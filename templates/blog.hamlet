@@ -1,0 +1,62 @@
+$newline never
+$doctype 5
+<html lang=en>
+    <head>
+        <meta charset=utf-8>
+        <title>#{postTitle} - Michael Snoyman's blog
+        <meta name=viewport content="width=device-width, initial-scale=1">
+        <link rel=stylesheet href=/static/normalize.css>
+        <link rel=stylesheet href=/blog-style.lucius>
+        \<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <body>
+        <header>
+            <h1>Michael Snoyman's blog
+        <p style="font-size:1.2em;font-weight:bold;color:#060">Note: This blog does not get updated very often. Most of my blog posts end up on <a href="http://www.yesodweb.com/blog">the Yesod blog</a>.
+        <article>
+            <hgroup>
+                <h1>#{postTitle}
+                <h2>#{formatTime defaultTimeLocale "%B %e, %Y" postDay}
+            #{postContent}
+        <section .sidebar>
+            <aside .me>
+                <h1>About
+                <div>
+                    <img src=/img/profile.jpg alt="Michael Snoyman">
+                <p>
+                    Michael Snoyman. Lead developer of the #
+                    <a href=http://www.yesodweb.com/>Yesod Web Framework
+                    .<br>Lead software engineer at #
+                    <a href=http://www.fpcomplete.com/>FP Complete
+                    .<br>Read more on #
+                    <a href="https://plus.google.com/u/0/116553865628071717889/posts">Google+
+                    .
+            <nav .links>
+                <h1>Links
+                <ul>
+                    <li>
+                        <a href=http://www.yesodweb.com/>Yesod Web Framework
+                    <li>
+                        <a href=http://photos.snoyman.com/>Family Photo Blog
+                    <li>
+                        <a href=http://www.haskellers.com/user/snoyberg>I'm a Haskeller
+
+            <aside .book>
+                <h1>Book
+                <div>
+                    <a href=http://shop.oreilly.com/product/0636920023142.do>
+                        <img src=/img/book-cover.png alt="Web Development with Haskell and Yesod">
+                <div>
+                    Or, #
+                    <a href=http://www.yesodweb.com/book>read it online
+                    .
+
+$#            <nav .archive>
+$#                <h1>Archive
+$#                $forall Month name posts <- archive
+$#                    <section>
+$#                        <h1>#{name}
+$#                        $forall Post url title <- posts
+$#                            <div>
+$#                                <a href=#{url}>#{title}
+        <div .clearfix>
+

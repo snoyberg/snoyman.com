@@ -1,4 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes       #-}
 {-# LANGUAGE TemplateHaskell   #-}
@@ -27,9 +28,11 @@ data App = App
 data Data = Data
     { dataHome :: Home
     , dataRootStyle :: TypedContent
+    , dataBlogStyle :: TypedContent
     , dataRoot :: FilePath
     , dataRobots :: TypedContent
     , dataFavicon :: TypedContent
+    , dataPosts :: HashMap (Year, Month, Text) Post
     }
 
 data Home = Home
@@ -132,15 +135,35 @@ instance FromJSON Talk where
         <*> o .: "venue"
         <*> ((Left <$> (o .: "links")) <|> (Right <$> (o .: "links")))
 
+newtype Year = Year Int
+    deriving (PathPiece, Show, Eq, Read, Hashable)
+newtype Month = Month Int
+    deriving (Show, Eq, Read, Hashable)
+instance PathPiece Month where
+    toPathPiece (Month i)
+        | i < 10 = "0" ++ tshow i
+        | otherwise = tshow i
+    fromPathPiece t
+        | length t /= 2 = Nothing
+        | Right (i, "") <- decimal t, i >= 1, i <= 12 = Just $ Month i
+
+data Post = Post
+    { postTitle :: Text
+    , postContent :: Markdown
+    , postDay :: Day
+    }
+
 mkYesod "App" [parseRoutes|
 / HomeR GET
 /style.lucius RootStyleR GET
+/blog-style.lucius BlogStyleR GET
 /img ImgR Static appImg
 /static StaticR Static appStatic
 /torah TorahR Static appTorah
 /robots.txt RobotsR GET
 /favicon.ico FaviconR GET
 /reload ReloadR GitRepo-Data appData
+/blog/#Year/#Month/#Text PostR GET
 |]
 
 instance Yesod App where
@@ -157,11 +180,22 @@ getHomeR = do
 getRootStyleR :: Handler TypedContent
 getRootStyleR = dataRootStyle <$> getData
 
+getBlogStyleR :: Handler TypedContent
+getBlogStyleR = dataBlogStyle <$> getData
+
 getFaviconR :: Handler TypedContent
 getFaviconR = dataFavicon <$> getData
 
 getRobotsR :: Handler TypedContent
 getRobotsR = dataRobots <$> getData
+
+getPostR :: Year -> Month -> Text -> Handler Html
+getPostR year month slugHTML = do
+    slug <- maybe notFound return $ stripSuffix ".html" slugHTML
+    posts <- dataPosts <$> getData
+    Post {..} <- maybe notFound return $ lookup (year, month, slug) posts
+    let archive = []
+    withUrlRenderer $(hamletFile "templates/blog.hamlet")
 
 loadData :: FilePath -> IO Data
 loadData dataRoot = do
@@ -176,7 +210,32 @@ loadData dataRoot = do
         txt <- readFile $ dataRoot </> "style.lucius"
         rendered <- either error return $ luciusRT txt []
         return $ TypedContent typeCss $ toContent txt
+
+    dataBlogStyle <- do
+        txt <- readFile $ dataRoot </> "blog-style.lucius"
+        rendered <- either error return $ luciusRT txt []
+        return $ TypedContent typeCss $ toContent txt
+
+    rawPosts <- decodeFileEither (fpToString $ dataRoot </> "posts.yaml")
+            >>= either throwM return
+    dataPosts <- mapFromList <$> mapM (loadPost dataRoot) rawPosts
+
     return Data {..}
+
+data PostRaw = PostRaw FilePath Text Day
+instance FromJSON PostRaw where
+    parseJSON = withObject "PostRaw" $ \o -> PostRaw
+        <$> (fpFromText <$> (o .: "file"))
+        <*> o .: "title"
+        <*> (o .: "day" >>= maybe (fail "invalid day") return . readMay . asText)
+
+loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
+loadPost dataRoot (PostRaw suffix postTitle postDay) = do
+    postContent <- fmap Markdown $ readFile $ dataRoot </> suffix
+    return ((Year $ fromIntegral year, Month month, slug), Post {..})
+  where
+    (year, month, _) = toGregorian postDay
+    slug = fpToText $ filename suffix
 
 main :: IO ()
 main = do
