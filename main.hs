@@ -15,9 +15,10 @@ import Yesod.Static
 import Text.Markdown
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
+import Yesod.GitRepo
 
 data App = App
-    { appData   :: IORef Data
+    { appData   :: GitRepo Data
     , appImg    :: Static
     , appStatic :: Static
     , appTorah  :: Static
@@ -26,6 +27,9 @@ data App = App
 data Data = Data
     { dataHome :: Home
     , dataRootStyle :: TypedContent
+    , dataRoot :: FilePath
+    , dataRobots :: TypedContent
+    , dataFavicon :: TypedContent
     }
 
 data Home = Home
@@ -136,13 +140,14 @@ mkYesod "App" [parseRoutes|
 /torah TorahR Static appTorah
 /robots.txt RobotsR GET
 /favicon.ico FaviconR GET
+/reload ReloadR GitRepo-Data appData
 |]
 
 instance Yesod App where
     makeSessionBackend _ = return Nothing
 
 getData :: Handler Data
-getData = getYesod >>= readIORef . appData
+getData = getYesod >>= liftIO . grContent . appData
 
 getHomeR :: Handler Html
 getHomeR = do
@@ -152,21 +157,38 @@ getHomeR = do
 getRootStyleR :: Handler TypedContent
 getRootStyleR = dataRootStyle <$> getData
 
-getFaviconR :: Handler ()
-getFaviconR = sendFile "image/x-icon" "content/favicon.ico"
+getFaviconR :: Handler TypedContent
+getFaviconR = dataFavicon <$> getData
 
-getRobotsR :: Handler ()
-getRobotsR = sendFile "text/plain" "content/robots.txt"
+getRobotsR :: Handler TypedContent
+getRobotsR = dataRobots <$> getData
+
+loadData :: FilePath -> IO Data
+loadData dataRoot = do
+    let readData x y = do
+            bs <- readFile $ dataRoot </> y
+            return $ TypedContent x $ toContent $ asByteString bs
+    dataFavicon <- readData "image/x-icon" "favicon.ico"
+    dataRobots <- readData "text/plain" "robots.txt"
+    dataHome <- decodeFileEither (fpToString $ dataRoot </> "home.yaml")
+            >>= either throwM return
+    dataRootStyle <- do
+        txt <- readFile $ dataRoot </> "style.lucius"
+        rendered <- either error return $ luciusRT txt []
+        return $ TypedContent typeCss $ toContent txt
+    return Data {..}
 
 main :: IO ()
 main = do
-    dataHome <- decodeFileEither "content/home.yaml" >>= either throwM return
-    dataRootStyle <- do
-        txt <- readFile "content/style.lucius"
-        rendered <- either error return $ luciusRT txt []
-        return $ TypedContent typeCss $ toContent txt
-    appData <- newIORef Data {..}
-    appImg <- staticDevel "content/img"
-    appStatic <- staticDevel "content/static"
-    appTorah <- staticDevel "content/torah"
+    appData <- gitRepo
+        "https://github.com/snoyberg/snoyman.com-content"
+        "master"
+        loadData
+
+    root <- dataRoot <$> grContent appData
+
+    let static' t = staticDevel $ fpToString $ root </> t
+    appImg <- static' "img"
+    appStatic <- static' "static"
+    appTorah <- static' "torah"
     warpEnv App {..}
