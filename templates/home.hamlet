@@ -1,0 +1,60 @@
+$doctype 5
+<html lang=en>
+    <head>
+        <meta charset=utf-8>
+        <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>#{homeTitle}
+        <link rel=stylesheet href=/style.lucius>
+    <body>
+        <aside>
+            #{homeProfile}
+            <ul>
+                $forall link <- homeToplinks
+                    <li>#{link}
+
+            <div #twitter>
+                <a class="twitter-timeline" href="https://twitter.com/snoyberg" data-widget-id="296574273508741122">Tweets by @snoyberg</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            
+
+        <article>
+            <h1>Michael Snoyman
+            <h2>About Me
+            <p .aboutme>#{homeAbout}
+
+            <h2>Publications
+            <ul>
+                $forall Pub url text date mpublisher <- homePubs
+                    <li>
+                        <a href=#{url}>#{text}#
+                        . #{date}
+                        $maybe publisher <- mpublisher
+                            , #{publisher}
+
+            <h2>Talks
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date
+                        <th>Title
+                        <th>Venue
+                        <th>Links
+                <tbody>
+                    $forall Talk d t v el <- homeTalks
+                        <tr>
+                            <td>#{d}
+                            <td>#{t}
+                            <td>#{v}
+                            <td>
+                                $case el
+                                    $of Left l
+                                        #{l}
+                                    $of Right ls
+                                        <ul>
+                                            $forall l <- ls
+                                                <li>#{l}
+
+            <h2>My Sites
+            <ul>
+                $forall l <- homeSites
+                    <li>#{l}

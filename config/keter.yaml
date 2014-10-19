@@ -1,0 +1,5 @@
+exec: ../dist/build/snoymancom/snoymancom
+host: www.snoyman.com
+redirects:
+    - from: snoyman.com
+      to: www.snoyman.com
