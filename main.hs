@@ -17,8 +17,10 @@ import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 
 data App = App
-    { appData :: IORef Data
-    , appImg  :: Static
+    { appData   :: IORef Data
+    , appImg    :: Static
+    , appStatic :: Static
+    , appTorah  :: Static
     }
 
 data Data = Data
@@ -130,6 +132,10 @@ mkYesod "App" [parseRoutes|
 / HomeR GET
 /style.lucius RootStyleR GET
 /img ImgR Static appImg
+/static StaticR Static appStatic
+/torah TorahR Static appTorah
+/robots.txt RobotsR GET
+/favicon.ico FaviconR GET
 |]
 
 instance Yesod App where
@@ -146,6 +152,12 @@ getHomeR = do
 getRootStyleR :: Handler TypedContent
 getRootStyleR = dataRootStyle <$> getData
 
+getFaviconR :: Handler ()
+getFaviconR = sendFile "image/x-icon" "content/favicon.ico"
+
+getRobotsR :: Handler ()
+getRobotsR = sendFile "text/plain" "content/robots.txt"
+
 main :: IO ()
 main = do
     dataHome <- decodeFileEither "content/home.yaml" >>= either throwM return
@@ -155,4 +167,6 @@ main = do
         return $ TypedContent typeCss $ toContent txt
     appData <- newIORef Data {..}
     appImg <- staticDevel "content/img"
+    appStatic <- staticDevel "content/static"
+    appTorah <- staticDevel "content/torah"
     warpEnv App {..}
