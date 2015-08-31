@@ -17,6 +17,7 @@ import Text.Markdown
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
+import System.FilePath (takeFileName)
 
 data App = App
     { appData   :: GitRepo Data
@@ -204,7 +205,7 @@ loadData dataRoot = do
             return $ TypedContent x $ toContent $ asByteString bs
     dataFavicon <- readData "image/x-icon" "favicon.ico"
     dataRobots <- readData "text/plain" "robots.txt"
-    dataHome <- decodeFileEither (fpToString $ dataRoot </> "home.yaml")
+    dataHome <- decodeFileEither (dataRoot </> "home.yaml")
             >>= either throwM return
     dataRootStyle <- do
         txt <- readFile $ dataRoot </> "style.lucius"
@@ -216,7 +217,7 @@ loadData dataRoot = do
         rendered <- either error return $ luciusRT txt []
         return $ TypedContent typeCss $ toContent txt
 
-    rawPosts <- decodeFileEither (fpToString $ dataRoot </> "posts.yaml")
+    rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
             >>= either throwM return
     dataPosts <- mapFromList <$> mapM (loadPost dataRoot) rawPosts
 
@@ -225,7 +226,7 @@ loadData dataRoot = do
 data PostRaw = PostRaw FilePath Text Day
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
-        <$> (fpFromText <$> (o .: "file"))
+        <$> o .: "file"
         <*> o .: "title"
         <*> (o .: "day" >>= maybe (fail "invalid day") return . readMay . asText)
 
@@ -235,7 +236,7 @@ loadPost dataRoot (PostRaw suffix postTitle postDay) = do
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
     (year, month, _) = toGregorian postDay
-    slug = fpToText $ filename suffix
+    slug = pack $ takeFileName suffix
 
 main :: IO ()
 main = do
@@ -246,7 +247,7 @@ main = do
 
     root <- dataRoot <$> grContent appData
 
-    let static' t = staticDevel $ fpToString $ root </> t
+    let static' t = staticDevel $ root </> t
     appImg <- static' "img"
     appStatic <- static' "static"
     appTorah <- static' "torah"

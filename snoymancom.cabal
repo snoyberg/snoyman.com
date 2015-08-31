@@ -13,7 +13,7 @@ cabal-version:       >=1.10
 
 executable snoymancom
   main-is:             main.hs
-  build-depends:       base >=4.7 && <4.8
+  build-depends:       base
                      , yaml
                      , aeson
                      , markdown
@@ -23,4 +23,6 @@ executable snoymancom
                      , yesod-static
                      , classy-prelude-yesod
                      , vector
+                     , yesod-gitrepo
+                     , filepath
   default-language:    Haskell2010
