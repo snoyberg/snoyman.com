@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+    name: snoymancom
+    labels:
+        name: snoymancom
+spec:
+  replicas: 1
+  selector:
+    name: snoymancom
+  template:
+    metadata:
+        labels:
+            name: snoymancom
+    spec:
+        containers:
+        - name: snoymancom
+          image: snoyberg/snoyman.com
+          command: ["snoymancom"]
+          ports:
+          - containerPort: 3000
+            hostPort: 3000
+          env:
+          - name: PORT
+            value: "3000"

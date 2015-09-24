@@ -1,1 +1,5 @@
 resolver: lts-3.0
+image:
+    container:
+        base: "fpco/stack-run"
+        name: "snoyberg/snoyman.com"
