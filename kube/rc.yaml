@@ -5,7 +5,7 @@ metadata:
     labels:
         name: snoymancom
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     name: snoymancom
   template:
@@ -16,6 +16,9 @@ spec:
         containers:
         - name: snoymancom
           image: snoyberg/snoyman.com
+          resources:
+            limits:
+              memory: 800Mi
           command: ["snoymancom"]
           ports:
           - containerPort: 3000
