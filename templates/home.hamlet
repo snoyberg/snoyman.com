@@ -5,6 +5,9 @@ $doctype 5
         <meta name=viewport content="width=device-width, initial-scale=1">
         <title>#{homeTitle}
         <link rel=stylesheet href=/style.lucius>
+
+        <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+        <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
     <body>
         <aside>
             #{homeProfile}
