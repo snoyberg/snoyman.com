@@ -15,7 +15,7 @@ spec:
     spec:
         containers:
         - name: snoymancom
-          image: snoyberg/snoyman.com
+          image: snoyberg/snoyman.com:latest
           resources:
             limits:
               memory: 800Mi
