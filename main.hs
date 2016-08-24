@@ -172,6 +172,7 @@ mkYesod "App" [parseRoutes|
 |]
 
 instance Yesod App where
+    approot = guessApproot
     makeSessionBackend _ = return Nothing
 
 getData :: Handler Data
