@@ -19,5 +19,5 @@ $doctype 5
                 $forall ((year, month, slug), post) <- reverse (mapToList posts)
                     <li>
                         <a href=@{PostR year month slug}>#{postTitle post}
-                        , #{formatTime defaultTimeLocale "%B %e, %Y" (postDay post)}
+                        , #{prettyDay (postDay post)}
         ^{sidebar}

@@ -15,7 +15,7 @@ $doctype 5
         <article>
             <hgroup>
                 <h1>#{postTitle}
-                <h2>#{formatTime defaultTimeLocale "%B %e, %Y" postDay}
+                <h2>#{prettyDay postDay}
                 <p>
                     <a href=@{PostsR}>Blog post archive
             #{postContent}

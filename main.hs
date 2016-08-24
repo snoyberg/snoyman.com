@@ -179,8 +179,20 @@ getData = getYesod >>= liftIO . grContent . appData
 
 getHomeR :: Handler Html
 getHomeR = do
-    Home {..} <- dataHome <$> getData
+    dat <- getData
+    let Home {..} = dataHome dat
+        mRecentPost =
+            case reverse $ mapToList $ dataPosts dat of
+                ((year, month, slug), post):_ -> Just
+                    ( PostR year month slug
+                    , postTitle post
+                    , prettyDay $ postDay post
+                    )
+                [] -> Nothing
     withUrlRenderer $(hamletFile "templates/home.hamlet")
+
+prettyDay :: Day -> String
+prettyDay = formatTime defaultTimeLocale "%B %e, %Y"
 
 getRootStyleR :: Handler TypedContent
 getRootStyleR = dataRootStyle <$> getData

@@ -26,6 +26,13 @@ $doctype 5
             <h2>About Me
             <p .aboutme>#{homeAbout}
 
+            $maybe (url, title, date) <- mRecentPost
+                <p>
+                    <b>Most recent blog post: #
+                    <a href=@{url}>#{title}
+                    \ #
+                    <i>#{date}
+
             <h2>Publications
             <ul>
                 $forall Pub url text date mpublisher <- homePubs
