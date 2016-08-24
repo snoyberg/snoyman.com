@@ -25,4 +25,5 @@ executable snoymancom
                      , vector
                      , yesod-gitrepo
                      , filepath
+                     , yesod-newsfeed
   default-language:    Haskell2010

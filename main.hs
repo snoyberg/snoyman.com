@@ -17,7 +17,9 @@ import Text.Markdown
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
+import Yesod.Feed
 import System.FilePath (takeFileName)
+import System.Environment (lookupEnv)
 
 data App = App
     { appData   :: GitRepo Data
@@ -164,7 +166,9 @@ mkYesod "App" [parseRoutes|
 /robots.txt RobotsR GET
 /favicon.ico FaviconR GET
 /reload ReloadR GitRepo-Data appData
+/blog PostsR GET
 /blog/#Year/#Month/#Text PostR GET
+/feed FeedR GET
 |]
 
 instance Yesod App where
@@ -190,13 +194,46 @@ getFaviconR = dataFavicon <$> getData
 getRobotsR :: Handler TypedContent
 getRobotsR = dataRobots <$> getData
 
+sidebar :: renderer -> Html
+sidebar = $(hamletFile "templates/sidebar.hamlet")
+
+getPostsR :: Handler Html
+getPostsR = do
+    posts <- dataPosts <$> getData
+    withUrlRenderer $(hamletFile "templates/posts.hamlet")
+
 getPostR :: Year -> Month -> Text -> Handler Html
-getPostR year month slugHTML = do
-    slug <- maybe notFound return $ stripSuffix ".html" slugHTML
+getPostR year month slug = do
+    forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
     posts <- dataPosts <$> getData
     Post {..} <- maybe notFound return $ lookup (year, month, slug) posts
     let archive = []
     withUrlRenderer $(hamletFile "templates/blog.hamlet")
+
+getFeedR :: Handler TypedContent
+getFeedR = do
+    posts <- take 10 . reverse . mapToList . dataPosts <$> getData
+    updated <-
+        case posts of
+            [] -> notFound
+            (_, post):_ -> return $ postDay post
+    newsFeed Feed
+        { feedTitle = "Michael Snoyman's blog"
+        , feedLinkSelf = FeedR
+        , feedLinkHome = HomeR
+        , feedAuthor = "Michael Snoyman"
+        , feedDescription = "Michael's thoughts on everything, mostly Haskell and tech startups"
+        , feedLanguage = "en"
+        , feedUpdated = UTCTime updated 0
+        , feedLogo = Nothing
+        , feedEntries = flip map posts $ \((year, month, slug), post) -> FeedEntry
+            { feedEntryLink = PostR year month slug
+            , feedEntryUpdated = UTCTime (postDay post) 0
+            , feedEntryTitle = postTitle post
+            , feedEntryContent = toHtml (postContent post)
+            , feedEntryEnclosure = Nothing
+            }
+        }
 
 loadData :: FilePath -> IO Data
 loadData dataRoot = do
@@ -240,10 +277,15 @@ loadPost dataRoot (PostRaw suffix postTitle postDay) = do
 
 main :: IO ()
 main = do
-    appData <- gitRepo
-        "https://github.com/snoyberg/snoyman.com-content"
-        "master"
-        loadData
+    isDev <- fmap isJust (lookupEnv "DEV")
+    appData <- if isDev
+        then gitRepoDev
+            "content"
+            loadData
+        else gitRepo
+            "https://github.com/snoyberg/snoyman.com-content"
+            "master"
+            loadData
 
     root <- dataRoot <$> grContent appData
 
