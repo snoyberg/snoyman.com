@@ -18,7 +18,7 @@ import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
 import Yesod.Feed
-import System.FilePath (takeFileName)
+import System.FilePath (takeBaseName)
 import System.Environment (lookupEnv)
 
 data App = App
@@ -35,7 +35,7 @@ data Data = Data
     , dataRoot :: FilePath
     , dataRobots :: TypedContent
     , dataFavicon :: TypedContent
-    , dataPosts :: HashMap (Year, Month, Text) Post
+    , dataPosts :: Map (Year, Month, Text) Post
     }
 
 data Home = Home
@@ -139,9 +139,9 @@ instance FromJSON Talk where
         <*> ((Left <$> (o .: "links")) <|> (Right <$> (o .: "links")))
 
 newtype Year = Year Int
-    deriving (PathPiece, Show, Eq, Read, Hashable)
+    deriving (PathPiece, Show, Eq, Read, Hashable, Ord)
 newtype Month = Month Int
-    deriving (Show, Eq, Read, Hashable)
+    deriving (Show, Eq, Read, Hashable, Ord)
 instance PathPiece Month where
     toPathPiece (Month i)
         | i < 10 = "0" ++ tshow i
@@ -273,7 +273,7 @@ loadPost dataRoot (PostRaw suffix postTitle postDay) = do
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
     (year, month, _) = toGregorian postDay
-    slug = pack $ takeFileName suffix
+    slug = pack $ takeBaseName suffix
 
 main :: IO ()
 main = do
