@@ -7,6 +7,7 @@ $doctype 5
         <meta name=viewport content="width=device-width, initial-scale=1">
         <link rel=stylesheet href=/static/normalize.css>
         <link rel=stylesheet href=/blog-style.lucius>
+        <link href=@{FeedR} type=application/atom+xml rel="alternate" title="Michael Snoyman's blog">
         \<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <body>
         <header>
