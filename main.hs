@@ -178,12 +178,17 @@ instance Yesod App where
 getData :: Handler Data
 getData = getYesod >>= liftIO . grContent . appData
 
+getDescendingPosts :: Handler [((Year, Month, Text), Post)]
+getDescendingPosts =
+    reverse . sortOn (postDay . snd) . mapToList . dataPosts <$> getData
+
 getHomeR :: Handler Html
 getHomeR = do
     dat <- getData
+    posts <- getDescendingPosts
     let Home {..} = dataHome dat
         mRecentPost =
-            case reverse $ mapToList $ dataPosts dat of
+            case posts of
                 ((year, month, slug), post):_ -> Just
                     ( PostR year month slug
                     , postTitle post
@@ -212,7 +217,7 @@ sidebar = $(hamletFile "templates/sidebar.hamlet")
 
 getPostsR :: Handler Html
 getPostsR = do
-    posts <- dataPosts <$> getData
+    posts <- getDescendingPosts
     withUrlRenderer $(hamletFile "templates/posts.hamlet")
 
 getPostR :: Year -> Month -> Text -> Handler Html
@@ -225,7 +230,7 @@ getPostR year month slug = do
 
 getFeedR :: Handler TypedContent
 getFeedR = do
-    posts <- take 10 . reverse . mapToList . dataPosts <$> getData
+    posts <- take 10 <$> getDescendingPosts
     updated <-
         case posts of
             [] -> notFound

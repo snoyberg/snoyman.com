@@ -17,7 +17,7 @@ $doctype 5
             <hgroup>
                 <h1>Michael Snoyman's blog
             <ul>
-                $forall ((year, month, slug), post) <- reverse (mapToList posts)
+                $forall ((year, month, slug), post) <- posts
                     <li>
                         <a href=@{PostR year month slug}>#{postTitle post}
                         , #{prettyDay (postDay post)}
