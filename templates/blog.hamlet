@@ -20,4 +20,10 @@ $doctype 5
                 <p>
                     <a href=@{PostsR}>Blog post archive
             #{postContent}
+
+            <div #disqus_thread>
+            <script>
+
+                (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
         ^{sidebar}
