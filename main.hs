@@ -20,6 +20,7 @@ import Yesod.GitRepo
 import Yesod.Feed
 import System.FilePath (takeBaseName)
 import System.Environment (lookupEnv)
+import qualified Data.Map as Map
 
 data App = App
     { appData   :: GitRepo Data
@@ -35,25 +36,32 @@ data Data = Data
     , dataRoot :: FilePath
     , dataRobots :: TypedContent
     , dataFavicon :: TypedContent
-    , dataPosts :: Map (Year, Month, Text) Post
+    , dataPostsPast :: Map (Year, Month, Text) Post
+    , dataPostsAll :: Map (Year, Month, Text) Post
     }
 
 data Home = Home
     { homeTitle :: Text
     , homeProfile :: Profile
     , homeToplinks :: Vector Link
-    , homeAbout :: Markdown
+    , homeAbout :: Html
     , homePubs :: Vector Pub
     , homeTalks :: Vector Talk
     , homeSites :: Vector Link
     }
+
+renderMarkdown :: Text -> Html
+renderMarkdown = markdown def
+    { msXssProtect = False
+    , msAddHeadingId = True
+    } . fromStrict
 
 instance FromJSON Home where
     parseJSON = withObject "Home" $ \o -> Home
         <$> o .: "title"
         <*> o .: "profile"
         <*> o .: "toplinks"
-        <*> (Markdown <$> (o .: "about"))
+        <*> (renderMarkdown <$> (o .: "about"))
         <*> o .: "publications"
         <*> o .: "talks"
         <*> o .: "sites"
@@ -152,7 +160,7 @@ instance PathPiece Month where
 
 data Post = Post
     { postTitle :: Text
-    , postContent :: Markdown
+    , postContent :: Html
     , postDay :: Day
     }
 
@@ -178,9 +186,17 @@ instance Yesod App where
 getData :: Handler Data
 getData = getYesod >>= liftIO . grContent . appData
 
+getPosts :: Handler (Map (Year, Month, Text) Post)
+getPosts = do
+    mpreview <- lookupGetParam "preview"
+    dat <- getData
+    return $ case mpreview of
+        Just "true" -> dataPostsAll dat
+        _ -> dataPostsPast dat
+
 getDescendingPosts :: Handler [((Year, Month, Text), Post)]
 getDescendingPosts =
-    reverse . sortOn (postDay . snd) . mapToList . dataPosts <$> getData
+    reverse . sortOn (postDay . snd) . mapToList <$> getPosts
 
 getHomeR :: Handler Html
 getHomeR = do
@@ -223,7 +239,7 @@ getPostsR = do
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
     forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
-    posts <- dataPosts <$> getData
+    posts <- getPosts
     Post {..} <- maybe notFound return $ lookup (year, month, slug) posts
     let archive = []
     withUrlRenderer $(hamletFile "templates/blog.hamlet")
@@ -274,7 +290,9 @@ loadData dataRoot = do
 
     rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
             >>= either throwM return
-    dataPosts <- mapFromList <$> mapM (loadPost dataRoot) rawPosts
+    dataPostsAll <- mapFromList <$> mapM (loadPost dataRoot) rawPosts
+    UTCTime today _ <- getCurrentTime
+    let dataPostsPast = Map.filter ((<= today) . postDay) dataPostsAll
 
     return Data {..}
 
@@ -287,7 +305,7 @@ instance FromJSON PostRaw where
 
 loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
 loadPost dataRoot (PostRaw suffix postTitle postDay) = do
-    postContent <- fmap Markdown $ readFile $ dataRoot </> suffix
+    postContent <- fmap renderMarkdown $ readFile $ dataRoot </> suffix
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
     (year, month, _) = toGregorian postDay

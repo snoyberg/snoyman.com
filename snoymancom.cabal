@@ -26,4 +26,5 @@ executable snoymancom
                      , yesod-gitrepo
                      , filepath
                      , yesod-newsfeed
+                     , containers
   default-language:    Haskell2010
