@@ -9,7 +9,7 @@
 import           ClassyPrelude.Yesod
 import Text.Hamlet (hamletFile)
 import Data.Yaml (decodeFileEither)
-import Data.Aeson (withObject, (.:?), withText)
+import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Lucius (luciusRT)
 import Text.Blaze (ToMarkup (..))
 import Yesod.Static
@@ -162,6 +162,7 @@ data Post = Post
     { postTitle :: Text
     , postContent :: Html
     , postDay :: Day
+    , postListed :: Bool
     }
 
 mkYesod "App" [parseRoutes|
@@ -186,22 +187,29 @@ instance Yesod App where
 getData :: Handler Data
 getData = getYesod >>= liftIO . grContent . appData
 
-getPosts :: Handler (Map (Year, Month, Text) Post)
-getPosts = do
+getPosts :: Bool -- ^ include unlisted?
+         -> Handler (Map (Year, Month, Text) Post)
+getPosts unlisted = do
     mpreview <- lookupGetParam "preview"
     dat <- getData
-    return $ case mpreview of
-        Just "true" -> dataPostsAll dat
-        _ -> dataPostsPast dat
+    let posts =
+            case mpreview of
+                Just "true" -> dataPostsAll dat
+                _ -> dataPostsPast dat
+    return $
+        if unlisted
+            then posts
+            else Map.filter postListed posts
 
-getDescendingPosts :: Handler [((Year, Month, Text), Post)]
-getDescendingPosts =
-    reverse . sortOn (postDay . snd) . mapToList <$> getPosts
+getDescendingPosts :: Bool -- ^ include unlisted?
+                   -> Handler [((Year, Month, Text), Post)]
+getDescendingPosts unlisted =
+    reverse . sortOn (postDay . snd) . mapToList <$> getPosts unlisted
 
 getHomeR :: Handler Html
 getHomeR = do
     dat <- getData
-    posts <- getDescendingPosts
+    posts <- getDescendingPosts False
     let Home {..} = dataHome dat
         mRecentPost =
             case posts of
@@ -233,20 +241,20 @@ sidebar = $(hamletFile "templates/sidebar.hamlet")
 
 getPostsR :: Handler Html
 getPostsR = do
-    posts <- getDescendingPosts
+    posts <- getDescendingPosts False
     withUrlRenderer $(hamletFile "templates/posts.hamlet")
 
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
     forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
-    posts <- getPosts
+    posts <- getPosts True
     Post {..} <- maybe notFound return $ lookup (year, month, slug) posts
     let archive = []
     withUrlRenderer $(hamletFile "templates/blog.hamlet")
 
 getFeedR :: Handler TypedContent
 getFeedR = do
-    posts <- take 10 <$> getDescendingPosts
+    posts <- take 10 <$> getDescendingPosts False
     updated <-
         case posts of
             [] -> notFound
@@ -296,15 +304,16 @@ loadData dataRoot = do
 
     return Data {..}
 
-data PostRaw = PostRaw FilePath Text Day
+data PostRaw = PostRaw FilePath Text Day Bool
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
         <$> o .: "file"
         <*> o .: "title"
         <*> (o .: "day" >>= maybe (fail "invalid day") return . readMay . asText)
+        <*> o .:? "listed" .!= True
 
 loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
-loadPost dataRoot (PostRaw suffix postTitle postDay) = do
+loadPost dataRoot (PostRaw suffix postTitle postDay postListed) = do
     postContent <- fmap renderMarkdown $ readFile $ dataRoot </> suffix
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
