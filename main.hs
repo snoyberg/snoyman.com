@@ -36,9 +36,15 @@ data Data = Data
     , dataRoot :: FilePath
     , dataRobots :: TypedContent
     , dataFavicon :: TypedContent
-    , dataPostsPast :: Map (Year, Month, Text) Post
     , dataPostsAll :: Map (Year, Month, Text) Post
     }
+
+dataPostsPast :: MonadIO m
+              => Data
+              -> m (Map (Year, Month, Text) Post)
+dataPostsPast d = do
+    UTCTime today _ <- liftIO getCurrentTime
+    return $ Map.filter ((<= today) . postDay) (dataPostsAll d)
 
 data Home = Home
     { homeTitle :: Text
@@ -192,10 +198,10 @@ getPosts :: Bool -- ^ include unlisted?
 getPosts unlisted = do
     mpreview <- lookupGetParam "preview"
     dat <- getData
-    let posts =
-            case mpreview of
-                Just "true" -> dataPostsAll dat
-                _ -> dataPostsPast dat
+    posts <-
+        case mpreview of
+            Just "true" -> return $ dataPostsAll dat
+            _ -> dataPostsPast dat
     return $
         if unlisted
             then posts
@@ -299,8 +305,6 @@ loadData dataRoot = do
     rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
             >>= either throwM return
     dataPostsAll <- mapFromList <$> mapM (loadPost dataRoot) rawPosts
-    UTCTime today _ <- getCurrentTime
-    let dataPostsPast = Map.filter ((<= today) . postDay) dataPostsAll
 
     return Data {..}
 
