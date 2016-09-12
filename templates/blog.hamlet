@@ -19,6 +19,8 @@ $doctype 5
                 <h2>#{prettyDay postDay}
                 <p>
                     <a href=@{PostsR}>Blog post archive
+                <script type="text/javascript" src="//www.redditstatic.com/button/button1.js">
+
             #{postContent}
 
             <div #disqus_thread>
