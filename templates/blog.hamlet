@@ -8,6 +8,12 @@ $doctype 5
         <link rel=stylesheet href=/static/normalize.css>
         <link rel=stylesheet href=/blog-style.lucius>
         <link href=@{FeedR} type=application/atom+xml rel="alternate" title="Michael Snoyman's blog">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/haskell.min.js">
+        <script>
+            hljs.configure({languages:[]});
+            hljs.initHighlightingOnLoad();
         \<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <body>
         <header>
