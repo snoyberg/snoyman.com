@@ -9,6 +9,8 @@
 module SnoymanCom
     ( prodMain
     , develMain
+    , resourcesApp
+    , Widget
     ) where
 
 import ClassyPrelude.Yesod
@@ -16,17 +18,13 @@ import Control.Concurrent.Async (race_)
 import Text.Hamlet (hamletFile)
 import Data.Yaml (decodeFileEither)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
-import Text.Lucius (luciusRT)
 import Text.Blaze (ToMarkup (..))
-import Yesod.Static
 import Text.Markdown
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
-import Yesod.Feed
 import System.Directory (doesFileExist)
 import System.FilePath (takeBaseName)
-import System.Environment (lookupEnv)
 import qualified Data.Map as Map
 
 data App = App
@@ -38,8 +36,6 @@ data App = App
 
 data Data = Data
     { dataHome :: Home
-    , dataRootStyle :: TypedContent
-    , dataBlogStyle :: TypedContent
     , dataRoot :: FilePath
     , dataRobots :: TypedContent
     , dataFavicon :: TypedContent
@@ -103,8 +99,8 @@ instance ToMarkup Profile where
         |]
 
 data Link = Link
-    { linkURL :: Text
-    , linkText :: Text
+    { _linkURL :: Text
+    , _linkText :: Text
     }
 instance FromJSON Link where
     parseJSON = withObject "Link" $ \o -> Link <$> o .: "url" <*> o .: "text"
@@ -112,10 +108,10 @@ instance ToMarkup Link where
     toMarkup (Link u t) = [shamlet|<a href=#{u}>#{t}|]
 
 data Pub = Pub
-    { pubURL :: Text
-    , pubText :: Text
-    , pubDate :: Date
-    , pubPublisher :: Maybe Text
+    { _pubURL :: Text
+    , _pubText :: Text
+    , _pubDate :: Date
+    , _pubPublisher :: Maybe Text
     }
 instance FromJSON Pub where
     parseJSON = withObject "Pub" $ \o -> Pub
@@ -147,10 +143,10 @@ instance ToMarkup Date where
         monthT = months V.! monthI
 
 data Talk = Talk
-    { talkDate :: Date
-    , talkTitle :: Text
-    , talkVenue :: Text
-    , talkLinks :: Either Text (Vector Link)
+    { _talkDate :: Date
+    , _talkTitle :: Text
+    , _talkVenue :: Text
+    , _talkLinks :: Either Text (Vector Link)
     }
 instance FromJSON Talk where
     parseJSON = withObject "Talk" $ \o -> Talk
@@ -170,6 +166,7 @@ instance PathPiece Month where
     fromPathPiece t
         | length t /= 2 = Nothing
         | Right (i, "") <- decimal t, i >= 1, i <= 12 = Just $ Month i
+        | otherwise = Nothing
 
 data Post = Post
     { postTitle :: Text
@@ -196,8 +193,6 @@ instance Yesod App where
     makeSessionBackend _ = return Nothing
 
     defaultLayout widget = do
-        master <- getYesod
-
         pc <- widgetToPageContent $ do
             addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
             addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
@@ -250,12 +245,6 @@ getHomeR = do
 prettyDay :: Day -> String
 prettyDay = formatTime defaultTimeLocale "%B %e, %Y"
 
-getRootStyleR :: Handler TypedContent
-getRootStyleR = dataRootStyle <$> getData
-
-getBlogStyleR :: Handler TypedContent
-getBlogStyleR = dataBlogStyle <$> getData
-
 getFaviconR :: Handler TypedContent
 getFaviconR = dataFavicon <$> getData
 
@@ -275,7 +264,6 @@ getPostR year month slug = do
     postsMap <- getPosts True
     thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
     posts <- getDescendingPosts False
-    let archive = []
     defaultLayout $ do
         setTitle $ toHtml $ postTitle thisPost <> " - Michael Snoyman's blog"
         toWidget
@@ -343,15 +331,6 @@ loadData dataRoot = do
     dataRobots <- readData "text/plain" "robots.txt"
     dataHome <- decodeFileEither (dataRoot </> "home.yaml")
             >>= either throwM return
-    dataRootStyle <- do
-        txt <- readFile $ dataRoot </> "style.lucius"
-        rendered <- either error return $ luciusRT txt []
-        return $ TypedContent typeCss $ toContent txt
-
-    dataBlogStyle <- do
-        txt <- readFile $ dataRoot </> "blog-style.lucius"
-        rendered <- either error return $ luciusRT txt []
-        return $ TypedContent typeCss $ toContent txt
 
     rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
             >>= either throwM return
