@@ -6,7 +6,13 @@
 {-# LANGUAGE TypeFamilies      #-}
 {-# LANGUAGE ViewPatterns      #-}
 {-# LANGUAGE RecordWildCards   #-}
-import           ClassyPrelude.Yesod
+module SnoymanCom
+    ( prodMain
+    , develMain
+    ) where
+
+import ClassyPrelude.Yesod
+import Control.Concurrent.Async (race_)
 import Text.Hamlet (hamletFile)
 import Data.Yaml (decodeFileEither)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
@@ -18,6 +24,7 @@ import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
 import Yesod.Feed
+import System.Directory (doesFileExist)
 import System.FilePath (takeBaseName)
 import System.Environment (lookupEnv)
 import qualified Data.Map as Map
@@ -324,9 +331,8 @@ loadPost dataRoot (PostRaw suffix postTitle postDay postListed) = do
     (year, month, _) = toGregorian postDay
     slug = pack $ takeBaseName suffix
 
-main :: IO ()
-main = do
-    isDev <- fmap isJust (lookupEnv "DEV")
+mkApp :: Bool -> IO App
+mkApp isDev = do
     appData <- if isDev
         then gitRepoDev
             "content"
@@ -342,4 +348,24 @@ main = do
     appImg <- static' "img"
     appStatic <- static' "static"
     appTorah <- static' "torah"
-    warpEnv App {..}
+    return App {..}
+
+prodMain :: IO ()
+prodMain = mkApp False >>= warpEnv
+
+develMain :: IO ()
+develMain = mkApp True >>= race_ watchTermFile . warpEnv
+
+-- | Would certainly be more efficient to use fsnotify, but this is
+-- simpler.
+watchTermFile :: IO ()
+watchTermFile =
+    loop
+  where
+    loop = do
+        exists <- doesFileExist "yesod-devel/devel-terminate"
+        if exists
+            then return ()
+            else do
+                threadDelay 100000
+                loop
