@@ -1,15 +1,55 @@
-$doctype 5
-<html lang=en>
-    <head>
-        <meta charset=utf-8>
-        <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>#{homeTitle}
-        <link rel=stylesheet href=/style.lucius>
+<div .container>
+  <div .row>
+    <div .col-md-8>
+        <h1>Michael Snoyman
+        <h2>About Me
+        <p .aboutme>#{homeAbout}
 
-        <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
-        <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
-        <link href=@{FeedR} type=application/atom+xml rel="alternate" title="Michael Snoyman's blog">
-    <body>
+        $maybe (url, title, date) <- mRecentPost
+            <p>
+                <b>Most recent blog post: #
+                <a href=@{url}>#{title}
+                \ #
+                <i>#{date}
+
+        <h2>Publications
+        <ul>
+            $forall Pub url text date mpublisher <- homePubs
+                <li>
+                    <a href=#{url}>#{text}#
+                    . #{date}
+                    $maybe publisher <- mpublisher
+                        , #{publisher}
+
+        <h2>Talks
+        <table .table .table-striped .table-bordered>
+            <thead>
+                <tr>
+                    <th>Date
+                    <th>Title
+                    <th>Venue
+                    <th>Links
+            <tbody>
+                $forall Talk d t v el <- homeTalks
+                    <tr>
+                        <td>#{d}
+                        <td>#{t}
+                        <td>#{v}
+                        <td>
+                            $case el
+                                $of Left l
+                                    #{l}
+                                $of Right ls
+                                    <ul>
+                                        $forall l <- ls
+                                            <li>#{l}
+
+        $#<h2>My Sites
+        $#<ul>
+        $#    $forall l <- homeSites
+        $#        <li>#{l}
+
+    <div .col-md-4>
         <aside>
             #{homeProfile}
             <ul>
@@ -19,62 +59,3 @@ $doctype 5
             <div #twitter>
                 <a class="twitter-timeline" href="https://twitter.com/snoyberg" data-widget-id="296574273508741122">Tweets by @snoyberg</a>
                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-            
-
-        <article>
-            <h1>Michael Snoyman
-            <h2>About Me
-            <p .aboutme>#{homeAbout}
-
-            $maybe (url, title, date) <- mRecentPost
-                <p>
-                    <b>Most recent blog post: #
-                    <a href=@{url}>#{title}
-                    \ #
-                    <i>#{date}
-
-            <h2>Publications
-            <ul>
-                $forall Pub url text date mpublisher <- homePubs
-                    <li>
-                        <a href=#{url}>#{text}#
-                        . #{date}
-                        $maybe publisher <- mpublisher
-                            , #{publisher}
-
-            <h2>Talks
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date
-                        <th>Title
-                        <th>Venue
-                        <th>Links
-                <tbody>
-                    $forall Talk d t v el <- homeTalks
-                        <tr>
-                            <td>#{d}
-                            <td>#{t}
-                            <td>#{v}
-                            <td>
-                                $case el
-                                    $of Left l
-                                        #{l}
-                                    $of Right ls
-                                        <ul>
-                                            $forall l <- ls
-                                                <li>#{l}
-
-            <h2>My Sites
-            <ul>
-                $forall l <- homeSites
-                    <li>#{l}
-
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-          ga('create', 'UA-1434510-21', 'auto');
-          ga('send', 'pageview');

@@ -1,0 +1,40 @@
+<nav .navbar .navbar-inverse>
+  <div .container>
+    <div .row>
+      <div .col-md-12>
+        <div .navbar-header>
+           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar" aria-expanded=false>
+             <span class="sr-only">Toggle navigation
+             <span class="icon-bar">
+             <span class="icon-bar">
+             <span class="icon-bar">
+           <ul #top-navbar .nav .navbar-nav .collapse .navbar-collapse>
+                <li>
+                    <a href=@{HomeR}>Homepage
+                <li>
+                    <a href=@{BlogR}>Blog
+                <li>
+                    <a href=http://www.yesodweb.com/>Yesod Web Framework
+                <li>
+                    <a href=http://shop.oreilly.com/product/0636920023142.do>Yesod Book
+
+^{widget}
+
+<div .container>
+  <div .row>
+    <div .col-md-12>
+      <div #twitter>
+        <div .follow>
+          <a href="https://twitter.com/snoyberg" class="twitter-follow-button" data-show-count="false">Follow @snoyberg
+        <div .mention>
+          <a href="https://twitter.com/intent/tweet?screen_name=snoyberg" class="twitter-mention-button" data-show-count="false">Tweet to @snoyberg
+          <script async src="//platform.twitter.com/widgets.js" charset="utf-8">
+  <div .row>
+    <div .col-md-12>
+      <ul .nav .navbar-nav>
+        <li>
+            <a href=@{HomeR}>Homepage
+        <li>
+            <a href=http://www.yesodweb.com/>Yesod Web Framework
+        <li>
+            <a href=http://www.haskellers.com/user/snoyberg>I'm a Haskeller

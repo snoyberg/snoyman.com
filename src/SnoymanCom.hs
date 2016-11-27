@@ -180,15 +180,13 @@ data Post = Post
 
 mkYesod "App" [parseRoutes|
 / HomeR GET
-/style.lucius RootStyleR GET
-/blog-style.lucius BlogStyleR GET
 /img ImgR Static appImg
 /static StaticR Static appStatic
 /torah TorahR Static appTorah
 /robots.txt RobotsR GET
 /favicon.ico FaviconR GET
 /reload ReloadR GitRepo-Data appData
-/blog PostsR GET
+/blog BlogR GET
 /blog/#Year/#Month/#Text PostR GET
 /feed FeedR GET
 |]
@@ -196,6 +194,19 @@ mkYesod "App" [parseRoutes|
 instance Yesod App where
     approot = guessApproot
     makeSessionBackend _ = return Nothing
+
+    defaultLayout widget = do
+        master <- getYesod
+
+        pc <- widgetToPageContent $ do
+            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+            addScriptRemote "https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+
+            $(whamletFile "templates/default-layout.hamlet")
+
+        withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
 getData :: Handler Data
 getData = getYesod >>= liftIO . grContent . appData
@@ -232,7 +243,9 @@ getHomeR = do
                     , prettyDay $ postDay post
                     )
                 [] -> Nothing
-    withUrlRenderer $(hamletFile "templates/home.hamlet")
+    defaultLayout $ do
+        setTitle $ toHtml homeTitle
+        $(whamletFile "templates/home.hamlet")
 
 prettyDay :: Day -> String
 prettyDay = formatTime defaultTimeLocale "%B %e, %Y"
@@ -249,21 +262,52 @@ getFaviconR = dataFavicon <$> getData
 getRobotsR :: Handler TypedContent
 getRobotsR = dataRobots <$> getData
 
-sidebar :: renderer -> Html
-sidebar = $(hamletFile "templates/sidebar.hamlet")
-
-getPostsR :: Handler Html
-getPostsR = do
+getBlogR :: Handler ()
+getBlogR = do
     posts <- getDescendingPosts False
-    withUrlRenderer $(hamletFile "templates/posts.hamlet")
+    case posts of
+        [] -> notFound
+        ((year, month, slug), _):_ -> redirect $ PostR year month slug
 
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
     forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
-    posts <- getPosts True
-    Post {..} <- maybe notFound return $ lookup (year, month, slug) posts
+    postsMap <- getPosts True
+    thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
+    posts <- getDescendingPosts False
     let archive = []
-    withUrlRenderer $(hamletFile "templates/blog.hamlet")
+    defaultLayout $ do
+        setTitle $ toHtml $ postTitle thisPost <> " - Michael Snoyman's blog"
+        toWidget
+            [lucius|
+                #social > div {
+                    display: inline-block;
+                    margin-right: 1em;
+                }
+                ul.blog-archive {
+                    padding: 0;
+                }
+                ul.blog-archive li {
+                    list-style: none;
+                    margin-bottom: 0.5em;
+                }
+                pre {
+                    overflow: auto;
+                    code {
+                        word-wrap: normal;
+                        white-space: pre;
+                    }
+                }
+            |]
+        $(whamletFile "templates/blog.hamlet")
+        toWidget
+            [julius|
+                hljs.configure({languages:[]});
+                hljs.initHighlightingOnLoad();
+            |]
+        addStylesheetRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css"
+        addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"
+        addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/haskell.min.js"
 
 getFeedR :: Handler TypedContent
 getFeedR = do
