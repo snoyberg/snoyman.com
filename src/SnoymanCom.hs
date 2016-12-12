@@ -32,6 +32,7 @@ data App = App
     , appImg    :: Static
     , appStatic :: Static
     , appTorah  :: Static
+    , appWellKnown :: Static
     }
 
 data Data = Data
@@ -186,6 +187,7 @@ mkYesod "App" [parseRoutes|
 /blog BlogR GET
 /blog/#Year/#Month/#Text PostR GET
 /feed FeedR GET
+/.well-known WellKnownR Static appWellKnown
 |]
 
 instance Yesod App where
@@ -371,6 +373,7 @@ mkApp isDev = do
     appImg <- static' "img"
     appStatic <- static' "static"
     appTorah <- static' "torah"
+    appWellKnown <- static' "well-known"
     return App {..}
 
 prodMain :: IO ()
