@@ -47,8 +47,8 @@ dataPostsPast :: MonadIO m
               => Data
               -> m (Map (Year, Month, Text) Post)
 dataPostsPast d = do
-    UTCTime today _ <- liftIO getCurrentTime
-    return $ Map.filter ((<= today) . postDay) (dataPostsAll d)
+    now <- liftIO getCurrentTime
+    return $ Map.filter ((<= now) . postTime) (dataPostsAll d)
 
 data Home = Home
     { homeTitle :: Text
@@ -172,7 +172,7 @@ instance PathPiece Month where
 data Post = Post
     { postTitle :: Text
     , postContent :: Html
-    , postDay :: Day
+    , postTime :: UTCTime
     , postListed :: Bool
     }
 
@@ -225,7 +225,7 @@ getPosts unlisted = do
 getDescendingPosts :: Bool -- ^ include unlisted?
                    -> Handler [((Year, Month, Text), Post)]
 getDescendingPosts unlisted =
-    reverse . sortOn (postDay . snd) . mapToList <$> getPosts unlisted
+    reverse . sortOn (postTime . snd) . mapToList <$> getPosts unlisted
 
 getHomeR :: Handler Html
 getHomeR = do
@@ -237,14 +237,14 @@ getHomeR = do
                 ((year, month, slug), post):_ -> Just
                     ( PostR year month slug
                     , postTitle post
-                    , prettyDay $ postDay post
+                    , prettyDay $ postTime post
                     )
                 [] -> Nothing
     defaultLayout $ do
         setTitle $ toHtml homeTitle
         $(whamletFile "templates/home.hamlet")
 
-prettyDay :: Day -> String
+prettyDay :: UTCTime -> String
 prettyDay = formatTime defaultTimeLocale "%B %e, %Y"
 
 getFaviconR :: Handler TypedContent
@@ -305,7 +305,7 @@ getFeedR = do
     updated <-
         case posts of
             [] -> notFound
-            (_, post):_ -> return $ postDay post
+            (_, post):_ -> return $ postTime post
     newsFeed Feed
         { feedTitle = "Michael Snoyman's blog"
         , feedLinkSelf = FeedR
@@ -313,11 +313,11 @@ getFeedR = do
         , feedAuthor = "Michael Snoyman"
         , feedDescription = "Michael's thoughts on everything, mostly Haskell and tech startups"
         , feedLanguage = "en"
-        , feedUpdated = UTCTime updated 0
+        , feedUpdated = updated
         , feedLogo = Nothing
         , feedEntries = flip map posts $ \((year, month, slug), post) -> FeedEntry
             { feedEntryLink = PostR year month slug
-            , feedEntryUpdated = UTCTime (postDay post) 0
+            , feedEntryUpdated = postTime post
             , feedEntryTitle = postTitle post
             , feedEntryContent = toHtml (postContent post)
             , feedEntryEnclosure = Nothing
@@ -340,19 +340,20 @@ loadData dataRoot = do
 
     return Data {..}
 
-data PostRaw = PostRaw FilePath Text Day Bool
+data PostRaw = PostRaw FilePath Text UTCTime Bool
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
         <$> o .: "file"
         <*> o .: "title"
-        <*> (o .: "day" >>= maybe (fail "invalid day") return . readMay . asText)
+        <*> ((flip UTCTime 0 <$> (o .: "day")) <|> (o .: "time"))
         <*> o .:? "listed" .!= True
 
 loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
-loadPost dataRoot (PostRaw suffix postTitle postDay postListed) = do
+loadPost dataRoot (PostRaw suffix postTitle postTime postListed) = do
     postContent <- fmap renderMarkdown $ readFile $ dataRoot </> suffix
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
+    UTCTime postDay _ = postTime
     (year, month, _) = toGregorian postDay
     slug = pack $ takeBaseName suffix
 
