@@ -19,6 +19,7 @@ library
                      , shakespeare
                      , blaze-markup
                      , yesod-static
+                     , yesod-core >= 1.4.30
                      , classy-prelude-yesod
                      , vector
                      , yesod-gitrepo

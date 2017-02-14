@@ -205,6 +205,19 @@ instance Yesod App where
 
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
+    defaultMessageWidget title body =
+        [whamlet|
+            <div .container>
+              <div .row>
+                <div .col-md-2>
+                <div .col-md-8>
+                  <h1>#{title}
+                  ^{body'}
+        |]
+      where
+        body' :: Widget
+        body' = toWidget body
+
 getData :: Handler Data
 getData = getYesod >>= liftIO . grContent . appData
 
@@ -350,7 +363,7 @@ instance FromJSON PostRaw where
 
 loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
 loadPost dataRoot (PostRaw suffix postTitle postTime postListed) = do
-    postContent <- fmap renderMarkdown $ readFile $ dataRoot </> suffix
+    postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> suffix
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
     UTCTime postDay _ = postTime
