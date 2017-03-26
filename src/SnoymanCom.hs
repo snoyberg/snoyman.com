@@ -258,7 +258,9 @@ getHomeR = do
         $(whamletFile "templates/home.hamlet")
 
 prettyDay :: UTCTime -> String
-prettyDay = formatTime defaultTimeLocale "%B %e, %Y"
+prettyDay x
+  | (2017, 4, 1) <- toGregorian (utctDay x) = "5 Nissan, 5777"
+  | otherwise = formatTime defaultTimeLocale "%B %e, %Y" x
 
 getFaviconR :: Handler TypedContent
 getFaviconR = dataFavicon <$> getData
