@@ -12,8 +12,8 @@
         <div #social>
             <div .twitter-share>
               <a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet
-            <div .reddit>
-              <script type="text/javascript" src="//www.redditstatic.com/button/button1.js">
+            $#<div .reddit>
+            $#  <script type="text/javascript" src="//www.redditstatic.com/button/button1.js">
             <div .linkedin>
               <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US
               <script type="IN/Share" data-counter="right">
