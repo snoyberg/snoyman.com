@@ -6,6 +6,7 @@
 {-# LANGUAGE TypeFamilies      #-}
 {-# LANGUAGE ViewPatterns      #-}
 {-# LANGUAGE RecordWildCards   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module SnoymanCom
     ( prodMain
     , develMain
@@ -188,6 +189,7 @@ mkYesod "App" [parseRoutes|
 /blog/#Year/#Month/#Text PostR GET
 /feed FeedR GET
 /.well-known WellKnownR Static appWellKnown
+/reveal/*[Text] RevealR GET
 |]
 
 instance Yesod App where
@@ -338,6 +340,41 @@ getFeedR = do
             , feedEntryEnclosure = Nothing
             }
         }
+
+data RevealToken = RTNewColumn !Text | RTNewRow !Text
+    deriving Show
+
+getRevealR :: [Text] -> Handler Html
+getRevealR pieces = do
+    mapM_ checkPiece pieces
+    let fp = unpack $ intercalate "/" ("content":"reveal":pieces) ++ ".md"
+    markdown :: [Text] <- (lines . decodeUtf8) <$> readFile fp `catchIO` \_ -> notFound
+    let (header, drop 1 -> body) = break (== "---") $ drop 1 markdown
+        title = fromMaybe "Reveal.js Slideshow"
+              $ listToMaybe
+              $ mapMaybe (stripPrefix "title: ") header
+        tokenized = tokenize id body
+        tokenize front [] = [RTNewRow $ unlines $ front []]
+        tokenize front ("---":rest) = RTNewColumn (unlines $ front []) : tokenize id rest
+        tokenize front ("----":rest) = RTNewRow (unlines $ front []) : tokenize id rest
+        tokenize front (x:rest) = tokenize (front . (x:)) rest
+        cols = toCols tokenized
+        toCols [] = []
+        toCols (RTNewColumn content:rest) =
+          let (cols, rest') = getRows id rest
+           in (content:cols) : toCols rest'
+        toCols (RTNewRow content:rest) = toCols (RTNewColumn content:rest)
+
+        getRows front (RTNewRow content:rest) = getRows (front . (content:)) rest
+        getRows front rest = (front [], rest)
+    withUrlRenderer $(hamletFile "reveal.hamlet")
+  where
+    checkPiece t =
+      case uncons t of
+        Nothing -> notFound
+        Just ('.', _) -> notFound
+        _ | '/' `elem` t -> notFound
+        _ -> return ()
 
 loadData :: FilePath -> IO Data
 loadData dataRoot = do
