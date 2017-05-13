@@ -14,7 +14,7 @@ $doctype 5
                   <section>
                     $forall row <- rows
                       <section data-markdown>
-                        <script type="text/template">#{row}
+                        <script type="text/template">#{preEscapedToMarkup row}
 
         <script src="/static/reveal/lib/js/head.min.js">
         <script src="/static/reveal/js/reveal.js">
