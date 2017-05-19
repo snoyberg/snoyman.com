@@ -24,7 +24,7 @@ import Text.Markdown
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
-import System.Directory (doesFileExist)
+import System.Directory (doesFileExist, canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
 import qualified Data.Map as Map
 
@@ -344,13 +344,23 @@ getFeedR = do
 data RevealToken = RTNewColumn !Text | RTNewRow !Text
     deriving Show
 
+getRevealDir :: Handler FilePath
+getRevealDir = do
+  master <- getYesod
+  contentDir <- liftIO $ dataRoot <$> grContent (appData master)
+  liftIO $ canonicalizePath $ contentDir </> "reveal"
+
 getRevealR :: [Text] -> Handler Html
 getRevealR [] = do
+  revealDir <- getRevealDir
+  let stripDir x = do
+        y <- stripPrefix revealDir x
+        Just $ fromMaybe y $ stripPrefix "/" y
   files <- runConduit
-         $ sourceDirectoryDeep False "content/reveal"
+         $ sourceDirectoryDeep False revealDir
         .| concatMapC (\fp ->
             case splitExtension fp of
-              (("content/reveal/" `stripPrefix`) -> Just x, ".md") ->
+              (stripDir -> Just x, ".md") ->
                 Just (map pack $ splitPath x, x)
               _ -> Nothing)
         .| sinkList
@@ -369,7 +379,8 @@ getRevealR [] = do
     |]
 getRevealR pieces = do
     mapM_ checkPiece pieces
-    let fp = unpack $ intercalate "/" ("content":"reveal":pieces) ++ ".md"
+    revealDir <- getRevealDir
+    let fp = revealDir </> unpack (intercalate "/" pieces ++ ".md")
     markdown :: [Text] <- (lines . decodeUtf8) <$> readFile fp `catchIO` \_ -> notFound
     let (header, drop 1 -> body) = break (== "---") $ drop 1 markdown
         title = fromMaybe "Reveal.js Slideshow"
