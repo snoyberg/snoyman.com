@@ -25,7 +25,7 @@ import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
 import System.Directory (doesFileExist)
-import System.FilePath (takeBaseName)
+import System.FilePath (takeBaseName, splitExtension, splitPath)
 import qualified Data.Map as Map
 
 data App = App
@@ -345,6 +345,28 @@ data RevealToken = RTNewColumn !Text | RTNewRow !Text
     deriving Show
 
 getRevealR :: [Text] -> Handler Html
+getRevealR [] = do
+  files <- runConduit
+         $ sourceDirectoryDeep False "content/reveal"
+        .| concatMapC (\fp ->
+            case splitExtension fp of
+              (("content/reveal/" `stripPrefix`) -> Just x, ".md") ->
+                Just (map pack $ splitPath x, x)
+              _ -> Nothing)
+        .| sinkList
+  defaultLayout $ do
+    setTitle "Reveal Decks"
+    [whamlet|
+      <div .container>
+        <div .row>
+          <div .col-md-2>
+          <div .col-md-8>
+            <h1>Reveal Decks
+            <ul>
+              $forall (pieces, whole) <- files
+                <li>
+                  <a href=@{RevealR pieces}>#{whole}
+    |]
 getRevealR pieces = do
     mapM_ checkPiece pieces
     let fp = unpack $ intercalate "/" ("content":"reveal":pieces) ++ ".md"
