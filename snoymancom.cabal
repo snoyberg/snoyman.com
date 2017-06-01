@@ -28,6 +28,7 @@ library
                      , containers
                      , directory
                      , async
+                     , time
   default-language:    Haskell2010
 
 executable snoymancom

@@ -27,6 +27,7 @@ import Yesod.GitRepo
 import System.Directory (doesFileExist, canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
 import qualified Data.Map as Map
+import Data.Time (diffUTCTime)
 
 data App = App
     { appData   :: GitRepo Data
@@ -246,21 +247,26 @@ getHomeR :: Handler Html
 getHomeR = do
     dat <- getData
     posts <- getDescendingPosts False
+    now <- liftIO getCurrentTime
     let Home {..} = dataHome dat
         mRecentPost =
             case posts of
                 ((year, month, slug), post):_ -> Just
                     ( PostR year month slug
                     , postTitle post
-                    , prettyDay $ postTime post
+                    , prettyDay now $ postTime post
                     )
                 [] -> Nothing
     defaultLayout $ do
         setTitle $ toHtml homeTitle
         $(whamletFile "templates/home.hamlet")
 
-prettyDay :: UTCTime -> String
-prettyDay x
+prettyDay :: UTCTime -- ^ today, for determining april fools age
+          -> UTCTime -- ^ day to show
+          -> String
+prettyDay today x
+  | (year, 4, 1) <- toGregorian (utctDay x)
+  , diffUTCTime today x >= (60 * 60 * 24 * 4) = "April Fools', " ++ show year
   | (2017, 4, 1) <- toGregorian (utctDay x) = "5 Nissan, 5777"
   | otherwise = formatTime defaultTimeLocale "%B %e, %Y" x
 
@@ -283,6 +289,7 @@ getPostR year month slug = do
     postsMap <- getPosts True
     thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
     posts <- getDescendingPosts False
+    now <- liftIO getCurrentTime
     defaultLayout $ do
         setTitle $ toHtml $ postTitle thisPost <> " - Michael Snoyman's blog"
         toWidget

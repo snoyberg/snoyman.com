@@ -8,7 +8,7 @@
           <a href="http://www.fpcomplete.com/blog">FP Complete blog#
           \.
         <h1>#{postTitle thisPost}
-        <h2>#{prettyDay $ postTime thisPost}
+        <h2>#{prettyDay now $ postTime thisPost}
         <div #social>
             <div .twitter-share>
               <a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet
@@ -34,4 +34,4 @@
                 <li>
                     <a href=@{PostR year month slug}>#{postTitle post}
                     \ #
-                    <i>#{prettyDay (postTime post)}
+                    <i>#{prettyDay now (postTime post)}
