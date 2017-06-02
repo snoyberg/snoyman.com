@@ -9,6 +9,12 @@
           \.
         <h1>#{postTitle thisPost}
         <h2>#{prettyDay now $ postTime thisPost}
+
+        <p>
+         <i>
+          See a typo? Have a suggestion?
+          <a target=_blank rel=nofollow href=https://github.com/snoyberg/snoyman.com-content/edit/master/#{postFilename thisPost}>Edit this page on Github
+
         <div #social>
             <div .twitter-share>
               <a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet

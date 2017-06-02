@@ -177,6 +177,7 @@ data Post = Post
     , postContent :: Html
     , postTime :: UTCTime
     , postListed :: Bool
+    , postFilename :: !FilePath
     }
 
 mkYesod "App" [parseRoutes|
@@ -450,13 +451,13 @@ instance FromJSON PostRaw where
         <*> o .:? "listed" .!= True
 
 loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
-loadPost dataRoot (PostRaw suffix postTitle postTime postListed) = do
-    postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> suffix
+loadPost dataRoot (PostRaw postFilename postTitle postTime postListed) = do
+    postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> postFilename
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where
     UTCTime postDay _ = postTime
     (year, month, _) = toGregorian postDay
-    slug = pack $ takeBaseName suffix
+    slug = pack $ takeBaseName postFilename
 
 mkApp :: Bool -> IO App
 mkApp isDev = do
