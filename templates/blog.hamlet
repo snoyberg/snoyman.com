@@ -32,6 +32,6 @@
         <ul .blog-archive>
             $forall ((year, month, slug), post) <- posts
                 <li>
-                    <a href=@{PostR year month slug}>#{postTitle post}
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
                     \ #
                     <i>#{prettyDay now (postTime post)}

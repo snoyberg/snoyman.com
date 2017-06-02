@@ -7,6 +7,7 @@
 {-# LANGUAGE ViewPatterns      #-}
 {-# LANGUAGE RecordWildCards   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections     #-}
 module SnoymanCom
     ( prodMain
     , develMain
@@ -276,12 +277,19 @@ getFaviconR = dataFavicon <$> getData
 getRobotsR :: Handler TypedContent
 getRobotsR = dataRobots <$> getData
 
+getAddPreview :: Handler (Route App -> (Route App, [(Text, Text)]))
+getAddPreview = do
+    let key = "preview" :: Text
+    previews <- lookupGetParams key
+    return (, map (key,) previews)
+
 getBlogR :: Handler ()
 getBlogR = do
     posts <- getDescendingPosts False
+    addPreview <- getAddPreview
     case posts of
         [] -> notFound
-        ((year, month, slug), _):_ -> redirect $ PostR year month slug
+        ((year, month, slug), _):_ -> redirect $ addPreview $ PostR year month slug
 
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
@@ -290,6 +298,7 @@ getPostR year month slug = do
     thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
     posts <- getDescendingPosts False
     now <- liftIO getCurrentTime
+    addPreview <- getAddPreview
     defaultLayout $ do
         setTitle $ toHtml $ postTitle thisPost <> " - Michael Snoyman's blog"
         toWidget
