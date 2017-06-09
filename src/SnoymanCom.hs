@@ -227,14 +227,15 @@ getData :: Handler Data
 getData = getYesod >>= liftIO . grContent . appData
 
 getPosts :: Bool -- ^ include unlisted?
+         -> Bool -- ^ include future posts regardless of ?preview=true?
          -> Handler (Map (Year, Month, Text) Post)
-getPosts unlisted = do
+getPosts unlisted includeFuture = do
     mpreview <- lookupGetParam "preview"
     dat <- getData
     posts <-
-        case mpreview of
-            Just "true" -> return $ dataPostsAll dat
-            _ -> dataPostsPast dat
+        if mpreview == Just "true" || includeFuture
+            then return $ dataPostsAll dat
+            else dataPostsPast dat
     return $
         if unlisted
             then posts
@@ -243,7 +244,7 @@ getPosts unlisted = do
 getDescendingPosts :: Bool -- ^ include unlisted?
                    -> Handler [((Year, Month, Text), Post)]
 getDescendingPosts unlisted =
-    reverse . sortOn (postTime . snd) . mapToList <$> getPosts unlisted
+    reverse . sortOn (postTime . snd) . mapToList <$> getPosts unlisted False
 
 getHomeR :: Handler Html
 getHomeR = do
@@ -295,7 +296,7 @@ getBlogR = do
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
     forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
-    postsMap <- getPosts True
+    postsMap <- getPosts True True
     thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
     posts <- getDescendingPosts False
     now <- liftIO getCurrentTime
