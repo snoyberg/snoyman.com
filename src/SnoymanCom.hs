@@ -484,7 +484,9 @@ prodMain :: IO ()
 prodMain = mkApp False >>= warpEnv
 
 develMain :: IO ()
-develMain = mkApp True >>= race_ watchTermFile . warpEnv
+develMain =
+  mkApp True >>=
+  Control.Concurrent.Async.race_ watchTermFile . warpEnv
 
 -- | Would certainly be more efficient to use fsnotify, but this is
 -- simpler.
