@@ -178,6 +178,7 @@ data Post = Post
     , postTime :: UTCTime
     , postListed :: Bool
     , postFilename :: !FilePath
+    , postDescription :: !(Maybe Text)
     }
 
 mkYesod "App" [parseRoutes|
@@ -302,7 +303,9 @@ getPostR year month slug = do
     now <- liftIO getCurrentTime
     addPreview <- getAddPreview
     defaultLayout $ do
-        setTitle $ toHtml $ postTitle thisPost <> " - Michael Snoyman's blog"
+        setTitle $ toHtml $ postTitle thisPost
+        forM_ (postDescription thisPost) $ \desc ->
+          toWidgetHead [shamlet|<meta name=og:description value=#{desc}>|]
         toWidget
             [lucius|
                 #social > div {
@@ -443,16 +446,17 @@ loadData dataRoot = do
 
     return Data {..}
 
-data PostRaw = PostRaw FilePath Text UTCTime Bool
+data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text)
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
         <$> o .: "file"
         <*> o .: "title"
         <*> ((flip UTCTime 0 <$> (o .: "day")) <|> (o .: "time"))
         <*> o .:? "listed" .!= True
+        <*> o .:? "description"
 
 loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
-loadPost dataRoot (PostRaw postFilename postTitle postTime postListed) = do
+loadPost dataRoot (PostRaw postFilename postTitle postTime postListed postDescription) = do
     postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> postFilename
     return ((Year $ fromIntegral year, Month month, slug), Post {..})
   where

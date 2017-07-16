@@ -11,6 +11,11 @@ $newline never
     <title>
       #{pageTitle pc}
 
+    <meta name=twitter:site content=@snoyberg>
+    <meta name=og:site_name content="Michael Snoyman's homepage">
+    <meta name=twitter:card content=summary>
+    <meta name=og:title content=#{pageTitle pc}>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
     ^{pageHead pc}
