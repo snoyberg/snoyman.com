@@ -29,6 +29,7 @@ import System.Directory (doesFileExist, canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
 import qualified Data.Map as Map
 import Data.Time (diffUTCTime)
+import Shekel
 
 data App = App
     { appData   :: GitRepo Data
@@ -36,6 +37,7 @@ data App = App
     , appStatic :: Static
     , appTorah  :: Static
     , appWellKnown :: Static
+    , appShekel :: !CurrentRef
     }
 
 data Data = Data
@@ -194,6 +196,8 @@ mkYesod "App" [parseRoutes|
 /feed FeedR GET
 /.well-known WellKnownR Static appWellKnown
 /reveal/*[Text] RevealR GET
+/shekel ShekelR GET
+/shekel/feed ShekelFeedR GET
 |]
 
 instance Yesod App where
@@ -464,8 +468,8 @@ loadPost dataRoot (PostRaw postFilename postTitle postTime postListed postDescri
     (year, month, _) = toGregorian postDay
     slug = pack $ takeBaseName postFilename
 
-mkApp :: Bool -> IO App
-mkApp isDev = do
+withApp :: Bool -> (App -> IO a) -> IO a
+withApp isDev inner = do
     appData <- if isDev
         then gitRepoDev
             "content"
@@ -482,14 +486,14 @@ mkApp isDev = do
     appStatic <- static' "static"
     appTorah <- static' "torah"
     appWellKnown <- static' "well-known"
-    return App {..}
+    withCurrentRef $ \appShekel -> inner App {..}
 
 prodMain :: IO ()
-prodMain = mkApp False >>= warpEnv
+prodMain = withApp False warpEnv
 
 develMain :: IO ()
 develMain =
-  mkApp True >>=
+  withApp True $
   Control.Concurrent.Async.race_ watchTermFile . warpEnv
 
 -- | Would certainly be more efficient to use fsnotify, but this is
@@ -505,3 +509,13 @@ watchTermFile =
             else do
                 threadDelay 100000
                 loop
+
+getShekelR :: Handler ()
+getShekelR = do
+  currentRef <- appShekel <$> getYesod
+  liftIO (htmlRes currentRef) >>= sendWaiResponse
+
+getShekelFeedR :: Handler ()
+getShekelFeedR = do
+  currentRef <- appShekel <$> getYesod
+  liftIO (atomRes currentRef) >>= sendWaiResponse
