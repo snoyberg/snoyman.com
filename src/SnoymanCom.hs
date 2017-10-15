@@ -411,11 +411,11 @@ getRevealR pieces = do
         title = fromMaybe "Reveal.js Slideshow"
               $ listToMaybe
               $ mapMaybe (stripPrefix "title: ") header
-        tokenized = tokenize id body
-        tokenize front [] = [RTNewRow $ unlines $ front []]
-        tokenize front ("---":rest) = RTNewColumn (unlines $ front []) : tokenize id rest
-        tokenize front ("----":rest) = RTNewRow (unlines $ front []) : tokenize id rest
-        tokenize front (x:rest) = tokenize (front . (x:)) rest
+        tokenized = tokenize RTNewColumn id body
+        tokenize wrapper front [] = [wrapper $ unlines $ front []]
+        tokenize wrapper front ("---":rest) = wrapper (unlines $ front []) : tokenize RTNewColumn id rest
+        tokenize wrapper front ("----":rest) = wrapper (unlines $ front []) : tokenize RTNewRow id rest
+        tokenize wrapper front (x:rest) = tokenize wrapper (front . (x:)) rest
         cols = toCols tokenized
         toCols [] = []
         toCols (RTNewColumn content:rest) =
