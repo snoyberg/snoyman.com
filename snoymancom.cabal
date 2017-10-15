@@ -22,6 +22,7 @@ library
                      , yesod-static
                      , yesod-core >= 1.4.30
                      , classy-prelude-yesod
+                     , deepseq
                      , vector
                      , yesod-gitrepo
                      , filepath

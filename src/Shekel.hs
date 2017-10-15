@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes, RecordWildCards #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Shekel
   ( CurrentRef
   , withCurrentRef
@@ -27,6 +28,8 @@ import qualified Data.Text as T
 import Data.Time
 import Text.Read (readMaybe)
 import Control.Concurrent.Async (race)
+import ClassyPrelude.Yesod (tryAnyDeep, SomeException, Generic, fromStrict, encodeUtf8, pack)
+import Control.DeepSeq (NFData)
 
 read' :: (Read a, Monad m) => String -> m a
 read' s =
@@ -34,22 +37,15 @@ read' s =
         Nothing -> fail $ "Could not parse: " ++ show s
         Just a -> return a
 
-type CurrentRef = IORef Current
+type CurrentRef = IORef (Either SomeException Current)
 
 withCurrentRef :: (CurrentRef -> IO a) -> IO a
 withCurrentRef inner = do
   currentRef <- getCurrent >>= newIORef
   either id id <$> race (populate currentRef) (inner currentRef)
 
-main :: IO ()
-main = do
-    port <- getEnv "PORT" >>= read'
-    icurrent <- getCurrent >>= newIORef
-    forkIO $ populate icurrent
-    run port $ app icurrent
-
-getCurrent :: IO Current
-getCurrent = do
+getCurrent :: IO (Either SomeException Current)
+getCurrent = tryAnyDeep $ do
     lbs <- simpleHttp "http://www.boi.org.il/currency.xml"
     let c = fromDocument $ parseLBS_ def lbs
     let rawDate = T.concat $ c $/ element "LAST_UPDATE" &/ content
@@ -73,27 +69,35 @@ getCurrent = do
                 _ -> "stronger"
         }
 
+populate :: CurrentRef -> IO a
 populate icurrent = forever $ do
     threadDelay $ 1000 * 1000 * 60 * 60 * 3 -- 3 hours
-    forkIO $ getCurrent >>= writeIORef icurrent
-
-app :: IORef Current -> Application
-app icurrent req respond = do
-    current <- readIORef icurrent
-    respond $ case pathInfo req of
-        [] -> responseLBS status200 [("Content-Type", "text/html; charset=utf-8")] $ homepage current
-        ["feed.atom"] -> responseLBS status200 [("Content-type", "application/atom+xml")] $ feed current
-        _ -> responseLBS status404 [] "Not found"
+    forkIO $ do
+      eres <- getCurrent
+      case eres of
+        Left e -> putStrLn $ "Error loading shekel conversion: " ++ show e
+        Right x -> writeIORef icurrent (Right x)
 
 htmlRes :: CurrentRef -> IO Response
 htmlRes currentRef = do
-  current <- readIORef currentRef
-  return $ responseLBS status200 [("Content-Type", "text/html; charset=utf-8")] (homepage current)
+  ecurrent <- readIORef currentRef
+  return $
+    case ecurrent of
+      Left e ->
+        responseLBS status500 [("Content-Type", "text/plain")]
+        $ fromStrict $ encodeUtf8 $ pack $ "Problem getting current exchange rate: " ++ show e
+      Right current -> responseLBS status200 [("Content-Type", "text/html; charset=utf-8")] (homepage current)
 
 atomRes :: CurrentRef -> IO Response
 atomRes currentRef = do
-  current <- readIORef currentRef
-  return $ responseLBS status200 [("Content-type", "application/atom+xml")] (feed current)
+  ecurrent <- readIORef currentRef
+  return $
+    case ecurrent of
+      Left e ->
+        responseLBS status500 [("Content-Type", "text/plain")]
+        $ fromStrict $ encodeUtf8 $ pack $ "Problem getting current exchange rate: " ++ show e
+      Right current ->
+        responseLBS status200 [("Content-type", "application/atom+xml")] (feed current)
 
 homepage Current {..} = renderHtml [shamlet|
 $doctype 5
@@ -153,6 +157,8 @@ data Current = Current
     , day :: Text
     , direction :: Text
     }
+  deriving Generic
+instance NFData Current
 
 feed Current {..} =
     renderLBS def $ Document (Prologue [] Nothing []) root []
