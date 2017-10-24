@@ -45,7 +45,7 @@ data Data = Data
     , dataRoot :: FilePath
     , dataRobots :: TypedContent
     , dataFavicon :: TypedContent
-    , dataPostsAll :: Map (Year, Month, Text) Post
+    , dataPostsAll :: Map (Year, Month, Text) (Either Post Text)
     }
 
 dataPostsPast :: MonadIO m
@@ -53,7 +53,10 @@ dataPostsPast :: MonadIO m
               -> m (Map (Year, Month, Text) Post)
 dataPostsPast d = do
     now <- liftIO getCurrentTime
-    return $ Map.filter ((<= now) . postTime) (dataPostsAll d)
+    let pred' (Left p)
+          | postTime p <= now = Just p
+        pred' _ = Nothing
+    return $ Map.mapMaybe pred' (dataPostsAll d)
 
 data Home = Home
     { homeTitle :: Text
@@ -239,7 +242,9 @@ getPosts unlisted includeFuture = do
     dat <- getData
     posts <-
         if mpreview == Just "true" || includeFuture
-            then return $ dataPostsAll dat
+            then return
+                    $ Map.mapMaybe (either Just (const Nothing))
+                    $ dataPostsAll dat
             else dataPostsPast dat
     return $
         if unlisted
@@ -298,9 +303,17 @@ getBlogR = do
         [] -> notFound
         ((year, month, slug), _):_ -> redirect $ addPreview $ PostR year month slug
 
+checkRedirects :: Year -> Month -> Text -> Handler ()
+checkRedirects year month slug = do
+  dat <- getData
+  case lookup (year, month, slug) $ dataPostsAll dat of
+    Just (Right slug') -> redirect $ PostR year month slug'
+    _ -> return ()
+
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
     forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
+    checkRedirects year month slug
     postsMap <- getPosts True True
     thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
     posts <- getDescendingPosts False
@@ -446,11 +459,11 @@ loadData dataRoot = do
 
     rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
             >>= either throwM return
-    dataPostsAll <- mapFromList <$> mapM (loadPost dataRoot) rawPosts
+    dataPostsAll <- (mapFromList . concat) <$> mapM (loadPost dataRoot) (asList rawPosts)
 
     return Data {..}
 
-data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text)
+data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text) !(Set Text)
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
         <$> o .: "file"
@@ -458,11 +471,16 @@ instance FromJSON PostRaw where
         <*> ((flip UTCTime 0 <$> (o .: "day")) <|> (o .: "time"))
         <*> o .:? "listed" .!= True
         <*> o .:? "description"
+        <*> o .:? "old-slugs" .!= mempty
 
-loadPost :: FilePath -> PostRaw -> IO ((Year, Month, Text), Post)
-loadPost dataRoot (PostRaw postFilename postTitle postTime postListed postDescription) = do
+loadPost :: FilePath -> PostRaw -> IO [((Year, Month, Text), Either Post Text)]
+loadPost dataRoot (PostRaw postFilename postTitle postTime postListed postDescription oldSlugs) = do
     postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> postFilename
-    return ((Year $ fromIntegral year, Month month, slug), Post {..})
+    let year' = Year $ fromIntegral year
+        month' = Month month
+    return
+      $ ((year', month', slug), Left Post {..})
+      : map (\slug' -> ((year', month', slug'), Right slug)) (setToList oldSlugs)
   where
     UTCTime postDay _ = postTime
     (year, month, _) = toGregorian postDay
