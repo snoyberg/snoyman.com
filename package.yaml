@@ -1,0 +1,51 @@
+name: snoymancom
+
+dependencies:
+- base
+- yaml
+- aeson
+- markdown
+- text
+- shakespeare
+- blaze-markup
+- yesod-static
+- yesod-core >=1.4.30
+- classy-prelude-yesod
+- deepseq
+- vector
+- yesod-gitrepo
+- filepath
+- yesod-newsfeed
+- containers
+- directory
+- async
+- time
+- http-conduit
+- lifted-base
+- xml-conduit
+- xml-hamlet
+- http-types
+- wai
+- blaze-html
+- warp
+- yesod-gitrev
+
+library:
+  source-dirs: src
+
+executables:
+  snoymancom:
+    main: main.hs
+    source-dirs: app
+    ghc-options: -threaded
+    dependencies:
+    - snoymancom
+    when:
+    - condition: flag(library-only)
+      buildable: false
+
+flags:
+  library-only:
+    description: Only build library
+    manual: true
+    default: false
