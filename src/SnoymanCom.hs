@@ -30,6 +30,7 @@ import System.FilePath (takeBaseName, splitExtension, splitPath)
 import qualified Data.Map as Map
 import Data.Time (diffUTCTime)
 import Shekel
+import Yesod.GitRev
 
 data App = App
     { appData   :: GitRepo Data
@@ -38,6 +39,7 @@ data App = App
     , appTorah  :: Static
     , appWellKnown :: Static
     , appShekel :: !CurrentRef
+    , appGitRev :: !GitRev
     }
 
 data Data = Data
@@ -201,6 +203,7 @@ mkYesod "App" [parseRoutes|
 /reveal/*[Text] RevealR GET
 /shekel ShekelR GET
 /shekel/feed ShekelFeedR GET
+/build-version BuildVersionR GitRev appGitRev
 |]
 
 instance Yesod App where
@@ -504,6 +507,7 @@ withApp isDev inner = do
     appStatic <- static' "static"
     appTorah <- static' "torah"
     appWellKnown <- static' "well-known"
+    let appGitRev = $gitRev
     withCurrentRef $ \appShekel -> inner App {..}
 
 prodMain :: IO ()

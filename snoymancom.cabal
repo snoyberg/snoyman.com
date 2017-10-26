@@ -39,6 +39,7 @@ library
                      , wai
                      , blaze-html
                      , warp
+                     , yesod-gitrev
   default-language:    Haskell2010
 
 executable snoymancom
