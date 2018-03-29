@@ -330,6 +330,11 @@ getPostR year month slug = do
           toWidgetHead [shamlet|<meta name=og:description value=#{desc}>|]
         toWidget
             [lucius|
+                .post-date {
+                    font-size: 20px;
+                    color: #777;
+                }
+
                 #social {
                     padding: 0.5em 1em;
                     background-color: #e8e8e8;
