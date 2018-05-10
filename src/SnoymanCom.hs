@@ -205,6 +205,7 @@ mkYesod "App" [parseRoutes|
 /shekel ShekelR GET
 /shekel/feed ShekelFeedR GET
 /build-version BuildVersionR GitRev appGitRev
+/base BaseR GET
 |]
 
 instance Yesod App where
@@ -555,3 +556,51 @@ getShekelFeedR :: Handler ()
 getShekelFeedR = do
   currentRef <- appShekel <$> getYesod
   liftIO (atomRes currentRef) >>= sendWaiResponse
+
+getBaseR :: Handler Html
+getBaseR = defaultLayout $ do
+  let title = "GHC/base/Cabal library versions"
+  setTitle title
+  toWidget [lucius|
+    table#versions {
+      font-size: 140%;
+      margin: 3em auto;
+
+      border-collapse: collapse;
+        th, td {
+          border: 1px solid black;
+          padding: 5px;
+        }
+    }
+  |]
+  [whamlet|
+    <div .container>
+      <div .row>
+        <div .col-md-2>
+        <div .col-md-8>
+          <h1>#{title}
+          <p>This table correlates GHC versions with the versions of the base and Cabal libraries it ships with.
+          <table #versions>
+            <thead>
+              <tr>
+                <th>GHC
+                <th>base
+                <th>Cabal
+            <tbody>
+              $forall (ghc, base, cabal) <- versions
+                <tr>
+                  <td>ghc-#{ghc}
+                  <td>base-#{base}
+                  <td>Cabal-#{cabal}
+  |]
+  where
+    versions :: [(Text, Text, Text)]
+    versions =
+      [ ("7.10.3", "4.8.2.0", "1.22.5.0")
+      , ("8.0.1", "4.9.0.0", "1.24.0.0")
+      , ("8.0.2", "4.9.1.0", "1.24.2.0")
+      , ("8.2.1", "4.10.0.0", "2.0.0.2")
+      , ("8.2.2", "4.10.1.0", "2.0.1.0")
+      , ("8.4.1", "4.11.0.0", "2.2.0.0")
+      , ("8.4.2", "4.11.1.0", "2.2.0.1")
+      ]

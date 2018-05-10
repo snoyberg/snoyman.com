@@ -20,7 +20,7 @@
 
 ^{widget}
 
-<div .container>
+<div .container .hidden-print>
   <div .row>
     <div .col-md-12>
       <div #twitter>
