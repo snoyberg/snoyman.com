@@ -146,7 +146,7 @@ $doctype 5
             <script type="text/javascript" src="https://s7.addthis.com/js/250/addthis_widget.js#username=snoyberg">
         <div class="footer">
             This free service provided by
-            <a href="http://www.snoyman.com/">Michael Snoyman
+            <a href="https://www.snoyman.com/">Michael Snoyman
 |]
 
 data Current = Current
@@ -166,13 +166,13 @@ feed Current {..} =
     root = Element "feed" (Map.singleton "xmlns" "http://www.w3.org/2005/Atom") nodes
     nodes = [xml|
         <title>Dollar versus Shekel
-        <link rel="self" href="http://www.snoyman.com/shekel/feed">
-        <link href="http://www.snoyman.com/shekel">
-        <updated>#{updated}</updated>
-        <id>http://www.snoyman.com/shekel
+        <link rel="self" href="https://www.snoyman.com/shekel/feed">
+        <link href="https://www.snoyman.com/shekel">
+        <updated>#{updated}
+        <id>https://www.snoyman.com/shekel
         <entry>
-            <id>http://www.snoyman.com/shekel?#{day}
-            <link href="http://www.snoyman.com/shekel?#{updated}">
+            <id>https://www.snoyman.com/shekel?#{day}
+            <link href="https://www.snoyman.com/shekel?#{updated}">
             <updated>#{updated}
             <title>Dollar versus Shekel: #{date}
             <content type="html">#{feedHtml}
