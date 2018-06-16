@@ -169,10 +169,10 @@ feed Current {..} =
         <link rel="self" href="http://www.snoyman.com/shekel/feed">
         <link href="http://www.snoyman.com/shekel">
         <updated>#{updated}</updated>
-        <id>http://www.dollarversusshekel.info/
+        <id>http://www.snoyman.com/shekel
         <entry>
-            <id>http://www.dollarversusshekel.info/?#{day}
-            <link href="http://www.dollarversusshekel.info/?#{updated}">
+            <id>http://www.snoyman.com/shekel?#{day}
+            <link href="http://www.snoyman.com/shekel?#{updated}">
             <updated>#{updated}
             <title>Dollar versus Shekel: #{date}
             <content type="html">#{feedHtml}
