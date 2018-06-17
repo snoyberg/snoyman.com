@@ -120,13 +120,13 @@ $doctype 5
             <div class="delta">The dollar became
             <div class=#{direction}>#{delta}
         <p>You can see more currencies versus the shekel and graphs on <a href="http://www.boi.org.il/en/markets/exchangerates/pages/default.aspx">the Bank of Israel website</a>.
-        <form style="border:1px solid #ccc;padding:3px;text-align:center;" action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('https://feedburner.google.com/fb/a/mailverify?uri=DollarVersusShekel', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+        <form style="border:1px solid #ccc;padding:3px;text-align:center;" action="https://blogtrottr.com" method="post" target="_blank">
             Enter your email address:
             <br>
-            <input type="email" style="width:400px" name="email">
+            <input type="email" style="width:400px" name="btr_email">
             <br>
-            <input type="hidden" value="DollarVersusShekel" name="uri">
-            <input type="hidden" name="loc" value="en_US">
+            <input type="hidden" value="https://www.snoyman.com/shekel/feed" name="btr_url">
+            <input type="hidden" name="schedule_type" value="0">
             <input type="submit" value="Subscribe">
         <div>
             <a href="https://feeds.feedburner.com/DollarVersusShekel" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">
