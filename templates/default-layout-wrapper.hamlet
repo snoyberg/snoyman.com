@@ -12,6 +12,7 @@ $newline never
       #{pageTitle pc}
 
     <meta name=twitter:site content=@snoyberg>
+    <meta name=twitter:creator content=@snoyberg>
     <meta name=og:site_name content="Michael Snoyman's homepage">
     <meta name=twitter:card content=summary>
     <meta name=og:title content=#{pageTitle pc}>
