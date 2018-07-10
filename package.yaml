@@ -5,6 +5,7 @@ dependencies:
 - yaml
 - aeson
 - markdown
+- cmark-gfm
 - text
 - shakespeare
 - blaze-markup

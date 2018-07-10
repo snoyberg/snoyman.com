@@ -23,6 +23,7 @@ import Data.Yaml (decodeFileEither)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Blaze (ToMarkup (..))
 import Text.Markdown
+import CMarkGFM (extTable, extStrikethrough, extAutolink, optSmart, commonmarkToHtml)
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import Yesod.GitRepo
@@ -71,18 +72,25 @@ data Home = Home
     , homeSites :: Vector Link
     }
 
-renderMarkdown :: Text -> Html
-renderMarkdown = markdown def
+renderMarkdownOld :: Text -> Html
+renderMarkdownOld = markdown def
     { msXssProtect = False
     , msAddHeadingId = True
     } . fromStrict
+
+renderMarkdownNew :: Text -> Html
+renderMarkdownNew =
+  preEscapedToMarkup .
+  commonmarkToHtml
+  [optSmart]
+  [extAutolink, extStrikethrough, extTable]
 
 instance FromJSON Home where
     parseJSON = withObject "Home" $ \o -> Home
         <$> o .: "title"
         <*> o .: "profile"
         <*> o .: "toplinks"
-        <*> (renderMarkdown <$> (o .: "about"))
+        <*> (renderMarkdownNew <$> (o .: "about"))
         <*> o .: "publications"
         <*> o .: "talks"
         <*> o .: "sites"
@@ -493,6 +501,9 @@ instance FromJSON PostRaw where
 
 loadPost :: FilePath -> PostRaw -> IO [((Year, Month, Text), Either Post Text)]
 loadPost dataRoot (PostRaw postFilename postTitle postTime postListed postDescription oldSlugs) = do
+    let renderMarkdown
+          | utctDay postTime >= fromGregorian 2018 7 9 = renderMarkdownNew
+          | otherwise = renderMarkdownOld
     postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> postFilename
     let year' = Year $ fromIntegral year
         month' = Month month
