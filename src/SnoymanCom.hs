@@ -19,6 +19,8 @@ module SnoymanCom
 import ClassyPrelude.Yesod
 import Control.Concurrent.Async (race_)
 import Text.Hamlet (hamletFile)
+import Text.Lucius (luciusFile)
+import Text.Julius (juliusFile)
 import Data.Yaml (decodeFileEither)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Blaze (ToMarkup (..))
@@ -371,11 +373,8 @@ getPostR year month slug = do
                 }
             |]
         $(whamletFile "templates/blog.hamlet")
-        toWidget
-            [julius|
-                hljs.configure({languages:[]});
-                hljs.initHighlightingOnLoad();
-            |]
+        toWidget $(luciusFile "templates/blog.lucius")
+        toWidget $(juliusFile "templates/blog.julius")
         addStylesheetRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css"
         addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"
         addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/haskell.min.js"

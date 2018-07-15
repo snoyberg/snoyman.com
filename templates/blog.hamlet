@@ -1,4 +1,4 @@
-<div .container>
+<div .container #blog-body>
   <div .row>
     <div .col-md-9>
         <p>
