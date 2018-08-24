@@ -197,7 +197,10 @@ data Post = Post
     , postListed :: Bool
     , postFilename :: !FilePath
     , postDescription :: !(Maybe Text)
+    , postSeries :: !(Maybe (SeriesName, Text))
     }
+
+type SeriesName = Text
 
 mkYesod "App" [parseRoutes|
 / HomeR GET
@@ -326,6 +329,11 @@ checkRedirects year month slug = do
     Just (Right slug') -> redirect $ PostR year month slug'
     _ -> return ()
 
+data SeriesInfo = SeriesInfo
+  { siTitle :: !Text
+  , siPosts :: ![(Maybe (Route App), Text)]
+  }
+
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
     forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
@@ -335,6 +343,19 @@ getPostR year month slug = do
     posts <- getDescendingPosts False
     now <- liftIO getCurrentTime
     addPreview <- getAddPreview
+    let mseriesInfo = flip map (postSeries thisPost) $ \(name, stitle) ->
+          SeriesInfo
+            { siTitle = stitle
+            , siPosts = flip mapMaybe (reverse posts) $ \(triple, post) -> do
+                (name', _) <- postSeries post
+                guard $ name == name'
+                let route
+                      | triple == (year, month, slug) = Nothing
+                      | otherwise =
+                          let (x, y, z) = triple
+                           in Just $ PostR x y z
+                Just (route, postTitle post)
+            }
     defaultLayout $ do
         setTitle $ toHtml $ postTitle thisPost
         forM_ (postDescription thisPost) $ \desc ->
@@ -370,6 +391,13 @@ getPostR year month slug = do
                         word-wrap: normal;
                         white-space: pre;
                     }
+                }
+
+                #series-info {
+                  margin: 0.5em;
+                  padding: 0.5em;
+                  background-color: #ffe;
+                  border-radius: 10px;
                 }
             |]
         $(whamletFile "templates/blog.hamlet")
@@ -482,13 +510,24 @@ loadData dataRoot = do
     dataHome <- decodeFileEither (dataRoot </> "home.yaml")
             >>= either throwM return
 
-    rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
-            >>= either throwM return
-    dataPostsAll <- (mapFromList . concat) <$> mapM (loadPost dataRoot) (asList rawPosts)
+    RawPosts rawPosts allSeries <-
+      decodeFileEither (dataRoot </> "posts.yaml")
+      >>= either throwM return
+    dataPostsAll <- (mapFromList . concat) <$> mapM (loadPost dataRoot allSeries) (rawPosts :: [PostRaw])
 
     return Data {..}
 
-data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text) !(Set Text)
+data RawPosts = RawPosts ![PostRaw] !(Map SeriesName Text)
+
+instance FromJSON RawPosts where
+  parseJSON v = asObject v <|> asArray
+    where
+      asArray = RawPosts <$> parseJSON v <*> pure mempty
+      asObject = withObject "RawPosts" $ \o -> RawPosts
+        <$> o .: "posts"
+        <*> o .: "series"
+
+data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text) !(Set Text) !(Maybe SeriesName)
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
         <$> o .: "file"
@@ -497,9 +536,18 @@ instance FromJSON PostRaw where
         <*> o .:? "listed" .!= True
         <*> o .:? "description"
         <*> o .:? "old-slugs" .!= mempty
+        <*> o .:? "series"
 
-loadPost :: FilePath -> PostRaw -> IO [((Year, Month, Text), Either Post Text)]
-loadPost dataRoot (PostRaw postFilename postTitle postTime postListed postDescription oldSlugs) = do
+loadPost
+  :: FilePath
+  -> Map SeriesName Text
+  -> PostRaw
+  -> IO [((Year, Month, Text), Either Post Text)]
+loadPost dataRoot allSeries (PostRaw postFilename postTitle postTime postListed postDescription oldSlugs mseries) = do
+    postSeries <- for mseries $ \name ->
+      case lookup name allSeries of
+        Nothing -> error $ "Undefined series name: " ++ show name
+        Just title -> pure (name, title)
     let renderMarkdown
           | utctDay postTime >= fromGregorian 2018 7 9 = renderMarkdownNew
           | otherwise = renderMarkdownOld

@@ -27,6 +27,16 @@
               <script src="https://apis.google.com/js/platform.js" async defer>
               <g:plusone>
 
+        $maybe SeriesInfo name otherPosts <- mseriesInfo
+          <aside #series-info>
+            <p>This post is part of a series, <b>#{name}</b>. You can read all the posts:
+            <ul>
+              $forall (mroute, title) <- otherPosts
+                <li>
+                  $maybe route <- mroute
+                    <a href=@{route}>#{title}
+                  $nothing
+                    #{title}
         #{postContent thisPost}
 
         <div #disqus_thread>
