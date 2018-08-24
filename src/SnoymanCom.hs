@@ -17,6 +17,7 @@ module SnoymanCom
     ) where
 
 import ClassyPrelude.Yesod
+import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async (race_)
 import Text.Hamlet (hamletFile)
 import Text.Lucius (luciusFile)
@@ -508,11 +509,11 @@ loadData dataRoot = do
     dataFavicon <- readData "image/x-icon" "favicon.ico"
     dataRobots <- readData "text/plain" "robots.txt"
     dataHome <- decodeFileEither (dataRoot </> "home.yaml")
-            >>= either throwM return
+            >>= either throwIO return
 
     RawPosts rawPosts allSeries <-
       decodeFileEither (dataRoot </> "posts.yaml")
-      >>= either throwM return
+      >>= either throwIO return
     dataPostsAll <- (mapFromList . concat) <$> mapM (loadPost dataRoot allSeries) (rawPosts :: [PostRaw])
 
     return Data {..}
