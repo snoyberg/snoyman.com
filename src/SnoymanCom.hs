@@ -214,6 +214,7 @@ mkYesod "App" [parseRoutes|
 /blog BlogR GET
 /blog/#Year/#Month/#Text PostR GET
 /feed FeedR GET
+/feed/#SeriesName SeriesFeedR GET
 /.well-known WellKnownR Static appWellKnown
 /reveal/*[Text] RevealR GET
 /shekel ShekelR GET
@@ -331,7 +332,8 @@ checkRedirects year month slug = do
     _ -> return ()
 
 data SeriesInfo = SeriesInfo
-  { siTitle :: !Text
+  { siName :: !SeriesName
+  , siTitle :: !Text
   , siPosts :: ![(Maybe (Route App), Text)]
   }
 
@@ -346,7 +348,8 @@ getPostR year month slug = do
     addPreview <- getAddPreview
     let mseriesInfo = flip map (postSeries thisPost) $ \(name, stitle) ->
           SeriesInfo
-            { siTitle = stitle
+            { siName = name
+            , siTitle = stitle
             , siPosts = flip mapMaybe (reverse posts) $ \(triple, post) -> do
                 (name', _) <- postSeries post
                 guard $ name == name'
@@ -409,8 +412,19 @@ getPostR year month slug = do
         addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/haskell.min.js"
 
 getFeedR :: Handler TypedContent
-getFeedR = do
-    posts <- take 10 <$> getDescendingPosts False
+getFeedR = feedHelper (const True)
+
+getSeriesFeedR :: SeriesName -> Handler TypedContent
+getSeriesFeedR name =
+  feedHelper $ \post ->
+    case postSeries post of
+      Just (name', _) -> name == name'
+      Nothing -> False
+
+feedHelper :: (Post -> Bool) -> Handler TypedContent
+feedHelper predicate = do
+    posts <- (take 10 . filter (predicate . snd))
+         <$> getDescendingPosts False
     updated <-
         case posts of
             [] -> notFound
