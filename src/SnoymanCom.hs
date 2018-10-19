@@ -334,7 +334,7 @@ checkRedirects year month slug = do
 data SeriesInfo = SeriesInfo
   { siName :: !SeriesName
   , siTitle :: !Text
-  , siPosts :: ![(Maybe (Route App), Text)]
+  , siPosts :: ![(Maybe (Route App), Text, UTCTime)]
   }
 
 getPostR :: Year -> Month -> Text -> Handler Html
@@ -358,7 +358,7 @@ getPostR year month slug = do
                       | otherwise =
                           let (x, y, z) = triple
                            in Just $ PostR x y z
-                Just (route, postTitle post)
+                Just (route, postTitle post, postTime post)
             }
     defaultLayout $ do
         setTitle $ toHtml $ postTitle thisPost

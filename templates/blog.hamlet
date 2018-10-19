@@ -28,12 +28,13 @@
           <aside #series-info>
             <p>This post is part of a series, <b>#{title}</b>. You can read all the posts:
             <ul>
-              $forall (mroute, title) <- otherPosts
+              $forall (mroute, title, date) <- otherPosts
                 <li>
                   $maybe route <- mroute
                     <a href=@{route}>#{title}
+                    <i>#{prettyDay now date}
                   $nothing
-                    #{title}
+                    <b>#{title}
             <p>
               <a href=@{SeriesFeedR name}>RSS feed link
         #{postContent thisPost}
