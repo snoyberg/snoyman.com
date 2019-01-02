@@ -215,6 +215,7 @@ mkYesod "App" [parseRoutes|
 /blog/#Year/#Month/#Text PostR GET
 /feed FeedR GET
 /feed/#SeriesName SeriesFeedR GET
+/series/#SeriesName SeriesR GET
 /.well-known WellKnownR Static appWellKnown
 /reveal/*[Text] RevealR GET
 /shekel ShekelR GET
@@ -421,6 +422,24 @@ getSeriesFeedR name =
     case postSeries post of
       Just (name', _) -> name == name'
       Nothing -> False
+
+getSeriesR :: SeriesName -> Handler Html
+getSeriesR name = do
+  posts <- Map.filter (\p -> (fst <$> postSeries p) == Just name) <$>
+           getPosts False False
+  title <-
+    case Map.minView posts of
+      Just (p, _) | Just (_, title) <- postSeries p -> pure title
+      _ -> notFound
+  let makeIdent (Year y, Month m, slug) = mconcat
+        [ "ident__"
+        , fromString $ show y
+        , "__"
+        , fromString $ show m
+        , "__"
+        , slug
+        ]
+  withUrlRenderer $(hamletFile "templates/series.hamlet")
 
 feedHelper :: (Post -> Bool) -> Handler TypedContent
 feedHelper predicate = do

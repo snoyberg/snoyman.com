@@ -37,6 +37,8 @@
                     <b>#{title}
             <p>
               <a href=@{SeriesFeedR name}>RSS feed link
+              |
+              <a href=@{SeriesR name}>Complete series
         #{postContent thisPost}
 
         <div #disqus_thread>
