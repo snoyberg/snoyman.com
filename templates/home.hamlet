@@ -21,7 +21,7 @@
                     $maybe publisher <- mpublisher
                         , #{publisher}
 
-        <h2>Talks
+        <h2 #talks>Talks
         <table .table .table-striped .table-bordered>
             <thead>
                 <tr>
