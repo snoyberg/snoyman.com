@@ -36,6 +36,9 @@ import qualified Data.Map as Map
 import Data.Time (diffUTCTime)
 import Shekel
 import Yesod.GitRev
+import GhcInfo
+import Control.AutoUpdate
+import Data.Version (Version)
 
 data App = App
     { appData   :: GitRepo Data
@@ -45,6 +48,7 @@ data App = App
     , appWellKnown :: Static
     , appShekel :: !CurrentRef
     , appGitRev :: !GitRev
+    , appBase :: !(IO (Map GhcVersion GhcInfo))
     }
 
 data Data = Data
@@ -616,6 +620,10 @@ withApp isDev inner = do
     appTorah <- static' "torah"
     appWellKnown <- static' "well-known"
     let appGitRev = $gitRev
+    appBase <- mkAutoUpdate defaultUpdateSettings
+      { updateAction = loadGhcInfo
+      , updateFreq = 1000 * 1000 * 60 * 60 * 24 -- daily
+      }
     withCurrentRef $ \appShekel -> inner App {..}
 
 prodMain :: IO ()
@@ -654,6 +662,7 @@ getBaseR :: Handler Html
 getBaseR = defaultLayout $ do
   let title = "GHC/base/Cabal library versions"
   setTitle title
+  versions <- getYesod >>= liftIO . appBase
   toWidget [lucius|
     table#versions {
       font-size: 140%;
@@ -679,22 +688,12 @@ getBaseR = defaultLayout $ do
                 <th>GHC
                 <th>base
                 <th>Cabal
+                <th>Win32
             <tbody>
-              $forall (ghc, base, cabal) <- versions
+              $forall (ghc, gi) <- mapToList versions
                 <tr>
                   <td>ghc-#{ghc}
-                  <td>base-#{base}
-                  <td>Cabal-#{cabal}
+                  <td>base-#{giBase gi}
+                  <td>Cabal-#{giCabal gi}
+                  <td>Win32-#{giWin32 gi}
   |]
-  where
-    versions :: [(Text, Text, Text)]
-    versions =
-      [ ("7.10.3", "4.8.2.0", "1.22.5.0")
-      , ("8.0.1", "4.9.0.0", "1.24.0.0")
-      , ("8.0.2", "4.9.1.0", "1.24.2.0")
-      , ("8.2.1", "4.10.0.0", "2.0.0.2")
-      , ("8.2.2", "4.10.1.0", "2.0.1.0")
-      , ("8.4.1", "4.11.0.0", "2.2.0.0")
-      , ("8.4.2", "4.11.1.0", "2.2.0.1")
-      , ("8.4.3", "4.11.1.0", "2.2.0.1")
-      ]

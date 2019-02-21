@@ -30,6 +30,8 @@ dependencies:
 - blaze-html
 - warp
 - yesod-gitrev
+- rio
+- auto-update
 
 library:
   source-dirs: src
