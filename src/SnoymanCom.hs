@@ -623,7 +623,7 @@ withApp isDev inner = do
     let appGitRev = $gitRev
     appBase <- mkAutoUpdate defaultUpdateSettings
       { updateAction = loadGhcInfo
-      , updateFreq = 1000 * 1000 * 60 * 60 * 24 -- daily
+      , updateFreq = 1000 * 1000 * 60 * 60 -- hourly
       }
     withCurrentRef $ \appShekel -> inner App {..}
 
