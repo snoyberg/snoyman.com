@@ -1,5 +1,1 @@
-resolver: lts-10.5
-image:
-    container:
-        base: "fpco/stack-run"
-        name: "snoyberg/snoyman.com"
+resolver: lts-14.10

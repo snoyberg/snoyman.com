@@ -17,9 +17,10 @@ module SnoymanCom
     ) where
 
 import ClassyPrelude.Yesod
+import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async (race_)
 import Text.Hamlet (hamletFile)
-import Data.Yaml (decodeFileEither)
+import Data.Yaml (decodeFileEither, decodeFileThrow)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Blaze (ToMarkup (..))
 import Text.Markdown
@@ -136,12 +137,12 @@ data Date = YearMonth Int Int
 instance FromJSON Date where
     parseJSON = withText "Date" $ \t -> parseYearMonth t
       where
-        parseYearMonth t = either fail return $ do
-            (year, t1) <- decimal t
-            t2 <- maybe (Left "no dash") Right $ stripPrefix "-" t1
-            (month, "") <- decimal t2
-            when (month < 1 || month > 12) $ Left "Invalid month"
-            return $ YearMonth year month
+        parseYearMonth t = do
+            (year, t1) <- either fail pure $ decimal t
+            t2 <- maybe (fail "no dash") pure $ stripPrefix "-" t1
+            (month, "") <- either fail pure $ decimal t2
+            when (month < 1 || month > 12) $ fail "Invalid month"
+            pure $ YearMonth year month
 instance ToMarkup Date where
     toMarkup (YearMonth year month') =
         toMarkup monthT ++ " " ++ toMarkup year
@@ -472,11 +473,8 @@ loadData dataRoot = do
             return $ TypedContent x $ toContent $ asByteString bs
     dataFavicon <- readData "image/x-icon" "favicon.ico"
     dataRobots <- readData "text/plain" "robots.txt"
-    dataHome <- decodeFileEither (dataRoot </> "home.yaml")
-            >>= either throwM return
-
-    rawPosts <- decodeFileEither (dataRoot </> "posts.yaml")
-            >>= either throwM return
+    dataHome <- decodeFileThrow (dataRoot </> "home.yaml")
+    rawPosts <- decodeFileThrow (dataRoot </> "posts.yaml")
     dataPostsAll <- (mapFromList . concat) <$> mapM (loadPost dataRoot) (asList rawPosts)
 
     return Data {..}
