@@ -21,7 +21,7 @@ import Text.XML
 import Text.XML.Cursor
 import qualified Data.Map as Map
 import Control.Concurrent
-import Data.IORef.Lifted
+import Data.IORef
 import Control.Monad
 import Network.HTTP.Conduit (simpleHttp)
 import qualified Data.Text as T

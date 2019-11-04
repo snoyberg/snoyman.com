@@ -22,7 +22,6 @@ dependencies:
 - async
 - time
 - http-conduit
-- lifted-base
 - xml-conduit
 - xml-hamlet
 - http-types
