@@ -504,7 +504,7 @@ getRevealR [] = do
           <div .col-md-8>
             <h1>Reveal Decks
             <ul>
-              $forall (pieces, whole) <- files
+              $forall (pieces, whole) <- sortBy (comparing fst) files
                 <li>
                   <a href=@{RevealR pieces}>#{whole}
     |]
