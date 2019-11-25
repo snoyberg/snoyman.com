@@ -1,12 +1,6 @@
 <div .container #blog-body>
   <div .row>
     <div .col-md-9>
-        <p>
-          I also blog frequently on the #
-          <a href="http://www.yesodweb.com/blog">Yesod Web Framework blog#
-          \, as well as the #
-          <a href="http://www.fpcomplete.com/blog">FP Complete blog#
-          \.
         <h1>#{postTitle thisPost}
         <h2 .post-date>#{prettyDay now $ postTime thisPost}
 

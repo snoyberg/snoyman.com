@@ -233,13 +233,7 @@ instance Yesod App where
     makeSessionBackend _ = return Nothing
 
     defaultLayout widget = do
-        pc <- widgetToPageContent $ do
-            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-            addScriptRemote "https://code.jquery.com/jquery-3.1.1.slim.min.js"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-
-            $(whamletFile "templates/default-layout.hamlet")
+        pc <- widgetToPageContent widget
 
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
