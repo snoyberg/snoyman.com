@@ -69,9 +69,9 @@ $newline never
     <footer .bg-dark .py-5>
       <ul class="list-inline text-center text-md-right mb-0">
         <li class="list-inline-item mx-2">
-          <a href="https://twitter.com/snoyberg" class="twitter-follow-button" data-show-count="false">Follow @snoyberg
+          <a href="https://twitter.com/snoyberg">Follow @snoyberg
         <li class="list-inline-item mx-2">
-          <a href="https://twitter.com/intent/tweet?screen_name=snoyberg" class="twitter-mention-button" data-show-count="false">Tweet to @snoyberg
+          <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg
         <li class="list-inline-item mx-2">
           <a href=https://github.com/snoyberg>Github
         <li class="list-inline-item mx-2">

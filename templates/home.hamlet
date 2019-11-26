@@ -47,5 +47,5 @@
         <aside>
             #{homeProfile}
             <div #twitter>
-                <a class="twitter-timeline" href="https://twitter.com/snoyberg" data-widget-id="296574273508741122">Tweets by @snoyberg</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                <a class="twitter-timeline" href="https://twitter.com/snoyberg">Tweets by snoyberg
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
