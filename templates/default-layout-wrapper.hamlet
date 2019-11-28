@@ -29,6 +29,8 @@ $newline never
     <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
     <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
     <link href=@{FeedR} type=application/atom+xml rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }
   <body>
     <header .inner-page>
       <nav .js-navbar-scroll .navbar .fixed-top .navbar-expand-lg>
@@ -58,12 +60,20 @@ $newline never
             <div class="col-md-7">
               <div class="text-center">
                 <h1 class="display-sm-4 display-lg-3">#{pageTitle pc}
+                ^{tagline}
 
     <main role=main>
       <section .wt-section>
         <div .container>
           <div class="row justify-content-between">
             <div class="col-lg-12">
+              $maybe socialLinks <- msocialLinks
+                <p class="text-center bg-light">
+                  <b>Share this
+                  $forall sl <- socialLinks
+                    \ #
+                    <a target="_blank" href=#{makeUrl (slPath sl) (slQuery sl)} title="Share on #{slName sl}">
+                      <i class="fab fa-#{slIcon sl}">
               ^{pageBody pc}
 
     <footer .bg-dark .py-5>

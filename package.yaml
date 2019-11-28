@@ -2,6 +2,7 @@ name: snoymancom
 
 dependencies:
 - base
+- bytestring
 - yaml
 - aeson
 - markdown

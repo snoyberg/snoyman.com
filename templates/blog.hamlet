@@ -1,22 +1,10 @@
 <div .container #blog-body>
   <div .row>
-    <div .col-md-9>
-        <h1>#{postTitle thisPost}
-        <h2 .post-date>#{prettyDay now $ postTime thisPost}
-
+    <div .col-lg-9>
         <p>
          <i>
           See a typo? Have a suggestion?
           <a target=_blank rel=nofollow href=https://github.com/snoyberg/snoyman.com-content/edit/master/#{postFilename thisPost}>Edit this page on Github
-
-        <div #social>
-            <div .twitter-share>
-              <a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet
-            <div .reddit>
-              <script type="text/javascript" src="//www.redditstatic.com/button/button1.js">
-            <div .linkedin>
-              <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US
-              <script type="IN/Share" data-counter="right">
 
         $maybe SeriesInfo name title otherPosts <- mseriesInfo
           <aside #series-info>
@@ -39,7 +27,7 @@
         <script>
           (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-    <div .col-md-3>
+    <div .col-lg-3>
         <h3>Blog archive
         <ul .blog-archive>
             $forall ((year, month, slug), post) <- posts

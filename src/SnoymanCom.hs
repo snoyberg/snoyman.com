@@ -25,6 +25,7 @@ import Text.Julius (juliusFile)
 import Data.Yaml (decodeFileEither, decodeFileThrow)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Blaze (ToMarkup (..))
+import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Text.Markdown
 import CMarkGFM (extTable, extStrikethrough, extAutolink, optSmart, commonmarkToHtml)
 import qualified Data.Vector as V
@@ -39,6 +40,9 @@ import Yesod.GitRev
 import GhcInfo
 import Control.AutoUpdate
 import Data.Version (Version)
+import Network.HTTP.Types (renderQueryText)
+import Data.Text.Encoding (encodeUtf8Builder)
+import Data.ByteString.Builder (toLazyByteString)
 
 data App = App
     { appData   :: GitRepo Data
@@ -228,14 +232,44 @@ mkYesod "App" [parseRoutes|
 /base BaseR GET
 |]
 
+data SocialLink = SocialLink
+  { slName :: !Text
+  , slIcon :: !Text
+  , slPath :: !Text
+  , slQuery :: ![(Text, Text)]
+  }
+
+defaultLayoutExtra tagline widget = do
+  pc <- widgetToPageContent widget
+  mselfRoute <- getCurrentRoute
+  withUrlRenderer $ \render -> do
+    let msocialLinks = socialLinks render (pageTitle pc) <$> mselfRoute
+    $(hamletFile "templates/default-layout-wrapper.hamlet") render
+  where
+    socialLinks render title selfRoute =
+      [ SocialLink "Twitter" "twitter" "https://twitter.com/intent/tweet" [("text", titleT <> " " <> self)]
+      , SocialLink "Facebook" "facebook" "https://www.facebook.com/sharer/sharer.php" [("u", self)]
+      , SocialLink "LinkedIn" "linkedin" "https://www.linkedin.com/shareArticle"
+          [ ("mini", "true")
+          , ("url", self)
+          , ("title", titleT)
+          ]
+      , SocialLink "Reddit" "reddit" "https://www.reddit.com/submit" [("url", self)]
+      ]
+      where
+        self = render selfRoute []
+
+        titleT :: Text
+        titleT = toStrict $ renderHtml title
+
+    makeUrl :: Text -> [(Text, Text)] -> Text
+    makeUrl path query = decodeUtf8 $ toStrict $ toLazyByteString $ encodeUtf8Builder path <> renderQueryText True (map (second Just) query)
+
 instance Yesod App where
     approot = guessApproot
     makeSessionBackend _ = return Nothing
 
-    defaultLayout widget = do
-        pc <- widgetToPageContent widget
-
-        withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
+    defaultLayout = defaultLayoutExtra mempty
 
     defaultMessageWidget title body =
         [whamlet|
@@ -360,7 +394,8 @@ getPostR year month slug = do
                            in Just $ PostR x y z
                 Just (route, postTitle post, postTime post)
             }
-    defaultLayout $ do
+    let tagline = [hamlet|<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published #{prettyDay now $ postTime thisPost}|]
+    defaultLayoutExtra tagline $ do
         setTitle $ toHtml $ postTitle thisPost
         forM_ (postDescription thisPost) $ \desc ->
           toWidgetHead [shamlet|<meta name=og:description value=#{desc}>|]
@@ -673,7 +708,6 @@ getBaseR = defaultLayout $ do
       <div .row>
         <div .col-md-2>
         <div .col-md-8>
-          <h1>#{title}
           <p>This table correlates GHC versions with the versions of the base and Cabal libraries it ships with.
           <table #versions>
             <thead>
