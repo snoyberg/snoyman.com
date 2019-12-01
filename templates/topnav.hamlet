@@ -1,0 +1,20 @@
+<nav .js-navbar-scroll .navbar .fixed-top .navbar-expand-lg>
+  <div .container-fluid>
+    <a .navbar-brand href=@{HomeR}>
+      <b>snoyberg
+    <button .navbar-toggler type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars">
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href=@{BlogR}>Blog
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href=https://www.yesodweb.com/>Yesod
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href=http://shop.oreilly.com/product/0636920035664.do>Yesod Book
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href=https://twitter.com/snoyberg>Twitter
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href=https://github.com/snoyberg>Github
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href=https://keybase.io/snoyberg>Keybase

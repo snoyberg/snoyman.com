@@ -1,51 +1,77 @@
-<div .container>
-  <div .row>
-    <div .col-md-8>
-        <h2>About Me
-        <p .aboutme>#{homeAbout}
+$newline never
+$doctype 5
+<html lang=en .no-js>
+  <head>
+    <title>Michael Snoyman - Strong Typing Advocate
 
-        $maybe (url, title, date) <- mRecentPost
-            <p>
-                <b>Most recent blog post: #
-                <a href=@{url}>#{title}
-                \ #
-                <i>#{date}
+    <meta charset=utf-8>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="keywords" content="Haskell, Rust, weightlifting, powerlifting, nutrition">
+    <meta name="description" content="Michael Snoyman's homepage, focusing on strongly typed programming and weightlifting. I'm a big fan of Haskell and Rust.">
+    <meta name="author" content="Michael Snoyman">
 
-        <h2>Publications
-        <ul>
-            $forall Pub url text date mpublisher <- homePubs
-                <li>
-                    <a href=#{url}>#{text}#
-                    . #{date}
-                    $maybe publisher <- mpublisher
-                        , #{publisher}
+    <!-- Styles -->
+    #{stylesheets}
+    <link rel="stylesheet" href="/static/home.css">
 
-        <h2 #talks>Talks
-        <table .table .table-striped .table-bordered>
-            <thead>
-                <tr>
-                    <th>Date
-                    <th>Title
-                    <th>Venue
-                    <th>Links
-            <tbody>
-                $forall Talk d t v el <- homeTalks
-                    <tr>
-                        <td>#{d}
-                        <td>#{t}
-                        <td>#{v}
-                        <td>
-                            $case el
-                                $of Left l
-                                    #{l}
-                                $of Right ls
-                                    <ul>
-                                        $forall l <- ls
-                                            <li>#{l}
+  <body>
+    <header>
+      ^{topnav}
+      <section class="wt-section hero-large position-relative overflow-hidden mt-md-2 bg-shape pb-0 mb-0">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <h1 class="text-uppercase mb-3 display-4 font-weight-bolder wt-ls-xs-sm">
+                Michael Snoyman
+              <p class="mb-4 h6">Strong Typing Advocate
+            <div class="col-md-6">
+              <img src="/img/michael-home.jpg" alt="banner" class="w-75">
 
-    <div .col-md-4>
-        <aside>
-            #{homeProfile}
-            <div #twitter>
-                <a class="twitter-timeline" href="https://twitter.com/snoyberg">Tweets by snoyberg
-                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
+    <main role=main>
+      <section class="wt-section">
+        <div class="container">
+          <div .row>
+            <div .col-md-8>
+                <h2>About Me
+                <p .aboutme>#{homeAbout}
+
+                $maybe (url, title, date) <- mRecentPost
+                    <p>
+                        <b>Most recent blog post: #
+                        <a href=@{url}>#{title}
+                        \ #
+                        <i>#{date}
+
+                <h2>Publications
+                <ul>
+                    $forall Pub url text date mpublisher <- homePubs
+                        <li>
+                            <a href=#{url}>#{text}#
+                            . #{date}
+                            $maybe publisher <- mpublisher
+                                , #{publisher}
+
+                <h2 #talks>Talks
+                $forall t <- homeTalks
+                  <div class="talk">
+                    <span class="venue">#{talkVenue t}
+                    \ #
+                    <span class="date">#{talkDate t}
+                    \ #
+                    <span class="title">#{talkTitle t}
+                    \ #
+                    <span class="links">
+                      $case talkLinks t
+                        $of Left l
+                          #{l}
+                        $of Right ls
+                          $forall l <- ls
+                            #{l} #
+
+            <div .col-md-4>
+                <aside>
+                    <div #twitter>
+                        <a class="twitter-timeline" href="https://twitter.com/snoyberg">Tweets by snoyberg
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
+    ^{bodyend}

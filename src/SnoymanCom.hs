@@ -19,7 +19,7 @@ module SnoymanCom
 import ClassyPrelude.Yesod
 import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async (race_)
-import Text.Hamlet (hamletFile)
+import Text.Hamlet (hamletFile, shamletFile)
 import Text.Lucius (luciusFile)
 import Text.Julius (juliusFile)
 import Data.Yaml (decodeFileEither, decodeFileThrow)
@@ -75,7 +75,6 @@ dataPostsPast d = do
 
 data Home = Home
     { homeTitle :: Text
-    , homeProfile :: Profile
     , homeToplinks :: Vector Link
     , homeAbout :: Html
     , homePubs :: Vector Pub
@@ -99,35 +98,11 @@ renderMarkdownNew =
 instance FromJSON Home where
     parseJSON = withObject "Home" $ \o -> Home
         <$> o .: "title"
-        <*> o .: "profile"
         <*> o .: "toplinks"
         <*> (renderMarkdownNew <$> (o .: "about"))
         <*> o .: "publications"
         <*> o .: "talks"
         <*> o .: "sites"
-
-data Profile = Profile
-    { profileURL :: Text
-    , profileAlt :: Text
-    , profileWidth :: Int
-    , profileHeight :: Int
-    }
-instance FromJSON Profile where
-    parseJSON = withObject "Profile" $ \o -> Profile
-        <$> o .: "url"
-        <*> o .: "alt"
-        <*> o .: "width"
-        <*> o .: "height"
-instance ToMarkup Profile where
-    toMarkup Profile {..} =
-        [shamlet|
-            <img
-                src=#{profileURL}
-                alt=#{profileAlt}
-                width=#{profileWidth}
-                height=#{profileHeight}
-                >
-        |]
 
 data Link = Link
     { _linkURL :: Text
@@ -174,10 +149,10 @@ instance ToMarkup Date where
         monthT = months V.! monthI
 
 data Talk = Talk
-    { _talkDate :: Date
-    , _talkTitle :: Text
-    , _talkVenue :: Text
-    , _talkLinks :: Either Text (Vector Link)
+    { talkDate :: Date
+    , talkTitle :: Text
+    , talkVenue :: Text
+    , talkLinks :: Either Text (Vector Link)
     }
 instance FromJSON Talk where
     parseJSON = withObject "Talk" $ \o -> Talk
@@ -238,6 +213,10 @@ data SocialLink = SocialLink
   , slPath :: !Text
   , slQuery :: ![(Text, Text)]
   }
+
+stylesheets = $(shamletFile "templates/stylesheets.hamlet")
+topnav = $(hamletFile "templates/topnav.hamlet")
+bodyend = $(hamletFile "templates/bodyend.hamlet")
 
 defaultLayoutExtra tagline widget = do
   pc <- widgetToPageContent widget
@@ -323,9 +302,7 @@ getHomeR = do
                     , prettyDay now $ postTime post
                     )
                 [] -> Nothing
-    defaultLayout $ do
-        setTitle $ toHtml homeTitle
-        $(whamletFile "templates/home.hamlet")
+    withUrlRenderer $(hamletFile "templates/home.hamlet")
 
 prettyDay :: UTCTime -- ^ today, for determining april fools age
           -> UTCTime -- ^ day to show
