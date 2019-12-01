@@ -1,7 +1,7 @@
 <nav .js-navbar-scroll .navbar .fixed-top .navbar-expand-lg>
   <div .container-fluid>
     <a .navbar-brand href=@{HomeR}>
-      <b>snoyberg
+      <img src="/img/snoylogo.png" height="50px">
     <button .navbar-toggler type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars">
     <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">

@@ -18,13 +18,13 @@ $doctype 5
   <body>
     <header>
       ^{topnav}
-      <section class="wt-section hero-large position-relative overflow-hidden mt-md-2 bg-shape pb-0 mb-0">
+      <section class="wt-section hero-large position-relative overflow-hidden mt-md-2 pb-0 mb-0">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-md-6">
               <h1 class="text-uppercase mb-3 display-4 font-weight-bolder wt-ls-xs-sm">
-                Michael Snoyman
-              <p class="mb-4 h6">Strong Typing Advocate
+                Strong types, strong lifts
+              <p class="mb-4 h6">Writings on programming and health
             <div class="col-md-6">
               <img src="/img/michael-home.jpg" alt="banner" class="w-75">
 
@@ -37,7 +37,7 @@ $doctype 5
                 <p .aboutme>#{homeAbout}
 
                 $maybe (url, title, date) <- mRecentPost
-                    <p>
+                    <p .alert .alert-info>
                         <b>Most recent blog post: #
                         <a href=@{url}>#{title}
                         \ #
