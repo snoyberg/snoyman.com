@@ -23,13 +23,14 @@ import qualified Data.Map as Map
 import Control.Concurrent
 import Data.IORef
 import Control.Monad
-import Network.HTTP.Conduit (simpleHttp)
+import Network.HTTP.Simple (parseRequestThrow, httpBS, getResponseBody, addRequestHeader)
 import qualified Data.Text as T
 import Data.Time
 import Text.Read (readMaybe)
 import Control.Concurrent.Async (race)
-import ClassyPrelude.Yesod (tryAnyDeep, SomeException, Generic, fromStrict, encodeUtf8, pack)
+import ClassyPrelude.Yesod (tryAnyDeep, SomeException, Generic, fromStrict, encodeUtf8, pack, ByteString, throwIO)
 import Control.DeepSeq (NFData)
+import qualified RIO.ByteString as B
 
 read' :: (Read a, Monad m) => String -> m a
 read' s =
@@ -44,10 +45,23 @@ withCurrentRef inner = do
   currentRef <- getCurrent >>= newIORef
   either id id <$> race (populate currentRef) (inner currentRef)
 
+getRaw :: IO ByteString
+getRaw = do
+  req <- parseRequestThrow "http://www.boi.org.il/currency.xml"
+  res <- httpBS req
+  let bs = getResponseBody res
+  if "document.cookie" `B.isInfixOf` bs
+    then do
+      let cookie = B.takeWhile (/= 59) $ B.drop 1 $ B.dropWhile (/= 39) bs
+      let req2 = addRequestHeader "Cookie" cookie req
+      getResponseBody <$> httpBS req2
+    else pure bs
+
 getCurrent :: IO (Either SomeException Current)
 getCurrent = tryAnyDeep $ do
-    lbs <- simpleHttp "http://www.boi.org.il/currency.xml"
-    let c = fromDocument $ parseLBS_ def lbs
+    bs <- getRaw
+    doc <- either throwIO pure $ parseLBS def $ fromStrict bs
+    let c = fromDocument doc
     let rawDate = T.concat $ c $/ element "LAST_UPDATE" &/ content
     date' <- read' $ T.unpack rawDate :: IO Day
     let usd = head $ c $/ element "CURRENCY" &/ element "CURRENCYCODE" >=> check (\c -> T.concat (c $/ content) == "USD") >=> parent
