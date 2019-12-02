@@ -2,8 +2,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Shekel
   ( CurrentRef
+  , Current (..)
   , withCurrentRef
-  , htmlRes
   , atomRes
   ) where
 
@@ -92,16 +92,6 @@ populate icurrent = forever $ do
         Left e -> putStrLn $ "Error loading shekel conversion: " ++ show e
         Right x -> writeIORef icurrent (Right x)
 
-htmlRes :: CurrentRef -> IO Response
-htmlRes currentRef = do
-  ecurrent <- readIORef currentRef
-  return $
-    case ecurrent of
-      Left e ->
-        responseLBS status500 [("Content-Type", "text/plain")]
-        $ fromStrict $ encodeUtf8 $ pack $ "Problem getting current exchange rate: " ++ show e
-      Right current -> responseLBS status200 [("Content-Type", "text/html; charset=utf-8")] (homepage current)
-
 atomRes :: CurrentRef -> IO Response
 atomRes currentRef = do
   ecurrent <- readIORef currentRef
@@ -112,56 +102,6 @@ atomRes currentRef = do
         $ fromStrict $ encodeUtf8 $ pack $ "Problem getting current exchange rate: " ++ show e
       Right current ->
         responseLBS status200 [("Content-type", "application/atom+xml")] (feed current)
-
-homepage Current {..} = renderHtml [shamlet|
-$doctype 5
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Dollar versus Shekel- Updated #{date}
-        <link href="https://feeds.feedburner.com/DollarVersusShekel" type="application/atom+xml" rel="alternate" title="Daily dollar versus shekel updates">
-        <meta name="description" content="Daily updates of the dollar versus shekel extra rate">
-        <style>body{text-align:center;font-size:140%;margin:0;padding:0;font-family:sans-serif}.rate{font-size:250%;margin:10px;color:#c60}a,a:visited{color:blue;text-decoration:none}a:hover{text-decoration:underline}.footer{margin-top:20px;border-top: 1px dashed #000;padding-top:20px}.stronger{color:green}.weaker{color:red}.stronger,.weaker{font-size:130%}#content{border: 1px solid #000;width:600px;margin:0 auto;background:#eee}
-        <script>var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-1434510-21']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
-    <body>
-        <div id="ads">
-            <script>google_ad_client = "pub-4609114172551638"; google_ad_slot = "6806204452"; google_ad_width = 728; google_ad_height = 90;
-            <script src="https://pagead2.googlesyndication.com/pagead/show_ads.js">
-        <div id="content">
-            On #{date}, $1 (United States Dollar) buys:
-            <div class="rate">#{rate} ₪
-            (New Israeli Shekel).
-            <div class="delta">The dollar became
-            <div class=#{direction}>#{delta}
-        <p>You can see more currencies versus the shekel and graphs on <a href="http://www.boi.org.il/en/markets/exchangerates/pages/default.aspx">the Bank of Israel website</a>.
-        <form style="border:1px solid #ccc;padding:3px;text-align:center;" action="https://blogtrottr.com" method="post" target="_blank">
-            Enter your email address:
-            <br>
-            <input type="email" style="width:400px" name="btr_email">
-            <br>
-            <input type="hidden" value="https://www.snoyman.com/shekel/feed" name="btr_url">
-            <input type="hidden" name="schedule_type" value="0">
-            <input type="submit" value="Subscribe">
-        <div>
-            <a href="https://feeds.feedburner.com/DollarVersusShekel" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">
-                <img src="https://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="border:0"/>
-            <a href="https://feeds.feedburner.com/DollarVersusShekel" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">
-                Subscribe in a reader
-        <div>
-            <div class="addthis_toolbox addthis_default_style" style="display:inline-block">
-                <a href="https://www.addthis.com/bookmark.php?v=250&amp;username=snoyberg" class="addthis_button_compact">
-                    Share
-                <span class="addthis_separator">|
-                <a class="addthis_button_preferred_1">
-                <a class="addthis_button_preferred_2">
-                <a class="addthis_button_preferred_3">
-                <a class="addthis_button_preferred_4">
-            <script type="text/javascript">var addthis_config = {"data_track_clickback":true};
-            <script type="text/javascript" src="https://s7.addthis.com/js/250/addthis_widget.js#username=snoyberg">
-        <div class="footer">
-            This free service provided by
-            <a href="https://www.snoyman.com/">Michael Snoyman
-|]
 
 data Current = Current
     { date :: Text
