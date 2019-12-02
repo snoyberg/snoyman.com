@@ -19,18 +19,16 @@ import Text.Hamlet.XML (xml)
 import Data.Text.Lazy (toStrict)
 import Text.XML
 import Text.XML.Cursor
-import qualified Data.Map as Map
-import Control.Concurrent
-import Data.IORef
-import Control.Monad
+import qualified RIO.Map as Map
 import Network.HTTP.Simple (parseRequestThrow, httpBS, getResponseBody, addRequestHeader)
 import qualified Data.Text as T
 import Data.Time
 import Text.Read (readMaybe)
-import Control.Concurrent.Async (race)
-import ClassyPrelude.Yesod (tryAnyDeep, SomeException, Generic, fromStrict, encodeUtf8, pack, ByteString, throwIO)
+import RIO
 import Control.DeepSeq (NFData)
 import qualified RIO.ByteString as B
+import RIO.ByteString.Lazy (fromStrict)
+import Control.Concurrent (forkIO)
 
 read' :: (Read a, Monad m) => String -> m a
 read' s =
@@ -38,7 +36,7 @@ read' s =
         Nothing -> fail $ "Could not parse: " ++ show s
         Just a -> return a
 
-type CurrentRef = IORef (Either SomeException Current)
+type CurrentRef = IORef (Either Text Current)
 
 withCurrentRef :: (CurrentRef -> IO a) -> IO a
 withCurrentRef inner = do
@@ -57,9 +55,10 @@ getRaw = do
       getResponseBody <$> httpBS req2
     else pure bs
 
-getCurrent :: IO (Either SomeException Current)
-getCurrent = tryAnyDeep $ do
-    bs <- getRaw
+getCurrent :: IO (Either Text Current)
+getCurrent = fmap (either (Left . fromString . displayException) id) $ tryAnyDeep $ do
+  bs <- getRaw
+  handleAnyDeep (onErr bs) $ do
     doc <- either throwIO pure $ parseLBS def $ fromStrict bs
     let c = fromDocument doc
     let rawDate = T.concat $ c $/ element "LAST_UPDATE" &/ content
@@ -68,7 +67,7 @@ getCurrent = tryAnyDeep $ do
         rate' = T.concat $ usd $/ element "RATE" &/ content
         change = T.concat $ usd $/ element "CHANGE" &/ content
     now <- getCurrentTime
-    return Current
+    return $ Right Current
         { date = T.pack $ formatTime defaultTimeLocale "%B %e, %Y" date'
         , rate = rate'
         , delta =
@@ -82,6 +81,13 @@ getCurrent = tryAnyDeep $ do
                 Just ('-', rest) -> "weaker"
                 _ -> "stronger"
         }
+  where
+    onErr bs err = pure $ Left $ T.unlines
+      [ "Unable to parse XML, got exception:"
+      , fromString $ displayException err
+      , "Original XML body:"
+      , decodeUtf8With lenientDecode bs
+      ]
 
 populate :: CurrentRef -> IO a
 populate icurrent = forever $ do
@@ -99,7 +105,7 @@ atomRes currentRef = do
     case ecurrent of
       Left e ->
         responseLBS status500 [("Content-Type", "text/plain")]
-        $ fromStrict $ encodeUtf8 $ pack $ "Problem getting current exchange rate: " ++ show e
+        $ fromStrict $ encodeUtf8 $ T.pack $ "Problem getting current exchange rate: " ++ show e
       Right current ->
         responseLBS status200 [("Content-type", "application/atom+xml")] (feed current)
 

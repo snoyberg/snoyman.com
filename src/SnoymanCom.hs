@@ -662,7 +662,7 @@ getShekelR = do
       setTitle "Dollar versus Shekel—not available"
       [whamlet|
         <p>The exchange rate is not currently available.
-        <pre>#{displayException e}
+        <pre>#{e}
       |]
     Right Current {..} -> defaultLayoutExtra (const ("Updated " <> toHtml date)) $ do
       setTitle "Dollar versus Shekel"
