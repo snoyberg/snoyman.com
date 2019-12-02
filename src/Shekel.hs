@@ -108,7 +108,7 @@ $doctype 5
         <link href="https://feeds.feedburner.com/DollarVersusShekel" type="application/atom+xml" rel="alternate" title="Daily dollar versus shekel updates">
         <meta name="description" content="Daily updates of the dollar versus shekel extra rate">
         <style>body{text-align:center;font-size:140%;margin:0;padding:0;font-family:sans-serif}.rate{font-size:250%;margin:10px;color:#c60}a,a:visited{color:blue;text-decoration:none}a:hover{text-decoration:underline}.footer{margin-top:20px;border-top: 1px dashed #000;padding-top:20px}.stronger{color:green}.weaker{color:red}.stronger,.weaker{font-size:130%}#content{border: 1px solid #000;width:600px;margin:0 auto;background:#eee}
-        <script>var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-1434510-18']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
+        <script>var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-1434510-21']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
     <body>
         <div id="ads">
             <script>google_ad_client = "pub-4609114172551638"; google_ad_slot = "6806204452"; google_ad_width = 728; google_ad_height = 90;
