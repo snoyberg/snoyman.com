@@ -45,7 +45,7 @@ withCurrentRef inner = do
 
 getRaw :: IO ByteString
 getRaw = do
-  req <- parseRequestThrow "http://www.boi.org.il/currency.xml"
+  req <- parseRequestThrow "https://www.boi.org.il/currency.xml"
   res <- httpBS req
   let bs = getResponseBody res
   if "document.cookie" `B.isInfixOf` bs
