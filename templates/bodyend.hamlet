@@ -22,13 +22,13 @@
 
 <!-- JS Script Files -->
 <!-- Global Vendor -->
-<script src="https://s3.amazonaws.com/static.snoyman.com/maxi-assets/vendors/jquery.min.js"></script>
-<script src="https://s3.amazonaws.com/static.snoyman.com/maxi-assets/vendors/jquery.migrate.min.js"></script>
-<script src="https://s3.amazonaws.com/static.snoyman.com/maxi-assets/vendors/popper.min.js"></script>
-<script src="https://s3.amazonaws.com/static.snoyman.com/maxi-assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- Components Vendor  --> 
-<script src="https://s3.amazonaws.com/static.snoyman.com/maxi-assets/contact/jqBootstrapValidation.js"></script>
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
 <!--Plugin Initialize-->
-<script src="https://s3.amazonaws.com/static.snoyman.com/maxi-assets/js/global.js"></script> 
+<script src="/maxi/js/global.js"></script>
 <!-- END JAVASCRIPTS -->

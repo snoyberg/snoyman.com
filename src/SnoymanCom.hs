@@ -50,6 +50,7 @@ data App = App
     , appStatic :: Static
     , appTorah  :: Static
     , appWellKnown :: Static
+    , appMaxi   :: Static
     , appShekel :: !CurrentRef
     , appGitRev :: !GitRev
     , appBase :: !(IO (Map GhcVersion GhcInfo))
@@ -200,6 +201,7 @@ mkYesod "App" [parseRoutes|
 /feed/#SeriesName SeriesFeedR GET
 /series/#SeriesName SeriesR GET
 /.well-known WellKnownR Static appWellKnown
+/maxi MaxiR Static appMaxi
 /reveal/*[Text] RevealR GET
 /shekel ShekelR GET
 /shekel/feed ShekelFeedR GET
@@ -624,6 +626,7 @@ withApp isDev inner = do
     appStatic <- static' "static"
     appTorah <- static' "torah"
     appWellKnown <- static' "well-known"
+    appMaxi <- static' "maxi"
     let appGitRev = $gitRev
     appBase <- mkAutoUpdate defaultUpdateSettings
       { updateAction = loadGhcInfo
