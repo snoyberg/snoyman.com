@@ -312,6 +312,7 @@ prettyDay :: UTCTime -- ^ today, for determining april fools age
 prettyDay today x
   | (year, 4, 1) <- toGregorian (utctDay x)
   , diffUTCTime today x >= (60 * 60 * 24 * 4) = "April Fools', " ++ show year
+  | (2020, 4, 1) <- toGregorian (utctDay x) = "Spring equinox 2020 + 12 days"
   | (2019, 4, 1) <- toGregorian (utctDay x) = "KAL. APR. MMDCCLXXII AUC"
   | (2018, 4, 1) <- toGregorian (utctDay x) = "Stardate 47634.4"
   | (2017, 4, 1) <- toGregorian (utctDay x) = "5 Nissan, 5777"
