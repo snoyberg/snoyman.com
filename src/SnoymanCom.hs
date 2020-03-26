@@ -30,7 +30,6 @@ import Text.Markdown
 import CMarkGFM (extTable, extStrikethrough, extAutolink, optSmart, commonmarkToHtml)
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
-import Yesod.GitRepo
 import System.Directory (doesFileExist, canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
 import qualified Data.Map as Map
@@ -45,7 +44,7 @@ import Data.Text.Encoding (encodeUtf8Builder)
 import Data.ByteString.Builder (toLazyByteString)
 
 data App = App
-    { appData   :: GitRepo Data
+    { appData   :: IO Data
     , appImg    :: Static
     , appStatic :: Static
     , appTorah  :: Static
@@ -194,7 +193,6 @@ mkYesod "App" [parseRoutes|
 /torah TorahR Static appTorah
 /robots.txt RobotsR GET
 /favicon.ico FaviconR GET
-/reload ReloadR GitRepo-Data appData
 /blog BlogR GET
 /blog/#Year/#Month/#Text PostR GET
 /feed FeedR GET
@@ -266,7 +264,7 @@ instance Yesod App where
         body' = toWidget body
 
 getData :: Handler Data
-getData = getYesod >>= liftIO . grContent . appData
+getData = getYesod >>= liftIO . appData
 
 getPosts :: Bool -- ^ include unlisted?
          -> Bool -- ^ include future posts regardless of ?preview=true?
@@ -487,7 +485,7 @@ data RevealToken = RTNewColumn !Text | RTNewRow !Text
 getRevealDir :: Handler FilePath
 getRevealDir = do
   master <- getYesod
-  contentDir <- liftIO $ dataRoot <$> grContent (appData master)
+  contentDir <- liftIO $ dataRoot <$> appData master
   liftIO $ canonicalizePath $ contentDir </> "reveal"
 
 getRevealR :: [Text] -> Handler Html
@@ -611,16 +609,11 @@ loadPost dataRoot allSeries (PostRaw postFilename postTitle postTime postListed 
 
 withApp :: Bool -> (App -> IO a) -> IO a
 withApp isDev inner = do
-    appData <- if isDev
-        then gitRepoDev
-            "content"
-            loadData
-        else gitRepo
-            "https://github.com/snoyberg/snoyman.com-content"
-            "master"
-            loadData
-
-    root <- dataRoot <$> grContent appData
+    let root = "content"
+    appData <-
+        if isDev
+            then pure $ loadData root
+            else pure <$> loadData root
 
     let static' t = staticDevel $ root </> t
     appImg <- static' "img"

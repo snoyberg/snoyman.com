@@ -15,7 +15,6 @@ dependencies:
 - classy-prelude-yesod
 - deepseq
 - vector
-- yesod-gitrepo
 - filepath
 - yesod-newsfeed
 - containers
