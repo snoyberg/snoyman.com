@@ -27,7 +27,7 @@ import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Blaze (ToMarkup (..))
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Text.Markdown
-import CMarkGFM (extTable, extStrikethrough, extAutolink, optSmart, commonmarkToHtml)
+import CMarkGFM (extTable, extStrikethrough, extAutolink, optSmart, commonmarkToHtml, optUnsafe)
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import System.Directory (doesFileExist, canonicalizePath)
@@ -92,7 +92,7 @@ renderMarkdownNew :: Text -> Html
 renderMarkdownNew =
   preEscapedToMarkup .
   commonmarkToHtml
-  [optSmart]
+  [optSmart, optUnsafe]
   [extAutolink, extStrikethrough, extTable]
 
 instance FromJSON Home where
