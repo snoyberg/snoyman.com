@@ -4,7 +4,7 @@
         <p>
          <i>
           See a typo? Have a suggestion?
-          <a target=_blank rel=nofollow href=https://github.com/snoyberg/snoyman.com-content/edit/master/#{postFilename thisPost}>Edit this page on Github
+          <a target=_blank rel=nofollow href=https://github.com/snoyberg/snoyman.com/edit/master/content/#{postFilename thisPost}>Edit this page on Github
 
         $maybe SeriesInfo name title otherPosts <- mseriesInfo
           <aside #series-info>

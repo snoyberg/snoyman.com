@@ -27,7 +27,6 @@ dependencies:
 - wai
 - blaze-html
 - warp
-- yesod-gitrev
 - rio
 - auto-update
 

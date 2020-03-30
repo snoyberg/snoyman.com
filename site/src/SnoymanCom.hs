@@ -45,7 +45,6 @@ import System.Directory (doesFileExist, canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
 import Data.Time (diffUTCTime)
 import Shekel
-import Yesod.GitRev
 import GhcInfo
 import Control.AutoUpdate
 import Network.HTTP.Types (renderQueryText)
@@ -60,7 +59,6 @@ data App = App
     , appWellKnown :: Static
     , appMaxi   :: Static
     , appShekel :: !CurrentRef
-    , appGitRev :: !GitRev
     , appBase :: !(IO (Map GhcVersion GhcInfo))
     }
 
@@ -213,7 +211,6 @@ mkYesod "App" [parseRoutes|
 /reveal/*[Text] RevealR GET
 /shekel ShekelR GET
 /shekel/feed ShekelFeedR GET
-/build-version BuildVersionR GitRev appGitRev
 /base BaseR GET
 |]
 
@@ -637,7 +634,6 @@ withApp isDev inner = do
     appTorah <- static' "torah"
     appWellKnown <- static' "well-known"
     appMaxi <- static' "maxi"
-    let appGitRev = $gitRev
     appBase <- mkAutoUpdate defaultUpdateSettings
       { updateAction = loadGhcInfo
       , updateFreq = 1000 * 1000 * 60 * 60 -- hourly
