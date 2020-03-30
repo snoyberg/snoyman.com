@@ -8,12 +8,9 @@ module Shekel
   ) where
 
 import Text.Hamlet (shamlet)
-import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import qualified Text.Blaze.Html.Renderer.Text
 import Network.Wai
-import Network.Wai.Handler.Warp
 import Network.HTTP.Types
-import System.Environment (getEnv)
 import Data.Text (Text)
 import Text.Hamlet.XML (xml)
 import Data.Text.Lazy (toStrict)
@@ -63,7 +60,7 @@ getCurrent = fmap (either (Left . fromString . displayException) id) $ tryAnyDee
     let c = fromDocument doc
     let rawDate = T.concat $ c $/ element "LAST_UPDATE" &/ content
     date' <- read' $ T.unpack rawDate :: IO Day
-    let usd = head $ c $/ element "CURRENCY" &/ element "CURRENCYCODE" >=> check (\c -> T.concat (c $/ content) == "USD") >=> parent
+    let usd = head $ c $/ element "CURRENCY" &/ element "CURRENCYCODE" >=> check (\c' -> T.concat (c' $/ content) == "USD") >=> parent
         rate' = T.concat $ usd $/ element "RATE" &/ content
         change = T.concat $ usd $/ element "CHANGE" &/ content
     now <- getCurrentTime
@@ -78,7 +75,7 @@ getCurrent = fmap (either (Left . fromString . displayException) id) $ tryAnyDee
         , day = rawDate
         , direction =
             case T.uncons change of
-                Just ('-', rest) -> "weaker"
+                Just ('-', _rest) -> "weaker"
                 _ -> "stronger"
         }
   where
@@ -120,6 +117,7 @@ data Current = Current
   deriving Generic
 instance NFData Current
 
+feed :: Current -> LByteString
 feed Current {..} =
     renderLBS def $ Document (Prologue [] Nothing []) root []
   where

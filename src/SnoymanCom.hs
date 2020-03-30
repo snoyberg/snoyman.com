@@ -22,7 +22,7 @@ import Control.Concurrent.Async (race_)
 import Text.Hamlet (hamletFile, shamletFile)
 import Text.Lucius (luciusFile)
 import Text.Julius (juliusFile)
-import Data.Yaml (decodeFileEither, decodeFileThrow)
+import Data.Yaml (decodeFileThrow)
 import Data.Aeson (withObject, (.:?), withText, (.!=))
 import Text.Blaze (ToMarkup (..))
 import Text.Blaze.Html.Renderer.Text (renderHtml)
@@ -38,7 +38,6 @@ import Shekel
 import Yesod.GitRev
 import GhcInfo
 import Control.AutoUpdate
-import Data.Version (Version)
 import Network.HTTP.Types (renderQueryText)
 import Data.Text.Encoding (encodeUtf8Builder)
 import Data.ByteString.Builder (toLazyByteString)
@@ -214,10 +213,16 @@ data SocialLink = SocialLink
   , slQuery :: ![(Text, Text)]
   }
 
+stylesheets :: Html
 stylesheets = $(shamletFile "templates/stylesheets.hamlet")
+
+topnav :: HtmlUrl (Route App)
 topnav = $(hamletFile "templates/topnav.hamlet")
+
+bodyend :: HtmlUrl (Route App)
 bodyend = $(hamletFile "templates/bodyend.hamlet")
 
+defaultLayoutExtra :: HtmlUrl (Route App) -> Widget -> Handler Html
 defaultLayoutExtra tagline widget = do
   pc <- widgetToPageContent widget
   mselfRoute <- getCurrentRoute
@@ -519,8 +524,8 @@ getRevealR pieces = do
     mapM_ checkPiece pieces
     revealDir <- getRevealDir
     let fp = revealDir </> unpack (intercalate "/" pieces ++ ".md")
-    markdown :: [Text] <- (lines . decodeUtf8) <$> readFile fp `catchIO` \_ -> notFound
-    let (header, drop 1 -> body) = break (== "---") $ drop 1 markdown
+    markdown' :: [Text] <- (lines . decodeUtf8) <$> readFile fp `catchIO` \_ -> notFound
+    let (header, drop 1 -> body) = break (== "---") $ drop 1 markdown'
         title = fromMaybe "Reveal.js Slideshow"
               $ listToMaybe
               $ mapMaybe (stripPrefix "title: ") header
@@ -532,8 +537,8 @@ getRevealR pieces = do
         cols = toCols tokenized
         toCols [] = []
         toCols (RTNewColumn content:rest) =
-          let (cols, rest') = getRows id rest
-           in (content:cols) : toCols rest'
+          let (cols', rest') = getRows id rest
+           in (content:cols') : toCols rest'
         toCols (RTNewRow content:rest) = toCols (RTNewColumn content:rest)
 
         getRows front (RTNewRow content:rest) = getRows (front . (content:)) rest

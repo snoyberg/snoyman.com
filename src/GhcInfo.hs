@@ -1,6 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 module GhcInfo
   ( GhcInfo (..)
   , GhcVersion
@@ -10,7 +11,6 @@ module GhcInfo
 import RIO
 import Network.HTTP.Simple
 import Data.Yaml
-import qualified RIO.Map as Map
 import Data.Version
 import Text.Blaze (ToMarkup (..))
 import qualified RIO.Text as T
