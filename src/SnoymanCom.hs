@@ -16,9 +16,20 @@ module SnoymanCom
     , Widget
     ) where
 
-import ClassyPrelude.Yesod
-import Control.Concurrent (threadDelay)
-import Control.Concurrent.Async (race_)
+import Conduit
+import RIO hiding (Data, Handler)
+import RIO.Time (UTCTime (..), toGregorian, fromGregorian, getCurrentTime, defaultTimeLocale, formatTime)
+import RIO.FilePath ((</>))
+import RIO.Text (pack)
+import qualified RIO.List as List
+import qualified RIO.Text as T
+import qualified RIO.Text.Lazy as TL
+import qualified RIO.ByteString.Lazy as BL
+import qualified RIO.Set as Set
+import qualified RIO.Map as Map
+import Yesod.Core
+import Yesod.Static
+import Yesod.Feed
 import Text.Hamlet (hamletFile, shamletFile)
 import Text.Lucius (luciusFile)
 import Text.Julius (juliusFile)
@@ -32,7 +43,6 @@ import qualified Data.Vector as V
 import Data.Text.Read (decimal)
 import System.Directory (doesFileExist, canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
-import qualified Data.Map as Map
 import Data.Time (diffUTCTime)
 import Shekel
 import Yesod.GitRev
@@ -85,7 +95,7 @@ renderMarkdownOld :: Text -> Html
 renderMarkdownOld = markdown def
     { msXssProtect = False
     , msAddHeadingId = True
-    } . fromStrict
+    } . TL.fromStrict
 
 renderMarkdownNew :: Text -> Html
 renderMarkdownNew =
@@ -131,16 +141,17 @@ instance FromJSON Date where
       where
         parseYearMonth t = do
             (year, t1) <- either fail pure $ decimal t
-            t2 <- maybe (fail "no dash") pure $ stripPrefix "-" t1
+            t2 <- maybe (fail "no dash") pure $ T.stripPrefix "-" t1
             (month, "") <- either fail pure $ decimal t2
             when (month < 1 || month > 12) $ fail "Invalid month"
             pure $ YearMonth year month
 instance ToMarkup Date where
     toMarkup (YearMonth year month') =
-        toMarkup monthT ++ " " ++ toMarkup year
+        toMarkup monthT <> " " <> toMarkup year
       where
-        months = asVector $ pack $ words
-            $ asText "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+        months :: Vector Text
+        months = V.fromList $ T.words
+            "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
         monthI
             | month' < 1 = 0
             | month' > 12 = 11
@@ -166,10 +177,10 @@ newtype Month = Month Int
     deriving (Show, Eq, Read, Hashable, Ord)
 instance PathPiece Month where
     toPathPiece (Month i)
-        | i < 10 = "0" ++ tshow i
+        | i < 10 = "0" <> tshow i
         | otherwise = tshow i
     fromPathPiece t
-        | length t /= 2 = Nothing
+        | T.length t /= 2 = Nothing
         | Right (i, "") <- decimal t, i >= 1, i <= 12 = Just $ Month i
         | otherwise = Nothing
 
@@ -244,10 +255,10 @@ defaultLayoutExtra tagline widget = do
         self = render selfRoute []
 
         titleT :: Text
-        titleT = toStrict $ renderHtml title
+        titleT = TL.toStrict $ renderHtml title
 
     makeUrl :: Text -> [(Text, Text)] -> Text
-    makeUrl path query = decodeUtf8 $ toStrict $ toLazyByteString $ encodeUtf8Builder path <> renderQueryText True (map (second Just) query)
+    makeUrl path query = either impureThrow id $ decodeUtf8' $ BL.toStrict $ toLazyByteString $ encodeUtf8Builder path <> renderQueryText True (map (second Just) query)
 
 instance Yesod App where
     approot = guessApproot
@@ -291,7 +302,7 @@ getPosts unlisted includeFuture = do
 getDescendingPosts :: Bool -- ^ include unlisted?
                    -> Handler [((Year, Month, Text), Post)]
 getDescendingPosts unlisted =
-    reverse . sortOn (postTime . snd) . mapToList <$> getPosts unlisted False
+    reverse . List.sortOn (postTime . snd) . Map.toList <$> getPosts unlisted False
 
 getHomeR :: Handler Html
 getHomeR = do
@@ -344,7 +355,7 @@ getBlogR = do
 checkRedirects :: Year -> Month -> Text -> Handler ()
 checkRedirects year month slug = do
   dat <- getData
-  case lookup (year, month, slug) $ dataPostsAll dat of
+  case Map.lookup (year, month, slug) $ dataPostsAll dat of
     Just (Right slug') -> redirect $ PostR year month slug'
     _ -> return ()
 
@@ -356,14 +367,14 @@ data SeriesInfo = SeriesInfo
 
 getPostR :: Year -> Month -> Text -> Handler Html
 getPostR year month slug = do
-    forM_ (stripSuffix ".html" slug) (redirect . PostR year month)
+    forM_ (T.stripSuffix ".html" slug) (redirect . PostR year month)
     checkRedirects year month slug
     postsMap <- getPosts True True
-    thisPost <- maybe notFound return $ lookup (year, month, slug) postsMap
+    thisPost <- maybe notFound return $ Map.lookup (year, month, slug) postsMap
     posts <- getDescendingPosts False
     now <- liftIO getCurrentTime
     addPreview <- getAddPreview
-    let mseriesInfo = flip map (postSeries thisPost) $ \(name, stitle) ->
+    let mseriesInfo = flip fmap (postSeries thisPost) $ \(name, stitle) ->
           SeriesInfo
             { siName = name
             , siTitle = stitle
@@ -497,8 +508,8 @@ getRevealR :: [Text] -> Handler Html
 getRevealR [] = do
   revealDir <- getRevealDir
   let stripDir x = do
-        y <- stripPrefix revealDir x
-        Just $ fromMaybe y $ stripPrefix "/" y
+        y <- List.stripPrefix revealDir x
+        Just $ fromMaybe y $ List.stripPrefix "/" y
   files <- runConduit
          $ sourceDirectoryDeep False revealDir
         .| concatMapC (\fp ->
@@ -516,23 +527,23 @@ getRevealR [] = do
           <div .col-md-8>
             <h1>Reveal Decks
             <ul>
-              $forall (pieces, whole) <- sortBy (comparing fst) files
+              $forall (pieces, whole) <- List.sortBy (comparing fst) files
                 <li>
                   <a href=@{RevealR pieces}>#{whole}
     |]
 getRevealR pieces = do
     mapM_ checkPiece pieces
     revealDir <- getRevealDir
-    let fp = revealDir </> unpack (intercalate "/" pieces ++ ".md")
-    markdown' :: [Text] <- (lines . decodeUtf8) <$> readFile fp `catchIO` \_ -> notFound
+    let fp = revealDir </> T.unpack (T.intercalate "/" pieces <> ".md")
+    markdown' :: [Text] <- T.lines <$> readFileUtf8 fp `catchIO` \_ -> notFound
     let (header, drop 1 -> body) = break (== "---") $ drop 1 markdown'
         title = fromMaybe "Reveal.js Slideshow"
               $ listToMaybe
-              $ mapMaybe (stripPrefix "title: ") header
+              $ mapMaybe (T.stripPrefix "title: ") header
         tokenized = tokenize RTNewColumn id body
-        tokenize wrapper front [] = [wrapper $ unlines $ front []]
-        tokenize wrapper front ("---":rest) = wrapper (unlines $ front []) : tokenize RTNewColumn id rest
-        tokenize wrapper front ("----":rest) = wrapper (unlines $ front []) : tokenize RTNewRow id rest
+        tokenize wrapper front [] = [wrapper $ T.unlines $ front []]
+        tokenize wrapper front ("---":rest) = wrapper (T.unlines $ front []) : tokenize RTNewColumn id rest
+        tokenize wrapper front ("----":rest) = wrapper (T.unlines $ front []) : tokenize RTNewRow id rest
         tokenize wrapper front (x:rest) = tokenize wrapper (front . (x:)) rest
         cols = toCols tokenized
         toCols [] = []
@@ -546,24 +557,24 @@ getRevealR pieces = do
     withUrlRenderer $(hamletFile "reveal.hamlet")
   where
     checkPiece t =
-      case uncons t of
+      case T.uncons t of
         Nothing -> notFound
         Just ('.', _) -> notFound
-        _ | '/' `elem` t -> notFound
+        _ | T.any (== '/') t -> notFound
         _ -> return ()
 
 loadData :: FilePath -> IO Data
 loadData dataRoot = do
     let readData x y = do
-            bs <- readFile $ dataRoot </> y
-            return $ TypedContent x $ toContent $ asByteString bs
+            bs <- readFileBinary $ dataRoot </> y
+            return $ TypedContent x $ toContent bs
     dataFavicon <- readData "image/x-icon" "favicon.ico"
     dataRobots <- readData "text/plain" "robots.txt"
     dataHome <- decodeFileThrow (dataRoot </> "home.yaml")
 
     RawPosts rawPosts allSeries <-
       decodeFileThrow (dataRoot </> "posts.yaml")
-    dataPostsAll <- (mapFromList . concat) <$> mapM (loadPost dataRoot allSeries) (rawPosts :: [PostRaw])
+    dataPostsAll <- (Map.fromList . concat) <$> mapM (loadPost dataRoot allSeries) (rawPosts :: [PostRaw])
 
     return Data {..}
 
@@ -595,18 +606,18 @@ loadPost
   -> IO [((Year, Month, Text), Either Post Text)]
 loadPost dataRoot allSeries (PostRaw postFilename postTitle postTime postListed postDescription oldSlugs mseries) = do
     postSeries <- for mseries $ \name ->
-      case lookup name allSeries of
+      case Map.lookup name allSeries of
         Nothing -> error $ "Undefined series name: " ++ show name
         Just title -> pure (name, title)
     let renderMarkdown
           | utctDay postTime >= fromGregorian 2018 7 9 = renderMarkdownNew
           | otherwise = renderMarkdownOld
-    postContent <- fmap (renderMarkdown . decodeUtf8) $ readFile $ dataRoot </> postFilename
+    postContent <- fmap renderMarkdown $ readFileUtf8 $ dataRoot </> postFilename
     let year' = Year $ fromIntegral year
         month' = Month month
     return
       $ ((year', month', slug), Left Post {..})
-      : map (\slug' -> ((year', month', slug'), Right slug)) (setToList oldSlugs)
+      : map (\slug' -> ((year', month', slug'), Right slug)) (Set.toList oldSlugs)
   where
     UTCTime postDay _ = postTime
     (year, month, _) = toGregorian postDay
@@ -639,7 +650,7 @@ prodMain = withApp False warpEnv
 develMain :: IO ()
 develMain =
   withApp True $
-  Control.Concurrent.Async.race_ watchTermFile . warpEnv
+  race_ watchTermFile . warpEnv
 
 -- | Would certainly be more efficient to use fsnotify, but this is
 -- simpler.
@@ -745,7 +756,7 @@ getBaseR = defaultLayout $ do
                 <th>Cabal
                 <th>Win32
             <tbody>
-              $forall (ghc, gi) <- mapToList versions
+              $forall (ghc, gi) <- Map.toList versions
                 <tr>
                   <td>ghc-#{ghc}
                   <td>base-#{giBase gi}
