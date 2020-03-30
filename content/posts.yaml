@@ -1,0 +1,452 @@
+series:
+  kids-coding: Kids Coding
+  health-guide: Health Guide
+  rust-crash-course: Rust Crash Course
+posts:
+- file: posts/lazy-rust-compiler.md
+  title: A Lazy Rust Compiler
+  time: 2020-04-01T03:00:00Z
+  description: |
+    I've begun work on a new compiler for the Rust programming language, adding a vital language feature missing in the official compiler.
+- file: posts/carbs.md
+  title: Basics of Carbohydrates
+  time: 2020-03-27T06:00:00Z
+  description: |
+    A basic overview of what carbohydrates are at a molecular level.
+- file: posts/making-nutrition-decisions.md
+  title: Making nutrition decisions
+  time: 2020-02-25T06:31:03Z
+  description: |
+    I've been trying out a new dietary pattern recently. This post is about how I make decisions on what to try, and some general rules I've been converging on.
+  series: health-guide
+- file: posts/the-warp-executable.md
+  title: The Warp Executable
+  time: 2020-01-20T04:23:21Z
+  description: |
+    Ever need a quick web server for some static files? Use the warp executable!
+- file: posts/rust-crash-course-09-tokio-0-2.md
+  title: Tokio 0.2 - Rust Crash Course lesson 9
+  time: 2019-12-05T12:57:38Z
+  description: |
+    Lesson 9 in the Rust crash course: using Tokio 0.2.
+  series: rust-crash-course
+- file: posts/rust-crash-course-08-down-dirty-future.md
+  title: Down and dirty with Future - Rust Crash Course lesson 8
+  time: 2019-12-02T04:00:00Z
+  description: |
+    Lesson 8 in the Rust crash course: down and dirty with the Future trait
+  series: rust-crash-course
+- file: posts/boring-haskell-manifesto.md
+  title: "Boring Haskell Manifesto"
+  time: 2019-11-21T11:28:13Z
+  description: |
+    Haskell is revolutionary. But we're ignoring that. Instead: how to get Haskell into your organization, and how to make your organization more productive and profitable with better engineering
+- file: posts/haskell-kata-with-try-file-lock.md
+  title: "Haskell kata: withTryFileLock"
+  time: 2019-08-18T12:04:13Z
+  description: |
+    A Haskell code kata to sharpen your skills. Rewrite withTryFileLock to have a different type signature.
+- file: posts/how-to-lose-weight.md
+  title: How to lose weight
+  time: 2019-07-15T10:13:42Z
+  description: |
+    A short guide on approaches you may take on losing weight, and my recommendations for getting started. Targeted at newcomers to the health and fitness world.
+  series: health-guide
+- file: posts/my-new-home-network-setup.md
+  title: My new home network setup
+  time: 2019-06-26T08:34:33Z
+  description: "We just did a bunch of rennovations on our house, including to our network setup. For the curious, here's what it looks like."
+- file: posts/gym-etiquette-test.md
+  title: Gym Etiquette Test
+  time: 2019-04-01T05:32:00Z
+  description: "A recommended required exam for anyone to join a gym"
+- file: posts/typing-resistance.md
+  title: Typing Resistance
+  time: 2019-04-01T03:00:00Z
+  description: "Programming languages, like the human body, are subject to the phenomenon known as resistance. Learn how type systems in programming act like insulin in the body."
+- file: posts/shutting-down-haskell-lang.md
+  title: "Shutting down haskell-lang.org"
+  time: 2019-02-18T19:33:00Z
+  description: "I've recently shut down the haskell-lang.org website, redirecting to a new FP Complete Haskell site."
+- file: posts/call-for-new-issue-triager.md
+  title: "Call for new Stack issue triager"
+  time: 2019-02-12T08:35:00Z
+  description: "Interested in contributing back to the Stack project? Consider joining the Stack issue triager team!"
+- file: posts/mismatched-global-packages.md
+  title: "Mismatched global packages"
+  time: 2019-01-24T12:30:00Z
+  description: "How GHC can ship packages that are different than what's on Hackage, how this impacts Stack, and how to do better"
+- file: posts/kids-coding-part-4.md
+  title: "Kids Coding, Part 4"
+  time: 2019-01-18T11:31:44Z
+  description: "Part 4 of teaching my kids to code, teaching the six year old some coding"
+  series: kids-coding
+- file: posts/kids-coding-interlude-the-function-game.md
+  title: "Kids Coding Interlude: the function game"
+  time: 2018-12-16T16:00:00Z
+  description: "An interlude in the series of kids coding to talk about a helpful exercise we use: the function game"
+  series: kids-coding
+- file: posts/improving-commercial-haskell.md
+  title: Improving Commercial Haskell
+  time: 2018-12-13T08:00:00Z
+  description: |
+    A proposal on how we can make the Commercial Haskell Special Interest Group more useful for the community. Feedback very much welcome.
+- file: posts/fp-completes-opinion.md
+  title: "FP Complete's opinion"
+  time: 2018-12-12T08:00:00Z
+  description: |
+    What is FP Complete's opinion on topic X? Nothing!
+- file: posts/new-user-empathy.md
+  title: New user empathy
+  time: 2018-12-11T13:00:00Z
+  description: |
+    We often talk about the abstract "new user." I'd like to propose a more concrete, and hopefully more helpful, approach to helping new users, both with Haskell, and in general.
+- file: posts/rust-crash-course-07-async-futures-tokio.md
+  title: Async, futures, and tokio - Rust Crash Course lesson 7
+  time: 2018-12-03T04:00:00Z
+  description: |
+    Lesson 7 in the Rust crash course: Async, futures, and tokio
+  series: rust-crash-course
+- file: posts/rust-crash-course-06-lifetimes-slices-solutions.md
+  title: Lifetimes and Slices - Rust Crash Course lesson 6 - exercise solutions
+  time: 2018-11-28T04:00:00Z
+  description: |
+    Solutions to exercises in Rust crash course lesson 6, "Lifetimes and Slices."
+  series: rust-crash-course
+- file: posts/rust-crash-course-06-lifetimes-slices.md
+  title: Lifetimes and Slices - Rust Crash Course lesson 6
+  time: 2018-11-26T04:00:00Z
+  description: |
+    Lesson 6 in the Rust crash course: Lifetimes and Slices.
+  series: rust-crash-course
+- file: posts/rust-crash-course-05-rule-of-three-solutions.md
+  title: Rule of Three - Parameters, Iterators, and Closures - Rust Crash Course lesson 5 - exercise solutions
+  time: 2018-11-21T04:00:00Z
+  description: |
+    Solutions to exercises in Rust crash course lesson 5, "Rule of Three - Parameters, Iterators, and Closures."
+  series: rust-crash-course
+- file: posts/why-i-believe-stackage-succeeded.md
+  title: Why (I believe) Stackage succeeded
+  time: 2018-11-20T16:30:00Z
+  description: |
+    Some thoughts on what I believe has made Stackage a successful project.
+- file: posts/rust-crash-course-05-rule-of-three.md
+  title: Rule of Three - Parameters, Iterators, and Closures - Rust Crash Course lesson 5
+  time: 2018-11-19T04:00:00Z
+  description: |
+    Lesson 5 in the Rust crash course: Rule of Three - Parameters, Iterators, and Closures.
+  series: rust-crash-course
+- file: posts/stackage-history-philosophy-future.md
+  title: "Stack(age): History, philosophy, and future"
+  time: 2018-11-18T12:15:00Z
+  description: |
+    A personal review of the history of the Stackage and Stack projects, their philosophy, and some thoughts on their future.
+- file: posts/rust-crash-course-04-crates-more-iterators-solutions.md
+  title: Crates and more iterators - Rust Crash Course lesson 4 - exercise solutions
+  time: 2018-11-14T04:00:00Z
+  description: |
+    Solutions to exercises in Rust crash course lesson 4, "Crates and more iterators."
+  series: rust-crash-course
+- file: posts/rust-crash-course-04-crates-more-iterators.md
+  title: Crates and more iterators - Rust Crash Course lesson 4
+  time: 2018-11-12T04:00:00Z
+  description: |
+    Lesson 4 in the Rust crash course: crates and more iterators.
+  series: rust-crash-course
+- file: posts/proposal-stack-coc.md
+  title: "Proposal: Stack Code of Conduct"
+  time: 2018-11-07T05:48:00Z
+  description: |
+    I'm proposing an unofficial code of conduct for the Stack project.
+- file: posts/rust-crash-course-03-iterators-and-errors-solutions.md
+  title: Iterators and Errors - Rust Crash Course lesson 3 - exercise solutions
+  time: 2018-11-07T04:00:00Z
+  description: |
+    Solutions to exercises in Rust crash course lesson 3, "Iterators and Errors."
+  series: rust-crash-course
+- file: posts/rust-crash-course-03-iterators-and-errors.md
+  title: Iterators and Errors - Rust Crash Course lesson 3
+  time: 2018-11-05T04:00:00Z
+  description: |
+    Lesson 3 in the Rust crash course: iterators and errors.
+  series: rust-crash-course
+- file: posts/rust-crash-course-02-basics-of-ownership-solutions.md
+  title: Basics of Ownership - Rust Crash Course lesson 2 - exercise solutions
+  time: 2018-10-31T04:00:00Z
+  description: |
+    Solutions to exercises in Rust crash course lesson 2, "Basics of Ownership."
+  series: rust-crash-course
+- file: posts/rust-crash-course-02-basics-of-ownership.md
+  title: Basics of Ownership - Rust Crash Course lesson 2
+  time: 2018-10-29T04:00:00Z
+  description: |
+    Lesson 2 in the Rust crash course: learning the basics of ownership.
+  series: rust-crash-course
+- file: posts/rust-crash-course-01-kick-the-tires-solutions.md
+  title: Kick the Tires - Rust Crash Course lesson 1 - exercise solutions
+  time: 2018-10-24T04:00:00Z
+  description: |
+    Solutions to exercises in Rust crash course lesson 1, "Kicking the Tires."
+  series: rust-crash-course
+- file: posts/rust-crash-course-01-kick-the-tires.md
+  title: Kick the Tires - Rust Crash Course lesson 1
+  time: 2018-10-22T04:00:00Z
+  description: |
+    Lesson 1 in the Rust crash course: kicking the tires with some basic usage of Rust.
+  series: rust-crash-course
+- file: posts/is-it-healthy-depends-on-context.md
+  title: Is it healthy? Depends on context
+  time: 2018-10-19T05:51:55Z
+  description: |
+    I recently was asked the question "is it healthy?" about a food item. This blog post is an answer to that.
+  series: health-guide
+- file: posts/introducing-rust-crash-course.md
+  title: Introducing the Rust crash course
+  time: 2018-10-18T03:04:00Z
+  description: |
+    I'm happy to announce that I'll be beginning a crash course on Rust. This post describes motivations and the style this will take.
+  series: rust-crash-course
+- file: posts/raii-better-than-bracket-pattern.md
+  title: RAII is better than the bracket pattern
+  time: 2018-10-08T03:18:00Z
+  description: |
+    Last week, I wrote a blog post about ResourceT, and mentioned Rust's RAII being better than Haskell's bracket pattern. In this blog post, I demonstrate what this advantage is.
+- file: posts/how-i-research-health.md
+  title: "How I research health"
+  time: 2018-10-02T19:08:00Z
+  description: "An explanation on my process for researching topics on health (including nutrition and exercise). Hopefully this can help others understand how I reach my conclusions, and follow similar processes for themselves."
+  series: health-guide
+- file: posts/kids-coding-part-3.md
+  title: "Kids Coding, Part 3"
+  time: 2018-08-28T12:12:00Z
+  description: "Part 3 of teaching my kids to code, introducing pattern matches and enums"
+  series: kids-coding
+- file: posts/kids-coding-part-2.md
+  title: "Kids Coding, Part 2"
+  time: 2018-08-24T06:04:00Z
+  description: "Part 2 of teaching my kids to code, introducing variables and defining functions."
+  series: kids-coding
+- file: posts/kids-coding-part-1.md
+  title: "Kids Coding, Part 1"
+  time: 2018-08-23T17:55:00Z
+  description: "I just started teaching my kids some coding. Here are the notes from the first lesson."
+  series: kids-coding
+- file: posts/post-fast-writeup.md
+  title: "Post Fast Write-up"
+  time: 2018-07-15T05:55:00Z
+  description: "I did a 5.5 day fast last week, here are some of the results"
+- file: posts/thoughts-on-fasting.md
+  title: "Thoughts on Fasting"
+  time: 2018-07-10T03:10:00Z
+  description: "A number of people expressed interest in my current multiday fast. Let me share some layperson's thoughts on the topic."
+  series: health-guide
+- file: posts/stop-supporting-older-ghcs.md
+  title: "Stop supporting older GHCs"
+  time: 2018-07-01T13:00:00Z
+  description: "An argument for dropping support in libraries for older versions of GHC"
+- file: posts/deprecating-haskell-markdown-library.md
+  title: "Deprecating the Haskell markdown library"
+  time: 2018-06-15T06:32:00Z
+  description: "I'm considering deprecating the markdown library I wrote"
+- file: posts/i-am-not-snoyjerk.md
+  title: "I am not snoyjerk"
+  time: 2018-05-28T08:43:00Z
+  description: "There's a user on Reddit known as snoyjerk. Just setting the record straight to avoid confusion: that's not me."
+- file: posts/my-open-source-goals.md
+  title: "My open source goals"
+  time: 2018-05-28T00:08:00Z
+  description: I'm planning on changing my open source priorities to focus more on helping others work on projects.
+- file: posts/building-packages-outside-snapshots.md
+  title: "Building packages outside snapshots"
+  time: 2018-05-23T13:06:00Z
+  description: Sometimes you want to build a package that isn't in the latest Stackage snapshots. Here's a quick trick to making that easier.
+- file: posts/guide-to-matrix-riot.md
+  title: "Guide to matrix.org and riot.im"
+  time: 2018-05-14T13:28:00Z
+  description: A user-oriented guide to using Matrix.org and Riot.im, intended for using them for open source project communication.
+- file: posts/stop-breaking-compatibility.md
+  title: Stop breaking compatibility
+  time: 2018-04-01T00:00:00Z
+  description: Without a doubt, the most dangerous thing in all of software development is breaking backwards compatibility. We need to stop this!
+- file: posts/lambdaconf-haskell-hackathon-2018.md
+  title: LambdaConf Haskell Hackathon 2018
+  time: 2018-03-28T10:12:00Z
+  description: Some details on an upcoming hackathon, and how you can request contributions to your open source projects
+- file: posts/quick-guide-jewish-holidays.md
+  title: Quick guide to the Jewish Holidays
+  time: 2018-03-25T06:03:00Z
+  description: A quick overview of the Jewish holidays, the calendar they originate from, and how I observe them
+- file: posts/haskell-ecosystem-requests.md
+  title: Haskell Ecosystem Requests
+  time: 2018-02-18T16:41:00Z
+  description: "Some requests for changes in how some parts of the Haskell ecosystem are maintained"
+- file: posts/stack-patching-policy.md
+  title: Stack Patching Policy
+  time: 2018-02-14T08:38:00Z
+  description: "Discussion of a potential policy change for Stack"
+- file: posts/conduitpocalypse.md
+  title: The Conduitpocalypse
+  time: 2018-02-04T10:15:00Z
+  description: "Announcing a bunch of breaking library releases"
+- file: posts/slurp.md
+  title: SLURP
+  time: 2018-01-24T04:45:00Z
+  description: "My comments on the SLURP proposal"
+- file: posts/breaking-changes-dependency-trees.md
+  title: "Breaking changes, dependency trees"
+  time: 2018-01-09T12:00:00Z
+  description: "Some thoughts on upcoming library breaking changes, and how to restructure dependency trees"
+- file: posts/drop-conduits-finalizers.md
+  title: "Drop Conduit's Finalizers?"
+  time: 2018-01-03T13:57:00Z
+  description: "Time to ask a really hard question: is it time to remove Conduit's finalizer concept from the library?"
+- file: posts/review-bridge-program.md
+  title: Review of The Bridge strength program
+  time: 2018-01-01T10:45:00Z
+  description: "My review of The Bridge strength program by Barbell Medicine"
+- file: posts/dropped-packages-following-lts-10.md
+  title: Dropped packages following LTS 10
+  time: 2017-12-25T15:47:00Z
+  description: "Following the release of LTS 10, we've removed a bunch of upper bounds and dropped some packages from Stackage Nightly"
+- file: posts/what-makes-haskell-unique.md
+  title: What Makes Haskell Unique
+  time: 2017-12-17T08:00:00Z
+  description: "A talk I gave at F(by) 2017 on what makes Haskell different from other languages"
+- file: posts/stack-and-nightly-breakage.md
+  title: Stack and Nightly breakage
+  time: 2017-12-07T04:00:00Z
+  description: "An explanation for why Stack 1.5 won't build Stackage Nightly snapshots right now"
+- file: posts/future-proofing-test-suites.md
+  title: Future proofing test suites
+  time: 2017-11-12T17:00:00Z
+  description: "A small piece of advice about including test suites that may fail over time"
+- file: posts/effective-ways-help-from-maintainers.md
+  title: Effective Ways to Get Help from Maintainers
+  time: 2017-10-23T08:45:00Z
+  description: "Tapping into the human nature of open source contributors for fun and profit"
+  old-slugs:
+  - manipulating-maintainers
+- file: posts/posture.md
+  title: Posture
+  time: 2017-08-16T09:43:00Z
+  description: "The story of how I (mostly) overcame back pain, and advice for others suffering from it"
+  series: health-guide
+- file: posts/some-upcoming-crazy-thoughts.md
+  title: Some Upcoming Crazy Thoughts
+  time: 2017-07-16T13:30:00Z
+  description: "Just a fair warning heads up that I've been having some crazy Haskell thoughts, and will be sharing them soon"
+- file: posts/the-spiderman-principle.md
+  title: The Spiderman Principle
+  time: 2017-07-05T03:00:00Z
+- file: posts/naive-overview-exercise.md
+  title: A Very Naive Overview of Exercise (Part 3)
+  time: 2017-06-15T15:00:00Z
+  series: health-guide
+- file: posts/naive-overview-nutrition.md
+  title: A Very Naive Overview of Nutrition (Part 2)
+  time: 2017-06-14T03:00:00Z
+  series: health-guide
+- file: posts/naive-overview-nutrition-exercise.md
+  title: A Very Naive Overview of Nutrition and Exercise (Part 1)
+  time: 2017-06-13T03:00:00Z
+  series: health-guide
+- file: posts/how-to-send-me-a-pull-request.md
+  title: How to send me a pull request
+  time: 2017-06-06T10:00:00Z
+- file: posts/why-i-lift.md
+  title: Why I lift
+  time: 2017-06-01T10:00:00Z
+  series: health-guide
+- file: posts/playing-with-lens-aeson.md
+  title: Playing with lens-aeson
+  time: 2017-05-29T18:00:00Z
+- file: posts/worst-function-in-conduit.md
+  title: The Worst Function in Conduit
+  time: 2017-05-07T05:10:00Z
+- file: posts/stackages-no-revisions-field.md
+  title: "Stackage's no-revisions (experimental) field"
+  time: 2017-04-27T06:00:00Z
+- file: posts/haskell-success-stories.md
+  title: Haskell Success Stories
+  time: 2017-04-24T06:00:00Z
+- file: posts/generalizing-type-signatures.md
+  title: Generalizing Type Signatures
+  time: 2017-04-20T06:00:00Z
+- file: posts/enough-with-backwards-compatibility.md
+  title: Enough with Backwards Compatibility
+  time: 2017-04-01T06:00:00Z
+- file: posts/better-exception-messages.md
+  title: Better Exception Messages
+  time: 2017-02-16T13:24:20Z
+- file: posts/hackage-security-stack.md
+  title: Hackage Security and Stack
+  time: 2017-02-14T15:24:20Z
+- file: posts/stackage-design-choices.md
+  title: "Stackage design choices: making Haskell curated package sets"
+  day: 2017-01-23
+- file: posts/follow-up-mapm.md
+  title: "Follow up on mapM_"
+  day: 2017-01-19
+- file: posts/safe-prelude-a-thought-experiment.md
+  title: "safe-prelude: a thought experiment"
+  day: 2017-01-16
+- file: posts/foldable-mapm-maybe-and-recursive-functions.md
+  title: Foldable.mapM_, Maybe, and recursive functions
+  day: 2017-01-10
+- file: posts/conflicting-module-names.md
+  title: Conflicting Module Names
+  day: 2017-01-05
+- file: posts/functors-applicatives-and-monads.md
+  title: Functors, Applicatives, and Monads
+  day: 2017-01-03
+- file: posts/beware-of-readfile.md
+  title: Beware of readFile
+  day: 2016-12-22
+- file: posts/call-for-new-stackage-curator.md
+  title: Call for new Stackage Curator
+  day: 2016-12-19
+- file: posts/extra-benefit-of-open-sourcing.md
+  title: An extra benefit of open sourcing
+  day: 2016-12-13
+- file: posts/haskell-documentation-2016-update.md
+  title: "Haskell Documentation, 2016 Update"
+  day: 2016-11-28
+- file: posts/haskell-for-dummies.md
+  title: "Haskell for Dummies"
+  day: 2016-11-23
+- file: posts/spreading-the-gospel-of-haskell.md
+  title: "Spreading the Gospel of Haskell"
+  day: 2016-11-22
+- file: posts/haskells-missing-concurrency-basics.md
+  title: "Haskell's Missing Concurrency Basics"
+  day: 2016-11-16
+- file: posts/designing-apis-for-extensibility.md
+  title: Designing APIs for Extensibility
+  day: 2016-11-03
+- file: posts/new-conduit-tutorial.md
+  title: New Conduit Tutorial
+  day: 2016-10-13
+- file: posts/proposed-conduit-reskin.md
+  title: Proposed conduit reskin
+  day: 2016-09-23
+- file:  posts/monads-are-like-lannisters.md
+  title: "Monads are like Lannisters"
+  day: 2016-09-12
+- file: posts/appveyor-haskell-windows-ci.md
+  title: "Using AppVeyor for Haskell+Windows CI"
+  day: 2016-08-31
+- file: posts/restarting-this-blog.md
+  title: Restarting this blog
+  day: 2016-08-24
+- file: posts/xslt-rant-explained
+  title: "XSLT Rant Explained"
+  day: 2012-04-09
+- file: posts/xslt-rant
+  title: "Open Letter to XSLT Fans"
+  day: 2012-04-05
+- file: posts/ie-mimetype-png
+  title: "Dysfunctional Programming: FindMimeFromData"
+  day: 2012-03-22
+- file: posts/first-post
+  title: First Post
+  day: 2012-01-31
