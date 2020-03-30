@@ -9,9 +9,8 @@
 {-# LANGUAGE RecordWildCards   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections     #-}
-module SnoymanCom
-    ( prodMain
-    , develMain
+module Main
+    ( main
     , resourcesApp
     , Widget
     ) where
@@ -640,27 +639,8 @@ withApp isDev inner = do
       }
     withCurrentRef $ \appShekel -> inner App {..}
 
-prodMain :: IO ()
-prodMain = withApp False warpEnv
-
-develMain :: IO ()
-develMain =
-  withApp True $
-  race_ watchTermFile . warpEnv
-
--- | Would certainly be more efficient to use fsnotify, but this is
--- simpler.
-watchTermFile :: IO ()
-watchTermFile =
-    loop
-  where
-    loop = do
-        exists <- doesFileExist "yesod-devel/devel-terminate"
-        if exists
-            then return ()
-            else do
-                threadDelay 100000
-                loop
+main :: IO ()
+main = withApp False warpEnv
 
 getShekelR :: Handler Html
 getShekelR = do
