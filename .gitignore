@@ -1,8 +1,4 @@
 *.swp
-/content/
-/dist/
-/.stack-work/
+.stack-work/
 *~
-yesod-devel/
-*#
-/snoymancom.cabal
+/site/snoymancom.cabal
