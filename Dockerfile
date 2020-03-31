@@ -1,11 +1,11 @@
-FROM base-build as build-app
+FROM docker.pkg.github.com/snoyberg/snoyman.com/base-build:7adf81919bfd60d553b252004df4f8f391458b28 as build-app
 
 RUN mkdir -p /artifacts/bin
 COPY site /src/site
 COPY stack.yaml /src/stack.yaml
 RUN stack install --stack-yaml /src/stack.yaml --local-bin-path /artifacts/bin
 
-FROM base-run
+FROM docker.pkg.github.com/snoyberg/snoyman.com/base-run:7adf81919bfd60d553b252004df4f8f391458b28
 
 ENV PORT 3000
 WORKDIR /app
