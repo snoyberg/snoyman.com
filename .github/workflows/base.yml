@@ -1,0 +1,20 @@
+name: Base image
+
+on:
+  push:
+    branches: [base]
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build base image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/base-build:$GITHUB_SHA
+          docker build base --tag $IMAGE_ID
+          docker push $IMAGE_ID
+          echo Pushed new base image $IMAGE_ID
