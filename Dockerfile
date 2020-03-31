@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
 FROM base-build as build-app
 
 RUN mkdir -p /artifacts/bin
-COPY site /src
+COPY site /src/site
+COPY stack.yaml /src/stack.yaml
 RUN stack install --stack-yaml /src/stack.yaml --local-bin-path /artifacts/bin
 
 FROM base-run
