@@ -1,10 +1,3 @@
-FROM fpco/pid1:18.04 as base-run
-
-RUN apt-get update && apt-get install -y \
-  ca-certificates \
-  libgmp-dev \
-  netbase
-
 FROM base-build as build-app
 
 RUN mkdir -p /artifacts/bin

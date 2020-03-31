@@ -12,9 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build base image
+      - name: Build base run image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/base-build:$GITHUB_SHA
-          docker build base --tag $IMAGE_ID
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/base-run:$GITHUB_SHA
+          docker build base-run --tag $IMAGE_ID
           docker push $IMAGE_ID
           echo Pushed new base image $IMAGE_ID
+
+      - name: Build base build image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/base-build:$GITHUB_SHA
+          docker build base-build --tag $IMAGE_ID
+          docker push $IMAGE_ID
+          echo Pushed new base build image $IMAGE_ID
