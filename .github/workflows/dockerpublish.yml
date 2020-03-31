@@ -16,6 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Log into Github registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Build base build image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/base-build
+          docker build base --tag base-build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $IMAGE_ID
+          docker tag base-build $IMAGE_ID
+          docker push $IMAGE_ID
+
       - name: Build image
         run: docker build . --tag image
 
@@ -28,9 +38,6 @@ jobs:
           IMAGE_ID=$IMAGE_ID:$GITHUB_SHA
           docker tag image $IMAGE_ID
           docker push $IMAGE_ID
-
-      - name: Log into Github registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image to Github registry
         run: |
