@@ -46,6 +46,12 @@ publications:
   publisher: "IEEE Spectrum, The Functional Web"
 
 talks:
+- date: 2020-04
+  title: Your Second Haskell Web App
+  venue: Berlin Functional Programming Group
+  links:
+  - url: "https://www.snoyman.com/reveal/second-app-yesod"
+    text: Slides
 - date: 2019-11
   title: Your first Haskell web app with WAI and Warp
   venue: Functional Conf 2019
