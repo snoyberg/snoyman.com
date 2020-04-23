@@ -36,7 +36,7 @@ library:
 executables:
   snoymancom:
     main: Main.hs
-    source-dirs: src
+    source-dirs: app
     ghc-options: -threaded
     dependencies:
     - snoymancom
