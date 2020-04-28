@@ -10,48 +10,28 @@ title: What Makes Haskell Unique
 
 <div><img src="/static/fpcomplete-logo.png" style="border:0;margin:0"></div>
 
-<aside class="notes">
-
-<ul>
-<li>Good morning, welcome</li>
-<li>FP Complete helps people adopt Haskell</li>
-<li>Need to know: <b>What makes Haskell unique</b></li>
-</ul>
-</aside>
-
 ---
 
 ## Why uniqueness matters
 
 * Programmers have lots of options
-* Need to know what distinguishes programming languages
-* Need to understand what makes Haskell different from other languages
+* Need some filtering mechanism for choosing languages
+* Need to know what distinguishes programming languages from each other
+* Today's topic: if I'm going to use Haskell, what makes it special?
 
 ---
 
-## Is Haskell functional?
+## First guess: Haskell is functional
 
+* Is Haskell the only functional language?
+* What about Scala, LISP, ML, F#...
 * What makes a language functional?
 * Lax definition
     * First class functions
 	* Higher order functions
 * Wait... is C functional?
 
-<aside class="notes">
-<ul>
-<li>Haskell is functional</li>
-<li>So are lots of others</li>
-<li>Even if you include closures, still many choices</li>
-</ul>
-</aside>
-
----
-
 __Haskell may be functional, but that doesn't make it unique__
-
-<aside class="notes">
-Lots of things could describe Haskell
-</aside>
 
 ---
 
@@ -77,7 +57,16 @@ Lots of things could describe Haskell
 
 ---
 
-__It's the combination of these features that makes Haskell unique__
+## Are those unique?
+
+* Not a single one of those features is unique to Haskell!
+* Very few languages have _any_ one feature that no one else has
+* Instead, we have to look at the _feature stack_ to understand the whole picture
+* Haskell is unique because of its _unique combination of features_
+
+---
+
+## Combination examples
 
 * Example: purity + strong typing + functional style leads to:
     * Easy to write
@@ -117,8 +106,10 @@ httpGetA(url1, |json1| =>
 ```
 
 * Aka "callback hell"
-* Lots of techniques to work around it, e.g. promises/futures
-* "Oh, promises form a monad!" Not even going there today :)
+* Lots of techniques to work around it
+    * Promises/futures
+    * Async/await syntax
+* How does Haskell solve this?
 
 ---
 
@@ -249,7 +240,7 @@ timeout tenSeconds expensiveComputation
 
 * Most languages default to mutable values
 * Haskell differs in two ways:
-    * Immutable by default, explicit kind of mutability
+    * Immutable by default, explicit mutability
 	* Mutating is an effect, tracked by the type system
 
 ---
@@ -308,7 +299,7 @@ But why does this matter?
 
 ---
 
-## Reasoning about code
+## Predicting code behavior
 
 Guess the output
 
@@ -371,7 +362,7 @@ Actual output:
 Highest: 55
 First result was by: Charlie</pre>
 
-Non-local changes broke our guessed result
+Non-local changes broke our predicted result
 </div>
 
 <aside class="notes">Our assumptions changed because of mutation</aside>
@@ -480,7 +471,7 @@ sortImmutable orig = runST $ do
 <b>Advantages</b>
 
 <ul>
-<li>Easier to reason about code</li>
+<li>Easier to predict code behavior</li>
 <li>Avoid many cases of data races</li>
 <li>Functions are more reliable, returning the same output for the same input</li>
 </ul>
@@ -511,7 +502,7 @@ runServer (|request| => {
 
 Looks reasonable, but...
 
-```
+```text
 Thread 1: receive request: Alice gives $10
 Thread 2: receive request: Alice receives $10
 Thread 1: lookup that Alice has $50
@@ -540,7 +531,7 @@ runServer (|request| => {
 })
 ```
 
-```
+```text
 Thread 1: receive request: $50 from Alice to Bob
 Thread 2: receive request: $50 from Bob to Alice
 Thread 1: lock Alice
@@ -562,8 +553,8 @@ runServer $ \request -> atomically $ do
   let fromVar = lookup (from request) accounts
       toVar = lookup (to request) accounts
   origFrom <- readTVar fromVar
-  writeTVar fromVar (origFrom - amt request)
   origTo <- readTVar toVar
+  writeTVar fromVar (origFrom - amt request)
   writeTVar toVar (origTo + amt request)
 ```
 
@@ -583,8 +574,7 @@ NOTE:
 
 ## The role of purity
 
-STM retries if a transaction isn't atomic. How many Bitcoins will I
-buy?
+STM retries if another thread modifies variables. If I can retry: how many Bitcoins will I buy?
 
 ```haskell
 atomically $ do
@@ -762,7 +752,7 @@ let loop i !total =
 
 <p>But this is great</p>
 
-<pre><code class="haskell">sum [1..1000000]</code></pre>
+<pre><code class="haskell">fold' (+) 0 [1..1000000]</code></pre>
 
 <ul>
 <li>Doesn't it allocate 8mb of ints?</li>
@@ -876,7 +866,6 @@ NOTE:
 
 * Too much to talk about in 40 minutes!
 * Two other topics I wanted to touch on
-* Feel free to ask me about these at breaks
 
 ---
 
@@ -886,7 +875,8 @@ NOTE:
 * Abstractions like `Alternative` a natural fit
     * `parseXMLElement <|> parseXMLText`.
 * Able to reuse huge number of existing library functions,
-    * `optional`, `many`, `foldMap`
+    * `optional`, `many`
+    * Also: `traverse`, `foldMap`, etc
 * General purpose `do`-notation is great
 
 ---
@@ -916,8 +906,10 @@ c/o [@queertypes](https://twitter.com/queertypes/status/941064338848100352)
 * Lens, conduit, pipes, ...
 * Lots of ways to do things in Haskell!
 * It's a plus and a minus
+* Don't overcomplicate your code!
 * Recommendation: choose a useful subset of Haskell and its libraries,
   and define some best practices
+* I prefer my Haskell to be boring
 
 ---
 
