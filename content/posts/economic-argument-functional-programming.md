@@ -201,9 +201,29 @@ Investigating the veracity of each of these claims requires more knowledge acqui
 
 Put yourself in the shoes of a manager who knows nothing about PHP and Haskell. Would you be willing to make these kinds of speculative investments with so much uncertainty in the air? I wouldn't.
 
-## Sunk cost fallacy
+## Fixed and sunk costs
 
-## What can we do?
+Many people have probably heard the phrase "sunk cost fallacy." But less commonly discussed are the things which proceed it: fixed and sunk costs. Instead of some analogy, let's jump straight into the software on this one.
+
+Let's say it takes three years to learn to be a software developer. Let's say I value that time at $10,000 a year. So the cost of learning to be a software developer is $30,000. Now as a freshly minted software developer, I spend six months writing my first project for a consulting gig, where I get paid $20,000. A naive view of this would be that my costs were $35,000&mdash;3 years learning at $10,000 each, plus half a year of work for $5,000. And the revenue I made is $20,000. So I lost $15,000 on the venture.
+
+Now I get my second gig, also for $20,000 for 6 months. I still value my time at $5,000 for those 6 months, so now I've made a profit of $15,000.
+
+But is it really accurate to say I lost money on the first gig? Not really. The terms in economics for what are going on here are fixed versus variable costs. Learning to be a software developer is a fixed cost which in reality gets spread across multiple projects, while the variables costs are incurred for each and every project. When I go to learn software development, I have to ask the question: how many years do I expect to work in this field? Based on that, I figure out whether the 3 year investment in learning programming is worth it.
+
+Now let's kick it up a notch. I've learnt how to program in language X. Just as I finish learning language X, an announcement is made that language X is dead, no new software will be written in it. I'm able to get 1 single gig in this language. Should I take that gig or not? From a purely financial standpoint, it's worth taking the project. I've _already_ spent the time on the fixed cost of learning language X. Since I've already made that investment, we no longer call it a fixed cost. Now it's a _sunk cost_. The cost is sunk, and we no longer take it into account when making further decisions. By contrast, if someone could have told me 3 years before that language X was about to die, I would have learned something else instead.
+
+So how does this "sunk cost fallacy" come into play? Let's say I've spent those 3 years learning language Y. That cost is sunk, and I should never, ever pay attention to it again for decision making purposes. However, we humans tend to let our emotions get in the way of logical analysis. Now let's say that language Z exists as well. And let's say I know somehow, with absolute certainty, it will only take me 6 months to learn language Z, and 6 months to implement a project in language Z. I also know for a fact that for some reason, it will take 18 months to implement the same project in language Y.
+
+The sunk cost fallacy would be to focus on the 3 years of investment you made in learning language Y, and say you can't just throw all of that away. Ignoring the emotional toll that may take, the correct economic decision _is_ to "throw away" that investment. Looking at the marginal costs, it is cheaper to learn and use language Z than it is to use the already-learned language Y.
+
+But "sunk cost fallacy" applies in a much wider way than human emotions. In fact, it can be an important defense mechanism in a corporate environment. No one wants to take the blame for making a bad technical decision 2 years ago, and may defend&mdash;seemingly irrationally&mdash;what you see as an obviously bad plan. "Don't throw good money after bad" is a great argument. But there can be other great counterarguments, such as "the devil you know." We _know_ language Y, we know how long it will take to use it, and language Z is a huge risk factor. Honestly, how do you know for certain that it will only take 12 months to learn and use language Z?
+
+The point of this is that there is a logical way of approaching these decisions involving fixed costs. But there will be both confounding factors, like emotional involvement or preexisting biases, that will make it difficult to approach this all rationally. And the interaction with other legitimate concerns, like perfect knowledge and risk, makes this even more complicated.
+
+## What should we do?
+
+I appreciate all of you humoring me and letting me live out my fantasy of being a stuffy economics professor. But now that we've covered all of these topics, it's time to bring it home. Can we use this knowledge to help us better approach improving software development?
 
 * Better communication
 * Communication to management
@@ -217,3 +237,4 @@ Put yourself in the shoes of a manager who knows nothing about PHP and Haskell. 
     * Initial training
     * Pilot project
     * Microservices (yes, I hate them)
+* Respect sunk costs, understand where you can and can't win
