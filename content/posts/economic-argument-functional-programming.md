@@ -125,6 +125,71 @@ Unfortunately, that's not how the birdhouse-purchasing-decision gets made. The o
 
 In this audience, many are probably all familiar with the concept of "the tragedy of the commons" with regards to open source software. If Alice is working on an open source project, and is giving $1000/month of benefit to 10 companies, it would make sense for them to pool their resources and pay her $10,000/month, right? Except why would they do that, when they can get the work for free? And ultimately, Alice isn't willing to work full time on this projects for less than $6,000/month. No single company is willing to spend that money. Even though the positive externality far outweighs that, the reality often is that Alice ends up dropping the project and getting a "real job."
 
+### Summary up until here
+
+Let's do a quick recap of what we've looked at up until now, and hammer home how it relates to programming. An important aspect in economics is defining all value in some standard, measurable unit. If you can do that correctly&mdash;and that's a very big if&mdash;you can make direct comparisons between seemingly unrelated things like "an ounce of gold" and "my pride in a job well done." That allows you to make more informed decisions.
+
+A common way we measure this is by asking questions like "how much would you spend to solve that problem," or "how much would someone have to pay you to give up on some thing you like?"
+
+Once we've assigned some value to everything, we can start comparing the options in front of us "at the margins," by comparing the relative benefits and costs in different alternatives, and finding the one where `max(delta benefit - delta cost)`. This accounts for not only the tangible things like "money someone pays me for my goods and services" or "raw material costs," but if done correctly also accounts for "extra advertising from displaying my work" and "I feel happy that I got to use the tools I like using."
+
+There are _many_ big holes in this breakdown. One of them is the fact that measuring the value of everything is all but impossible to do correctly. We do the best we can, but we're going to go into this flaw in a more detail in a bit. The other big flaw we've mentioned is externalities. The person making the decisions only pays attention to benefits and costs that apply to him or her. This is going to be absolutely crucial to understanding how we make functional programming successful in industry, and how we generally try to improve software. Hold onto that thought though, because I want to build up a few other ideas.
+
 ## Perfect knowledge
 
+I'm sure everyone's tired of birdhouses. Let's talk about going out to buy groceries instead. For those of you who don't remember: before COVID-19, it was common for people to leave their houses on a fairly regular basis to buy food from things called supermarkets, instead of hoping that delivery trucks would drop food out in front of their houses.
+
+Anyway: let's say I want to buy bananas. I have two supermarkets equal distance from my house. I'm lazy, so I'm going to drive to whichever one I go to. I look up on the websites for each supermarket to see which one is selling bananas cheaper. And then I go and buy my bananas from that store. I don't worry about the cost of gas or the cost of my time, because both supermarkets will take the same amount of time to get to.
+
+But now, let's say that supermarket A will take 10 minutes to drive to, and supermarket B will take 20 minutes. The bananas will cost $10 at supermarket A, and $5 at supermarket B. Now it's time to look up the going cost of gas. And figure out: how much is 10 minutes of your time worth? OK, that's not too terribly difficult, and you can come to a conclusion fairly quickly.
+
+Now let's say you want to buy apples, bananas, and pears. Supermarket A is cheaper for apples and bananas, supermarket B is cheaper for pears. Now you decide to analyze three plans:
+
+1. Buy everything at supermarket A
+2. Buy everything at supermarket B
+3. Go to both supermarkets A and B and buy the cheapest stuff at each place
+
+Again, you _can_ do this analysis, but it's started to get a bit more involved. And here's the rub: the time you spend on performing the analysis is worth something too! If you value your time at $40/hour, for example, and you spend 15 minutes performing this analysis, the analysis itself cost you $10. How much are you going to optimize on your supermarket expenditure for that $10?
+
+A lot of microeconomics is built around an assumption of perfect knowledge, that everyone has access to all information they would need to make an informed decision. That's a nice simplifying assumption, but it's obviously not true in practice. In the supermarket case, here's what I think most people in the world do. You have a general gut feeling of whether produce is cheaper at supermarket A or B. If you need produce, you go to the cheaper one. If you start getting annoyed about travel time, your brain automatically starts making adjustments to justify going to the more expensive but closer supermarket. If you notice that the prices are going up, you'll either consciously or subconsciously start updating your opinion of the two supermarkets.
+
+Also, if I know I'm about to make a major shopping trip, such as stocking my house for the next 3 months of quarantine, I may decide to pull open a newspaper and more directly compare prices. For a truly massive trip, I may even do a full analysis with a spreadsheet and estimate where my bill is going to be smaller.
+
+This is an intuitive and imprecise process. The gut reaction of not just engineers, but accountants, mathematicians, and many others would be: that's inefficient! You're wasting money! With my economics hat on, I see it very differently: this is a judicious trade-off between the expensive act of acquiring knowledge, and the unspecified potential gain of having that knowledge. It's liberating to know in advance: yes, I'm going to make imperfect decisions, but I know why I'm making them, and it's worth doing it in some cases.
+
+This concept applies to my job as a software engineer on a daily basis. In our line of work, gathering knowledge is in my opinion about 70% of the battle. Implementing solutions, once you have a clear plan of action, is relatively speaking the easier and more straightforward part. There are many extremes we can take on the acquisition of knowledge, anywhere from "I'm going to keep using PHP for all my apps, even a desktop GTK app, because I know it works" all the way to "I need to investigate the differences between these two RPC libraries with a line-by-line code analysis to determine which one will fit our use case better."
+
+One of the greatest skills you can achieve as an engineer is learning how deep into a topic you need to dive before you can make an informed decision. You'll see these kinds of discussions come up with management all the time: please provide an estimate, what are the risks, if we give you 3 more developers how much more quickly can you achieve the results, and so on. Understanding that acquisition of knowledge itself is a costly action, and talking about it as its own, separate work item is a great approach.
+
+I gave a talk in 2018 called "Functional Programming for the Long Haul." I made the argument there that as developers, we often ignore some of the real costs in maintenance of software development. We can use acquisition of knowledge as another explanation for that. It's _incredibly_ costly to acquire the knowledge to answer the question "is it more expensive to maintain software in Java or C#?" I believe, in response to this, most developers lie to themselves and say productivity and benchmarks are far more important than they are. That's because these pieces of knowledge are much cheaper to acquire. And we don't want to admit to ourselves that we're making uninformed decisions.
+
+Instead, I argue for being brutally honest about this. For example, I'd say that:
+
+* The single most important metric for a programming language is how difficult it is to maintain software in it
+* It's all but impossible to assess this metric yourself without actually writing a real life application
+* Therefore, we have to take some guesses at this
+* We're going to base our guesses on less reliable data sources, like:
+    * Marketing material
+    * Proof-by-authority claims from leaders
+    * Popularity
+
+And this is one of the areas where we are failing as functional programmers. We _could_ be writing marketing material. We should be. We have lots of success stories, but we don't talk about them. Instead, we talk about how elegant our code is, and explore more advanced solutions.
+
+Try to put yourself in the shoes of a developer or a manager who isn't a Haskell or Scala aficionado. They have limited time to gather knowledge on "this FP thing." They pull up some articles on Go, and see what a success it is in the DevOps space. They look at Rust's subreddit and see a page full of "look at this weekend project I threw together." They come to the Haskell mailing list and read about effect systems, and dependently typed coding, or to make fun of myself: a bunch of criticisms of monad transformer stacks and async exception caveats.
+
+We believe that functional programming solves real world problems better than the alternatives. But we're not effectively signaling that. And the highly rational breadth-first search most companies and developers will follow to find a language will probably not select FP based on this information.
+
 ## Risk mitigation
+
+## Sunk cost fallacy
+
+## What can we do?
+
+* Better communication
+* Communication to management
+* Make intangible things tangible
+    * Joy of learning
+    * Long term improvements to team structure
+    * Ease of recruitment
+* Talk to your coworkers
+* Choose cases where the marginal benefit is high and marginal cost is low
