@@ -181,6 +181,26 @@ We believe that functional programming solves real world problems better than th
 
 ## Risk mitigation
 
+We're almost through the economics lesson, don't worry. Two topics left, and they're both much easier than the others.
+
+Let's play a gambling game. I'm going to flip a coin. If it's heads, you get $2. If it's tails, you get nothing. How much would you be willing to pay to play the game? Most people would probably be willing to spend $1 for a 50% chance of winning $2. You may not be someone who enjoys gambling, and so you may not want to play. But the basic idea probably makes sense.
+
+Now let's pretend that your entire life savings is in your pocket, and it's $10,000. I offer you the same basic game: if I flip heads, you'll get $20,000. If I flip tails, you'll get nothing. Would you spend all $10,000 of your money to play the game? Probably not. There are some people who would still play this game. But most people are _risk averse_. Even though on a purely monetary level this game is fair, the value of these outcomes is not equivalent. Doubling your net worth is really great, but wiping out all of your savings is completely devastating.
+
+This situation with the coin is pretty simple. Assuming you trust me to be fair, you know we're talking about a 50/50 shot. But with most things in the world, we don't know the true probabilities of the different outcomes. Usually, to get a good feel for the likelihood of an outcome in any kind of complicated situation, you need to invest significant time in acquiring that knowledge.
+
+Companies tend to be fairly risk averse, especially larger and established companies. If I come in and say "Hey, if you invest 5 months of dev time, we can rewrite your entire codebase from PHP to Haskell. And once rewritten, I'll reduce your hardware costs by 37%, your maintenance cost by 33%, and improve user satisfaction by 63%." As a company, we can weigh the investment of 5 months of dev against those benefits and come up with a decision. Except for one really big question: risk.
+
+* Will the rewrite really take 5 months, or will it take longer?
+* Will the new version of the codebase actually work, or will we be in firefighting mode?
+* Will the claims of hardware cost reduction actually play out?
+* Is Haskell actually more maintainable than PHP? This Michael guy seems really excited about it, but why should we believe him?
+* I get it, the new code base will be more reliable, faster response time, and we can iterate on new features. But will user satisfaction actually rise 63%?
+
+Investigating the veracity of each of these claims requires more knowledge acquisition, which as we know is expensive. Even then, we'll only get some basic idea of the risk. Maybe I've successfully migrated 8 companies from PHP to Haskell in the past, and I did it on time and within budget in 5 of those cases. In the other 3, the project went over on time by 25%, and over on budget by 40%. How does that affect my risk analysis?
+
+Put yourself in the shoes of a manager who knows nothing about PHP and Haskell. Would you be willing to make these kinds of speculative investments with so much uncertainty in the air? I wouldn't.
+
 ## Sunk cost fallacy
 
 ## What can we do?
@@ -193,3 +213,7 @@ We believe that functional programming solves real world problems better than th
     * Ease of recruitment
 * Talk to your coworkers
 * Choose cases where the marginal benefit is high and marginal cost is low
+* Contain risk in your recommendations, minimize the investment
+    * Initial training
+    * Pilot project
+    * Microservices (yes, I hate them)
