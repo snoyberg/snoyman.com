@@ -181,7 +181,7 @@ We believe that functional programming solves real world problems better than th
 
 ## Risk mitigation
 
-We're almost through the economics lesson, don't worry. Two topics left, and they're both much easier than the others.
+We're almost through the economics lesson, don't worry. Three topics left, and they're all much easier than the others.
 
 Let's play a gambling game. I'm going to flip a coin. If it's heads, you get $2. If it's tails, you get nothing. How much would you be willing to pay to play the game? Most people would probably be willing to spend $1 for a 50% chance of winning $2. You may not be someone who enjoys gambling, and so you may not want to play. But the basic idea probably makes sense.
 
@@ -221,9 +221,68 @@ But "sunk cost fallacy" applies in a much wider way than human emotions. In fact
 
 The point of this is that there is a logical way of approaching these decisions involving fixed costs. But there will be both confounding factors, like emotional involvement or preexisting biases, that will make it difficult to approach this all rationally. And the interaction with other legitimate concerns, like perfect knowledge and risk, makes this even more complicated.
 
+## Needs versus wants
+
+I think this was actually the first lesson I ever received in an economics class. I almost forgot to include it in this talk, because it's so fundamental to how I think about things. There is no such thing as a "need" in economics. There are wants, or desires, or more appropriately, different valuations of things.
+
+"But wait a second," you say. "I _need_ oxygen!" Well, no. Oxygen is necessary in order to live, and you've decided you want to live. It sounds morbid and uncaring, but it's a way of exploring things. And it's vitally important. As soon as you begin saying "this is an absolute requirement and there is no way we can ever budge on it," we start to get into uncharted economics territory.
+
+Let's take a simple software example. Most of us in this room would probably say "a network service needs to have high uptime, at least 99% or 99.9%." By defining it as a need instead of a want, we're not able to talk rationally about trade-offs. Suddenly, any cost necessary to achieve this goal is worthwhile. What if a customer came along and said, "Hey, look, I want to see a proof of concept of your app. I don't care if it crashes every 20 seconds, I just want to see it running. If I see that, I'm willing to sign a $5 million contract for the software." In the "need" analysis, this isn't an option. In a "want" analysis, we can value high uptime of an app at a certain dollar figure. And then in our new analysis for this specific customer, we can reevaluate the value of high uptime.
+
+This disconnect between want and need is one of the deepest divides that occurs between engineering teams and management. We'll see why after a recap.
+
+## Final recap
+
+I appreciate all of you humoring me and letting me live out my fantasy of being a stuffy economics professor. Let's do one final recap of the key points before bringing it home.
+
+* Compare cost and benefit at the margin versus other alternatives
+* Quantify both tangible and non-tangible items when performing an analysis
+* The person making the decision may not be paying attention to externalities that affect others
+* Acquisition of knowledge to make perfect decisions is expensive
+    * Therefore: it's logical to make imperfect decisions from imperfect knowledge
+* When dealing with risks, risk averse people will often evaluate the downside to be far worse than the upside
+* Once you've paid for a fixed cost, it's a sunk cost, and you logically should never pay attention to it for analysis purposes again
+    * However, there are reasons why people may end up still taking them into account
+* There are no economic needs, there are only wants, which should be valued objectively and quantitatively
+
 ## What should we do?
 
-I appreciate all of you humoring me and letting me live out my fantasy of being a stuffy economics professor. But now that we've covered all of these topics, it's time to bring it home. Can we use this knowledge to help us better approach improving software development?
+Now that we've covered all of these topics, it's time to bring it home. Can we use this knowledge to help us better approach improving software development?
+
+Let's go back to the beginning. Why is software slow? I said before:
+
+> The people making budget decisions in software companies have determined that the marginal revenue to the company is less than the marginal cost of speeding up the software.
+
+If I'm the CEO of a company, and I'm making budget decisions, I ultimately care about just two things: how much money will it make, and how much money will it cost. When you step down the ladder a few rungs, you'll get to a director of engineer who is really annoyed that his engineers are wasting time waiting for their software to respond. You'll get to a customer relationship manager who is hearing constant complaints that the software sucks.
+
+But often, the beauty of being CEO is you don't hear about this or care. If someone comes to you and says "I'm so annoyed that the software is slow," the CEO can legitimately ask "so what?" If you want to motivate a company to fix slow software, you need to quantify why it matters. Here are some examples:
+
+* The QA team is slowed down by slow software. If we speed up the software, they can work 20% more efficiently.
+    * The CEO is able to convert "20% more efficiently" into a dollar value by knowing how much he spends on QA.
+* I spoke with the sales team, and they estimate that 7% of potential customers chose not to use our product because it was too slow.
+* Our engineers are frustrated by working on this product because we never speed it up. I'm worried about losing good people.
+    * This is usually as far as such a conversation goes. Take it to the next step:
+    * Replacing an engineer and training them up is typically a 3-4 month process. Not only will it delay our deliverables, but it will cost us significantly on HR and engineering costs.
+
+With this kind of language, you've established half the story with the CEO: what benefit do I get from speeding up the software? The CEO can look at the three points above, figure out the staffing costs that will be saved, plus the potential increase in revenue. Then comes time for the next question: how much is it going to cost?
+
+Another typical engineering mistake is to throw the kitchen sink in at this point. "We should totally refactor our entire codebase to use latest best practices." This kind of approach throws warning bells up:
+
+* It sounds like an engineer wishlist instead of something inherently valuable to the company. Keep in mind misaligned interests: engineers tend to get joy and satisfaction from engineering perfection, and non-engineers know to be careful of allowing this to happen.
+* It's potentially a huge undertaking.
+* The risk to the product is massive: such a refactoring almost always results in new bugs and potentially downtime.
+
+Instead, make a priority list of different potential improvements. Start with the highest impact ones. For example: we're currently running on smaller machines. If we bump to bigger machines, the increased hardware cost will be X, and it will take Y days of engineering to make it happen. This has a potential to improve latency on requests by Z percent.
+
+The first few things on the list may not be glamorous. You may think to yourself: I have the CEO's attention, I should try to get him to approve the code fixes that I know are absolutely vital. Ignore that temptation! Be honest, and give the most accurate engineering answer you can. My primary reason for saying this is business ethics: your company is relying on you to be a technical expert, and you can't take advantage of that. But since this is an economics talk, and I'm trying to put things in more tangible terms, here's another reason: you don't want to blow your credibility. If you establish early wins, and demonstrate that you give an accurate and business-friendly analysis, you're more likely to be listened to in the future.
+
+## The Apollo missions
+
+A common cry in our industry is that we've become so much worse than our predecessors. NASA was able to write nearly-flawless software that sent people to the moon. They did this with hardware far simpler than anything we have today. And now we can't even make a web app without it crashing every other week.
+
+We like to lament bad practices in our industry. Or that software is too complex. Or many other things. They all may be true. But they are _symptoms_. Let's do the same kind of basic analysis I just applied to slow software. Companies are typically buying software these days based on feature sets. Or nice UI/UX. FIXME continue from here.
+
+FIXME One of the things that I'd like to point out is that in this entire talk so far, I have referenced software development issues many times. I'll do much more going forward. But at no point did I actually give a technical explanation of why, for example, FP leads to more maintainable software.
 
 * Better communication
 * Communication to management
@@ -238,3 +297,12 @@ I appreciate all of you humoring me and letting me live out my fantasy of being 
     * Pilot project
     * Microservices (yes, I hate them)
 * Respect sunk costs, understand where you can and can't win
+
+## Never discussed the technical details
+
+* Not necessary for the economic analysis
+* True understanding of the technical details necessary to come up with the numbers
+    * Risks
+    * Estimate of costs
+    * Estimate of benefits
+* You are the subject matter expert, you are providing that bridge between the two worlds
