@@ -280,29 +280,138 @@ The first few things on the list may not be glamorous. You may think to yourself
 
 A common cry in our industry is that we've become so much worse than our predecessors. NASA was able to write nearly-flawless software that sent people to the moon. They did this with hardware far simpler than anything we have today. And now we can't even make a web app without it crashing every other week.
 
-We like to lament bad practices in our industry. Or that software is too complex. Or many other things. They all may be true. But they are _symptoms_. Let's do the same kind of basic analysis I just applied to slow software. Companies are typically buying software these days based on feature sets. Or nice UI/UX. FIXME continue from here.
+We like to lament bad practices in our industry. Or that software is too complex. Or many other things. They all may be true. But they are _symptoms_. Let's do the same kind of basic analysis I just applied to slow software. Companies are typically buying software these days based on feature sets. Or nice UI/UX. There is usually some quality bar we need to pass to make the software tolerable. But typically, that's as far as things go in analyzing software.
 
-FIXME One of the things that I'd like to point out is that in this entire talk so far, I have referenced software development issues many times. I'll do much more going forward. But at no point did I actually give a technical explanation of why, for example, FP leads to more maintainable software.
+So when you go back to your CEO and say "our app is unstable," the completely fair follow-up question is once again "so what?" And here's the sad part: there may not be market forces available today to force higher quality into most software. The Apollo machines had such famously high software quality because the cost of a bug was _massive_: lots of money and even human lives wasted because of a bug. Therefore, the cost of writing software correctly was warranted by the risks inherent to the project.
 
-* Better communication
-* Communication to management
-* Make intangible things tangible
-    * Joy of learning
-    * Long term improvements to team structure
-    * Ease of recruitment
-* Talk to your coworkers
-* Choose cases where the marginal benefit is high and marginal cost is low
-* Contain risk in your recommendations, minimize the investment
-    * Initial training
-    * Pilot project
-    * Microservices (yes, I hate them)
-* Respect sunk costs, understand where you can and can't win
+How do we change this? It's actually pretty hard. It would require finding market forces that reward companies that produce more reliable software. This may come down to figuring out a better marketing message. Can you go to market with a less-featured piece of software with the claim "yeah, but it's less buggy!" Will people use it? Can you convince common review site, or corporate magazines, or whatever purchasers tend to read, to start making software bugginess a key ingredient in their analysis?
 
-## Never discussed the technical details
+Personally, I think the world would be a better place if we could make that happen. But unlike features or flashy UI, it's much harder to analyze software reliability in a 1 hour session.
 
-* Not necessary for the economic analysis
-* True understanding of the technical details necessary to come up with the numbers
-    * Risks
-    * Estimate of costs
-    * Estimate of benefits
-* You are the subject matter expert, you are providing that bridge between the two worlds
+## Functional programming
+
+I'm not sure if you've all noticed, but I've done something pretty impressive. I've spoken for however long I've spoken so far without really getting into any concrete benefits of functional programming. There's a reason for that: the concrete benefits aren't important to the higher level economic analysis. A CEO isn't going to care too much about _why_ functional programming saves him or her money. They'll care much more about how much money you're saving them in costs, or making them in revenue. And how much it's going to cost them to get those benefits. And how much risk there is inherent to your plans.
+
+But as the engineer who wants functional programming to take off in a company, you need to have a solid understanding of the concrete benefits, and a way to quantify those benefits, justify those benefits, estimate risks, and most importantly: put together a reasonable plan of action.
+
+Let's start off with a purely technical review of some of the purported benefits of functional programming:
+
+* More declarative code
+* Immutable data by default
+* Explicit effects
+* Higher order functions
+* Purity
+* Combinators
+* Mathematical abstractions
+* Static type checking
+* More fun to write
+
+Can we turn these into quantifiable items?
+
+* More declarative
+    * Less time spent in code review
+    * Easier to maintain code
+* Immutable data by default
+    * Reduce risk of race conditions
+    * Reduce risk of business logic errors
+* Explicit effects/Higher order functions/Purity
+    * We _think_ it makes code easier to maintain
+    * Really hard to make those kinds of arguments directly
+* Combinators/Mathematical abstractions
+    * Reusable concepts
+    * Less time spent learning new concepts for each library
+    * More consistent interface == reduced bug count
+* Static type checking
+    * Remove classes of bugs entirely (don't claim no bugs!)
+    * Reduce overall testing burden
+    * QA can focus on higher impact bugs
+    * More maintainable codebases (would really love concrete data to back up that claim!)
+* More fun to write
+    * Probably don't lead with that one
+    * But can point out: better staff retention, easier recruiting
+    * Recruiting _is_ a concern often, more on that below
+
+## Don't hide the downsides
+
+I've been guilty of this in the past. I see it happening all the time. Sometimes, we fall so much in love with FP, or specific tooling, or anything else, that we become unrelenting advocates for it. This actually undermines your case. Putting it in economics terms: whoever you're pitching FP to doesn't have perfect knowledge. And more importantly, they _know_ they don't have perfect knowledge. When you describe all of the benefits with none of the costs, they know you're misrepresenting things.
+
+You can establish credibility by acknowledging both the pluses and the minuses of whatever you're advocating. This can actually be used as a persuasion technique; if you're curious, check out the book "Presuasion." I am _not_ advocating that you try to manipulate people listening to you by giving them a stacked set of downsides. This isn't an interview where you get asked "what's your greatest weakness" and you say "well, sometimes I just work too hard and produce code that's too perfect." Again, like before, there's an ethical issue at hand. But more practically: you _will_ get caught eventually.
+
+Some examples. I don't think Haskell is a good alternative to Kotlin for an Android app. I don't think Haskell is the best choice for frontend web development. If there's a project that requires hard realtime guarantees, I'm not going to recommend any garbage collected language, I'm going to reach for Rust.
+
+The hiring pool for FP languages is not as broad as for languages like Python or Java. I think this can be mitigated by pointing out:
+
+* The people who are looking for FP jobs are typically highly motivated people
+* If you're willing to hire remotely&mdash;which in a post-COVID world I'm hoping is more likely&mdash;the hiring pool is plenty large
+* Training people in FP languages is not as big an undertaking as it used to be
+    * There is lots of good material out there now
+    * FP concepts have permeated industry pretty well
+
+I'm not here to beat up on FP, far from it. I truly believe it's the best approach for writing the vast majority of software today. But keep the downsides in mind. And importantly: save your ammo. By that, I mean:
+
+## Maximize benefit, minimize cost
+
+When you're ready to make a pitch for FP, make it on the project most likely to succeed. Choose a case where the benefits are highest, and the costs the lowest. That mythical "rewrite it all in Haskell" isn't the first thing to recommend. Instead, look at smaller side-projects first. Take something which would be particularly difficult to do in the language your company typically uses. Do something that plays to the benefits of the FP language you're advocating.
+
+One of my big recommendations for Haskell is to implement a piece of complicated business logic as a separate microservice. I'm _not_ a huge fan of microservices in general. But providing a new Haskell service over a network API meets a number of our goals:
+
+* The benefits are relatively high
+    * You've established some complex business logic needs to be implemented
+    * Haskell's purity makes it easier to test such logic
+    * Haskell excels specifically in the domain of concurrent network services
+* The costs are low
+    * This is a well trodden path with lots of success points in industry
+    * The worst case scenario is that the project has to be scrapped, which is far less bad than "breaks an existing mission-critical service"
+
+And based on this, the risk factor is also lower than in many other cases.
+
+If you do get the go-ahead to move forward, try to set up some measurable objectives. It's too easy for a successful project to be written off. I remember one case we had at FP Complete where we helped a company do a pilot project in Haskell, to test the waters for moving from C# to Haskell. At the end, they had their two top C# experts review the results to determine if it was something they should consider. The ultimate answer was "nah, we like C#." We had produced results in less time, less lines of code, with less bugs. But the company had set a completely subjective measure of "do our C# developers like it?" It undermined the entire process.
+
+One word of warning here. Don't be an overly pedantic engineer. If asked to compare a Haskell and Java solution, you don't need to get hung up on the details of the differences between the two codebases. I give you permission to compare apples and oranges, and give a basic high-level comparison of bugs, code size, and so on. I can basically guarantee that's what management is interested in.
+
+## Hidden benefits, hidden costs
+
+Management is rarely intentionally blind to things that can increase revenue and decrease costs. They are usually unaware of the details. Your job as an engineer is to discover and communicate clearly about these details. I'm trying in this talk to point out what kinds of data points matter in an economic analysis. I hope it's resonating and sinking in. Your next step is to do your own analysis.
+
+And then, and this is really important: you need to communicate clearly about it. The founder of FP Complete, and my boss for 7 years, Aaron Contorer, taught me a lot. One of these items is that you can have a feature that unlocks the value of all the other features. Clear communications is one of these things. You can perform all the analysis in the world, and have an absolutely perfect recommendation which will absolutely be golden for your company.
+
+However, if you obscure that recommendation behind poor communication, you haven't done anything at all. As engineers, we often believe the truth speaks for itself. It doesn't. The truth needs help. It needs well structured words. It needs a well structured email. It needs a pretty graph. Sometimes, it needs a Powerpoint. You're not betraying some truth by dressing it up nicely. Be honest, be accurate, be clear, and be persuasive.
+
+I've given you some examples of the hidden benefits and hidden costs throughout this talk. I'll give you another short list here. Think about how these apply at your company. See if you can make the argument that these metrics will be positively impacted by employing functional programming.
+
+* Request handling latency
+* Engineer morale
+* Bug rate
+* Time to market
+* Hardware costs
+* Maintainability
+
+And if you can't make the argument for these, here's the unfortunate truth: maybe a move to FP _doesn't_ make economic sense at that time. Be ready to accept that. Don't place your own vested interests over what's actually best for your team and your company. Again, there's the ethical issue, but there's also the fact that such a weak argument will be transparent, and you'll lose credibility. Again, save your ammo for where it counts.
+
+## Proof by authority
+
+Do you agree with this statement?
+
+> Java is obviously a great language, because so much software is written in it
+
+Probably not. Someone attending LambdaConf probably doesn't pay much attention to prevailing wisdom in software development. We know that inferior languages sometimes win out for non-technical reasons. However, let me argue back just a bit: a lot of software truly is successfully written in Java. It may not be the best language, but at the very least we know it's capable of working.
+
+The way the FP world often talks publicly about our languages, we can't really make the same claim. I know many, many companies and individually successfully using Haskell at large scale. But unfortunately, I have little in the way of public information to point to. We are not establishing basic proof points. I would love to see a world where FP companies were regularly writing articles, both on their own blogs and in popular publications, about their successful deployment of FP languages.
+
+When you go to your CEO, who's never heard of Haskell, and say that you want to invest six months of engineer time into some Haskell project, it's completely valid for him or her to ask for existing success stories. Talking about all the technical merits of Haskell doesn't cut it. Most companies don't want to be the first company to ever deploy a web service in Haskell. And the way we discuss things with them, that's often the case.
+
+Fintec is a good proof point for success of Haskell in industry. I know that many companies paid attention when Facebook started talking publicly about their usage of Haskell. As engineers, we may care more about the technical merits. But companies have a right to be skeptical.
+
+Point to other similar companies that have done similar things with FP. Or, by contrast, point to companies that have been hurt by other languages. To borrow an example from a related field: DevOps saw lots more interest when big companies started having major and public intrusions.
+
+My request: everyone in this room should start talking more, in public, about the successes they've had with functional programming.
+
+## Conclusion
+
+I hope this talk provided a fresh look for you at how decisions are made in our industry. Perhaps you have a better understanding of why your company is behaving a certain way right now. And hopefully you have a plan of how to move forward with technical recommendations.
+
+If there's one final word I can leave you with in all of this, it's __empathy__. When discussing these topics with your friends, coworkers, boss, or customers, think about their view. Try to see how they will be analyzing the topics. Try to present them with information that will both be understandable to them, and answer the concerns they have. Spend the time structuring your communication in a way that respects them, and presents them with information to make a valid economic analysis.
+
+Thank you to the virtual audience, and thank you to LambdaConf for restructuring the entire conference structure so we can all get together virtually like this. I'm looking forward to interacting with everyone over the course of the year!
+
+And at this point, I'd be happy to take some questions.
