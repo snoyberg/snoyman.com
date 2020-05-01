@@ -282,11 +282,17 @@ A common cry in our industry is that we've become so much worse than our predece
 
 We like to lament bad practices in our industry. Or that software is too complex. Or many other things. They all may be true. But they are _symptoms_. Let's do the same kind of basic analysis I just applied to slow software. Companies are typically buying software these days based on feature sets. Or nice UI/UX. There is usually some quality bar we need to pass to make the software tolerable. But typically, that's as far as things go in analyzing software.
 
-So when you go back to your CEO and say "our app is unstable," the completely fair follow-up question is once again "so what?" And here's the sad part: there may not be market forces available today to force higher quality into most software. The Apollo machines had such famously high software quality because the cost of a bug was _massive_: lots of money and even human lives wasted because of a bug. Therefore, the cost of writing software correctly was warranted by the risks inherent to the project.
+So when you go back to your CEO and say "our app is unstable," the completely fair follow-up question is once again "so what?" And here's the sad part: there may not be market forces available today to force higher quality into most software. The Apollo missions had such famously high software quality because the cost of a bug was _massive_: lots of money and even human lives wasted because of a bug. Therefore, the cost of writing software correctly was warranted by the risks inherent to the project.
 
-How do we change this? It's actually pretty hard. It would require finding market forces that reward companies that produce more reliable software. This may come down to figuring out a better marketing message. Can you go to market with a less-featured piece of software with the claim "yeah, but it's less buggy!" Will people use it? Can you convince common review site, or corporate magazines, or whatever purchasers tend to read, to start making software bugginess a key ingredient in their analysis?
+How do we change this? It's actually pretty hard. It would require finding market forces that reward companies that produce more reliable software. This may come down to figuring out a better marketing message. Can you go to market with a less-featured piece of software with the claim "yeah, but it's less buggy!" Will people use it? Can you convince common review sites, or corporate magazines, or whatever purchasers tend to read, to start making software bugginess a key ingredient in their analysis?
+
+One possible approach is instituting legal responsibility for bugs. If a company can be sued due to losses incurred by a bug in software it purchased, it may put pressure on providers of software to increase quality.
 
 Personally, I think the world would be a better place if we could make that happen. But unlike features or flashy UI, it's much harder to analyze software reliability in a 1 hour session.
+
+Important quote:
+
+> u gotta 10x harder otherwise some young code wyzyrd is gonna eat your lunch by deploying a modern serverless webapp that can auto$cale to the moon in a lambo - Dr. Joseph Kachberg
 
 ## Functional programming
 
@@ -396,21 +402,21 @@ Do you agree with this statement?
 
 Probably not. Someone attending LambdaConf probably doesn't pay much attention to prevailing wisdom in software development. We know that inferior languages sometimes win out for non-technical reasons. However, let me argue back just a bit: a lot of software truly is successfully written in Java. It may not be the best language, but at the very least we know it's capable of working.
 
-The way the FP world often talks publicly about our languages, we can't really make the same claim. I know many, many companies and individually successfully using Haskell at large scale. But unfortunately, I have little in the way of public information to point to. We are not establishing basic proof points. I would love to see a world where FP companies were regularly writing articles, both on their own blogs and in popular publications, about their successful deployment of FP languages.
+The way the FP world often talks publicly about our languages, we can't really make the same claim. I know many, many companies and individuals successfully using Haskell at large scale. But unfortunately, I have little in the way of public information to point to. We are not establishing basic proof points. I would love to see a world where FP companies were regularly writing articles, both on their own blogs and in popular publications, about their successful deployment of FP languages.
 
-When you go to your CEO, who's never heard of Haskell, and say that you want to invest six months of engineer time into some Haskell project, it's completely valid for him or her to ask for existing success stories. Talking about all the technical merits of Haskell doesn't cut it. Most companies don't want to be the first company to ever deploy a web service in Haskell. And the way we discuss things with them, that's often the case.
+When you go to your CEO, who's never heard of Haskell, and say that you want to invest six months of engineer time into some Haskell project, it's completely valid for him or her to ask for existing success stories. Talking about all the technical merits of Haskell doesn't cut it. Most companies don't want to be the first company to ever deploy a web service in Haskell. And the way we discuss things with them, that's what they think you're proposing.
 
-Fintec is a good proof point for success of Haskell in industry. I know that many companies paid attention when Facebook started talking publicly about their usage of Haskell. As engineers, we may care more about the technical merits. But companies have a right to be skeptical.
+Fintec is a good proof point for success of Haskell in industry. Also, I know that many companies paid attention when Facebook started talking publicly about their usage of Haskell. As engineers, we may care more about the technical merits. But companies have a right to be skeptical.
 
 Point to other similar companies that have done similar things with FP. Or, by contrast, point to companies that have been hurt by other languages. To borrow an example from a related field: DevOps saw lots more interest when big companies started having major and public intrusions.
 
-My request: everyone in this room should start talking more, in public, about the successes they've had with functional programming.
+My request: everyone in this virtual room should start talking more, in public, about the successes they've had with functional programming.
 
 ## Conclusion
 
 I hope this talk provided a fresh look for you at how decisions are made in our industry. Perhaps you have a better understanding of why your company is behaving a certain way right now. And hopefully you have a plan of how to move forward with technical recommendations.
 
-If there's one final word I can leave you with in all of this, it's __empathy__. When discussing these topics with your friends, coworkers, boss, or customers, think about their view. Try to see how they will be analyzing the topics. Try to present them with information that will both be understandable to them, and answer the concerns they have. Spend the time structuring your communication in a way that respects them, and presents them with information to make a valid economic analysis.
+If there's one final word I can leave you with in all of this, it's __empathy__. When discussing these topics with your friends, coworkers, boss, or customers, think about their point of view. Try to see how they will be analyzing the topics. Try to present them with information that will both be understandable to them, and answer the concerns they have. Spend the time structuring your communication in a way that respects them, and presents them with information to make a valid economic analysis.
 
 Thank you to the virtual audience, and thank you to LambdaConf for restructuring the entire conference structure so we can all get together virtually like this. I'm looking forward to interacting with everyone over the course of the year!
 
