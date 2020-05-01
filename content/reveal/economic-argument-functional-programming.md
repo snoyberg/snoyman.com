@@ -356,6 +356,10 @@ But now, let's say that supermarket A will take 10 minutes to drive to, and supe
 
 ---
 
+![Extrapolate](/static/econarg/extrapolate.jpg)
+
+---
+
 ## FP's flaw
 
 * We're not helping the situation
@@ -382,6 +386,12 @@ We believe that functional programming solves real world problems better than th
 * Almost done with the econ lesson
 * Three easier topics
 * Recap, then bring it home
+
+![Just to keep you awake](/static/econarg/economies-of-scale.png)
+
+<aside class="notes" data-markdown>
+If anyone's wondering about the relevance of the comic: there isn't one really, I just like it, and wanted to keep you awake.
+</aside>
 
 ---
 
@@ -439,260 +449,414 @@ Without knowing Haskell, would you take this risk? I wouldn't
 
 ---
 
-<aside class="notes" data-markdown>
-</aside>
+## Fixed and sunk costs
 
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
+* COBOL is almost dead, Python is very popular
+* Should I spend 5 years learning COBOL for one contract?
+* Should I spend 5 years learning Python for 50 contracts?
+* Fixed costs need to be amortized (spread out)
+* If I already know COBOL, should I be willing to take a contract?
+* Yes, it's a _sunk cost_
+* Should I _avoid_ learning Python? Absolutely not!
 
 <aside class="notes" data-markdown>
 </aside>
 
 ---
 
+## Sunk cost fallacy
+
+* Focus on the already-spent sunk costs
+* Include them in the analysis, even though you shouldn't
+* One reason: humans are emotional, make bad decisions
+* Another: justify a decision you made previously to your boss
+
+---
+
+## Decisions with sunk costs
+
+1. Use the language we know, will take 18 months
+2. Learn a new language for 6 months, then spend 6 months implementing?
+
+<br>
+
+* Use the new language, obviously!
+* But do you believe those estimates?
+* And is there institutional objection to ditching a sunk cost?
+
 <aside class="notes" data-markdown>
+The point of this is that there is a logical way of approaching these decisions involving fixed costs. But there will be both confounding factors, like emotional involvement or preexisting biases, that will make it difficult to approach this all rationally. And the interaction with other legitimate concerns, like perfect knowledge and risk, makes this even more complicated.
 </aside>
 
 ---
 
+## Needs versus wants
+
+* There are no needs in economics
+* "But I need oxygen!"
+* Nah, only if you _want_ to live
+* Morbid and uncaring? Yep
+* Highly useful
+    * All options are on the table
+    * All options have a value
+
 <aside class="notes" data-markdown>
+I think this was actually the first lesson I ever received in an economics class. I almost forgot to include it in this talk, because it's so fundamental to how I think about things.
 </aside>
 
 ---
 
+## Uptime
+
+> Our software must have high uptime, at least 99%
+
+* Is that always true?
+* What about Proof of Concept to close a $5m deal?
+* Everything is a trade-off, everything has a value
+* The value is context dependent
+* Can be a big disconnect between management and engineering
+
+---
+
+## Final recap
+
+* Compare cost and benefit at margin vs alternatives
+* Quantify both tangible and non-tangible items
+* Decision maker does not consider externalities
+* Acquiring knowledge is expensive
+    * It's logical to make imperfect decisions
+* Risk aversion: downside more weighty than upside
+* Ignore sunk costs!
+    * Except people usually don't
+* No needs, all wants, can be evaluated
+
 <aside class="notes" data-markdown>
+I appreciate all of you humoring me and letting me live out my fantasy of being a stuffy economics professor. Let's do one final recap of the key points before bringing it home.
 </aside>
 
 ---
 
+## From the top!
+
+Why is software slow?
+
+> The people making budget decisions in software companies have determined that the marginal revenue to the company is less than the marginal cost of speeding up the software.
+
+---
+
+## The CEO's perspective
+
+* I don't use the software, I don't talk to customers
+* How much am I spending? How much am I making?
+* "I'm so annoyed about slow software!" "So what?"
+* Need to talk in real, measurable terms
+
+---
+
+## Measuring slowness
+
+* QA team is slowed down, speeding up will make them 20% more efficient
+    * 20% more efficient == $$$ to the CEO
+* Sales team estimates 7% of potential customers didn't buy because it's too slow
+* Engineers are frustrated, I'm worried about losing good people
+    * 3-4 month process to train a new engineer
+    * Will delay deliverables
+    * Will have both HR and engineering cost to replace
+
+---
+
+## Half the story
+
+* Established concrete benefits
+    * Increasing sales
+    * Decreasing costs
+* What will it cost to speed up the software?
+* Be judicious in your recommendations!
+* Start with cheapest, least risky, highest benefit items
+* Aka highest leverage moves
+* Don't throw in the kitchen sink
+
+---
+
+## Example: bump the machines
+
+* Don't say "rewrite the codebase"
+    * Raises appropriate warning bells with management
+    * It's probably not the best short term solution!
+    * Carries massive risk
+* Start with: increase size of servers
+* Estimate hardware costs, engineering time
+* Quantify risks
+* Estimate improvements, measure afterwards
+* Establish credibility, rinse and repeat
+
+---
+
+&ldquo;u gotta 10x harder otherwise some young code wyzyrd is gonna eat your lunch by deploying a modern serverless webapp that can auto$cale to the moon in a lambo&rdquo;
+
+![Kachberg](/static/econarg/dr-kachberg.jpg)
+
+\- Dr. Joseph Kachberg
+
 <aside class="notes" data-markdown>
+For the record: it was super easy to figure out a way to include this quote in this talk.
 </aside>
 
 ---
 
+## The Apollo machines
+
+* Software used to be better!
+* Look what NASA did with much worse hardware
+* We can't even write functioning web apps
+* Why? Complex software? Bad abstractions? Symptoms!
+* No one is purchasing software based on quality
+* Purchase software on features, UI/UX, reviews
+
+---
+
+## How to fix it?
+
+* Convince review sites to analyze software quality
+    * Unlikely, expensive to get that knowledge
+* Convince companies to stop using broken software
+    * Unlikely, vendor lock-in
+* Legal responsibility for bugs? Maybe
+
+---
+
+## Benefits of FP
+
+* More declarative code
+* Immutable data by default
+* Explicit effects
+* Higher order functions
+* Purity
+* Combinators
+* Mathematical abstractions
+* Static type checking
+* More fun to write
+
+Can we say that better?
+
 <aside class="notes" data-markdown>
+I'm not sure if you've all noticed, but I've done something pretty impressive. I've spoken for however long I've spoken so far without really getting into any concrete benefits of functional programming. There's a reason for that: the concrete benefits aren't important to the higher level economic analysis. A CEO isn't going to care too much about _why_ functional programming saves him or her money. They'll care much more about how much money you're saving them in costs, or making them in revenue. And how much it's going to cost them to get those benefits. And how much risk there is inherent to your plans.
 </aside>
 
 ---
 
+## More declarative
+
+* Less time spent in code review
+* Easier to maintain code
+
+---
+
+## Immutable data by default
+
+* Reduce risk of race conditions
+* Reduce risk of business logic errors
+
+---
+
+## Explicit effects/Higher order functions/Purity
+
+* We _think_ it makes code easier to maintain
+* Really hard to make those kinds of arguments directly
+* Probably not something I'd lead with
+
+---
+
+## Combinators/Mathematical abstractions
+
+* Reusable concepts
+* Less time spent learning new concepts for each library
+* More consistent interface == reduced bug count
+
+---
+
+## Static type checking
+
+* Remove classes of bugs entirely
+    * Don't claim no bugs!
+* Reduce overall testing burden
+* QA can focus on higher impact bugs
+* More maintainable codebases
+    * Would really love concrete data to back up that claim!
+    * Actually, applies to all the points here
+
+---
+
+## More fun to write
+
+* Probably don't lead with that one either
+* But can point out: better staff retention, easier recruiting
+* Recruiting _is_ a concern often, more on that below
+
+---
+
+## Acknowledge downsides
+
+* Don't be a zealot (I've been guilty)
+* Your audience knows they have imperfect knowledge
+* If you hide all defects: they'll know you're lying
+* Establish credibility by acknowledging flaws
+    * See the book "Presuasion"
+* Don't manipulate, be honest!
+* Ethical issue
+* But also practical: you'll get caught
+
+---
+
+## Example downsides
+
+* Haskell is worse that Kotlin for an Android app
+* Many better options than Haskell for front end web
+* Nothing garbage collected for real time guarantees
+* Many, many more, based on context
+
+---
+
+## Recruiting concerns
+
+* Common concern from companies in my experience
+* FP pool not as large as Python or Java
+
+However
+
+* Highly motivated people
+* Many people available if you hire remotely
+* Easier to train than in the past
+    * Lots of good material
+    * FP concepts are maintstream
+
+---
+
+## Choose your battles
+
+* I believe FP is the best choice for most software
+* But we need to acknowledge the downsides
+* Save your ammo for solid wins
+
+---
+
+## max(benefit), min(cost)
+
+* Highest benefits, lowest costs, lowest risks
+* Don't pitch "Rewrite it in Haskell"
+* Small side projects
+* Play to strengths of the language
+* Minimize impact on the rest of the project/company
+* Wait till normal approach has major costs
+
+---
+
+## Example: Haskell microservice
+
+* Not a big fan of microservices...
+* But it isolates the risk
+* Complicated business logic case
+* Easy to test well in Haskell
+* Haskell well proven for network services
+* Worst case scenario: scrap the whole project
+    * As opposed to bring down the company
+* Set up measurable objectives
+* May have to compare apples to oranges
+
 <aside class="notes" data-markdown>
+If you do get the go-ahead to move forward, try to set up some measurable objectives. It's too easy for a successful project to be written off. I remember one case we had at FP Complete where we helped a company do a pilot project in Haskell, to test the waters for moving from C# to Haskell. At the end, they had their two top C# experts review the results to determine if it was something they should consider. The ultimate answer was "nah, we like C#." We had produced results in less time, less lines of code, with less bugs. But the company had set a completely subjective measure of "do our C# developers like it?" It undermined the entire process.
 </aside>
 
 ---
 
+## Hidden benefits &amp; costs
+
+* Management doesn't ignore these things
+* They are _unaware_
+* Your job: make them aware
+* Put it in terms they will understand and care about
+* Communicate clearly
+* Clear communication _unlocks the value_ of your analysis
+* The truth doesn't speak for itself
+* Well structured email, pretty graph, Powerpoint
+* Be honest, be accurate, be clear, be persuasive
+
 <aside class="notes" data-markdown>
+The founder of FP Complete, and my boss for 7 years, Aaron Contorer, taught me a lot. One of these items is that you can have a feature that unlocks the value of all the other features. Clear communications is one of these things. You can perform all the analysis in the world, and have an absolutely perfect recommendation which will absolutely be golden for your company.
 </aside>
 
 ---
 
+## Examples of hidden costs &amp; benefits
+
+Do these apply at your company? Can you make the argument for them?
+
+* Request handling latency
+* Engineer morale
+* Bug rate
+* Time to market
+* Hardware costs
+* Maintainability
+
+---
+
+## Be willing to wait
+
+* Again, save your ammo
+* If you can't make an argument on metrics, **don't**
+* Wait until you have a solid argument for your case
+
+---
+
+## Proof by authority
+
+Do you agree with this?
+
+> Java is obviously a great language, because so much software is written in it
+
+* I don't, but there's a grain of truth
+* Inferior languages win because of non-technical reasons
+* But software shipping in Java is a good proof point
+
+---
+
+## What's Haskell?
+
+* We don't talk about our successes enough
+* Management will want concrete examples of success
+* Explaining why it's theoretically better isn't enough
+* Need more success blog posts
+* Need more articles in popular publications
+* Gotten good traction with examples from Fintec
+* Facebook's articles have made waves
+* Point to examples of downsides of current language
+* Example: DevOps is seeing a boom right now
+
 <aside class="notes" data-markdown>
+My request: everyone in this virtual room should start talking more, in public, about the successes they've had with functional programming.
 </aside>
 
 ---
 
-<aside class="notes" data-markdown>
-</aside>
+## Conclusion
+
+* I hope this talk:
+    * gave you a fresh look on decision making processes
+    * helps you communicate more effectively
+    * opens up new ways of thinking
+
+Final word: __empathy__. As you discuss topics of FP, or anything else, be empathetic to the listener. Attune your message to what they care about and will understand.
 
 ---
 
-<aside class="notes" data-markdown>
-</aside>
+## Thank you
+
+* Thanks to this great audience
+* Thanks to the LambdaConf team for restructuring the entire conference
+* Looking forward to great interactions throughout the year!
 
 ---
 
-<aside class="notes" data-markdown>
-</aside>
+## Questions?
 
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
-
----
-
-<aside class="notes" data-markdown>
-</aside>
+Oh, shoot, did I lose my connection?
