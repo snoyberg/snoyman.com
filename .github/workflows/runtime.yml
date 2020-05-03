@@ -12,6 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/cache@v1
+        with:
+          path: .stack-work/
+          key: ${{ runner.os }}-${{ matrix.resolver }}-${{ hashFiles('stack.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.resolver }}-
+
+      - uses: actions/cache@v1
+        with:
+          path: site/.stack-work/
+          key: ${{ runner.os }}-${{ matrix.resolver }}-${{ hashFiles('stack.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.resolver }}-
+
       - name: Log into Github registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
