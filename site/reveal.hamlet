@@ -40,8 +40,7 @@ $doctype 5
               { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
               { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
               { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
-              { src: '/static/reveal/plugin/notes/notes.js', async: true },
-              { src: '/static/reveal/plugin/math/math.js', async: true }
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
             ];
 
             // default options to init reveal.js
