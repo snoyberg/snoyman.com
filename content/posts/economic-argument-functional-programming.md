@@ -203,13 +203,13 @@ Put yourself in the shoes of a manager who knows nothing about PHP and Haskell. 
 
 ## Fixed and sunk costs
 
-Many people have probably heard the phrase "sunk cost fallacy." But less commonly discussed are the things which proceed it: fixed and sunk costs. Instead of some analogy, let's jump straight into the software on this one.
+Many people have probably heard the phrase "sunk cost fallacy." But less commonly discussed are the things which preceed it: fixed and sunk costs. Instead of some analogy, let's jump straight into the software on this one.
 
 Let's say it takes three years to learn to be a software developer. Let's say I value that time at $10,000 a year. So the cost of learning to be a software developer is $30,000. Now as a freshly minted software developer, I spend six months writing my first project for a consulting gig, where I get paid $20,000. A naive view of this would be that my costs were $35,000&mdash;3 years learning at $10,000 each, plus half a year of work for $5,000. And the revenue I made is $20,000. So I lost $15,000 on the venture.
 
 Now I get my second gig, also for $20,000 for 6 months. I still value my time at $5,000 for those 6 months, so now I've made a profit of $15,000.
 
-But is it really accurate to say I lost money on the first gig? Not really. The terms in economics for what are going on here are fixed versus variable costs. Learning to be a software developer is a fixed cost which in reality gets spread across multiple projects, while the variables costs are incurred for each and every project. When I go to learn software development, I have to ask the question: how many years do I expect to work in this field? Based on that, I figure out whether the 3 year investment in learning programming is worth it.
+But is it really accurate to say I lost money on the first gig? Not really. The terms in economics for what are going on here are fixed versus variable costs. Learning to be a software developer is a fixed cost which in reality gets spread across multiple projects, while the variable costs are incurred for each and every project. When I go to learn software development, I have to ask the question: how many years do I expect to work in this field? Based on that, I figure out whether the 3 year investment in learning programming is worth it.
 
 Now let's kick it up a notch. I've learnt how to program in language X. Just as I finish learning language X, an announcement is made that language X is dead, no new software will be written in it. I'm able to get 1 single gig in this language. Should I take that gig or not? From a purely financial standpoint, it's worth taking the project. I've _already_ spent the time on the fixed cost of learning language X. Since I've already made that investment, we no longer call it a fixed cost. Now it's a _sunk cost_. The cost is sunk, and we no longer take it into account when making further decisions. By contrast, if someone could have told me 3 years before that language X was about to die, I would have learned something else instead.
 
@@ -240,7 +240,7 @@ I appreciate all of you humoring me and letting me live out my fantasy of being 
 * The person making the decision may not be paying attention to externalities that affect others
 * Acquisition of knowledge to make perfect decisions is expensive
     * Therefore: it's logical to make imperfect decisions from imperfect knowledge
-* When dealing with risks, risk averse people will often evaluate the downside to be far worse than the upside
+* When dealing with risks, risk averse people will often evaluate the downside to be far more important than the potential upside
 * Once you've paid for a fixed cost, it's a sunk cost, and you logically should never pay attention to it for analysis purposes again
     * However, there are reasons why people may end up still taking them into account
 * There are no economic needs, there are only wants, which should be valued objectively and quantitatively
@@ -275,6 +275,8 @@ Another typical engineering mistake is to throw the kitchen sink in at this poin
 Instead, make a priority list of different potential improvements. Start with the highest impact ones. For example: we're currently running on smaller machines. If we bump to bigger machines, the increased hardware cost will be X, and it will take Y days of engineering to make it happen. This has a potential to improve latency on requests by Z percent.
 
 The first few things on the list may not be glamorous. You may think to yourself: I have the CEO's attention, I should try to get him to approve the code fixes that I know are absolutely vital. Ignore that temptation! Be honest, and give the most accurate engineering answer you can. My primary reason for saying this is business ethics: your company is relying on you to be a technical expert, and you can't take advantage of that. But since this is an economics talk, and I'm trying to put things in more tangible terms, here's another reason: you don't want to blow your credibility. If you establish early wins, and demonstrate that you give an accurate and business-friendly analysis, you're more likely to be listened to in the future.
+
+Side note: you may want to read up on game theory to understand multi-step, multi-player games.
 
 ## The Apollo missions
 
