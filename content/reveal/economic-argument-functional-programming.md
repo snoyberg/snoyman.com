@@ -28,7 +28,7 @@ With that: I promise I will not be bringing up COVID-19 any more, unless it's ac
 
 ## Let's talk about me
 
-* A bit self indulgent, sorry
+* A bit self indulgent
 * Background and education is a bit different
 * This talk is really based on that difference
 * Context here will help
@@ -111,7 +111,9 @@ It was a good discussion. I don't disagree with any of the points here. I'm sure
 * What do those words mean?
 * That's stupid, you can't answer "why is software slow" without talking about software!
 
-### Goal for today
+---
+
+## Goal for today
 
 * You'll understand what that statement means
 * You'll agree it's a pretty good root cause analysis
@@ -128,12 +130,18 @@ Type|Time|Cost|Price
 Normal | 1 day | $10 | $75
 Golden | 1 day | $100 | $150
 
-Profit: $65 vs $50
+Profit: $65 vs $50 _Or_
 
-_Or_
-
-Marginal cost | $90
-Marginal revenue | $75
+<table>
+<tr>
+<th>Marginal cost</th>
+<td>$90</td>
+</tr>
+<tr>
+<th>Marginal revenue</th>
+<td>$75</td>
+</tr>
+</table>
 
 ```
 $65 - $50 == $90 - $75 == $15
@@ -183,8 +191,8 @@ What does this have to do with software? Soon
 
 ## Pride of the maker
 
-* My birdhouses are a piece of my soul!
-* I want to leave my mark on the world
+* Bob's birdhouses are a piece of his soul!
+* Bob wants to leave a mark on the world
 * Can't put a price tag on joy and pride
 
 
@@ -208,13 +216,13 @@ What does this have to do with software? Soon
 
 `$55 - $50 == $5`
 
-I guess your pride and joy is worth $5
+I guess Bob's pride and joy is worth $5
 
 ---
 
 ## How about gold?
 
-* I'm really proud of my gold birdhouses
+* Bob is really proud of his gold birdhouses
 * Gold birdhouse for front yard? $120
 * Gold birdhouse for explosions? $145
 * Pride in a gold birdhouse: $25
@@ -247,25 +255,25 @@ $150 revenue - $100 material + $25 pride = $75 profit
 
 ## Externalities
 
-* I'd be willing to spend $25 more for a gold birdhouse
+* Alice is willing to spend $25 more for a gold birdhouse
 * Actually costs $75 more
-* I buy a normal birdhouse, done
+* Alice buys a normal birdhouse, done
 * 10 neighbors, each prefer gold by $10
 * $100 of _positive externality_
 * Global decision: buy the gold!
 * Actual decision: buy normal
-* Decision maker doesn't take all benefits into account
+* Alice doesn't take all benefits into account
 
 ---
 
 ## Tragedy of the commons
 
-* Alice is making OSS
+* Charlie is making OSS
 * 10 companies each benefit $1,000/month
 * They _should_ pay $10,000/month
 * Game theory: they won't put the money in, get the work for free
-* Alice willing to work for $6,000/month
-* Alice ultimately gets a "real job"
+* Charlie willing to work for $6,000/month
+* Charlie ultimately gets a "real job"
 * $4,000 in potential profit is lost
 
 ---
@@ -427,7 +435,7 @@ If anyone's wondering about the relevance of the comic: there isn't one really, 
 * 33% reduction in maintenance costs
 * 63% improvement in user satisfaction
 
-Easy to weight cost of 5 months of dev against benefits
+Easy to weigh cost of 5 months of dev against benefits
 
 Except...
 
@@ -592,31 +600,10 @@ Why is software slow?
 
 ---
 
-&ldquo;u gotta 10x harder otherwise some young code wyzyrd is gonna eat your lunch by deploying a modern serverless webapp that can auto$cale to the moon in a lambo&rdquo;
-
-![Kachberg](/static/econarg/dr-kachberg.jpg)
-
-\- Dr. Joseph Kachberg
-
-<aside class="notes" data-markdown>
-For the record: it was super easy to figure out a way to include this quote in this talk.
-</aside>
-
----
-
-## The Apollo machines
-
-* Software used to be better!
-* Look what NASA did with much worse hardware
-* We can't even write functioning web apps
-* Why? Complex software? Bad abstractions? Symptoms!
-* No one is purchasing software based on quality
-* Purchase software on features, UI/UX, reviews
-
----
-
 ## How to fix it?
 
+* Convince decision makers to take speed into account
+* Same thing applies to buggy software
 * Convince review sites to analyze software quality
     * Unlikely, expensive to get that knowledge
 * Convince companies to stop using broken software
@@ -691,7 +678,9 @@ I'm not sure if you've all noticed, but I've done something pretty impressive. I
 
 * Probably don't lead with that one either
 * But can point out: better staff retention, easier recruiting
-* Recruiting _is_ a concern often, more on that below
+    * Some concerns around recruiting pool
+    * Highly motivated people in FP
+    * Hire remotely!
 
 ---
 
@@ -710,25 +699,10 @@ I'm not sure if you've all noticed, but I've done something pretty impressive. I
 
 ## Example downsides
 
-* Haskell is worse that Kotlin for an Android app
+* Haskell is worse than Kotlin for an Android app
 * Many better options than Haskell for front end web
 * Nothing garbage collected for real time guarantees
 * Many, many more, based on context
-
----
-
-## Recruiting concerns
-
-* Common concern from companies in my experience
-* FP pool not as large as Python or Java
-
-However
-
-* Highly motivated people
-* Many people available if you hire remotely
-* Easier to train than in the past
-    * Lots of good material
-    * FP concepts are maintstream
 
 ---
 
@@ -800,14 +774,6 @@ Do these apply at your company? Can you make the argument for them?
 
 ---
 
-## Be willing to wait
-
-* Again, save your ammo
-* If you can't make an argument on metrics, **don't**
-* Wait until you have a solid argument for your case
-
----
-
 ## Proof by authority
 
 Do you agree with this?
@@ -820,7 +786,7 @@ Do you agree with this?
 
 ---
 
-## What's Haskell?
+## How to be effective
 
 * We don't talk about our successes enough
 * Management will want concrete examples of success
@@ -829,8 +795,6 @@ Do you agree with this?
 * Need more articles in popular publications
 * Gotten good traction with examples from Fintec
 * Facebook's articles have made waves
-* Point to examples of downsides of current language
-* Example: DevOps is seeing a boom right now
 
 <aside class="notes" data-markdown>
 My request: everyone in this virtual room should start talking more, in public, about the successes they've had with functional programming.
@@ -853,6 +817,7 @@ Final word: __empathy__. As you discuss topics of FP, or anything else, be empat
 
 * Thanks to this great audience
 * Thanks to the LambdaConf team for restructuring the entire conference
+* Thanks to my wife, Miriam, for all the help preparing this talk
 * Looking forward to great interactions throughout the year!
 
 ---
