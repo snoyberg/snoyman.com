@@ -27,8 +27,8 @@ toplinks:
 #  text: "+Michael Snoyman"
 
 publications:
-- url: 'https://www.rustfornewprogrammers.com'
-  text: Rust for New Programmers (in beta)
+- url: 'https://www.beginrust.com'
+  text: Begin Rust (in beta)
   date: 2020-03
 - url: 'http://aosabook.org/en/posa/warp.html'
   text: Performance of Open Source Applications
@@ -46,6 +46,14 @@ publications:
   publisher: "IEEE Spectrum, The Functional Web"
 
 talks:
+- date: 2020-04
+  title: What Makes Haskell Unique (2020 update)
+  venue: Haskell in the City
+  links:
+  - url: "https://www.snoyman.com/reveal/what-makes-haskell-unique-2020"
+    text: Slides
+  - url: "https://youtu.be/geiTNX7AYfI"
+    text: Video
 - date: 2020-04
   title: Your Second Haskell Web App
   venue: Berlin Functional Programming Group
