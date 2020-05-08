@@ -46,6 +46,14 @@ publications:
   publisher: "IEEE Spectrum, The Functional Web"
 
 talks:
+- date: 2020-05
+  title: Economic Argument for Functional Programming
+  venue: LambdaConf 2020 Global Edition
+  links:
+  - url: "https://www.snoyman.com/reveal/economic-argument-functional-programming"
+    text: Slides
+  - url: "https://www.youtube.com/watch?v=n7QETok5hYI"
+    text: Video
 - date: 2020-04
   title: What Makes Haskell Unique (2020 update)
   venue: Haskell in the City
