@@ -3,6 +3,11 @@ series:
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
 posts:
+- file: posts/no-mutable-parameters-in-rust.md
+  title: There are no mutable parameters in Rust
+  time: 2020-05-10T18:00:00Z
+  description: |
+    A quick description of the difference between mutable values and variables in Rust, as an addendum to the Begin Rust book.
 - file: posts/lazy-rust-compiler.md
   title: A Lazy Rust Compiler
   time: 2020-04-01T03:00:00Z
