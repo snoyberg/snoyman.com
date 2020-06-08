@@ -3,6 +3,11 @@ series:
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
 posts:
+- file: posts/new-book-begin-rust.md
+  title: "New book available: Begin Rust"
+  time: 2020-06-08T13:00:00Z
+  description: |
+    Miriam and I are happy to announce a new book, Begin Rust, for teaching Rust as a first programming language.
 - file: posts/no-mutable-parameters-in-rust.md
   title: There are no mutable parameters in Rust
   time: 2020-05-10T18:00:00Z
