@@ -28,8 +28,8 @@ toplinks:
 
 publications:
 - url: 'https://www.beginrust.com'
-  text: Begin Rust (in beta)
-  date: 2020-03
+  text: Begin Rust
+  date: 2020-06
 - url: 'http://aosabook.org/en/posa/warp.html'
   text: Performance of Open Source Applications
   date: 2013-11
