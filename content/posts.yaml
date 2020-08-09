@@ -3,6 +3,11 @@ series:
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
 posts:
+- file: posts/book-review-loserthink.md
+  title: "Book review: Loserthink"
+  time: 2020-08-10T04:30:00Z
+  description: |
+    A short review of a book I've just completed: Loserthink.
 - file: posts/new-book-begin-rust.md
   title: "New book available: Begin Rust"
   time: 2020-06-08T13:00:00Z
