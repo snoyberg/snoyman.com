@@ -3,6 +3,11 @@ series:
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
 posts:
+- file: posts/stackage-for-rust.md
+  title: "Stackage for Rust?"
+  time: 2020-08-18T04:30:00Z
+  description: |
+    A discussion of what Stackage is, why it exists for Haskell, why it might make sense for Rust, and my reasons for mostly thinking it's not worth it.
 - file: posts/book-review-loserthink.md
   title: "Book review: Loserthink"
   time: 2020-08-10T04:30:00Z
