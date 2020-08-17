@@ -39,6 +39,8 @@ $newline never
         <div .container>
           <div class="row justify-content-between">
             <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book
               $maybe socialLinks <- msocialLinks
                 <p class="text-center bg-light">
                   <b>Share this
