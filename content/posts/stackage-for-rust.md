@@ -8,7 +8,7 @@ I would be more than happy to engage with any Rustaceans who are interested in d
 
 ## What is Stackage?
 
-Stackage's two word slogan is "Stable Hackage." Hackage is the de facto standard repository for open source Haskell libraries and tools. It would easily be describe as Haskell's version of Crates. Stackage is a project which produces versioned snapshots of packages, together with underlying compiler versions, which are guaranteed to meet a basic buildability standard. That essentially comes down to:
+Stackage's two word slogan is "Stable Hackage." Hackage is the de facto standard repository for open source Haskell libraries and tools. It would easily be described as Haskell's version of Crates. Stackage is a project which produces versioned snapshots of packages, together with underlying compiler versions, which are guaranteed to meet a basic buildability standard. That essentially comes down to:
 
 * On a Linux system, using a Docker container we've configured with a number of helper system libraries, the package compiles
 * Unless told otherwise, the docs build successful, the tests build and run successfully, and the benchmarks build successfully
@@ -103,7 +103,7 @@ This is where my larger Haskell experience may be skewing my vision. As I mentio
 
 By contrast, in Rust, I've rarely run into problems with the dependency solver. I have gotten build plans that have failed to build. I have had to manually modify `Cargo.toml` files to specify different versions. I have been bitten by libraries accidentally breaking compatibility within a major version. But relative to my pains with Haskell, it's small potatoes.
 
-So next point: **Dependency solving emperically works pretty well in Rust"
+So next point: **Dependency solving emperically works pretty well in Rust**
 
 ## Culture of compatibility
 
