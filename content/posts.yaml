@@ -5,7 +5,7 @@ series:
 posts:
 - file: posts/stackage-for-rust.md
   title: "Stackage for Rust?"
-  time: 2020-08-18T04:30:00Z
+  time: 2020-08-17T06:15:00Z
   description: |
     A discussion of what Stackage is, why it exists for Haskell, why it might make sense for Rust, and my reasons for mostly thinking it's not worth it.
 - file: posts/book-review-loserthink.md
