@@ -4,7 +4,7 @@ I've been really disappointed in the lack of computer literacy in my children's 
 * Email management
 * Typing practice
 
-We encouraged the kids to play games on the comptuer instead of their tablets. (Minecraft was a big hit here.) And we [started teaching them Rust](https://www.beginrust.com/). These things all worked, but the kids don't really enjoy this stuff. We wanted to find something more fun and engaging.
+We encouraged the kids to play games on the computer instead of their tablets. (Minecraft was a big hit here.) And we [started teaching them Rust](https://www.beginrust.com/). These things all worked, but the kids don't really enjoy this stuff. We wanted to find something more fun and engaging.
 
 With the new school year, the kids have some days home for remote learning with larger gaps in their schedules. So we decided to try something new, and it seems to be a success.
 
@@ -29,7 +29,7 @@ When I said PowerPoint above, I meant the actual desktop version of Microsoft Po
 
 I initially thought that we should keep the kids more agnostic on which tools they use, and not marry them immediately to one platform. Miriam and I discussed this in more depth, and realized at this point it's more important for us to get them productive as quickly as possible, with a single tool, to keep their motivation high.
 
-Recently at work, I've been on the Microsoft Office suite quite a bit. We made a move to Microsoft 365, and I've been making my own presentations and documents in PowerPoint and Word again. My familiarity, the maturity of the tools, the really nice features (like built in recording and design ideas), and the general adoption makes me think we made the right decision on focusing on this toolchain.
+Recently at work, I've been on the Microsoft Office suite quite a bit. We made a move to Microsoft 365, and I've been making my own presentations and documents in PowerPoint and Word again. My familiarity, the maturity of the tools, the really nice features (like built in recording and design ideas), and the general adoption makes me think we made the right decision in focusing on this toolchain.
 
 I still hope to make the kids more computer literate going forward, and hope that they don't end up dependent on just one vendor's tools. But I don't want the perfect to be the enemy of the good, and I'd rather they be competent with 1 technology than 0.
 
