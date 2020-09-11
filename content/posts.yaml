@@ -3,6 +3,11 @@ series:
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
 posts:
+- file: posts/homeschool-on-powerpoint.md
+  title: "Homeschool on PowerPoint"
+  time: 2020-09-11T10:15:00Z
+  description: |
+    With Coronavirus continuing to keep our kids home for some of their education, we're getting an opportunity to teach them some additional skills they aren't getting in school. We wanted to share some success with teaching them PowerPoint.
 - file: posts/stackage-for-rust.md
   title: "Stackage for Rust?"
   time: 2020-08-17T06:15:00Z
