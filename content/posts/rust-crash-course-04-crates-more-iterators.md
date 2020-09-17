@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 I'm getting bored with bouncy, this is our third week talking about this program. It's time to finish this off! How do we do double buffering? It's time to learn about external libraries in Rust, or _crates_.
 
 This post is part of a series based on [teaching Rust at FP

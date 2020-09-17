@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 Arguably the biggest distinguishing aspect of Rust versus other
 popular programming languages is its ownership model. In this lesson,
 we're going to hit the basics of ownership in Rust. You can read much

@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 In the [previous lesson in the crash course](/blog/2019/12/rust-crash-course-08-down-dirty-future), we covered the new `async/.await` syntax stabilized in Rust 1.39, and the `Future` trait which lives underneath it. This information greatly supercedes the now-defunct lesson 7 from last year, which covered the older `Future` approach.
 
 Now it's time to update the second half of lesson 7, and teach the hot-off-the-presses Tokio 0.2 release. For those not familiar with it, let me quote the project's overview:

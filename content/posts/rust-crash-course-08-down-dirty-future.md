@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 It's about a year since I wrote the [last installment](https://www.snoyman.com/blog/2018/12/rust-crash-course-07-async-futures-tokio) in the Rust Crash Course series. That last post was a doozy, diving into async, futures, and tokio. All in one post. That was a bit sadistic, and I'm a bit proud of myself on that front.
 
 Much has happened since then, however. Importantly: the `Future` trait has moved into the standard library itself and absorbed a few modifications. And then to tie that up in a nicer bow, there's a new `async/.await` syntax. It's hard for me to overstate just how big a quality of life difference this is when writing asynchronous code in Rust.

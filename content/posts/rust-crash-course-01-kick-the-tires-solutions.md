@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 Below are the solutions to the exercises from the last Rust Crash
 Course lesson, "Kick the Tires."
 

@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 __NOTE__ With the addition of async/await syntax in Rust 1.39 (November 2019), everything related to async code in Rust is getting an overhaul. As such, this lesson is now pretty deeply out of date. It's still useful for understanding the deeper principles, but I hope to write up an updated tutorial in the future covering the new approach.
 
 Unlike languages like Haskell, Erlang, and Go, Rust does not have a

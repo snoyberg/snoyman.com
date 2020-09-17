@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 In this lesson, we just want to get set up with the basics: tooling,
 ability to compile, basic syntax, etc. Let's start off with the
 tooling, you can keep reading while things download.

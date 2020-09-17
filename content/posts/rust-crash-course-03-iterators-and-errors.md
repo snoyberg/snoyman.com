@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 Last time, we finished off with a [bouncy ball
 implementation](https://gist.github.com/snoyberg/5307d493750d7b48c1c5281961bc31d0)
 with some downsides: lackluster error handling and ugly buffering. It

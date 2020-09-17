@@ -1,3 +1,5 @@
+**Heads up** This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the [Rust Crash Course eBook](https://www.fpcomplete.com/rust/crash-course/).
+
 In this lesson, we're going to cover what I'm dubbing the "rule of
 three," which applies to function parameters, iterators, and
 closures. We've already seen this rule applied to function parameters,
