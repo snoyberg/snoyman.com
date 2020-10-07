@@ -3,6 +3,11 @@ series:
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
 posts:
+- file: posts/force-code-to-break.md
+  title: "Force your code to break"
+  time: 2020-10-08T18:15:00Z
+  description: |
+    I prefer using Haskell and Rust, first and foremost, because of strong typing. I like languages and tools that protect me from myself. That's why I love it when my code breaks.
 - file: posts/homeschool-on-powerpoint.md
   title: "Homeschool on PowerPoint"
   time: 2020-09-11T10:15:00Z
