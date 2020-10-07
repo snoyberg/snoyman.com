@@ -5,7 +5,7 @@ COPY site /src/site
 COPY stack.yaml /src/stack.yaml
 RUN stack install --stack-yaml /src/stack.yaml --local-bin-path /artifacts/bin
 
-FROM docker.pkg.github.com/snoyberg/snoyman.com/base-run:2baa393d8e35596f9c2eb84bd4e833d745079eed
+FROM docker.pkg.github.com/snoyberg/snoyman.com/base-run:b41a44cd43b49ca308affb3fd327ce285ab70d49
 
 WORKDIR /app
 CMD ["/usr/local/bin/snoymancom", "prod", "3000"]
