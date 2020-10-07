@@ -40,7 +40,7 @@ import Text.Markdown
 import CMarkGFM (extTable, extStrikethrough, extAutolink, optSmart, commonmarkToHtml, optUnsafe)
 import qualified Data.Vector as V
 import Data.Text.Read (decimal)
-import System.Directory (doesFileExist, canonicalizePath)
+import System.Directory (canonicalizePath)
 import System.FilePath (takeBaseName, splitExtension, splitPath)
 import Data.Time (diffUTCTime)
 import Shekel
@@ -49,6 +49,7 @@ import Control.AutoUpdate
 import Network.HTTP.Types (renderQueryText)
 import Data.Text.Encoding (encodeUtf8Builder)
 import Data.ByteString.Builder (toLazyByteString)
+import System.Environment (getArgs)
 
 data App = App
     { appData   :: IO Data
@@ -640,7 +641,20 @@ withApp isDev inner = do
     withCurrentRef $ \appShekel -> inner App {..}
 
 main :: IO ()
-main = withApp False warpEnv
+main = do
+  args <- getArgs
+  let res = do
+        [devprodS, portS] <- Just args
+        devprod <-
+          case devprodS of
+            "dev" -> Just True
+            "prod" -> Just False
+            _ -> Nothing
+        port <- readMaybe portS
+        Just (devprod, port)
+  case res of
+    Nothing -> error "Arguments: <dev/prod> <port number>"
+    Just (devprod, port) -> withApp devprod (warp port)
 
 getShekelR :: Handler Html
 getShekelR = do

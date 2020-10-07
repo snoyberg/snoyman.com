@@ -7,9 +7,8 @@ RUN stack install --stack-yaml /src/stack.yaml --local-bin-path /artifacts/bin
 
 FROM docker.pkg.github.com/snoyberg/snoyman.com/base-run:2baa393d8e35596f9c2eb84bd4e833d745079eed
 
-ENV PORT 3000
 WORKDIR /app
-CMD ["/usr/local/bin/snoymancom"]
+CMD ["/usr/local/bin/snoymancom", "prod", "3000"]
 
 COPY --from=build-app /artifacts/bin/snoymancom /usr/local/bin
 
