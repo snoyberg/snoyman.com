@@ -11,5 +11,3 @@ WORKDIR /app
 CMD ["/usr/local/bin/snoymancom", "prod", "3000"]
 
 COPY --from=build-app /artifacts/bin/snoymancom /usr/local/bin
-
-COPY content /app/content

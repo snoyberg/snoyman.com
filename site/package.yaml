@@ -29,6 +29,7 @@ dependencies:
 - warp
 - rio
 - auto-update
+- yesod-gitrepo
 
 library:
   source-dirs: src

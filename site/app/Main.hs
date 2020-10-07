@@ -50,6 +50,8 @@ import Network.HTTP.Types (renderQueryText)
 import Data.Text.Encoding (encodeUtf8Builder)
 import Data.ByteString.Builder (toLazyByteString)
 import System.Environment (getArgs)
+import Yesod.GitRepo
+import Control.Concurrent (forkIO)
 
 data App = App
     { appData   :: IO Data
@@ -622,11 +624,25 @@ loadPost dataRoot allSeries (PostRaw postFilename postTitle postTime postListed 
 
 withApp :: Bool -> (App -> IO a) -> IO a
 withApp isDev inner = do
-    let root = "content"
-    appData <-
+    (appData, root) <-
         if isDev
-            then pure $ loadData root
-            else pure <$> loadData root
+            then do
+              let root = "content"
+              pure (loadData "content", root)
+            else do
+              ref <- newIORef $ error "This should never be used" -- ugly hack, patch yesod-gitrepo
+              gr <- gitRepo
+                "https://github.com/snoyberg/snoyman.com"
+                "master"
+                $ \root' -> do
+                  let root = root' </> "content"
+                  writeIORef ref  root
+                  loadData root
+              void $ forkIO $ forever $ do
+                threadDelay $ 5 * 60 * 1000 * 1000
+                grRefresh gr
+              root <- readIORef ref
+              pure (grContent gr, root)
 
     let static' t = staticDevel $ root </> t
     appImg <- static' "img"
