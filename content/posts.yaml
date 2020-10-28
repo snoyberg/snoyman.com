@@ -2,7 +2,14 @@ series:
   kids-coding: Kids Coding
   health-guide: Health Guide
   rust-crash-course: Rust Crash Course
+  haskell-bad-parts: "Haskell: The Bad Parts"
 posts:
+- file: posts/haskell-bad-parts-1.md
+  title: "Haskell: The Bad Parts, part 1"
+  time: 2020-10-28T09:10:00Z
+  description: |
+    The first part of a blog post series on the parts of Haskell we should avoid using.
+  #series: haskell-bad-parts
 - file: posts/force-code-to-break.md
   title: "Force your code to break"
   time: 2020-10-08T09:10:00Z
