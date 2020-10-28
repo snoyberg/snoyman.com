@@ -72,6 +72,8 @@ Friends don't let friends use `Data.Text.IO`.
 
 "Oh, but `putStrLn` is fine!" Yeah, maybe. It's also potentially slow. And it will throw a runtime exception due to character encoding mismatches. Just use a good logging library. That's why we have one in `rio`.
 
+__EDIT__ Since so many people have asked: instead of `readFile`, I recommend using [`readFileUtf8`](https://www.stackage.org/haddock/lts-16.20/rio-0.1.19.0/RIO.html#v:readFileUtf8), which is available from [`rio`](https://github.com/commercialhaskell/rio).
+
 ## Control.Exception.bracket
 
 This is by far the least objectionable of the bad things in this list. I included it because the entire original tweet was inspired by a coworker telling me about a bug he ran into because of this function.
