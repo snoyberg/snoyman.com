@@ -774,9 +774,12 @@ getBaseR = defaultLayout $ do
 
 getPlanetHaskellR :: Handler TypedContent
 getPlanetHaskellR = do
-  req <- parseRequest "http://planet.haskell.org/atom.xml"
+  --req <- parseRequest "http://planet.haskell.org/atom.xml"
+  req <- parseRequest "http://planet.haskell.org/rss20.xml"
   res <- httpLBS req
   if getResponseStatusCode res == 200
-    then pure $ TypedContent "application/atom+xml; charset=utf-8"
+    then pure $ TypedContent
+              --"application/atom+xml; charset=utf-8"
+              "text/xml; charset=UTF-8"
               $ toContent $ getResponseBody res
     else error "Couldn't download Atom feed"
