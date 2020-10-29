@@ -10,7 +10,7 @@ This is wonderful news, and I'm happy to hear it. In the ensuing discussion, the
 
 I truly believe people are trying to improve Haskell community processes right now. I've shared some thoughts with people to help encourage them towards what I think are vital improvements to make Haskell a better language, a better ecosystem, and a better community. Now that these conversations are (thankfully) beginning to happen more openly, I'd like to put some of my thoughts down in writing here.
 
-The notes below turned out to be something of a stream-of-conciousness brain dump. There's no particular order or priority. Also, one final thing. I'm making aspirational statements below. I certainly try to achieve these goals. I don't always succeed. My failings as an individual and a maintainer does not preclude that correctness of my points below.
+The notes below turned out to be something of a stream-of-consciousness brain dump. There's no particular order or priority. Also, one final thing. I'm making aspirational statements below. I certainly try to achieve these goals. I don't always succeed. My failings as an individual and a maintainer do not preclude that correctness of my points below.
 
 ## What is transparency?
 
