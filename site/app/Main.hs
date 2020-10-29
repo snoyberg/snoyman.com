@@ -52,6 +52,7 @@ import Data.ByteString.Builder (toLazyByteString)
 import System.Environment (getArgs)
 import Yesod.GitRepo
 import Control.Concurrent (forkIO)
+import Network.HTTP.Simple (parseRequest, getResponseStatusCode, getResponseBody, httpLBS)
 
 data App = App
     { appData   :: IO Data
@@ -214,6 +215,7 @@ mkYesod "App" [parseRoutes|
 /shekel ShekelR GET
 /shekel/feed ShekelFeedR GET
 /base BaseR GET
+/planet-haskell PlanetHaskellR GET
 |]
 
 data SocialLink = SocialLink
@@ -769,3 +771,12 @@ getBaseR = defaultLayout $ do
                   <td>Cabal-#{giCabal gi}
                   <td>Win32-#{giWin32 gi}
   |]
+
+getPlanetHaskellR :: Handler TypedContent
+getPlanetHaskellR = do
+  req <- parseRequest "http://planet.haskell.org/atom.xml"
+  res <- httpLBS req
+  if getResponseStatusCode res == 200
+    then pure $ TypedContent "application/atom+xml; charset=utf-8"
+              $ toContent $ getResponseBody res
+    else error "Couldn't download Atom feed"
