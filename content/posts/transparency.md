@@ -46,6 +46,8 @@ Almost as a counterpoint to the above: information needs to be centralized too. 
 
 In the beginning of Hitchhiker's Guide to the Galaxy, Arthur Dent discovers that, for months, there have been plans to demolish his house sitting in the basement of the planning office. He's told he needs to take initiative to be involved in government to know about these kinds of things. Ultimately, some galactic aliens pull the same thing on us Earthlings and blow us up. (Oh, sorry, spoiler alert.)
 
+__EDIT__ Thanks to [george_____t](https://www.reddit.com/r/haskell/comments/jk6d2z/transparency/gah6ogj/), here are the [two](https://www.goodreads.com/quotes/40705-but-the-plans-were-on-display-on-display-i-eventually) [quotes](https://www.goodreads.com/quotes/379100-there-s-no-point-in-acting-surprised-about-it-all-the). From Hitchhiker's Guide. If you've never read it, or even if you have, you should check these out.
+
 Being told "but there was a GitHub issue 5 months ago that proposed this" is the same thing. Burying high priority information in the middle of a highly active channel (issue tracker, active mailing list, etc.) obscures things.
 
 It's not always obvious when a change is something that warrants a heavy signal. Mistakes will happen. Sometimes you'll overshare. But much worse is undersharing. Examples:

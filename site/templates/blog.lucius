@@ -11,4 +11,10 @@
   #archive {
     border-left: 1px solid black;
   }
+
+  blockquote {
+    margin-left: 0.5em;
+    border-left: 5px solid #999;
+    padding-left: 0.5em;
+  }
 }
