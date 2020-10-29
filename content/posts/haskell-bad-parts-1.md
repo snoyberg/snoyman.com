@@ -56,7 +56,7 @@ I've already covered this one once before when I told everyone to [beware of `re
 
 But `Data.Text.IO` is a wolf in sheep's clothing. We're all told by people who think they can tell people how to write their Haskell code (*cough* me *cough*) that we should exorcise `String` from our codebases and replace it in all cases with `Text`. Attacking the `Text` type is a topic for another time. But the problem is that by cloaking itself in the warm embrace of `Text`, this module claims more legitimacy than it deserves.
 
-The only module worse in this regards is `Data.Text.Lazy.IO`, which should be buried even deeper.
+The only module worse in this regard is `Data.Text.Lazy.IO`, which should be buried even deeper.
 
 OK, what exactly am I on about? Locale sensitive file decoding. It's possible that this has been the number one example of a Haskell bug in the wild I've encountered in my entire career. Not the spooky memory leak. Partial functions like `head` randomly throwing exceptions are up there, but don't quite rise to prominence.
 
