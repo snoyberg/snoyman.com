@@ -4,6 +4,11 @@ series:
   rust-crash-course: Rust Crash Course
   haskell-bad-parts: "Haskell: The Bad Parts"
 posts:
+- file: posts/transparency.md
+  title: Transparency
+  time: 2020-10-29T07:36:00Z
+  description: |
+    Some thoughts I'd like to share on building open communities based on the principle of transparency
 - file: posts/haskell-bad-parts-1.md
   title: "Haskell: The Bad Parts, part 1"
   time: 2020-10-28T09:10:00Z
