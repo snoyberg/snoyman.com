@@ -12,6 +12,12 @@ I truly believe people are trying to improve Haskell community processes right n
 
 The notes below turned out to be something of a stream-of-conciousness brain dump. There's no particular order or priority. Also, one final thing. I'm making aspirational statements below. I certainly try to achieve these goals. I don't always succeed. My failings as an individual and a maintainer does not preclude that correctness of my points below.
 
+## What is transparency?
+
+Before diving into my points, I want to clarify what I consider transparency. It's not simply about an existence proof that a sufficiently dedicated person could discover information. It's the property that a reasonably interested person can easily find out information about a project. But it's more than that. Simply having introspection is the first step. Understanding how things work, how to contribute, how to influence, and how to disagree are vital too. A truly transparent project, in my definition, provides an easy onramp for new and interested parties to come up to speed on current status, see the inner workings of current members, volunteer to be "part of the team," and constructively argue for a new direction.
+
+OK, that's it for my definition. You can disagree with that definition, but hopefully you can now understand better my concrete points below.
+
 ## Multiple media
 
 Do you like mailing lists? Twitter? Reddit? Blog posts? RSS feeds? Slack? Discourse? Discord? Gitter? Keybase? Zoom?
