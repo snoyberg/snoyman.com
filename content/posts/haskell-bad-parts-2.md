@@ -4,7 +4,7 @@ If you didn't see it, please check out [part 1 of this series](/blog/2020/10/has
 
 Laziness very likely belongs in this list. My favorite part of criticizing laziness is how quickly people jump to defend it based on edge cases. So let's be a bit more nuanced before I later get far _less_ nuanced. Laziness is **obviously** a good thing. Strictness is **obviously** a good thing. They also both suck. It depends on context and purpose. Each of them introduce different kinds of issues. The real question is: what's a more sensible default? We'll get to that another time.
 
-I called this section partial functions. Am I having a senior moment? Maybe, but I intentionally started with laziness. In a strict language, function calls can result in exceptions being thrown, segfaulting occuring, or panicking. (And if I write a "Rust: The Bad Parts", believe me, I'll be mentioning panicking.) The fact that a function _acts_ like it can successfully perform something, but in fact fails in a predictable way (like failing a `HashMap` lookup), it should be reflected at the type level. If not, ya dun goofed.
+I called this section partial functions. Am I having a senior moment? Maybe, but I intentionally started with laziness. In a strict language, function calls can result in exceptions being thrown, segfaulting occurring, or panicking. (And if I write a "Rust: The Bad Parts", believe me, I'll be mentioning panicking.) The fact that a function _acts_ like it can successfully perform something, but in fact fails in a predictable way (like failing a `HashMap` lookup), it should be reflected at the type level. If not, ya dun goofed.
 
 Also, if you have a language that doesn't let you reflect this information at the type level: ya dun goofed.
 
@@ -146,7 +146,7 @@ So in sum:
 * There are enough friction points that people don't use it where it should be used, making lists overused
 * It's not core to the language and libraries, but it's "kinda core," preventing better options from succeeding
 
-"Michael, you're not being very nice to the maintainers of this library." I mean these comments in complete respect. I've _advocated_ for many of the things I'm now saying are bad. We learn new stuff and move on. If I had a vision for how to make `vector` better, I'd propose it. I'm just airing my concerns. I have a vague idea on a nicer library, where you have a typeclass and associated type determining the preferred storage format for each tyep that can be stored, growable storage, an easy-to-use freeze/thaw, minimal dependencies, quick compile, and associated but separate stream fusion library. But I think working on it would be like [adding a new standard](https://xkcd.com/927/), so I'm not jumping into the fray.
+"Michael, you're not being very nice to the maintainers of this library." I mean these comments in complete respect. I've _advocated_ for many of the things I'm now saying are bad. We learn new stuff and move on. If I had a vision for how to make `vector` better, I'd propose it. I'm just airing my concerns. I have a vague idea on a nicer library, where you have a typeclass and associated type determining the preferred storage format for each type that can be stored, growable storage, an easy-to-use freeze/thaw, minimal dependencies, quick compile, and associated but separate stream fusion library. But I think working on it would be like [adding a new standard](https://xkcd.com/927/), so I'm not jumping into the fray.
 
 ## Next time...
 
