@@ -129,9 +129,9 @@ Firstly, the `vector` package is a package. It shouldn't be. Packed arrays shoul
 
 `vector` is slow to compile. Dog slow. Sloth-recovery-from-Thanksgiving-dinner slow. I'm peeved by this right now because I had to compile it recently.
 
-`vector` seems to have a littany of runtime performance issues. I haven't tested these myself. But people regularly complain to me about them. Enough people, with enough Haskell experience, that I believe them. (And `text`: you're in this list too.)
+`vector` seems to have a litany of runtime performance issues. I haven't tested these myself. But people regularly complain to me about them. Enough people, with enough Haskell experience, that I believe them. (And `text`: you're in this list too.)
 
-Oh, right, `text`. `vector` is completely different from `bytestring` and `text`. And there's the pinned-vs-unpinned memory issue that screws things up. I'm unaware of any other language needing to make that distinciton. (If there _are_ examples, please let me know. I'd love to read about it.)
+Oh, right, `text`. `vector` is completely different from `bytestring` and `text`. And there's the pinned-vs-unpinned memory issue that screws things up. I'm unaware of any other language needing to make that distinction. (If there _are_ examples, please let me know. I'd love to read about it.)
 
 Stream fusion is dumb. I mean, it's not dumb, I love it. "Stream fusion should be a default when performing array operations so that you magically mostly fuse away intermediate buffers but sometimes it doesn't work because rewrite rules are really fiddly and then my program consumes 8GB of memory whoopsie daisy" is dumb. Really, really dumb.
 
