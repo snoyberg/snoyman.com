@@ -6,7 +6,7 @@ series:
 posts:
 - file: posts/haskell-bad-parts-2.md
   title: "Haskell: The Bad Parts, part 2"
-  time: 2020-11-09T09:10:00Z
+  time: 2020-11-09T08:05:00Z
   description: |
     The second part of a blog post series on the parts of Haskell we should avoid using.
   series: haskell-bad-parts
