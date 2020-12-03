@@ -479,11 +479,11 @@ feedHelper predicate = do
             [] -> notFound
             (_, post):_ -> return $ postTime post
     newsFeed Feed
-        { feedTitle = "Michael Snoyman's blog"
+        { feedTitle = "The Abominable Snoyman"
         , feedLinkSelf = FeedR
         , feedLinkHome = HomeR
         , feedAuthor = "Michael Snoyman"
-        , feedDescription = "Michael's thoughts on everything, mostly Haskell and tech startups"
+        , feedDescription = "Home to strong typing, strong lifts, and more"
         , feedLanguage = "en"
         , feedUpdated = updated
         , feedLogo = Nothing
