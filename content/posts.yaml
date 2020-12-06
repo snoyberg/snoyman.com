@@ -4,6 +4,12 @@ series:
   rust-crash-course: Rust Crash Course
   haskell-bad-parts: "Haskell: The Bad Parts"
 posts:
+- file: posts/haskell-bad-parts-3.md
+  title: "Haskell: The Bad Parts, part 3"
+  time: 2020-12-07T08:05:00Z
+  description: |
+    The third part of a blog post series on the parts of Haskell we should avoid using.
+  series: haskell-bad-parts
 - file: posts/haskell-foundation.md
   title: "The Haskell Foundation"
   time: 2020-12-02T12:05:00Z
