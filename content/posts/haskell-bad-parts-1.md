@@ -1,42 +1,42 @@
-There's a popular book called "JavaScript: The Good Parts." And there's a common meme around the relative size of that book versus "JavaScript: The Definitive Guide."
+There's a popular book called _JavaScript: The Good Parts_. And there's a common meme around the relative size of that book versus _JavaScript: The Definitive Guide_.
 
-<img src="https://i.imgur.com/wIf3EJh.jpg" style="max-width:80%">
+<img src="https://i.imgur.com/wIf3EJh.jpg" style="max-width:80%"> 
 
-Haskell is in my opinion a far more well designed and coherent language than JavaScript. However, it's also an old language with some historical baggage. And in many ways it's a bleeding edge research language that sometimes includes... half-baked features. And due to an inconsistent set of rules around backwards compatibility, it sometimes will break code every six months, and sometimes keep strange decisions around for decades.
+Haskell is, in my opinion, a far more well designed and coherent language than JavaScript. However, it's also an old language with some historical baggage. In many ways, it's a bleeding edge research language that sometimes includes...half-baked features. Due to an inconsistent set of rules around backwards compatibility, it will sometimes break code every six months, and sometimes keep strange decisions around for decades.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">True mastery of Haskell comes down to knowing which things in core libraries should be avoided like the plague.<br><br>* foldl<br>* sum/product<br>* Data.Text.IO<br>* Control.Exception.bracket (use unliftio instead, handles interruptible correctly)<br><br>Just as some examples</p>&mdash; Michael Snoyman (@snoyberg) <a href="https://twitter.com/snoyberg/status/1321049221697544193?ref_src=twsrc%5Etfw">October 27, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-After a request and some tongue-in-cheek comments in that thread, I decided a longer form blog post was in order. I'm going to start off by expanding on the four examples I gave in that tweet. But there are many, many more examples out there. If there's more interest in seeing a continuation of this series, please let me know. And if you have pet peeves you'd like me to address, input will be very welcome.
+After a request and some tongue-in-cheek comments under that tweet, I decided a long-form blog post was in order. I'm going to start off by expanding on the four examples I gave in that tweet. But there are many, many more examples out there. If there's more interest in seeing a continuation of this series, please let me know. And if you have pet peeves you'd like me to address, your input will be very welcome.
 
-## What is a "bad part"
+## What is a "bad part"?
 
-Very rarely is there such a thing as a language feature, function, type, or library that is so egregiously bad that it should never, ever be used. Null is of course the billion dollar mistake, but it's still incredibly useful in some cases. So when I say that something is a "bad part" of Haskell, I mean something along these lines:
+Very rarely is there such a thing: a language feature, function, type, or library—that is so egregiously bad that it should never, ever be used. Null is of course the billion dollar mistake, but it's still incredibly useful in some cases. So when I say that something is a "bad part" of Haskell, I mean something along these lines:
 
-* A rarely-useful feature has been promoted to a position of prominence
+* A rarely useful feature has been promoted to a position of prominence
 * A function has major downsides that are not documented
 * There's an unexpected performance implication
 
-There's a large tendency in the Haskell community to be overly literal in responding to blog posts. Feel free to do that to your heart's content. But this caveat serves as a word of warning: I'm not going to caveat each one of these with an explanation of "yes, but there's this one corner case where it's actually useful."
+There's a large tendency in the Haskell community to be overly literal in responding to blog posts. Feel free to do that to your heart's content. But this caveat serves as a word of warning: I'm not going to caveat each one of these with an explanation of "Yes, but there's this one corner case where it's actually useful."
 
 ## Why attack Haskell?
 
-Since I'm a Haskeller and advocate of the language, you may be wondering: why am I attacking Haskell? I don't see this as an attack. I _do_ wish we could fix these issues, and I think it's a fair thing to say that the problems I'm listing are warts on the language. But every language has warts. I'm writing this because I've seen these kinds of things break real world projects. I've seen these failures manifest at runtime, defeating yet again the false claim that "if it compiles it works." I've seen these become nefarious time bombs that disincentivize people from ever working with Haskell in the future.
+Since I'm a Haskeller and an advocate of the language, you may be wondering: "Why are you attacking Haskell?" I don't see this as an attack. I _do_ wish we could fix these issues. I think it's a fair thing to say that the problems I'm listing are warts on the language. And every language has warts. I'm writing this because I've seen these kinds of things break real world projects. I've seen these failures manifest at runtime, defeating yet again the false claim: "If it compiles, it works." I've seen these become nefarious time bombs that disincentivize people from ever working with Haskell in the future.
 
-I hope by calling these out publicly, I can help raise awareness of these problems. And then, either we can fix the problems at their source or, more likely, get more widespread awareness of the issue.
+I hope by calling these out publicly, I can help raise awareness of these problems. Then either we fix the problems at their source or, more likely, get more widespread awareness of the issue.
 
-Also, because it feels appropriate, I'm going to take a more jovial tone below. I personally find it easier to beat up on a language I love like that.
+Also, because it feels appropriate, I'm going to take a more jovial tone below. I find it easier to beat up on a language I love like that.
 
 ## foldl
 
-Duncan Coutts [already did this one](https://www.well-typed.com/blog/2014/04/fixing-foldl/). `foldl` is broken. It's a bad function. Left folds are supposed to be strict, not lazy. End of story. Goodbye. Too many space leaks have been caused by this function. We should gut it out entirely.
+Duncan Coutts [already did this one](https://www.well-typed.com/blog/2014/04/fixing-foldl/). `foldl` is broken. It's a bad function. Left folds are supposed to be strict, not lazy. End of story. Goodbye. This function have caused too many space leaks. We should gut it out entirely.
 
 But wait! A lazy left fold makes perfect sense for a `Vector`! Yeah, no one ever meant that. And the problem isn't the fact that this function exists. It's the __name__. It has taken the hallowed spot of the One True Left Fold. I'm sorry, the One True Left Fold is strict.
 
-Also, side note: we can't raise linked lists to a position of supreme power within our ecosystem and then pretend like we actually care about vectors. We don't, we just pay lip service to them. Until we fix the wart which is overuse of lists, `foldl` is only ever used on lists.
+Also, side note: we can't raise linked lists to a position of supreme power within our ecosystem and then pretend like we actually care about vectors. We don't; we just pay lip service to them. Until we fix the wart that is overuse of lists, `foldl` is only ever used on lists.
 
 OK, back to this bad left fold. This is all made worse by the fact that the true left fold, `foldl'`, is not even exported by the `Prelude`. We Haskellers are a lazy bunch. And if you make me type in `import Data.List (foldl')`, I just won't. I'd rather have a space leak than waste precious time typing in those characters.
 
-Alright, so what should you do? Use an alternative prelude that doesn't export a bad function, and does export a good function. If you really, really want a lazy left fold: add a comment, or use a function named `foldlButLazyIReallyMeanIt`. Otherwise I'm going to fix your code during my code review.
+Alright, so what should you do? Use an alternative prelude that doesn't export a bad function, but does export a good function. If you really, really want a lazy left fold: add a comment, or use a function named `foldlButLazyIReallyMeanIt`. Otherwise I'm going to fix your code during my code review.
 
 ## sum/product
 
@@ -52,7 +52,7 @@ That's true. Now go off and write your own `lazySum` and `lazyProduct`. 99 times
 
 ## Data.Text.IO
 
-I've already covered this one once before when I told everyone to [beware of `readFile`](https://www.snoyman.com/blog/2016/12/beware-of-readfile). In that blog post, I talk about a bunch of `String` based I/O functions, especially the titular `readFile`, which is obnoxiously exported by `Prelude`. Those are bad, and I'll reiterate why in a second. But `Data.Text.IO` is arguably far worse. The reason is that there's pretty good awareness in the community that `String`-based I/O is bad. Even though the `String` part is the least of our worries, it does a good job of scaring away the uninitiated.
+I've already covered this one once before when I told everyone to [beware of `readFile`](https://www.snoyman.com/blog/2016/12/beware-of-readfile). In that blog post, I talked about a bunch of `String` based I/O functions, especially the titular `readFile`, which is obnoxiously exported by `Prelude`. Those are bad. But `Data.Text.IO` is arguably far worse, and I'll reiterate why in a second. The reason is that there's pretty good awareness in the community that `String`-based I/O is bad. Even though the `String` part is the least of our worries, it does a good job of scaring away the uninitiated.
 
 But `Data.Text.IO` is a wolf in sheep's clothing. We're all told by people who think they can tell people how to write their Haskell code (*cough* me *cough*) that we should exorcise `String` from our codebases and replace it in all cases with `Text`. Attacking the `Text` type is a topic for another time. But the problem is that by cloaking itself in the warm embrace of `Text`, this module claims more legitimacy than it deserves.
 
@@ -82,15 +82,15 @@ Async exceptions are subtle. Very, very subtle. Like, super duper subtle. I've d
 
 Then someone said, "You know what? Async exceptions aren't subtle enough. Let's invent two different ways of masking them!"
 
-Wait, what does masking mean? Well, of course it means temporary blocking the ability to receive an async exception. Totally, 100% blocks it. It's like async exceptions don't exist at all. So you're totally 100% safe. Right?
+Wait, what does masking mean? Well, of course it means temporarily blocking the ability to receive an async exception. Totally, 100% blocks it. It's like async exceptions don't exist at all. So you're totally 100% safe, right?
 
 Wrong. Masking isn't really masking. Masking is kinda-sorta masking. No, if you really want protection, you have to use `uninterruptibleMask`. You knew that, right? Of course you did, because it's so incredibly obvious. And of course it's painfully obvious to every single Haskeller on the planet just how important it is to choose normal `mask` versus `uninterruptibleMask`. And there'd never be a disagreement about these cases.
 
-In case the tone isn't clear: this is sarcasm. Interruptible vs uninterruptible masking is confusing. Incredibly confusing. And nowhere is that more blatant than in the `Control.Exception.bracket` function. Interruptible masking means "hey, I don't want to receive any async exceptions, unless I'm doing a blocking call, then I totally don't want to be masked." And `Control.Exception.bracket` uses interruptible masking for it's cleanup handler. So if you need to perform some kind of blocking action in your cleanup, and you want to make sure that you don't get interrupted by an async exception, you have to remember to use `uninterruptibleMask` yourself. Otherwise, your cleanup action may not complete, which is Bad News Bears.
+In case the tone isn't clear: this is sarcasm. Interruptible vs uninterruptible masking is confusing. Incredibly confusing. And nowhere is that more blatant than in the `Control.Exception.bracket` function. Interruptible masking means "Hey, I don't want to receive any async exceptions, unless I'm doing a blocking call, then I totally don't want to be masked." And `Control.Exception.bracket` uses interruptible masking for it's cleanup handler. So if you need to perform some kind of blocking action in your cleanup, and you want to make sure that you don't get interrupted by an async exception, you have to remember to use `uninterruptibleMask` yourself. Otherwise, your cleanup action may not complete, which is Bad News Bears.
 
-This is all too confusing. I get the allure of interruptible masking. It means that you get super-cool-looking deadlock detection. It's nifty. It's also misleading, since you can't rely on it. Really good Haskellers have released completely broken libraries based on the false idea that deadlock detection reliably works. It doesn't. This is a false sense of hope, much like rewrite rules for stream fusion.
+This is all too confusing. I get the allure of interruptible masking. It means that you get super-cool-looking deadlock detection. It's nifty. It's also misleading because you can't rely on it. Really good Haskellers have released completely broken libraries based on the false idea that deadlock detection reliably works. It doesn't. This is a false sense of hope, much like rewrite rules for stream fusion.
 
-I'm not putting `mask` on the "bad parts" list right now, but I'm tempted to do so, and claim that `uninterruptibleMask` should have been the default, and perhaps only, way of masking. (Reminder for later: `throw` is a horribly named function too.) But I _am_ saying that `bracket` defaulting to interruptible masking is a mistake. It's unexpected, and basically undocumented.
+I'm not putting `mask` on the "bad parts" list right now, but I'm tempted to do so, and claim that `uninterruptibleMask` should have been the default, and perhaps the only way of masking. (Reminder for later: `throw` is a horribly named function too.) But I _am_ saying that `bracket` defaulting to interruptible masking is a mistake. It's unexpected, and basically undocumented.
 
 In `unliftio` (and therefore in `rio`) we provide an alternative `bracket` that uses uninterruptible masking. I debated this internally quite a bit, since I don't generally like throwing new behavior into an old function name. I eventually agreed with the idea that the current `bracket` implementation is just buggy and should be fixed. I still feel a bit uneasy about the decision though. (Note that I made the opposite decision regarding `sum` and `product` and included the broken versions, which I _also_ feel uneasy about.)
 
