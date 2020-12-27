@@ -10,4 +10,4 @@ I'm also planning on streaming simultaneously on Twitter via Periscope, so if yo
 
 This first go through will likely be rocky, so if you want to come and help me out, and/or laugh at me fumbling through coding and fighting A/V issues simultaneously, come check it out!
 
-If anyone has requests for future live streaming sessions, or Q&A they'd like to queue up in advance, please let me know in the comments below or on Twitter.
+If anyone has requests for future live streaming sessions, or Q&A they'd like to queue up in advance, please let me know in the comments below or on Twitter. I'd definitely like to do some Haskell live coding too, so I'm curious what people would like to see on that front in particular.
