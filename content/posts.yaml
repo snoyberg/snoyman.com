@@ -4,6 +4,12 @@ series:
   rust-crash-course: Rust Crash Course
   haskell-bad-parts: "Haskell: The Bad Parts"
 posts:
+- file: posts/live-coding-rust-reverse-proxy.md
+  title: "Live Coding: Rust reverse proxy"
+  time: 2020-12-27T12:00:00Z
+  description: |
+    Announcing my first scheduled live coding session, December 29, 2020 at 10am Eastern time.
+  twitter-image: "https://i.imgur.com/uwqNWwv.png"
 - file: posts/haskell-bad-parts-3.md
   title: "Haskell: The Bad Parts, part 3"
   time: 2020-12-09T08:05:00Z
