@@ -193,6 +193,7 @@ data Post = Post
     , postFilename :: !FilePath
     , postDescription :: !(Maybe Text)
     , postSeries :: !(Maybe (SeriesName, Text))
+    , postTwitterImage :: !(Maybe Text)
     }
 
 type SeriesName = Text
@@ -394,6 +395,11 @@ getPostR year month slug = do
         setTitle $ toHtml $ postTitle thisPost
         forM_ (postDescription thisPost) $ \desc ->
           toWidgetHead [shamlet|<meta name=og:description value=#{desc}>|]
+        forM_ (postTwitterImage thisPost) $ \url ->
+          toWidgetHead [shamlet|
+            <meta property=og:image content=#{url}>
+            <meta name=twitter:card content=summary_large_image>
+          |]
         toWidget
             [lucius|
                 .post-date {
@@ -589,7 +595,7 @@ instance FromJSON RawPosts where
         <$> o .: "posts"
         <*> o .: "series"
 
-data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text) !(Set Text) !(Maybe SeriesName)
+data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text) !(Maybe Text) !(Set Text) !(Maybe SeriesName)
 instance FromJSON PostRaw where
     parseJSON = withObject "PostRaw" $ \o -> PostRaw
         <$> o .: "file"
@@ -597,6 +603,7 @@ instance FromJSON PostRaw where
         <*> ((flip UTCTime 0 <$> (o .: "day")) <|> (o .: "time"))
         <*> o .:? "listed" .!= True
         <*> o .:? "description"
+        <*> o .:? "twitter-image"
         <*> o .:? "old-slugs" .!= mempty
         <*> o .:? "series"
 
@@ -605,7 +612,7 @@ loadPost
   -> Map SeriesName Text
   -> PostRaw
   -> IO [((Year, Month, Text), Either Post Text)]
-loadPost dataRoot allSeries (PostRaw postFilename postTitle postTime postListed postDescription oldSlugs mseries) = do
+loadPost dataRoot allSeries (PostRaw postFilename postTitle postTime postListed postDescription postTwitterImage oldSlugs mseries) = do
     postSeries <- for mseries $ \name ->
       case Map.lookup name allSeries of
         Nothing -> error $ "Undefined series name: " ++ show name
