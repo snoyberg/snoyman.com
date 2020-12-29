@@ -1,6 +1,6 @@
 I've been doing quite a bit of experimenting recently with my video recording and streaming setup. As a combination of "let's test it out" and "let's see if anyone likes this kind of thing," I'm going to be doing a live coding session this Tuesday, December 29, at 10am Eastern. If everything goes according to plan (which it may not), you can [view the live stream and the recording on YouTube](https://youtu.be/ksKpx6MlMPw):
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/ksKpx6MlMPw' frameborder='0' allowfullscreen></iframe></div>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/FcHYQMRfGWw' frameborder='0' allowfullscreen></iframe></div>
 
 I'm also planning on streaming simultaneously on Twitter via Periscope, so if you follow me on Twitter you may see it pop up there. The current plan is:
 
