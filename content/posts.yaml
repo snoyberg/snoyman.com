@@ -4,6 +4,12 @@ series:
   rust-crash-course: Rust Crash Course
   haskell-bad-parts: "Haskell: The Bad Parts"
 posts:
+- file: posts/parents-guide-minecraft.md
+  title: "A parents' guide to Minecraft"
+  time: 2021-01-09T07:55:00Z
+  description: |
+    Some hopefully helpful information for fellow parents who have kids that want to play Minecraft.
+  twitter-image: "https://i.imgur.com/7Hyo979.png"
 - file: posts/live-coding-rust-reverse-proxy.md
   title: "Live Coding: Rust reverse proxy"
   time: 2020-12-27T12:00:00Z
