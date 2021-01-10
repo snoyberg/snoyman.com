@@ -214,6 +214,6 @@ If you've gotten this far, congratulations. I've covered everything I promised I
 * Limit the number of browser extensions you use. Each extension is a potential intrusion into your online communications. I use the BitWarden extension, with some level of trepidation.
 * Look at URLs before clicking a link to avoid phishing. Phishing attacks, and social engineering attacks in general, are a primary way to be compromised online.
 * Secure your devices. Make sure you have a password or biometric lock on your devices. Don't lose your devices. If you do lose your device, reset your passwords.
-* Use advanced credential management like two factor auth whenever possible. _Especially_ if you use the same password everywhere. But seriously: use a password manager.
+* Use advanced credential management like two factor auth whenever possible. _Especially_ if you use the same password everywhere. But seriously: use a password manager. Consider using a system with cloud backup like Authy.
 
 OK, that's it, I promise. Let me know in the comments below, or on [Twitter](https://twitter.com/snoyberg) or [Gab](https://gab.com/snoyberg), if you have additional questions that you'd like me to answer. And if people want, I may turn this blog post into a video as well.
