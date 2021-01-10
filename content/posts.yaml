@@ -4,9 +4,15 @@ series:
   rust-crash-course: Rust Crash Course
   haskell-bad-parts: "Haskell: The Bad Parts"
 posts:
+- file: posts/securing-internet-communications-laymans-guide.md
+  title: "Securing internet communications: a layman's guide (2021)"
+  time: 2021-01-10T16:00:00Z
+  description: |
+    A hopefully helpful guide to understanding private communications and censorship-proof social media in 2021. Targeted at non tech people trying to understand this crazy world.
+  twitter-image: https://i.imgur.com/qI8FFBO.png"
 - file: posts/parents-guide-minecraft.md
   title: "A parents' guide to Minecraft"
-  time: 2021-01-09T07:55:00Z
+  time: 2021-01-09T19:55:00Z
   description: |
     Some hopefully helpful information for fellow parents who have kids that want to play Minecraft.
   twitter-image: "https://i.imgur.com/7Hyo979.png"
