@@ -170,6 +170,9 @@ img.wt-block-image {
 .inner-page{
     background: #006bdf;
 }
+.inner-page ::selection {
+  background: green;
+}
 footer{
 	color:#bdbdbd;
 }
