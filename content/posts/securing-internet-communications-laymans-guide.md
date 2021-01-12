@@ -2,6 +2,8 @@ There has been rising concern over the past number of years around security in p
 
 One word of caveat, since everything is politically charged today. I definitely have my own political views, and I mostly elect to keep them separate from my discussions of technology. I'm going to do so here as well. I'm not endorsing or objecting to any recent actions or desires of people to communicate in certain ways. If I ever decided to publicly share my political views, I would do that separately. For now, I'm simply going through the technological implications.
 
+__UPDATE__ I decided to make a video version of this information as well for those who prefer getting the content in that format. You can check it out [on YouTube](https://www.youtube.com/watch?v=RT69LwB2Pyk) or [on BitChute](https://www.bitchute.com/video/zuT7MMGdEX7c/).
+
 ## Executive summary
 
 I know there are a lot of details below, but I strongly encourage people to read through it, or at least skim, to understand my recommendations here. But for the busy (or lazy), here are my recommendations:
