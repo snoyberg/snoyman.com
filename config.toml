@@ -1,0 +1,13 @@
+base_url = "https://www.snoyman.com"
+default_language = "en"
+compile_sass = false
+generate_feed = true
+highlight_code = false
+
+taxonomies = [
+  {name = "tags", paginate_by = 20},
+  {name = "series", paginate_by = 20},
+]
+
+[extra]
+# Put all your custom variables here

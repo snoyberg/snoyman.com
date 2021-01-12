@@ -1,0 +1,84 @@
+{% import "macros.html" as macros %}
+
+{% if page %}
+    {% set content = page %}
+{% elif section %}
+    {% set content = section %}
+{% endif %}
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>{{ content.title }}</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="{{ content.title }}">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <script src="https://kit.fontawesome.com/ed5ab29d5a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    {% block pagehead %}
+    {% endblock %}
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      {{ macros::topnav() }}
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">{{ content.title }}</h1>
+                {% block subtitle %}
+                {% endblock subtitle %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              <!-- FIXME
+              $maybe socialLinks <- msocialLinks
+                <p class="text-center bg-light">
+                  <b>Share this
+                  $forall sl <- socialLinks
+                    \ #
+                    <a target="_blank" href=#{makeUrl (slPath sl) (slQuery sl)} title="Share on #{slName sl}">
+                      <i class="fab fa-#{slIcon sl}">
+              -->
+              {% block content %}
+                {{ content.content | safe }}
+              {% endblock content %}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    {{ macros::bodyend() }}
+
+  </body>
+</html>
