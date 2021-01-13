@@ -1618,3 +1618,16 @@ li.nav-item.active > a {
     font-size: 2rem;
   }
 }
+
+/* Base */
+table#versions {
+  font-size: 140%;
+  margin: 3em auto;
+
+  border-collapse: collapse;
+}
+
+table#versions th, table#versions td {
+  border: 1px solid black;
+  padding: 5px;
+}
