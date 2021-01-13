@@ -46,7 +46,7 @@ module name appear in different packages:
     [Stackage doc list by module](https://www.stackage.org/lts/docs)
     and discover:
 
-    ![monads-tf and mtl](http://i.imgur.com/FkeC6ak.png)
+    ![monads-tf and mtl](https://i.imgur.com/FkeC6ak.png)
 
     If I'm not familiar with the Haskell ecosystem, I'm unlikely to
     know that `mtl` is far

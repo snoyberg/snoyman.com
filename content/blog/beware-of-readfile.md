@@ -143,7 +143,7 @@ discovered this trick recently.)
 Here are the graphical results, full textual results are available
 below:
 
-<img src="http://imagehost.cc/images/2019/03/06/bench.png" alt="Benchmark Results" style="max-width:100%">
+<img src="/img/beware-of-readfile-bench.png" alt="Benchmark Results" style="max-width:100%">
 
 Unsurprisingly, `String` I/O is the slowest, and `ByteString` I/O is
 the fastest (since no character encoding overhead is involved). I
