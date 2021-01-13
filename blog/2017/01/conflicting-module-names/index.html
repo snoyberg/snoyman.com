@@ -1,0 +1,339 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Conflicting Module Names</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Conflicting Module Names">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Conflicting Module Names</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published January  5, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Conflicting%20Module%20Names https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;conflicting-module-names&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;conflicting-module-names&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;conflicting-module-names&#x2F;&amp;title=Conflicting%20Module%20Names" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;conflicting-module-names&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;conflicting-module-names.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>It's
+<a href="https://github.com/fpco/stackage/issues/416">the oldest open issue on the Stackage repo</a>,
+and a topic I've discussed more times than I can remember over the
+years. Hackage enforces that <em>package names</em> are unique (so that no
+one else can claim the name <code>conduit</code>, for instance), but does nothing
+to ensure unique <em>module names</em> (so someone else could write a package
+named <code>my-conduit</code> with a module named <code>Data.Conduit</code>).</p>
+<p>For the record, I think Hackage's position here is not only a good
+one, but the only logical one it could have made. I'm not even hinting
+at wanting to change that. Please don't read this blog post in that
+way at all.</p>
+<p>Usually, conflicting module names do not negatively affect us, at
+least when working on project code with a proper <code>.cabal</code> file. In my
+made-up example above, I would explicitly state that I depend on
+<code>conduit</code> and not list <code>my-conduit</code>, and when my code imports
+<code>Data.Conduit</code>, Stack+Cabal+GHC can all work together to ensure that
+the correct module is used.</p>
+<p><strong>EDIT</strong> Since I've already written some of the code for stackage-curator to
+detect this, I generated a <a href="https://gist.github.com/snoyberg/c5044f390d22200fcee37c894a853719">list of all conflicting module
+names</a> to
+give an idea of what we're looking at.</p>
+<h2 id="the-problem">The problem</h2>
+<p>(If you're already convinced that conflicting module names are a
+problem, you may want to skip straight to &quot;the solution.&quot; This section
+is fairly long and detailed.)</p>
+<p>Unfortunately, there are still some downsides to having the same
+module name appear in different packages:</p>
+<ol>
+<li>
+<p><strong>Documentation</strong> Suppose I'm reading a tutorial that includes the
+line <code>import Control.Monad.Reader</code>. I look at the
+<a href="https://www.stackage.org/lts/docs">Stackage doc list by module</a>
+and discover:</p>
+<p><img src="https://i.imgur.com/FkeC6ak.png" alt="monads-tf and mtl" /></p>
+<p>If I'm not familiar with the Haskell ecosystem, I'm unlikely to
+know that <code>mtl</code> is far
+<a href="https://www.stackage.org/package/mtl#reverse-dependencies">more</a>
+<a href="https://www.stackage.org/package/monads-tf#reverse-dependencies">popular</a>
+than <code>monads-tf</code> and choose the latter.</p>
+</li>
+<li>
+<p><strong>runghc/ghci</strong> We're not always working on project
+code. Sometimes we're just writing a script. Sometimes we're
+playing with an idea in GHCi. What if I <code>import System.FilePath.Glob</code> in a GHCi prompt when I have both the
+<code>filemanip</code> and <code>Glob</code> packages installed?</p>
+</li>
+<li>
+<p><strong>doctests</strong> Similar to the previous point: even when you run
+doctests from inside the context of a project, they don't
+typically know which packages can be used, and conflicting module
+names can
+<a href="https://github.com/yesodweb/wai/issues/579">cause the tests to fail</a>. What's
+especially bad about this is that an unrelated action (like
+running <code>stack build async-dejafu</code>) can suddenly make your tests
+start to fail when they previously succeeded.</p>
+</li>
+<li>
+<p><strong>Custom Setup.hs</strong> Suppose you're writing a cabal package that
+uses a custom <code>Setup.hs</code> file and imports some additional
+modules. To pick a concrete example that just happened: the
+<code>executable-hash</code> package has a <code>Setup.hs</code> file which -
+indirectly - imports <code>Crypto.Hash.SHA1</code>. And there's an explicit
+dependency on <code>cryptohash</code> in the <code>.cabal</code> file, which one may
+naively infer means we're safe. However, when <code>uuid-1.3.13</code> moved
+from cryptonite to a few other packages (including
+cryptohash-sha1), building <code>executable-hash</code> when <code>uuid</code> was
+already installed became a build error. And like the previous
+point, this is essentially a non-deterministic race condition.</p>
+<p>Since I was a backup maintainer for <code>executable-hash</code>, I
+implemented two fixes:
+<a href="https://github.com/fpco/executable-hash/commit/91ee923513b6464a49f02fdc0738202e7b4a907a">adding an explicit <code>PackageImport</code></a>
+and
+<a href="https://github.com/fpco/executable-hash/commit/e93af5ed6e1e46efc876ab008bd48574c761780c">using the new custom-setup feature in Cabal-1.24</a>. While
+custom-setup is definitely the way to go with this, and it's a
+great addition to Cabal, not everyone is using the newest version
+of Cabal, Stack is only just now adding support for this, and not
+all packages will update to support this immediately.</p>
+</li>
+<li>
+<p><strong>Better tooling</strong> It would be great if tooling could
+automatically determine which packages to install based on the
+imports list, to avoid the need for a lot of manual and redundant
+statements of dependencies. We're considering
+<a href="https://github.com/commercialhaskell/stack/issues/2805#issuecomment-263075097">doing this in the upcoming <code>stack script</code> command</a>. But
+how will Stack know which <code>Control.Monad.Reader</code> to use?</p>
+</li>
+</ol>
+<h2 id="the-solution">The solution</h2>
+<p>While we know that we can't have fully unique module names without a
+lot of buy-in from package authors, we can get pretty close, with
+<em>canonical</em> locations for a module. We've already implemented this to
+some extent in Stackage to resolve problem (3) listed above. We now
+have the ability to list some packages as <em>hidden</em> in a Stackage
+snapshot. This means that, after installing the package, the Stackage
+build system will <em>hide</em> the package, so that its modules won't be
+available for import. By adding <code>async-dejafu</code> to the hidden list, the
+warp doctest suite no longer has the ambiguity issue when running.</p>
+<p>After dealing with the cryptohash-sha1 fallout earlier this week, I
+realized that this solution can generalize to solve a large swath of
+the problems described above. Here's how I see it working:</p>
+<ul>
+<li>We introduce a new constraint in the Stackage build process: every
+module name must be present in only one <em>exposed</em> (that is,
+non-hidden) package.</li>
+<li>When <code>stack build</code> registers a package, it automatically hides it if
+the snapshot lists it as hidden.</li>
+<li>On the stackage.org module list, modules from a hidden package are
+explicitly marked as hidden (or, if we want to be more extreme, we
+just hide them entirely).</li>
+<li>With the upcoming <code>stack script</code> command, when finding a package for
+a given imported module, we only pay attention to non-hidden
+modules.</li>
+</ul>
+<p>This doesn't fully solve the problems above. For example, if a user
+just Googles <code>Control.Monad.Reader</code>, they'll still possibly get
+confusing documentation. But I think this is a huge step in the right
+direction.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

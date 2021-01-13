@@ -1,0 +1,435 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>The Worst Function in Conduit</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="The Worst Function in Conduit">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">The Worst Function in Conduit</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published May  7, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=The%20Worst%20Function%20in%20Conduit https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;05&#x2F;worst-function-in-conduit&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;05&#x2F;worst-function-in-conduit&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;05&#x2F;worst-function-in-conduit&#x2F;&amp;title=The%20Worst%20Function%20in%20Conduit" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;05&#x2F;worst-function-in-conduit&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;worst-function-in-conduit.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This blog post addresses a long-standing FIXME in the
+conduit-combinators documentation, as well as
+<a href="https://twitter.com/bitemyapp/status/860919651957710849">a question on Twitter</a>. This
+blog post will assume familiarity with the Conduit streaming data
+library; if you'd like to read up on it first, please
+<a href="https://haskell-lang.org/library/conduit">check out the tutorial</a>. The
+full executable snippet is at the end of this blog post, but we'll
+build up intermediate bits along the way. First, the
+<a href="https://haskell-lang.org/get-started">Stack</a> script header, import
+statement, and some minor helper functions.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">--stack --resolver lts-8.12 script
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Conduit
+
+</span><span style="color:#b58900;">src10 </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Monad m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">ConduitM i Int m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">src10 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> yieldMany [</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">]
+
+</span><span style="color:#b58900;">remaining </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MonadIO m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">ConduitM i o m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">remaining </span><span style="color:#859900;">=</span><span style="color:#657b83;"> lengthC </span><span style="color:#859900;">&gt;&gt;= \</span><span style="color:#657b83;">x </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> liftIO (putStrLn (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Remaining: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show x))
+</span></code></pre>
+<p><code>src10</code> just provides the numbers 1 through 10 as a source, and
+<code>remaining</code> tells you how many values are remaining from
+upstream. Cool.</p>
+<p>Now let's pretend that the Conduit libraries completely forgot to
+provide a <code>drop</code> function. That is, a function that will take an <code>Int</code>
+and discard that many values from the upstream. We could write one
+ourselves pretty easily:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">dropSink </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Monad m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">Int </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">ConduitM i o m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">dropSink cnt
+  </span><span style="color:#859900;">|</span><span style="color:#657b83;"> cnt </span><span style="color:#859900;">&lt;= </span><span style="color:#6c71c4;">0 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> return </span><span style="color:#b58900;">()
+  </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> await </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> dropSink (cnt </span><span style="color:#859900;">- </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>(Bonus points to readers: this function is inefficient in the case
+that upstream has less than <code>cnt</code> values, optimize it.)</p>
+<p>This function will drop a certain number of elements from upstream, so
+the next component we monadically bind with can pick it up. Let's see
+how that looks:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">goodDropSink </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">goodDropSink </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+             </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (dropSink </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> remaining)
+</span></code></pre>
+<p>All well and good. But notice two things:</p>
+<ul>
+<li>I called this <code>dropSink</code>. Why sink?</li>
+<li>I stressed that we had to monadically bind. Why?</li>
+</ul>
+<p>Well, there's another formulation of this drop function. Instead of
+letting the next monadically bound component pick up remaining values,
+we could <em>pass the remaining values downstream</em>. Fortunately it's
+really easy to implement this function in terms of <code>dropSink</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">dropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Monad m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">Int </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">ConduitM i i m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">dropTrans cnt </span><span style="color:#859900;">=</span><span style="color:#657b83;"> dropSink cnt </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> mapC id
+</span></code></pre>
+<p>(For more meaningless bonus points, feel free to implement this
+without <code>dropSink</code>, or for a greater challenge, implement <code>dropSink</code>
+in terms of <code>dropTrans</code>.) Anyway, this function can be used easily as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">goodDropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">goodDropTrans </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+              </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+             </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> dropTrans </span><span style="color:#6c71c4;">5
+             </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> remaining
+</span></code></pre>
+<p>Many may argue that this is more natural. To some extent, it mirrors
+the behavior of <code>take</code> more closely, as <code>take</code> passes the initial
+values downstream. On the other hand, <code>dropTrans</code> cannot <em>guarantee</em>
+that the values will be removed from the stream; if instead of
+<code>dropTrans 5 .| remaining</code> I simply did <code>dropTrans 5 .| return ()</code>,
+then the <code>dropTrans</code> would never have a chance to fire, since
+execution is driven from downstream. Also, as demonstrated, it's
+really easy to capture this transformer behavior from the sink
+behavior; the other way is trickier.</p>
+<p>My point here is that we have two legitimate definitions of a
+function. And from my experience, different people expect different
+behavior for the function. In fact, some people (myself included)
+intuitively expect different behavior <em>depending on the circumstance</em>!
+This is what earns <code>drop</code> the title of worst function in conduit.</p>
+<p>To make it even more clear how bad this is, let's see how you can
+misuse these functions unintentionally.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">badDropSink </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">badDropSink </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+            </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+           </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> dropSink </span><span style="color:#6c71c4;">5
+           </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> remaining
+</span></code></pre>
+<p>This code looks perfectly reasonable, and if we just replaced
+<code>dropSink</code> with <code>dropTrans</code>, it would be correct. But instead of
+saying, as expected, that we have 5 values remaining, this will
+print 0. The reason: <code>src10</code> yields 10 values to
+<code>dropSink</code>. <code>dropSink</code> drops 5 of those and leaves the remaining 5
+untouched. But <code>dropSink</code> never itself yields a value downstream, so
+<code>remaining</code> receives nothing.</p>
+<p>Because of the type system, it's slightly trickier to misuse
+<code>dropTrans</code>. Let's first do the naive thing of just assuming it's
+<code>dropSink</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">badDropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">badDropTrans </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+             </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (dropTrans </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> remaining)
+</span></code></pre>
+<p>GHC does not like this one bit:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error:
+    • Couldn&#39;t match type ‘Int’ with ‘Data.Void.Void’
+      Expected type: ConduitM () Data.Void.Void IO ()
+        Actual type: ConduitM () Int IO ()
+</span></code></pre>
+<p>The problem is that <code>runConduit</code> expects a pipeline where the final
+output value is <code>Void</code>. However, <code>dropTrans</code> has an output value of
+type <code>Int</code>. And if it's yielding <code>Int</code>s, so must <code>remaining</code>. This is
+definitely an argument in favor of <code>dropTrans</code> being the better
+function: the type system helps us a bit. (It's also an argument in
+favor of keeping
+<a href="http://www.snoyman.com/blog/2017/04/generalizing-type-signatures">the type signature of <code>runConduit</code> as-is</a>.)</p>
+<p>However, it's still possible to accidentally screw things up in bigger
+pipelines, e.g.:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">badDropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">badDropTrans </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+             </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (dropTrans </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> remaining)
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (sinkList </span><span style="color:#859900;">&gt;&gt;=</span><span style="color:#657b83;"> liftIO </span><span style="color:#859900;">.</span><span style="color:#657b83;"> print)
+</span></code></pre>
+<p>This code may look a bit contrived, but in real-world Conduit code
+it's not at all uncommon to deeply nest these components in such a way
+that the error would not be present. You may be surprised to hear that
+the output of this program is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Remaining: 0
+[6,7,8,9,10]
+</span></code></pre>
+<p>The reason is that the <code>sinkList</code> is downstream from <code>dropTrans</code>, and
+grabs all of its output. <code>dropTrans</code> itself will drain all output from
+<code>src10</code>, leaving nothing behind for <code>remaining</code> to grab.</p>
+<p>The Conduit libraries use the <code>dropSink</code> variety of function. I wish
+there was a better approach here that felt more intuitive to
+everyone. The closest I can think of to that is deprecating <code>drop</code> and
+replacing it with more explicitly named <code>dropSink</code> and <code>dropTrans</code>,
+but I'm not sure how I feel about that (feedback welcome, and other
+ideas <em>certainly</em> welcome).</p>
+<hr />
+<p>Full code</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">--stack --resolver lts-8.12 script
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Conduit
+
+</span><span style="color:#b58900;">dropSink </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Monad m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">Int </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">ConduitM i o m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">dropSink cnt
+  </span><span style="color:#859900;">|</span><span style="color:#657b83;"> cnt </span><span style="color:#859900;">&lt;= </span><span style="color:#6c71c4;">0 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> return </span><span style="color:#b58900;">()
+  </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> await </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> dropSink (cnt </span><span style="color:#859900;">- </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">)
+
+</span><span style="color:#b58900;">dropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Monad m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">Int </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">ConduitM i i m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">dropTrans cnt </span><span style="color:#859900;">=</span><span style="color:#657b83;"> dropSink cnt </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> mapC id
+
+</span><span style="color:#b58900;">src10 </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Monad m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">ConduitM i Int m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">src10 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> yieldMany [</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">]
+
+</span><span style="color:#b58900;">remaining </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MonadIO m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">ConduitM i o m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">remaining </span><span style="color:#859900;">=</span><span style="color:#657b83;"> lengthC </span><span style="color:#859900;">&gt;&gt;= \</span><span style="color:#657b83;">x </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> liftIO (putStrLn (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Remaining: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show x))
+
+</span><span style="color:#b58900;">goodDropSink </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">goodDropSink </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+             </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (dropSink </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> remaining)
+
+</span><span style="color:#b58900;">badDropSink </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">badDropSink </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+            </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+           </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> dropSink </span><span style="color:#6c71c4;">5
+           </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> remaining
+
+</span><span style="color:#b58900;">goodDropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">goodDropTrans </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+              </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+             </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> dropTrans </span><span style="color:#6c71c4;">5
+             </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> remaining
+
+</span><span style="color:#b58900;">badDropTrans </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">badDropTrans </span><span style="color:#859900;">=</span><span style="color:#657b83;"> runConduit
+             </span><span style="color:#859900;">$</span><span style="color:#657b83;"> src10
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (dropTrans </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">&gt;&gt;</span><span style="color:#657b83;"> remaining)
+            </span><span style="color:#859900;">.|</span><span style="color:#657b83;"> (sinkList </span><span style="color:#859900;">&gt;&gt;=</span><span style="color:#657b83;"> liftIO </span><span style="color:#859900;">.</span><span style="color:#657b83;"> print)
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Good drop sink</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  goodDropSink
+  putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bad drop sink</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  badDropSink
+  putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Good drop trans</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  goodDropTrans
+  putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bad drop trans</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  badDropTrans
+</span></code></pre>
+<p>Full output</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Good drop sink
+Remaining: 5
+Bad drop sink
+Remaining: 0
+Good drop trans
+Remaining: 5
+Bad drop trans
+Remaining: 0
+[6,7,8,9,10]
+</span></code></pre>
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

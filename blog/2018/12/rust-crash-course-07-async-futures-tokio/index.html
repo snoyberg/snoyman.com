@@ -1,0 +1,2168 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Async, futures, and tokio - Rust Crash Course lesson 7</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Async, futures, and tokio - Rust Crash Course lesson 7">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 7 in the Rust crash course: Async, futures, and tokio
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Async, futures, and tokio - Rust Crash Course lesson 7</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published December  3, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Async%2C%20futures%2C%20and%20tokio%20-%20Rust%20Crash%20Course%20lesson%207 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;rust-crash-course-07-async-futures-tokio&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;rust-crash-course-07-async-futures-tokio&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;rust-crash-course-07-async-futures-tokio&#x2F;&amp;title=Async%2C%20futures%2C%20and%20tokio%20-%20Rust%20Crash%20Course%20lesson%207" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;rust-crash-course-07-async-futures-tokio&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-07-async-futures-tokio.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p><strong>NOTE</strong> With the addition of async/await syntax in Rust 1.39 (November 2019), everything related to async code in Rust is getting an overhaul. As such, this lesson is now pretty deeply out of date. It's still useful for understanding the deeper principles, but I hope to write up an updated tutorial in the future covering the new approach.</p>
+<p>Unlike languages like Haskell, Erlang, and Go, Rust does not have a
+runtime system providing green threads and asynchronous I/O. However,
+for many real world use cases, async I/O is strongly desired, if not a
+hard requirement. The de facto standard library for handling this in
+Rust is tokio.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<p>This lesson in the crash course is going to be a bit different from
+others, since:</p>
+<ol>
+<li>There's a lot of interconnected material to cover which can't as
+easily be separated out</li>
+<li>It's more important to understand the motivation behind the design
+of these libraries than in many other cases</li>
+<li>I believe the material may be useful for people who haven't been
+following the rest of the crash course</li>
+</ol>
+<p>Therefore, some different rules will apply:</p>
+<ul>
+<li>I'm defining up front the knowledge you'll need of Rust to
+understand this lesson, namely:
+<ul>
+<li>All the basics of syntax</li>
+<li>Traits and associated types</li>
+<li>Iterators</li>
+<li>Closures</li>
+</ul>
+</li>
+<li>Instead of providing the exercise solutions in a later post, I'll be
+providing them immediately, since the material is so cumulative. I
+still <em>strongly recommend</em> spending significant time and effort
+trying to solve the exercises yourself before looking at the
+solutions. It's harder and more time consuming, but ultimately
+worthwhile.</li>
+</ul>
+<p>Also, this lesson is <em>much longer and more involved</em> than previous
+lessons. You should plan on it taking more time to complete than
+others. I considered breaking this up into multiple lessons, but
+decided to keep all of the content together. Instead, I'll be taking a
+break from weekly lessons after this one for a bit.</p>
+<p>Consider that the intro to the intro. Now the real intro!</p>
+<h2 id="why-async">Why async?</h2>
+<p>I'm going to assume that readers are already familiar with async I/O
+and its motivations in general. If you're not, it's worth reading up a
+bit on <a href="https://en.wikipedia.org/wiki/C10k_problem">the C10k problem</a>,
+where many of us started thinking hard about async I/O. You may also
+be interested in reading a post I wrote <a href="https://www.fpcomplete.com/blog/2017/01/green-threads-are-like-garbage-collection">about green
+threads</a>,
+a language runtime-based solution to the same problem.</p>
+<p>At the end of the day, the goals of Rust's approach to async I/O are:</p>
+<ul>
+<li>Minimize system resources for handling a large number of concurrent
+I/O tasks</li>
+<li>Provide a zero-cost abstraction on top of the async I/O mechanisms
+provided by operating systems</li>
+<li>Do it at a library level, instead of introducing a runtime to Rust</li>
+</ul>
+<h2 id="a-sample-problem">A sample problem</h2>
+<p>It's difficult to dive in to the wonderful world of tokio. You need to
+learn about futures and streams, tasks and executors, async I/O system
+calls and the <code>Async</code> type, etc. To try and decouple this learning
+experience, we're going to start with a simplified problem. This
+problem mostly, but not perfectly, models async I/O in the real world,
+and will demonstrate many of the design concerns. It will also let us
+play just a bit more with concurrent programming before diving into
+futures and tokio.</p>
+<p>We're going to run a separate thread. This thread will have access to
+two atomic values:</p>
+<ul>
+<li>An <code>AtomicBool</code> to tell us whether we want this side thread to keep
+running</li>
+<li>An <code>AtomicUsize</code> counter</li>
+</ul>
+<p>We haven't covered atomic types yet, but they're exactly what they
+sound like: variables that can be safely accessed from multiple
+threads. Since learning about them isn't the point of this lesson,
+I'll defer further questions about the usage of these types to <a href="https://doc.rust-lang.org/std/sync/atomic/index.html">their
+API
+documentation</a>.</p>
+<p>Our separate thread is going to run in a loop. As long as the
+<code>AtomicBool</code> is <code>true</code>, it will:</p>
+<ul>
+<li>Sleep for a given number of milliseconds</li>
+<li>Print a message to the console</li>
+<li>Increment the <code>AtomicUsize</code> counter</li>
+</ul>
+<p>The series of examples we'll be looking at will then try different
+approaches to observing the changes in the counter.</p>
+<h2 id="interval">Interval</h2>
+<p>We're going to call this thing an <code>Interval</code>, since it somewhat
+represents a <code>setInterval</code> call in Javascript.  Go ahead and start a
+new project:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo new interval --bin
+$ cd interval
+</span></code></pre>
+<p>We're going to put the code for our <code>Interval</code> into a separate
+module. First, put the following code into <code>src/interval.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::sync::Arc;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep, spawn};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+
+#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Clone)]
+</span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Interval </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">counter</span><span style="color:#657b83;">: Arc&lt;AtomicUsize&gt;,
+    </span><span style="color:#268bd2;">still_running</span><span style="color:#657b83;">: Arc&lt;AtomicBool&gt;,
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Drop </span><span style="color:#859900;">for </span><span style="color:#b58900;">Interval </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">drop</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Interval thread shutting down</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.still_running.</span><span style="color:#859900;">store</span><span style="color:#657b83;">(</span><span style="color:#b58900;">false</span><span style="color:#657b83;">, Ordering::SeqCst);
+    }
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#b58900;">Interval </span><span style="color:#657b83;">{
+    </span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">from_millis</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">millis</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u64</span><span style="color:#657b83;">) -&gt; Interval {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> duration = Duration::from_millis(millis);
+
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> counter = Arc::new(AtomicUsize::new(</span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">));
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> counter_clone = counter.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> still_running = Arc::new(AtomicBool::new(</span><span style="color:#b58900;">true</span><span style="color:#657b83;">));
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> still_running_clone = still_running.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+
+        </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(</span><span style="color:#586e75;">move </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Interval thread launched</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">while</span><span style="color:#657b83;"> still_running_clone.</span><span style="color:#859900;">load</span><span style="color:#657b83;">(Ordering::SeqCst) {
+                </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(duration);
+                </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> old = counter_clone.</span><span style="color:#859900;">fetch_add</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, Ordering::SeqCst);
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Interval thread still alive, value was: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, old);
+            }
+        });
+
+        Interval {
+            counter,
+            still_running,
+        }
+    }
+
+    </span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_counter</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#268bd2;">usize </span><span style="color:#657b83;">{
+        </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.counter.</span><span style="color:#859900;">load</span><span style="color:#657b83;">(Ordering::SeqCst)
+    }
+}
+</span></code></pre>
+<p>Next, let's provide a minimal <code>src/main.rs</code> which uses this <code>Interval</code>
+data type:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> duration = std::time::Duration::from_millis(</span><span style="color:#6c71c4;">2000</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// 2 seconds
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Iteration number </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">, counter is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">());
+        std::thread::sleep(duration);
+    }
+}
+</span></code></pre>
+<p>You should see something like the following:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Iteration number 1, counter is 0
+Interval thread launched
+Interval thread still alive, value was: 0
+Interval thread still alive, value was: 1
+Interval thread still alive, value was: 2
+Iteration number 2, counter is 3
+Interval thread still alive, value was: 3
+Interval thread still alive, value was: 4
+...
+Interval thread still alive, value was: 33
+Interval thread still alive, value was: 34
+Iteration number 10, counter is 35
+Interval thread still alive, value was: 35
+Interval thread still alive, value was: 36
+Interval thread still alive, value was: 37
+Interval thread still alive, value was: 38
+Interval thread shutting down
+</span></code></pre>
+<p>Hurrah, we have some concurrent communication.</p>
+<h2 id="problems-with-this-approach">Problems with this approach</h2>
+<p>The first thing that jumps out as a problem is that we're missing some updates in the main thread. Notice how the counter jumps from 0 to 3. This is obviously a problem with the interval set in the main thread: we're delaying for 2 seconds instead of half a second. Let's instead delay for a tenth of a second (100ms) in the main thread, and check if the value has changed since last time.</p>
+<p><strong>NOTE</strong> It's still possible we'll miss some updates this way, since
+<code>sleep</code> guarantees a thread will sleep <em>at least</em> a given amount of
+time, but may sleep longer. However, by having such a large
+difference, we're fairly certain we'll catch all of the updates.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> duration = std::time::Duration::from_millis(</span><span style="color:#6c71c4;">100</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// 0.1 seconds
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> last = interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">51 </span><span style="color:#657b83;">{
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> curr = interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">();
+
+        </span><span style="color:#859900;">if</span><span style="color:#657b83;"> curr != last {
+            last = curr;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Iteration number </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">, counter is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, curr);
+        }
+
+        std::thread::sleep(duration);
+    }
+}
+</span></code></pre>
+<p>I had to increase the number of iterations to 50, because so many of
+our main thread iterations end up showing no change in the
+counter. Here's an example of running this on my machine:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Interval thread launched
+Interval thread still alive, value was: 0
+Iteration number 6, counter is 1
+Interval thread still alive, value was: 1
+Iteration number 11, counter is 2
+Interval thread still alive, value was: 2
+Iteration number 16, counter is 3
+Interval thread still alive, value was: 3
+Iteration number 21, counter is 4
+Interval thread still alive, value was: 4
+Iteration number 26, counter is 5
+Interval thread still alive, value was: 5
+Iteration number 31, counter is 6
+Interval thread still alive, value was: 6
+Iteration number 36, counter is 7
+Interval thread still alive, value was: 7
+Iteration number 41, counter is 8
+Interval thread still alive, value was: 8
+Iteration number 46, counter is 9
+Interval thread still alive, value was: 9
+Interval thread shutting down
+</span></code></pre>
+<p>We didn't lose any counter updates here, but from the bumps in
+interval thread numbers, we can see that we're wasting a lot of time
+in the main thread checking numbers that aren't changing.</p>
+<p>Another problem that's less obvious is that we're dedicating an entire
+OS thread to this sleep-and-check iteration. In our simple program,
+that's not a big deal. But imagine we decided we wanted to have 50
+different similar tasks going on. It would require 49 extra threads,
+most of which would sit around <code>sleep</code>ing the majority of the
+time. That's highly wasteful. We should be able to do better.</p>
+<p>Finally, and perhaps least important for the moment, this is all
+rather ad hoc. It seems like a common need to be able to abstract over
+&quot;this thing will produce a value in the future.&quot; Even though this
+seems like the least important problem, we'll start by solving it
+first.</p>
+<h2 id="the-future-trait">The Future trait</h2>
+<p>Who'd have thought that our meandering would naturally lead to one of
+the topics mentioned in this lesson's title! You may have noticed a
+pattern that developed in the <code>main</code> thread's loop:</p>
+<ul>
+<li>Check if a new value is available</li>
+<li>Use it if it is available</li>
+<li>Skip if it isn't available</li>
+</ul>
+<p>That's exactly what the <code>Future</code> trait allows us to do, with one
+addition: it also allows for error handling. We're not going to worry
+about that for now, since my code doesn't have any errors :).</p>
+<p>We'll start by adding the <code>futures</code> crate as a dependency. In
+<code>Cargo.toml</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">[</span><span style="color:#b58900;">dependencies</span><span style="color:#657b83;">]
+</span><span style="color:#268bd2;">futures </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">0.1</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>Next, let's add a new module to provide a struct that will provide a
+<code>Future</code> implementation. Behold, <code>src/future.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+
+</span><span style="color:#859900;">use super</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">futures::prelude::*;
+
+</span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">IntervalFuture </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">interval</span><span style="color:#657b83;">: Interval,
+    </span><span style="color:#268bd2;">last</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#b58900;">IntervalFuture </span><span style="color:#657b83;">{
+    </span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">interval</span><span style="color:#657b83;">: Interval) -&gt; IntervalFuture {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> last = interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">();
+        IntervalFuture { interval, last }
+    }
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">IntervalFuture </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= </span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Error </span><span style="color:#657b83;">= ();
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item, </span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Error&gt; {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> curr = </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">();
+        </span><span style="color:#859900;">if</span><span style="color:#657b83;"> curr == </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.last {
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::NotReady)
+        } </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+            </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.last = curr;
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(curr))
+        }
+    }
+}
+</span></code></pre>
+<p>We're going to own an <code>Interval</code> and the last value we provided, just
+like our <code>main</code> loop used to. The <code>new</code> method is fairly
+straightforward. For the <code>impl Future</code>, we need to define three
+things:</p>
+<ul>
+<li>The thing which will be returned by this type when ready. In our
+case, it's the counter value, which is a <code>usize</code>.</li>
+<li>The type of errors that can occur. We don't have any errors, so we
+use <code>()</code>. (The Haskeller in me screams that we should use
+<code>Void</code>. Soon enough, we'll be able to use
+<a href="https://doc.rust-lang.org/std/primitive.never.html"><code>never</code></a>.)</li>
+<li>A function <code>poll</code>, which returns a <code>Result</code>. In the error case, this
+will be our <code>Self::Error</code>. In the success case, this is an <code>Async</code>
+enum type. As we can see in our method body, this is either a
+<code>Ready</code> variant with the value, or <code>NotReady</code>.</li>
+</ul>
+<p>The logic in our function is the same as before, so I won't comment on
+implementation. Back in our <code>src/main.rs</code>, instead of playing around
+with the <code>curr</code>/<code>last</code> logic, we can just pattern match on the result
+of <code>poll()</code>ing:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">future</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::future::IntervalFuture;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">futures::prelude::*;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> interval_future = IntervalFuture::new(interval);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> duration = std::time::Duration::from_millis(</span><span style="color:#6c71c4;">100</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// 0.1 seconds
+
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">51 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">match</span><span style="color:#657b83;"> interval_future.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(curr)) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Iteration number </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">, counter is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, curr);
+            }
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::NotReady) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">(),
+            </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(()) </span><span style="color:#859900;">=&gt; unreachable!</span><span style="color:#657b83;">(),
+        }
+
+        std::thread::sleep(duration);
+    }
+}
+</span></code></pre>
+<p>Arguably a minor improvement on the previous code, though nothing
+major. But congratulations, you're now officially using the <code>futures</code>
+crate!</p>
+<h3 id="the-poll-type-definition">The Poll type definition</h3>
+<p>Just a minor helper to mention. The type <code>Result&lt;Async&lt;Self::Item&gt;, Self::Error&gt;</code> may look a bit unwieldy to you. If so, you'll be happy
+to learn about the <code>Poll</code> type definition, which lets you replace the
+above with <code>Poll&lt;Self::Item, Self::Error&gt;</code>. Not a big deal, but
+important to recognize as you're reading other code.</p>
+<h2 id="the-tokio-executor">The tokio executor</h2>
+<p>Right now, we're running our own executor in our <code>main</code> function:
+we're manually looping, delaying, etc. Besides tedium, we've already
+mentioned some downsides to this above:</p>
+<ul>
+<li>We need a single thread per task we wish to perform</li>
+<li>We need to implement some kind of guess-and-check thread sleeping</li>
+</ul>
+<p>It's time to pull out the big guns, and tokio this thing. We'll end up
+losing some functionality first, and then we'll build it back.</p>
+<p>First, add <code>tokio = &quot;0.1&quot;</code> to your <code>Cargo.toml</code>. Now, let's try using
+the tokio executor by calling <code>tokio::run</code> on a <code>Future</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+</span><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">future</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::future::IntervalFuture;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> interval_future = IntervalFuture::new(interval);
+
+    tokio::run(interval_future)
+}
+</span></code></pre>
+<p>This fails with a compilation error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[</span><span style="color:#cb4b16;">E0271</span><span style="color:#657b83;">]: </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">mismatch</span><span style="color:#657b83;"> resolving `&lt;future::IntervalFuture </span><span style="color:#859900;">as </span><span style="color:#657b83;">futures::Future&gt;::Item == ()`
+  --&gt; src/main.rs:</span><span style="color:#6c71c4;">15</span><span style="color:#657b83;">:</span><span style="color:#6c71c4;">5
+   </span><span style="color:#859900;">|
+</span><span style="color:#6c71c4;">15 </span><span style="color:#859900;">|     </span><span style="color:#657b83;">tokio::run(interval_future)
+   </span><span style="color:#859900;">|     ^^^^^^^^^^</span><span style="color:#657b83;"> expected </span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">, found ()
+   </span><span style="color:#859900;">|
+   </span><span style="color:#657b83;">= note: expected </span><span style="color:#268bd2;">type</span><span style="color:#657b83;"> `</span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">`
+              found </span><span style="color:#268bd2;">type</span><span style="color:#657b83;"> `()`
+   = note: required by `tokio::run`
+</span></code></pre>
+<p>The <code>tokio::run</code> function expects a <code>Future</code> where the <code>Item</code> is <code>()</code>,
+but ours is <code>usize</code>. This kind of makes sense anyway: don't we want to
+write some code to actually do something when we get a value?</p>
+<p>We're going to fix this, first the overly painful way, and then the
+pleasant way. That will also help you appreciate why lesson 5 spent so
+much time on closures.</p>
+<h3 id="define-an-adapter-future">Define an adapter Future</h3>
+<p>Remember how you can define <code>Iterator</code>s that consume other <code>Iterator</code>s
+and compose more powerful streams? Well, you can do the same thing
+with <code>Future</code>s. Let's define a new type that will:</p>
+<ul>
+<li>Wrap around an <code>IntervalFuture</code></li>
+<li>Print the new value whenever it's ready</li>
+</ul>
+<p>We'll put this in <code>src/main.rs</code> for now, it won't last long anyway.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+</span><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">future</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::future::IntervalFuture;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">IntervalPrinter</span><span style="color:#657b83;">(IntervalFuture);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">IntervalPrinter </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= ();
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Error </span><span style="color:#657b83;">= ();
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item, </span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Error&gt; {
+        </span><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(curr)) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+                </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(()))
+            }
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::NotReady) </span><span style="color:#859900;">=&gt; Ok</span><span style="color:#657b83;">(Async::NotReady),
+            </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(e) </span><span style="color:#859900;">=&gt; Err</span><span style="color:#657b83;">(e),
+        }
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_future = IntervalFuture::new(interval);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_printer = IntervalPrinter(interval_future);
+
+    tokio::run(interval_printer)
+}
+</span></code></pre>
+<p>Compile the code, but don't run it yet. This is relatively
+straight-forward given all of the types and traits we've seen, but
+it's obviously tedious. Let's start off with a minor simplification.</p>
+<h3 id="the-try-ready-macro">The try_ready macro</h3>
+<p>The body of poll spends a lot of lines of code to:</p>
+<ul>
+<li>Pattern match</li>
+<li>If it's <code>NotReady</code>, return <code>NotReady</code></li>
+<li>If it's an <code>Err</code>, return the <code>Err</code></li>
+</ul>
+<p>This is a repetitive pattern, and is pretty similar to the error
+handling we saw previously in lesson 3. The futures crate provides a
+macro, <code>try_ready!</code>, to deal with this annoyance. Add the following
+above the <code>extern crate futures;</code> in <code>src/main.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">macro_use</span><span style="color:#657b83;">]
+</span></code></pre>
+<p>And then your implementation of <code>poll</code> can be simplified to:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> curr = </span><span style="color:#859900;">try_ready!</span><span style="color:#657b83;">(</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">());
+</span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+</span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(()))
+</span></code></pre>
+<p>Nice! Compile, and again, don't run. (Getting curious yet why I keep
+saying that? We'll find out soon, just one more pitstop first.)</p>
+<h3 id="i-need-some-closure">I need some closure</h3>
+<p>It's amazing I've made it to lesson 7 in this crash course without
+making that pun. Obviously, defining an entire struct and <code>Future</code>
+implementation is a bit overkill to just print a line. Fortunately,
+the authors of the <code>futures</code> crate noticed this too. There are a
+number of combinators built into the <code>Future</code> trait that make it easy
+to chain things together. We're going to use the <code>and_then</code> method:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+</span><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">future</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::future::IntervalFuture;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_future = IntervalFuture::new(interval);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_printer = interval_future.</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">curr</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+        futures::future::ok(())
+    });
+
+    tokio::run(interval_printer)
+}
+</span></code></pre>
+<p>That's much nicer! If you're anything like me though, the
+<code>futures::future::ok(())</code> is bothering you. What purpose does it serve
+there? This is a vital part of the design of futures, which we'll be
+taking advantage of quite a bit going forward. It allows us to create
+chains of actions to run as each bit of async I/O completes. For now,
+we don't want to do anything else after we print the first value from
+the counter, so we just return <code>futures::future::ok(())</code>, which means
+&quot;don't do anything, and return the item <code>()</code>&quot;.</p>
+<p><strong>Exercise 1</strong> There's another method, <code>.map</code>, which is actually a
+better choice for us here than <code>.and_then</code>. Try rewriting the code
+above to use <code>.map</code>. Note: no solution provided to this one.</p>
+<p>Out of curiosity, what's the type of <code>interval_printer</code>? Let's use the
+dumb trick from before of giving it the wrong type. Insert something
+silly like <code>let interval_printer: bool = ...</code> and try compiling,
+you'll get some type like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">futures::AndThen&lt;
+  future::IntervalFuture,
+  futures::FutureResult&lt;(), ()&gt;,
+  [closure@src/main.rs:14:59: 17:6]
+&gt;
+</span></code></pre>
+<p>If this is starting to look a bit like <code>Iterator</code> types, that's by
+design. Just like <code>Iterator</code>s, <code>Future</code>s capture a large amount of
+information in the types themselves about what they'll do. This allows
+<code>Future</code>s to compile down to highly efficient code, living up to the
+Rust mantra of zero-cost abstractions.</p>
+<h3 id="finally-run-it">Finally, run it!</h3>
+<p>Is the suspense killing you? Alright, your moment has arrived. What
+happens when you run <code>cargo run</code>?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run
+Interval thread launched
+Interval thread shutting down
+Interval thread still alive, value was: 0
+...
+</span></code></pre>
+<p>And that's it. It hangs. It doesn't print out the message we
+painstakingly added with <code>and_then</code>. I'm a complete failure, my life
+is in ruins.</p>
+<p>After an hour to myself to contemplate my life and a few shots of
+whiskey, things started to get clear. In our original implementation,
+we had a really wasteful loop in the main function. It kept checking
+if the counter had changed. We did that with our <code>Future</code>
+implementation too at first, sleeping and then checking again for a
+<code>NotReady</code>. But tokio probably <em>isn't</em> doing that, right? (The answer
+is yes, right.)</p>
+<p>Instead of doing the silly wasteful thing, the <code>futures</code> crate is far
+smarter. It has a mechanism to:</p>
+<ul>
+<li>determine which task is trying to get access to the data provided by
+this future, and then</li>
+<li>notify that task that new data is available</li>
+</ul>
+<p>The
+<a href="https://docs.rs/futures/0.1/futures/task/fn.current.html"><code>futures::task::current()</code></a>
+function gives us the current task being run, as a
+<a href="https://docs.rs/futures/0.1/futures/task/struct.Task.html"><code>Task</code></a>
+struct. That struct has a method,
+<a href="https://docs.rs/futures/0.1/futures/task/struct.Task.html#method.notify"><code>notify</code></a>,
+to let the task know that more data is available.</p>
+<p>In our program, we have the logic split between <code>Interval</code> and
+<code>IntervalFuture</code>. <code>IntervalFuture</code> will need to be responsible for
+calling the <code>current()</code> function (give some thought as to why that's
+the case). The changes needed to make this work are:</p>
+<ul>
+<li>Add a new field to <code>Interval</code> to hold an <code>Arc&lt;Mutex&lt;Option&lt;Task&gt;&gt;&gt;</code>
+(yes, that's a mouthful), and initialize correctly.</li>
+<li>Each time we call <code>fetch_add</code> and update the counter, also call
+<code>notify()</code> on that task, if it's there.</li>
+<li>Provide a method <code>set_task</code> to set the <code>Task</code> on an <code>Interval</code></li>
+<li>When returning <code>NotReady</code> in <code>IntervalFuture</code>, call <code>set_task</code></li>
+</ul>
+<p><strong>Exercise 2</strong> Take a stab at implementing these four changes before
+looking at the solution below. A hint on some features of Rust we
+haven't covered yet: you'll end up wanting to pattern match on the
+<code>Option</code> held inside the <code>Mutex</code>. You'll want to pattern match by
+reference, which will require some code that looks like <code>Some(ref task) =&gt;</code>. And the final output should look like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Interval thread launched
+Interval thread still alive, value was: 0
+Counter is: 1
+Interval thread shutting down
+</span></code></pre>
+<p>If you want to be sure, you can see the <a href="https://github.com/snoyberg/rush-crash-course-tokio-exercise-2/tree/03c5b9029263ce36e626e877e986a281c9334d4e">initial version of the code on Github</a>.</p>
+<h3 id="solution-2">Solution 2</h3>
+<p>You can <a href="https://github.com/snoyberg/rush-crash-course-tokio-exercise-2/commit/1c58bf4df946763f5f9f0773235e975968260ba9">check out the
+diff</a>
+and <a href="https://github.com/snoyberg/rush-crash-course-tokio-exercise-2/tree/1c58bf4df946763f5f9f0773235e975968260ba9">full
+solution</a>
+on Github. Here's the diff included inline:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">diff --git a/src/future.rs b/src/future.rs
+index 9aaee3c..e231e7b 100644
+</span><span style="color:#93a1a1;">--- a/src/future.rs
++++ b/src/future.rs
+</span><span style="color:#268bd2;">@@ -22,6 +22,8 @@ </span><span style="color:#cb4b16;">impl Future for IntervalFuture {
+</span><span style="color:#657b83;">     fn poll(&amp;mut self) -&gt; Result&lt;Async&lt;Self::Item&gt;, Self::Error&gt; {
+         let curr = self.interval.get_counter();
+         if curr == self.last {
+</span><span style="color:#859900;">+            let task = futures::task::current();
++            self.interval.set_task(task);
+</span><span style="color:#657b83;">             Ok(Async::NotReady)
+         } else {
+             self.last = curr;
+diff --git a/src/interval.rs b/src/interval.rs
+index 044e2ca..8013ac6 100644
+</span><span style="color:#93a1a1;">--- a/src/interval.rs
++++ b/src/interval.rs
+</span><span style="color:#268bd2;">@@ -1,12 +1,14 @@
+ </span><span style="color:#cb4b16;">use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+</span><span style="color:#dc322f;">-use std::sync::Arc;
+</span><span style="color:#859900;">+use std::sync::{Arc, Mutex};
+</span><span style="color:#657b83;"> use std::thread::{sleep, spawn};
+ use std::time::Duration;
+</span><span style="color:#859900;">+use futures::task::Task;
+</span><span style="color:#657b83;">
+ #[derive(Clone)]
+ pub struct Interval {
+     counter: Arc&lt;AtomicUsize&gt;,
+     still_running: Arc&lt;AtomicBool&gt;,
+</span><span style="color:#859900;">+    task: Arc&lt;Mutex&lt;Option&lt;Task&gt;&gt;&gt;,
+</span><span style="color:#657b83;"> }
+
+ impl Drop for Interval {
+</span><span style="color:#268bd2;">@@ -26,22 +28,37 @@ </span><span style="color:#cb4b16;">impl Interval {
+</span><span style="color:#657b83;">         let still_running = Arc::new(AtomicBool::new(true));
+         let still_running_clone = still_running.clone();
+
+</span><span style="color:#859900;">+        let task: Arc&lt;Mutex&lt;Option&lt;Task&gt;&gt;&gt; = Arc::new(Mutex::new(None));
++        let task_clone = task.clone();
++
+</span><span style="color:#657b83;">         spawn(move || {
+             println!(&quot;Interval thread launched&quot;);
+             while still_running_clone.load(Ordering::SeqCst) {
+                 sleep(duration);
+                 let old = counter_clone.fetch_add(1, Ordering::SeqCst);
+                 println!(&quot;Interval thread still alive, value was: {}&quot;, old);
+</span><span style="color:#859900;">+
++                let task = task_clone.lock().unwrap();
++                match *task {
++                    None =&gt; (),
++                    Some(ref task) =&gt; task.notify(),
++                };
+</span><span style="color:#657b83;">             }
+         });
+
+         Interval {
+             counter,
+             still_running,
+</span><span style="color:#859900;">+            task,
+</span><span style="color:#657b83;">         }
+     }
+
+     pub fn get_counter(&amp;self) -&gt; usize {
+         self.counter.load(Ordering::SeqCst)
+     }
+</span><span style="color:#859900;">+
++    pub fn set_task(&amp;mut self, task: Task) {
++        let mut guard = self.task.lock().unwrap();
++        *guard = Some(task);
++    }
+</span><span style="color:#657b83;"> }
+</span></code></pre>
+<p>Hurrah, we finally have a working tokio program!</p>
+<p>In case you're worried about how complex that was, don't
+be. Notification is a vital aspect of how tokio works
+internally. However, in most cases, you won't be creating your own
+primitive <code>Future</code>s, but instead dealing with existing ones provided
+by tokio or other libraries. Those existing <code>Future</code>s will provide the
+necessary notification logic. You'll simply need to obey this one
+rule:</p>
+<blockquote>
+<p>Only return a <code>NotReady</code> from a <code>poll</code> function if you received a
+<code>NotReady</code> from an underlying <code>Future</code>.</p>
+</blockquote>
+<h2 id="just-one-value">Just one value?</h2>
+<p>It's a bit disappointing that our wonderful long running counter only
+ends up printing a single value. Can we create some kind of a loop? A
+simple approach like the following doesn't work:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_printer = interval_future.</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">curr</span><span style="color:#657b83;">| {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+    interval_printer
+});
+</span></code></pre>
+<p>This isn't Haskell, we can't recursively refer to <code>interval_printer</code>
+we're in the middle of defining. Go ahead and take a few other stabs
+at doing something like that, and you'll eventually get frustrated and
+go back to the whiskey. Digging through the <code>futures</code> docs, a helper
+function like
+<a href="https://docs.rs/futures/0.1.25/futures/future/fn.loop_fn.html"><code>loop_fn</code></a>
+looks promising, but I didn't see a simple way to make it work in this
+case. (Please let me know if I missed something!) I ended up with
+something wonky like this before stopping:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_future = Arc::new(Mutex::new(IntervalFuture::new(interval)));
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_printer = </span><span style="color:#859900;">loop_fn</span><span style="color:#657b83;">(interval_future, |</span><span style="color:#268bd2;">interval_future</span><span style="color:#657b83;">| {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_future_clone = interval_future.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+        interval_future.</span><span style="color:#859900;">lock</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">().</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">curr</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+            futures::future::ok(Continue(interval_future_clone))
+        })
+    });
+
+    tokio::run(interval_printer)
+}
+</span></code></pre><h3 id="another-struct">Another struct!</h3>
+<p>Like before, we're going to define another helper type to implement
+this concept of looping. Then we'll see that this problem has already
+been solved better in the <code>futures</code> crate itself, but we'll get there
+soon.</p>
+<p>We want to define a new struct, <code>KeepPrinting</code>, which is a newtype
+around an <code>IntervalFuture</code>. It's going to:</p>
+<ul>
+<li>Have a <code>Future</code> implementation</li>
+<li>Have <code>Item = ()</code></li>
+<li>Use a <code>loop</code> in its implementation</li>
+<li>Use the <code>try_ready!</code> macro</li>
+</ul>
+<p><strong>Exercise 3</strong> Try implementing <code>KeepPrinting</code> and using it in the
+<code>main</code> function. Solution follows immediately, but try not to cheat!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">macro_use</span><span style="color:#657b83;">]
+</span><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+</span><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">future</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::future::IntervalFuture;
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">KeepPrinting</span><span style="color:#657b83;">(IntervalFuture);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">KeepPrinting </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= ();
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Error </span><span style="color:#657b83;">= ();
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; Poll&lt;(), ()&gt; {
+        </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> curr = </span><span style="color:#859900;">try_ready!</span><span style="color:#657b83;">(</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">());
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+        }
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_future = IntervalFuture::new(interval);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> keep_printing = KeepPrinting(interval_future);
+
+    tokio::run(keep_printing)
+}
+</span></code></pre>
+<p>And, just like that, we get an infinitely looping program. This almost
+looks like something that we could have done with <code>Iterator</code>s. Which
+makes me wonder... is there something like <code>Iterator</code>s in <code>futures</code>?</p>
+<h2 id="streams">Streams</h2>
+<p>A <code>Future</code> is an action with a delayed single result. A <code>Stream</code> is a
+stream of results, like an <code>Iterator</code>, with a delay between each
+value.</p>
+<p>In <code>src/main.rs</code>, add <code>mod stream;</code> and then edit <code>src/stream.rs</code>. The
+file will end up looking remarkably similar to <code>src/future.rs</code>,
+except:</p>
+<ul>
+<li>Call the struct <code>IntervalStream</code> instead of <code>IntervalFuture</code></li>
+<li>Provide an <code>impl Stream for IntervalStream</code> instead of <code>impl Future</code></li>
+<li>Follow the compiler errors to fix it</li>
+</ul>
+<p>Within the <code>main</code> function, instead of using <code>KeepPrinting</code> or
+anything else, we'll want to create an <code>IntervalStream</code>
+value. However, <code>tokio::run</code> needs a <code>Future</code>, not a <code>Stream</code>, to
+run. Fortunately, there's a helper function, <code>for_each</code>, that runs a
+given <code>closure</code> on each value in the stream.</p>
+<p><strong>Exercise 4</strong> Try to implement <code>src/stream.rs</code> and
+<code>src/main.rs</code>. Solution to follow.</p>
+<p>The trickiest bit for me when first learning <code>for_each</code> was to realize
+that, like <code>and_then</code>, it needs to end with a <code>Future</code>. I don't know
+if that was just my own shortcoming, or a common issue. In any event,
+if you struggled to realize you needed something like <code>future::ok(())</code>
+at the end of your closure, you're in good company.</p>
+<p>In addition, the <code>poll</code> function for a <code>Stream</code> is slightly different,
+in returning an <code>Option&lt;Item&gt;</code>. This is similar to how <code>Iterator</code>
+works. In our case, we have an infinite stream, so we never provide
+the <code>None</code> case.</p>
+<p>Anyway, here's <code>src/stream.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+
+</span><span style="color:#859900;">use super</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">futures::prelude::*;
+
+</span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">IntervalStream </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">interval</span><span style="color:#657b83;">: Interval,
+    </span><span style="color:#268bd2;">last</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#b58900;">IntervalStream </span><span style="color:#657b83;">{
+    </span><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">interval</span><span style="color:#657b83;">: Interval) -&gt; IntervalStream {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> last = interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">();
+        IntervalStream { interval, last }
+    }
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Stream </span><span style="color:#859900;">for </span><span style="color:#b58900;">IntervalStream </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= </span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Error </span><span style="color:#657b83;">= ();
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; Poll&lt;</span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item&gt;, </span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Error&gt; {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> curr = </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.interval.</span><span style="color:#859900;">get_counter</span><span style="color:#657b83;">();
+        </span><span style="color:#859900;">if</span><span style="color:#657b83;"> curr == </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.last {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> task = futures::task::current();
+            </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.interval.</span><span style="color:#859900;">set_task</span><span style="color:#657b83;">(task);
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::NotReady)
+        } </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+            </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.last = curr;
+            </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(</span><span style="color:#859900;">Some</span><span style="color:#657b83;">(curr)))
+        }
+    }
+}
+</span></code></pre>
+<p>And <code>src/main.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> futures;
+</span><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">interval</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">mod </span><span style="color:#b58900;">stream</span><span style="color:#657b83;">;
+
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::interval::Interval;
+</span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::stream::IntervalStream;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval = Interval::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">); </span><span style="color:#93a1a1;">// half a second
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interval_stream = IntervalStream::new(interval);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = interval_stream.</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">curr</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Counter: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, curr);
+        futures::future::ok(())
+    });
+
+    tokio::run(future)
+}
+</span></code></pre>
+<p><strong>Exercise 5</strong> Like <code>Iterator</code>s, <code>Stream</code>s have helper methods that
+you can use to build up more complex things. For example, try throwing
+in <code>map</code> and <code>take</code> to print only the first 10 counter values, but
+double them before printing. (No solution provided.)</p>
+<p>This is all beginning to fit together nicely! While there are still
+details to learn in the <code>futures</code> crate, you've got most of the big
+ideas down. The next bit is to get familiar with the API in tokio, but
+relatively speaking this is less mind-bending. To hammer home what
+we've done so far, we'll hit a few exercises, and then continue with
+tokio.</p>
+<h2 id="exercise-6">Exercise 6</h2>
+<p>Define a new struct <code>MyOk</code> such that this <code>main</code> function works:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = MyOk::new(name).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">name</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+        MyOk::new(())
+    });
+
+    tokio::run(future)
+}
+</span></code></pre>
+<p>Hint: before cheating and looking at the solution, here's one piece of
+help: you'll want an <code>Option</code> inside the <code>MyOk</code> newtype, and it's
+invalid to call <code>poll</code> on it twice.</p>
+<h3 id="solution-6">Solution 6</h3>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">MyOk</span><span style="color:#657b83;">&lt;T&gt;(</span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt;);
+
+</span><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;T&gt; </span><span style="color:#b58900;">MyOk</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">t</span><span style="color:#657b83;">: T) -&gt; MyOk&lt;T&gt; {
+        MyOk(</span><span style="color:#859900;">Some</span><span style="color:#657b83;">(t))
+    }
+}
+
+</span><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;T&gt; Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">MyOk</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= T;
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Error </span><span style="color:#657b83;">= ();
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; Poll&lt;T, ()&gt; {
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0.</span><span style="color:#859900;">take</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">()))
+    }
+}
+</span></code></pre><h2 id="exercise-7">Exercise 7</h2>
+<p>Use <code>iter_ok</code> to convert the range <code>1..11</code> to a <code>Stream</code>, and then
+collect it as a <code>Vec</code> and print it.</p>
+<h3 id="solution-7">Solution 7</h3>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    tokio::run(stream::iter_ok(</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#657b83;">).</span><span style="color:#859900;">collect</span><span style="color:#657b83;">().</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+        future::ok(())
+    }))
+}
+</span></code></pre><h2 id="async-i-o">Async I/O</h2>
+<p>We've played around with the <code>futures</code> crate by creating a fake async
+I/O source of data (the <code>Interval</code>). We've built up <code>Future</code>s and
+<code>Stream</code>s in that world. And we've used tokio's executor to run these
+things. It's now time to take it to use some real async I/O.</p>
+<p>Most async I/O we care about will end up being network
+traffic. Filesystem operations don't always play nicely with async I/O
+at an operating system level. That said, to get our feet wet, let's
+play with a filesystem based example.</p>
+<p>You'll want to look at the docs quite a bit, you can <a href="https://docs.rs/tokio/0.1.11/tokio/">find them on
+docs.rs</a>.</p>
+<h2 id="list-files-in-a-directory">List files in a directory</h2>
+<p>If you look through the docs above, you may find the function
+<a href="https://docs.rs/tokio/0.1.11/tokio/fs/fn.read_dir.html"><code>read_dir</code></a>. It
+takes a path, and returns a <code>ReadDirFuture</code>. This is a standard
+approach in tokio, like we had with <code>Iterator</code>s: simple wrapper
+functions providing access to the structs that do the heavy
+lifting. One thing to get used to in tokio is how to read these docs.</p>
+<p>Click through on the <code>ReadDirFuture</code> struct. It has a <code>Future</code>
+implementation, where <code>Item</code> is <code>ReadDir</code>, and <code>Error</code> is
+<code>std::io::Error</code>. Before we deal with that <code>ReadDir</code>, let's just get
+something that compiles. Since this is still a crash course, we'll
+bash our heads against a brick wall each step of the way.</p>
+<p>First, to call <code>read_dir</code>, we need a directory. Let's use <code>&quot;.&quot;</code> (the
+current directory). We'll use command line arguments later. Here's a
+naive implementation:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::fs;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">.</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    tokio::run(future)
+}
+</span></code></pre>
+<p>This gives us a somewhat intimidating error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0271]: type mismatch resolving `&lt;tokio_fs::read_dir::ReadDirFuture&lt;&amp;str&gt; as tokio::prelude::Future&gt;::Item == ()`
+ --&gt; src/main.rs:8:5
+  |
+8 |     tokio::run(future)
+  |     ^^^^^^^^^^ expected struct `tokio_fs::read_dir::ReadDir`, found ()
+  |
+  = note: expected type `tokio_fs::read_dir::ReadDir`
+             found type `()`
+  = note: required by `tokio::run`
+
+error[E0271]: type mismatch resolving `&lt;tokio_fs::read_dir::ReadDirFuture&lt;&amp;str&gt; as tokio::prelude::Future&gt;::Error == ()`
+ --&gt; src/main.rs:8:5
+  |
+8 |     tokio::run(future)
+  |     ^^^^^^^^^^ expected struct `std::io::Error`, found ()
+  |
+  = note: expected type `std::io::Error`
+             found type `()`
+  = note: required by `tokio::run`
+</span></code></pre>
+<p>However, let me narrow that down for you:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">expected type `tokio_fs::read_dir::ReadDir`, found type `()`
+expected type `std::io::Error`, found type `()`
+</span></code></pre>
+<p>Oh, right! <code>tokio::run</code> requires that we have <code>Item</code> and <code>Error</code> as
+<code>()</code>. We can modify the <code>Error</code> with <code>map_err</code>. Let's just print out
+the error if one occurs:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">.</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)
+    .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+    ;
+</span></code></pre>
+<p>That knocked out the first compilation error. Let's also throw in a
+<code>.and_then</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">.</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">readdir</span><span style="color:#657b83;">| {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">FIXME: use this: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, readdir);
+})
+</span></code></pre>
+<p>Uh oh, we got this compilation error. Can you figure out how to solve it?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: the trait bound `(): tokio::prelude::Future` is not satisfied
+</span></code></pre>
+<p>In my experience, when you see that, it almost always means: &quot;I forgot
+to add <code>future::ok(())</code>. Remember, <code>and_then</code> needs to end with the
+next <code>Future</code> to run. Add that line, and your code should
+compile. Running produces the output:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">FIXME: use this: ReadDir(ReadDir(&quot;.&quot;))
+</span></code></pre>
+<p>Cool! Now it's time to look at the <a href="https://docs.rs/tokio-fs/0.1.3/tokio_fs/struct.ReadDir.html">docs for
+<code>ReadDir</code></a>. Instead
+of a <code>Future</code> implementation, this has a <code>Stream</code>. Let's shove a
+<code>for_each</code> in there and see what happens.</p>
+<p><strong>Challenge</strong> try to guess the errors in the code below before you compile it.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">.</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">readdir</span><span style="color:#657b83;">| {
+    readdir
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+        })
+})
+</span></code></pre>
+<p>There are two problems with this code:</p>
+<ol>
+<li>It leaves an error type of <code>std::io::Error</code></li>
+<li>It doesn't include <code>future::ok(())</code> at the end of the closure
+provided to <code>for_each</code></li>
+</ol>
+<p>Go ahead and fix those problems. To be sure we're on the same page,
+here's my solution which compiles and runs successfully:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::fs;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">.</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">readdir</span><span style="color:#657b83;">| {
+            readdir
+                .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+                .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                    future::ok(())
+                })
+        })
+        ;
+    tokio::run(future)
+}
+</span></code></pre><h3 id="duplicated-error-handling">Duplicated error handling</h3>
+<p>It's a bit irritating that we have two identical <code>map_err</code> calls. We
+have two different sources of errors: the initial <code>read_dir</code> <code>Future</code>,
+and then streaming the individual <code>DirEntry</code>s from it. However, the
+type of the errors in both cases is the same:
+<code>std::io::Error</code>. Therefore, we can move our error handling to the
+end, and just do it once:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">.</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)
+        .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">readdir</span><span style="color:#657b83;">| {
+            readdir
+                .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                    future::ok(())
+                })
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre><h3 id="flattening">Flattening</h3>
+<p>It turns out that it's common enough to have a <code>Future</code> that generates
+another <code>Future</code>, and then we want to run that second <code>Future</code>, that
+there's a helper method for it <code>flatten()</code>. There's <em>also</em> a
+<a href="https://docs.rs/futures/0.1.23/futures/future/trait.Future.html#method.flatten_stream"><code>flatten_stream()</code></a>
+that does the same thing when a <code>Future</code> gives us a <code>Stream</code>.</p>
+<p><strong>Exercise 8</strong> Rewrite the code above to use <code>flatten_stream</code>. You
+should end up with <em>no calls to <code>and_then</code></em>. Solution follows
+immediately:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::fs;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">.</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)
+        .</span><span style="color:#859900;">flatten_stream</span><span style="color:#657b83;">()
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+            future::ok(())
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre><h3 id="command-line-arguments">Command line arguments</h3>
+<p>It's somewhat boring to always print out what's in the current
+directory. Instead, let's take all of the command line arguments
+(skipping the first, which is the executable name), and list the
+directory contents. We'll use <code>stream::iter_ok</code> to convert the <code>Args</code>
+<code>Iterator</code> into a <code>Stream</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::fs;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = stream::iter_ok(</span><span style="color:#859900;">args</span><span style="color:#657b83;">())
+        .</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">)
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">dir</span><span style="color:#657b83;">| {
+            fs::read_dir(dir)
+                .</span><span style="color:#859900;">flatten_stream</span><span style="color:#657b83;">()
+                .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                    future::ok(())
+                })
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre>
+<p>Unfortunately, this doesn't compile. The full error message is large
+(I encourage you to check it out yourself), but the first few lines
+are sufficient to find the problem:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: `std::env::Args` cannot be sent between threads safely
+  --&gt; src/main.rs:20:5
+   |
+20 |     tokio::run(future)
+   |     ^^^^^^^^^^ `std::env::Args` cannot be sent between threads safely
+</span></code></pre>
+<p>Oh, darn. <code>Args</code> isn't thread safe, and so cannot be converted into a
+<code>Stream</code>. Fair enough: vectors to the rescue!</p>
+<p><strong>Exercise 9</strong> Create a vector of arguments before the definition of
+<code>future</code> and use that.</p>
+<p>Solution:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::fs;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> args: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#859900;">String</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">args</span><span style="color:#657b83;">().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">).</span><span style="color:#859900;">collect</span><span style="color:#657b83;">();
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = stream::iter_ok(args)
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">dir</span><span style="color:#657b83;">| {
+            fs::read_dir(dir)
+                .</span><span style="color:#859900;">flatten_stream</span><span style="color:#657b83;">()
+                .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                    future::ok(())
+                })
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre><h3 id="where-s-the-concurrency">Where's the concurrency?</h3>
+<p>If you provide this program two different directories with a large
+number of files, you may notice that it processes these directories
+sequentially: it will print all of the files in the first directory,
+and then all of the files in the second directory. Given that async
+I/O and concurrency usually go hand-in-hand, that may be a bit
+surprising.</p>
+<p>So far, we've only ever had a single task at a time. Our program
+streams out the value of <code>args</code>, and for each one provides a
+<code>Future</code>. That <code>Future</code> is run to completion, and then the next value
+from <code>args</code> is processed.</p>
+<p>What if we want to process each directory concurrently? To do that, we
+need to <em>spawn</em> another task, the same way we would spawn a new
+thread. Like <code>tokio::run</code>, <code>tokio::spawn</code> takes a <code>Future</code> where both
+<code>Item</code> and <code>Error</code> are <code>()</code>. Here's a more concurrent version of our
+program:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = stream::iter_ok(args)
+    .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">dir</span><span style="color:#657b83;">| {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(dir)
+            .</span><span style="color:#859900;">flatten_stream</span><span style="color:#657b83;">()
+            .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+            .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                future::ok(())
+            })
+            ;
+        tokio::spawn(future);
+        future::ok(())
+    })
+    ;
+</span></code></pre>
+<p>Notice how I've put <code>future::ok(())</code> after the
+<code>tokio::spawn(future);</code> call. It turns out that's not needed: <code>spawn</code>
+returns a <code>Spawn</code> value, which behaves like <code>future::ok(())</code> (via its
+<code>IntoFuture</code> implementation). So just remove <code>future::ok</code> and the
+semicolon after <code>spawn</code>, and your code will still work.</p>
+<p><strong>NOTE</strong> You may not notice the concurrency unless you have a large
+number of files in each directory.</p>
+<h3 id="skipping-the-vector">Skipping the vector</h3>
+<p>One final thing that annoyed me above is that <code>Vec</code>. It really seems
+like we should be able to get away without it. We can't convert <code>Args</code>
+into a <code>Stream</code>, because that would require sending the value between
+threads. But now we've got a new trick up our sleeves: spawning. What
+if we never send the <code>Args</code> anywhere, but just spawn a bunch of tasks.</p>
+<p>When I was first learning tokio, I'll admit that I spent way more time
+trying to figure out the trick I'm about to show you than I'm proud
+of. We need to create a <code>Future</code>, then run a <code>for</code> loop inside of
+it. How do we create a <code>Future</code> that lets us run some code without
+waiting for anything else? We can use <code>future::ok(())</code> to create a
+dummy <code>Future</code>, and then chain the next action together with
+<code>and_then</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = future::ok(()).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|()| {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> dir </span><span style="color:#859900;">in args</span><span style="color:#657b83;">().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(dir)
+            .</span><span style="color:#859900;">flatten_stream</span><span style="color:#657b83;">()
+            .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+            .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                future::ok(())
+            })
+            ;
+        tokio::spawn(future);
+    }
+    future::ok(())
+});
+</span></code></pre>
+<p>Another approach, if you're so inclined, is to use the <a href="https://docs.rs/tokio/0.1.11/tokio/prelude/future/fn.poll_fn.html"><code>future::poll_fn</code></a> helper function. This takes a 0 argument function which returns a <code>Result&lt;Async&lt;Item&gt;, Error&gt;</code>, just like the <code>poll</code> method of <code>Future</code> does.</p>
+<p><strong>Exercise 10</strong></p>
+<p>Rewrite our program above to use <code>future::poll_fn</code>. Your program
+should not use <code>and_then</code> at all.</p>
+<p>Solution:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::fs;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = future::poll_fn(|| {
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> dir </span><span style="color:#859900;">in args</span><span style="color:#657b83;">().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = fs::read_dir(dir)
+                .</span><span style="color:#859900;">flatten_stream</span><span style="color:#657b83;">()
+                .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error reading directory: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+                .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">entry</span><span style="color:#657b83;">| {
+                    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, entry.</span><span style="color:#859900;">path</span><span style="color:#657b83;">());
+                    future::ok(())
+                })
+                ;
+            tokio::spawn(future);
+        }
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Async::Ready(()))
+    });
+    tokio::run(future)
+}
+</span></code></pre>
+<p>Is all of this ceremony worth it for file system operations? Probably
+not. Let's get into something more interesting: network communications!</p>
+<h2 id="tcp-client">TCP client</h2>
+<p>Rust's standard library already provides really nice support for TCP
+communications out of the box. For example, the following code will
+print the full response headers and body from an HTTP request to
+http://httpbin.org/json:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::io::{Read, Write};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::net::TcpStream;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;(), </span><span style="color:#859900;">Box</span><span style="color:#657b83;">&lt;std::error::Error&gt;&gt; {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> stream = TcpStream::connect(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.org:80</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    stream.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET /json HTTP/1.1</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Host: httpbin.org</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Connection: close</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> buffer = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[];
+    stream.</span><span style="color:#859900;">read_to_end</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> buffer)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, std::str::from_utf8(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer)</span><span style="color:#859900;">?</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(())
+}
+</span></code></pre>
+<p>There are some simplifying assumptions here, like using <code>connection: close</code> so that we can use <code>read_to_end</code>, and assuming the response
+body is properly UTF-8 encoded. But that's not really an indictment of
+the TCP support in the standard library.</p>
+<p>The real problem is the same one we've been talking about throughout
+this lesson: it hogs an entire OS thread blocking on a successful
+write to and subsequent read from the network. Let's look at how tokio
+can help.</p>
+<p>It looks like there's a <code>TcpStream</code> type in
+<a href="https://docs.rs/tokio/0.1.12/tokio/net/struct.TcpStream.html"><code>tokio::net::TcpStream</code></a>. That
+looks like a good place to start. It takes a
+<a href="https://doc.rust-lang.org/nightly/std/net/addr/enum.SocketAddr.html"><code>SocketAddr</code></a>,
+which we can probably make easily enough. And it returns a
+<a href="https://docs.rs/tokio/0.1.12/tokio/net/tcp/struct.ConnectFuture.html"><code>ConnectFuture</code></a>. Let's
+start with some code that simple establishes a connection:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpStream;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::net::ToSocketAddrs;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> addr_iter = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.org:80</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">to_socket_addrs</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> addr_iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; panic!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">DNS resolution failed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error connecting: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Got a stream: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, stream);
+        });
+    tokio::run(future)
+}
+</span></code></pre>
+<p>The <code>to_socket_addrs</code> business isn't our focus right now, so I'm going
+to ignore it. Feel free as an exercise to improve the error handling
+of that bit of code.</p>
+<p>We've got all of the familiar pieces here: define a <code>Future</code>, handle
+errors, and use <code>map</code> to chain together the action to take with the
+open connection.</p>
+<p>Let's look a bit more closely at that <code>stream</code> value passed to the
+closure. It comes from a <code>ConnectFuture</code>, so we need to look at the
+<code>Item</code> associated type there. And sure enough, if you check the docs,
+you'll see that it's <code>TcpStream</code>. Great.</p>
+<p>We used <code>write_all</code> in our original, non-async, blocking code. If I
+<a href="https://docs.rs/tokio/0.1.12/tokio/prelude/trait.AsyncWrite.html?search=write_all">search for <code>write_all</code> in
+tokio</a>,
+I find that <a href="https://docs.rs/tokio/0.1.12/tokio/io/fn.write_all.html">there's such a helper
+function</a>
+which returns a
+<a href="https://docs.rs/tokio/0.1.12/tokio/io/struct.WriteAll.html"><code>WriteAll</code></a>
+<code>Future</code>. Something interesting:</p>
+<ul>
+<li><code>write_all</code> takes two parameters: an <code>AsyncWrite</code> and an
+<code>AsRef&lt;[u8]&gt;</code>. This will work out to be our <code>TcpStream</code> and the data
+to send.</li>
+<li>The <code>Item</code> for <code>AsyncWrite</code> is a pair of the variables <code>A</code> and <code>T</code>,
+which turns out to be exactly the same as the parameters we passed
+in.</li>
+</ul>
+<p>Giving us back the stream we originally provided is vital to
+continuing the connection. I didn't see any documentation clarifying
+the point of returning the byte buffer, but I believe it's returned so
+that, if desired, you can reuse a mutable buffer.</p>
+<p>Anyway, let's put this together and make our request:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpStream;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::io::write_all;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::net::ToSocketAddrs;
+
+</span><span style="color:#268bd2;">const </span><span style="color:#cb4b16;">REQ_BODY</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u8</span><span style="color:#657b83;">] = </span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET /json HTTP/1.1</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Host: httpbin.org</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Connection: close</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> addr_iter = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.org:80</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">to_socket_addrs</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> addr_iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; panic!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">DNS resolution failed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+        .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(stream, </span><span style="color:#cb4b16;">REQ_BODY</span><span style="color:#657b83;">)
+                .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">_body</span><span style="color:#657b83;">)| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Write succeeded: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, stream))
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error occured: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre>
+<p>Notice how I replaced the previous <code>map</code> with an <code>and_then</code> call, so
+that I could provide another <code>Future</code> to be performed after the
+connection was established.</p>
+<p>Would it be too much to ask to <em>also</em> get a <code>read_to_end</code> function in
+tokio? <a href="https://docs.rs/tokio/0.1.12/tokio/io/fn.read_to_end.html">Nope, not at
+all.</a></p>
+<p><strong>Exercise 11</strong> Use <code>read_to_end</code> to consume the entire response into
+a <code>Vec&lt;u8&gt;</code>, and then print that out, using <code>std::str::from_utf8</code> and
+being as careless with error handling as you like.</p>
+<p>Alright, solution:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::net::ToSocketAddrs;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::io::{read_to_end, write_all};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpStream;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+
+</span><span style="color:#268bd2;">const </span><span style="color:#cb4b16;">REQ_BODY</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u8</span><span style="color:#657b83;">] = </span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET /json HTTP/1.1</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Host: httpbin.org</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Connection: close</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> addr_iter = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.org:80</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">to_socket_addrs</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> addr_iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; panic!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">DNS resolution failed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+        .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(stream, </span><span style="color:#cb4b16;">REQ_BODY</span><span style="color:#657b83;">)
+        }).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">_body</span><span style="color:#657b83;">)| {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> buffer = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[];
+            </span><span style="color:#859900;">read_to_end</span><span style="color:#657b83;">(stream, buffer)
+        }).</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">_stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">buffer</span><span style="color:#657b83;">)| {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> s = std::str::from_utf8(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer).</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, s);
+        }).</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error occured: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e));
+    tokio::run(future)
+}
+</span></code></pre><h2 id="streaming-to-a-file">Streaming to a file</h2>
+<p>I'll repeat for maximum annoyance: tokio is not intended for
+asynchronous file operations. That said, there <em>is</em> a
+<code>tokio::fs::File</code> struct which we can use. Let's try to write the
+response contents to <code>httpbin.json</code> instead:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+    .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(stream, </span><span style="color:#cb4b16;">REQ_BODY</span><span style="color:#657b83;">)
+    }).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">_body</span><span style="color:#657b83;">)| {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> buffer = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[];
+        </span><span style="color:#859900;">read_to_end</span><span style="color:#657b83;">(stream, buffer)
+    }).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">_stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">buffer</span><span style="color:#657b83;">)| {
+        File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.json</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">file</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(file, </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer).</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| ())
+        })
+    }).</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error occured: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e));
+</span></code></pre>
+<p>Unfortunately, the compiler doesn't like this too much:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: the trait bound `std::fs::File: tokio::io::AsyncWrite` is not satisfied
+  --&gt; src/main.rs:25:17
+   |
+25 |                 write_all(file, &amp;buffer).map(|_| ())
+   |                 ^^^^^^^^^ the trait `tokio::io::AsyncWrite` is not implemented for `std::fs::File`
+   |
+   = note: required by `tokio::io::write_all
+</span></code></pre>
+<p>Well, I guess that makes sense: you can't asynchronously write to a
+<code>File</code>, so <code>tokio::io::write_all</code> isn't going to work. Fortunately,
+<code>File</code> <em>does</em> implement the <code>Write</code> trait, which provides a blocking
+<code>write_all</code>, which is sufficient for our purposes.</p>
+<p><strong>Exercise 12</strong> Rewrite the code above to successfully write
+<code>httpbin.json</code>.</p>
+<p>First solution, ignoring anything close to proper error handling:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+    .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(stream, </span><span style="color:#cb4b16;">REQ_BODY</span><span style="color:#657b83;">)
+    }).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">_body</span><span style="color:#657b83;">)| {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> buffer = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[];
+        </span><span style="color:#859900;">read_to_end</span><span style="color:#657b83;">(stream, buffer)
+    }).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">_stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">buffer</span><span style="color:#657b83;">)| {
+        File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.json</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">).</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">file</span><span style="color:#657b83;">| {
+            file.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer).</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">()
+        })
+    }).</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error occured: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e));
+</span></code></pre>
+<p>But ideally, we'd like to avoid that <code>unwrap()</code> and instead promote an
+I/O error here to be handle by the <code>map_err</code> below. It turns out that
+there's a surprisingly trivial change to make that happen:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">httpbin.json</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">file</span><span style="color:#657b83;">| {
+    file.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer)
+})
+</span></code></pre>
+<p>Instead of using <code>map</code>, we use <code>and_then</code>, which requires that we
+return some value that implements <code>Future</code>. But fortunately, <code>Result</code>
+itself implements <code>Future</code>! The <code>Ok</code> variant becomes the <code>Item</code> for
+that <code>Future</code>, and the <code>Err</code> variant becomes its <code>Error</code>. Problem
+solved!</p>
+<h2 id="exercise-13">Exercise 13</h2>
+<p>We haven't taken advantage of tokio here at all! Let's make this
+program concurrent. Write a program that takes command line arguments
+to determine HTTP requests to make and files to store them to. To
+simplify the implementation, we'll have it take input that looks like
+the following:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run httpbin.org:80 /json httpbin.json example.com:80 / homepage.html
+</span></code></pre>
+<p>Feel free to handle invalid command line arguments however's easiest.</p>
+<h3 id="solution">Solution</h3>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::net::ToSocketAddrs;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::io::{read_to_end, write_all};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpStream;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::fs::File;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">download</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">host</span><span style="color:#657b83;">: String, </span><span style="color:#268bd2;">path</span><span style="color:#657b83;">: String, </span><span style="color:#268bd2;">filename</span><span style="color:#657b83;">: String) -&gt; impl Future&lt;Item=(), Error=()&gt; {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> addr_iter = host.</span><span style="color:#859900;">to_socket_addrs</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> addr_iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; panic!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">DNS resolution failed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> req_body = </span><span style="color:#859900;">format!</span><span style="color:#657b83;">(
+        </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> HTTP/1.1</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Host: </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">:80</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Connection: close</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">,
+        path,
+        host,
+        );
+
+    TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+        .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(stream, req_body).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">_body</span><span style="color:#657b83;">)| {
+                </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> buffer = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[];
+                </span><span style="color:#859900;">read_to_end</span><span style="color:#657b83;">(stream, buffer).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">_stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">buffer</span><span style="color:#657b83;">)| {
+                    File::create(filename).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">file</span><span style="color:#657b83;">| {
+                        file.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer)
+                    })
+                })
+            })
+        }).</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error occured: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    tokio::run(future::poll_fn(|| {
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = std::env::args().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+        </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">match </span><span style="color:#657b83;">(args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">(), args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">(), args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">()) {
+                (</span><span style="color:#859900;">Some</span><span style="color:#657b83;">(host), </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(path), </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(filename)) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+                    tokio::spawn(</span><span style="color:#859900;">download</span><span style="color:#657b83;">(host, path, filename));
+                }
+                </span><span style="color:#859900;">_ =&gt; return Ok</span><span style="color:#657b83;">(Async::Ready(())),
+            }
+        }
+    }))
+}
+</span></code></pre><h2 id="nicer-error-handling">Nicer error handling</h2>
+<p>We're just <code>panic!</code>ing when we have a bad address. Let's do a little
+bit better. First, I'll define a helper function to return a nice
+<code>Result</code>. We'll use a <code>String</code> for the <code>Err</code> variant, but we could
+should ideally define an <code>enum</code> instead:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">resolve_addr</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">host</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;SocketAddr, </span><span style="color:#859900;">String</span><span style="color:#657b83;">&gt; {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> addr_iter = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> host.</span><span style="color:#859900;">to_socket_addrs</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(addr_iter) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr_iter,
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(e) </span><span style="color:#859900;">=&gt; return Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">format!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Invalid host name </span><span style="color:#cb4b16;">{:?}</span><span style="color:#2aa198;">: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, host, e)),
+    };
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> addr_iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">format!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No addresses found for host: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, host)),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt; Ok</span><span style="color:#657b83;">(addr),
+    }
+}
+</span></code></pre>
+<p>Inside <code>download</code>, we could continue <code>panic!</code>ing with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">resolve_addr</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">host).</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+</span></code></pre>
+<p>But let's do better. Using <code>?</code> won't work, since we aren't returning a
+<code>Result</code>. One idea would be to use <code>return</code> to return early:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">match resolve_addr</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">host) {
+    </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr,
+    </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(e) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error resolving address: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e);
+        </span><span style="color:#859900;">return </span><span style="color:#657b83;">future::err(());
+    }
+};
+</span></code></pre>
+<p>However, we get an interesting error message from the compiler:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+  --&gt; src/main.rs:34:5
+   |
+34 | /     TcpStream::connect(&amp;addr)
+35 | |         .and_then(|stream| {
+36 | |             write_all(stream, req_body).and_then(|(stream, _body)| {
+37 | |                 let buffer = vec![];
+...  |
+43 | |             })
+44 | |         }).map_err(|e| eprintln!(&quot;Error occured: {:?}&quot;, e))
+   | |___________________________________________________________^ expected struct `tokio::prelude::future::FutureResult`, found struct `tokio::prelude::future::MapErr`
+</span></code></pre>
+<p>In order to make things work, we need to ensure that we always return
+the same type. We've so far used <code>impl Future</code> to say &quot;we'll return
+some type which is a <code>Future</code>,&quot; but we haven't told the compiler what
+that type is. Instead, the compiler has inferred that. But now, we
+have two different types.</p>
+<p>One approach would be dynamic dispatch, such as using
+<code>Box&lt;Future&gt;</code>. But there's a better way: using the <code>Either</code> helper
+type. This type is used in a case where we have two different types of
+<code>Future</code>s which both have the same <code>Item</code> and <code>Error</code>. Let's see how
+we can rewrite our code above to use <code>Either</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">download</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">host</span><span style="color:#657b83;">: String, </span><span style="color:#268bd2;">path</span><span style="color:#657b83;">: String, </span><span style="color:#268bd2;">filename</span><span style="color:#657b83;">: String) -&gt; impl Future&lt;Item=(), Error=()&gt; {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#859900;">match resolve_addr</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">host) {
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(addr) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> addr,
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(e) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error resolving address: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e);
+            </span><span style="color:#859900;">return </span><span style="color:#657b83;">future::Either::A(future::err(()));
+        }
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> req_body = </span><span style="color:#859900;">format!</span><span style="color:#657b83;">(
+        </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> HTTP/1.1</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Host: </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">:80</span><span style="color:#dc322f;">\r\n</span><span style="color:#2aa198;">Connection: close</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">,
+        path,
+        host,
+        );
+
+    future::Either::B(TcpStream::connect(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr)
+        .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">| {
+            </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(stream, req_body).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">_body</span><span style="color:#657b83;">)| {
+                </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> buffer = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[];
+                </span><span style="color:#859900;">read_to_end</span><span style="color:#657b83;">(stream, buffer).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">_stream</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">buffer</span><span style="color:#657b83;">)| {
+                    File::create(filename).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">file</span><span style="color:#657b83;">| {
+                        file.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">buffer)
+                    })
+                })
+            })
+        }).</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error occured: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e)))
+}
+</span></code></pre>
+<p><strong>Exercise 14</strong> Implement your own <code>Either</code> data type and use it in
+the code above.</p>
+<p>Solution:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">enum </span><span style="color:#b58900;">Either</span><span style="color:#657b83;">&lt;A, B&gt; {
+    A(A),
+    B(B),
+}
+
+</span><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;A, B&gt; Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">Either</span><span style="color:#657b83;">&lt;A, B&gt;
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;"> A: Future&lt;Item=</span><span style="color:#268bd2;">B::</span><span style="color:#657b83;">Item, Error=</span><span style="color:#268bd2;">B::</span><span style="color:#657b83;">Error&gt;,
+          B: Future,
+{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= A::Item;
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Error </span><span style="color:#657b83;">= A::Error;
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item, </span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Error&gt; {
+        </span><span style="color:#859900;">match </span><span style="color:#d33682;">self </span><span style="color:#657b83;">{
+            Either::A(a) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> a.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">(),
+            Either::B(b) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> b.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">(),
+        }
+    }
+}
+</span></code></pre><h2 id="tcp-server">TCP server</h2>
+<p>Having been so successful with our TCP client, let's move over to the
+server side. Conceptually, we want to:</p>
+<ol>
+<li>Bind a listening socket</li>
+<li>Accept connections from that socket</li>
+<li>Copy all data from the input side of the socket to the output side
+of the socket</li>
+</ol>
+<p>Binding a listening socket is going to be a <a href="https://docs.rs/tokio/0.1.12/tokio/net/struct.TcpListener.html#method.bind">blocking
+call</a>
+to <code>bind</code>, taking our old friend <code>SocketAddr</code>. Since we're not playing
+around with DNS resolution anymore, we can be a bit lazier about how
+we do this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpListener;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">127.0.0.1:3000</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">().</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t parse address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> listener = TcpListener::bind(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr).</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t bind address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">It worked! </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, listener);
+}
+</span></code></pre>
+<p>We now have have a <code>TcpListener</code>. Unlike other types we've seen, this
+doesn't have an implementation of either <code>Future</code> or
+<code>Stream</code>. However, it does have a method called <code>incoming()</code>, which
+returns an <code>Incoming</code>, which has a <code>Stream</code> implementation, where
+<code>Item</code> is <code>TcpStream</code>. That looks promising!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+    .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+    .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Accepted a connection! </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, socket);
+        future::ok(())
+    })
+    .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+    ;
+tokio::run(future)
+</span></code></pre>
+<p>And just like that, we've implemented points (1) and (2) above. We're
+just left with point 3: copying all of the data. Let's <a href="https://docs.rs/tokio/0.1.12/tokio/net/struct.TcpListener.html?search=copy">search tokio
+for something to do
+copying</a>. It
+looks like
+<a href="https://docs.rs/tokio/0.1.12/tokio/io/fn.copy.html"><code>tokio::io::copy</code></a>
+will do. We need to provide it both a reader and writer. Since we're
+reader from and writing to the same socket, let's just provide the
+same value for both:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+    .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+    .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+        </span><span style="color:#859900;">copy</span><span style="color:#657b83;">(socket, socket)
+            .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+    })
+    .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+    ;
+</span></code></pre>
+<p>Are you already laughing at my comically silly mistake?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: use of moved value: `socket`
+  --&gt; src/main.rs:13:26
+   |
+13 |             copy(socket, socket)
+   |                  ------  ^^^^^^ value used here after move
+   |                  |
+   |                  value moved here
+</span></code></pre>
+<p>Of course we can't use the same value in both positions. Fortunately,
+when designing <code>Stream</code>s, the authors provided a method called
+<a href="https://docs.rs/tokio/0.1.12/tokio/prelude/trait.Stream.html#method.split"><code>split</code></a>
+to give us a read and write end of the stream. With that in hand, our
+echo server becomes trivial:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpListener;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::io::copy;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">127.0.0.1:3000</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">().</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t parse address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> listener = TcpListener::bind(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr).</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t bind address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+        .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+            </span><span style="color:#268bd2;">let </span><span style="color:#657b83;">(reader, writer) = socket.</span><span style="color:#859900;">split</span><span style="color:#657b83;">();
+            </span><span style="color:#859900;">copy</span><span style="color:#657b83;">(reader, writer)
+                .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre><h2 id="writing-directly">Writing directly</h2>
+<p>Using <code>copy</code> kind of ignores the gory details of what's going on under
+the surface. Let's start off by writing some arbitrary message to the
+writer side of things, using the <a href="https://docs.rs/tokio/0.1.12/tokio/io/fn.write_all.html"><code>write_all</code>
+function</a>.</p>
+<p><strong>NOTE</strong> The <code>tokio::io::write_all</code> function takes a <code>AsyncWrite</code> and
+returns a <code>WriteAll</code> <code>Future</code>. Don't be confused by the presence of a
+<code>write_all</code> <em>method</em>, which in fact is a blocking call. I wasted about
+5 minutes fumbling with that while writing this tutorial.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpListener;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::io::{copy, write_all};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">127.0.0.1:3000</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">().</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t parse address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> listener = TcpListener::bind(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr).</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t bind address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+        .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+            </span><span style="color:#268bd2;">let </span><span style="color:#657b83;">(reader, writer) = socket.</span><span style="color:#859900;">split</span><span style="color:#657b83;">();
+            </span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(writer, </span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome to the echo server</span><span style="color:#dc322f;">\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)
+                .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre>
+<p><strong>Exercise 15</strong> Modify the code above so that, after printing &quot;Welcome
+to the echo server&quot;, it proceeds to actually echo content sent in.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">write_all</span><span style="color:#657b83;">(writer, </span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome to the echo server</span><span style="color:#dc322f;">\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)
+    .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|(</span><span style="color:#268bd2;">writer</span><span style="color:#657b83;">, _)| {
+        </span><span style="color:#859900;">copy</span><span style="color:#657b83;">(reader, writer)
+            .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+    })
+</span></code></pre><h2 id="codecs">Codecs</h2>
+<p>Reading from the <code>reader</code> directly is slightly trickier than writing
+to the <code>writer</code>. We <em>could</em> go play around with the underlying polling
+reading functions, but we're not going to here. (Feel free to <a href="https://tokio.rs/docs/getting-started/hello-world/">read
+the official tokio tutorial for more
+information</a>.)</p>
+<p>Instead, we're going to introduce a new concept, <em>codecs</em>. So far,
+we've implicitly been working with the <code>AsyncRead</code> and <code>AsyncWrite</code>
+traits, which essentially provide the raw polling functions we'd need
+for building up our own <code>Future</code>s (as we did way long ago at the
+beginning of this lesson). However, we often don't want to work at
+that level of abstraction. Instead, we'd like to deal with some kind
+of framed (or chunked) data.</p>
+<p>The new abstraction instead will be a <code>Sink</code>, which is &quot;a value into
+which other values can be sent, asynchronously.&quot; We'll continue to use
+the <code>Stream</code> trait for the read side, which we're already quite
+familiar with.</p>
+<p>Let's contrive an example. Our echo server currently provides slightly
+weird output:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Hello
+Hello
+There
+There
+World
+World
+</span></code></pre>
+<p>It's hard to tell what I typed in, and what the server
+responded. Instead, I'd like each line sent back from the server to
+begin with &quot;You said: &quot;. Doing that with the abstractions we've seen
+so far would be fairly painful: we'd need to grab chunks of data, look
+for the newline character, break up the input, splice in the &quot;You
+said: &quot; message. I know this is a crash course and all, but I'd rather
+not crash into that.</p>
+<p>Instead, let's jump straight to the better solution. I want to treat
+our TCP stream as a stream of lines of data. If I search for the word
+&quot;lines&quot; (and this is <em>actually</em> how I learned about codecs), I end up
+with
+<a href="https://docs.rs/tokio/0.1.12/tokio/codec/struct.LinesCodec.html"><code>LinesCodec</code></a>. It
+provides a method <code>new()</code>, as well as <code>new_with_max_length</code>. We'll use
+<code>new</code> here, but I recommend reading the docs to see why that's a
+terrible idea in any kind of security sensitive context.</p>
+<p>The only other method on the type is <code>max_length</code>, which doesn't look
+like it's going to help us actually deal with a TCP socket as a stream
+of lines. So let's look down at the trait implementations. We've got
+all of our usual suspects: <code>Clone</code>, <code>PartialOrd</code>, etc. But two new
+ones stick out: <code>Decoder</code> and <code>Encoder</code>. Well <em>that</em> certainly looks
+interesting.</p>
+<p>Reading through the docs on <code>Decoder</code>, it provides a <a href="https://docs.rs/tokio/0.1.12/tokio/codec/trait.Decoder.html#method.framed">method called
+<code>framed</code></a>,
+which has a description that is great. (Please, take a second to
+follow that link and read the docs.) Without further ado, let's try
+adding in our <code>LinesCodec</code> to our echo server:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpListener;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::codec::{Decoder, LinesCodec};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">127.0.0.1:3000</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">().</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t parse address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> listener = TcpListener::bind(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr).</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t bind address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+        .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> lines_codec = LinesCodec::new();
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> socket = lines_codec.</span><span style="color:#859900;">framed</span><span style="color:#657b83;">(socket);
+            socket
+                .</span><span style="color:#859900;">send</span><span style="color:#657b83;">(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome to the echo server</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+                .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre>
+<p>You may have noticed that we no longer have a newline sequence at the
+end of the &quot;Welcome&quot; string. That's because our lines codec
+automatically handles that. Additionally, we now need to use
+<code>String::from</code>, since the <code>Item</code> for this <code>Sink</code> is a <code>String</code>.</p>
+<p>We can also use <code>split</code> to isolate the <code>Sink</code> from the <code>Stream</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#657b83;">(sink, stream) = lines_codec.</span><span style="color:#859900;">framed</span><span style="color:#657b83;">(socket).</span><span style="color:#859900;">split</span><span style="color:#657b83;">();
+sink
+    .</span><span style="color:#859900;">send</span><span style="color:#657b83;">(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome to the echo server</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+    .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+</span></code></pre>
+<p>And, we can use <code>for_each</code> on the <code>Stream</code> side to get a stream of the
+lines:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpListener;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::codec::{Decoder, LinesCodec};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">127.0.0.1:3000</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">().</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t parse address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> listener = TcpListener::bind(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr).</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t bind address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+        .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> lines_codec = LinesCodec::new();
+            </span><span style="color:#268bd2;">let </span><span style="color:#657b83;">(sink, stream) = lines_codec.</span><span style="color:#859900;">framed</span><span style="color:#657b83;">(socket).</span><span style="color:#859900;">split</span><span style="color:#657b83;">();
+            sink
+                .</span><span style="color:#859900;">send</span><span style="color:#657b83;">(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome to the echo server</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+                .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">sink</span><span style="color:#657b83;">| {
+                    stream
+                        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">line</span><span style="color:#657b83;">| {
+                            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Received a line: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, line);
+                            future::ok(())
+                        })
+                        .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+                })
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre>
+<p>We're almost done here: we just need to <code>send</code> the lines back to the
+<code>sink</code> instead of to <code>stdout</code>. Unfortunately, using the <code>send</code> method
+we've seen so far is going to be tricky, since we'll end up consuming
+the <code>sink</code> in each iteration of <code>for_each</code>. We could figure out a way
+to make that all work, but instead, let's just cut to the chase and
+use <code>send_all</code>.</p>
+<p><strong>Exercise 16</strong> Modify the code above so that, instead of printing the
+lines to standard output, they get sent back to the client with the
+message &quot;You said: &quot;. You'll want to look at
+<a href="https://docs.rs/tokio/0.1.12/tokio/prelude/trait.Sink.html#method.send_all"><code>send_all</code></a></p>
+<p><strong>Solution</strong></p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> tokio;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::prelude::*;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::net::TcpListener;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">tokio::codec::{Decoder, LinesCodec};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> addr = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">127.0.0.1:3000</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">().</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t parse address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> listener = TcpListener::bind(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">addr).</span><span style="color:#859900;">expect</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">couldn&#39;t bind address</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> future = listener
+        .</span><span style="color:#859900;">incoming</span><span style="color:#657b83;">()
+        .</span><span style="color:#859900;">for_each</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">socket</span><span style="color:#657b83;">| {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> lines_codec = LinesCodec::new();
+            </span><span style="color:#268bd2;">let </span><span style="color:#657b83;">(sink, stream) = lines_codec.</span><span style="color:#859900;">framed</span><span style="color:#657b83;">(socket).</span><span style="color:#859900;">split</span><span style="color:#657b83;">();
+            sink
+                .</span><span style="color:#859900;">send</span><span style="color:#657b83;">(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome to the echo server</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+                .</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">sink</span><span style="color:#657b83;">| {
+                    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> stream = stream
+                        .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">line</span><span style="color:#657b83;">| </span><span style="color:#859900;">format!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You said: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, line))
+                        ;
+                    sink.</span><span style="color:#859900;">send_all</span><span style="color:#657b83;">(stream)
+                        .</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|_| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Connection closed</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">))
+                })
+        })
+        .</span><span style="color:#859900;">map_err</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">e</span><span style="color:#657b83;">| </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">An error occurred: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e))
+        ;
+    tokio::run(future)
+}
+</span></code></pre><h2 id="next-time">Next time</h2>
+<p>Whew, that was a big lesson! At this point, you should have a <em>very</em>
+solid footing in the ins and outs of tokio. It's time to get lots more
+experience with using the library, and related higher level libraries
+for doing things like HTTP servers and clients.</p>
+<p>Depending on reader feedback, the next lesson may either go deeper
+into tokio and related libraries, or go back to more fundamental
+aspects of Rust like lifetimes. From the tokio side, we'd play with:</p>
+<ul>
+<li>Message passing between tasks</li>
+<li>UDP communications</li>
+<li>Recursive directory traversal</li>
+<li>Parallel downloading of files</li>
+</ul>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

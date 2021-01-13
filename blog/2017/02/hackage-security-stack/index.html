@@ -1,0 +1,348 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Hackage Security and Stack</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Hackage Security and Stack">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Hackage Security and Stack</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published February 14, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Hackage%20Security%20and%20Stack https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;hackage-security-stack&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;hackage-security-stack&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;hackage-security-stack&#x2F;&amp;title=Hackage%20Security%20and%20Stack" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;hackage-security-stack&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;hackage-security-stack.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>Back in 2015, there were two proposals made for securing package
+distribution in Haskell. The Stackage team proposed and implemented a
+solution using HTTPS and Git, which was then used as the default in
+Stack. Meanwhile, the Hackage team moved ahead with
+hackage-security. Over the past few weeks, I've been working on moving
+Stack over to hackage-security (more on motivation below). The current
+status of the overall hackage-security roll-out is:</p>
+<ul>
+<li>Hackage is now providing the relevant data for hackage-security (the
+01-index.tar file and signature files)</li>
+<li>cabal-install will move over to hackage-security in its next release</li>
+<li>The FP Complete Hackage mirror is using hackage-security (and in
+particular
+<a href="https://github.com/hvr/hackage-mirror-tool">Herbert's hackage-mirror-tool</a>)
+to run its
+<a href="https://www.fpcomplete.com/blog/2016/09/updated-hackage-mirroring">S3-backed mirror</a>.</li>
+<li>On the master branch, Stack defaults to using hackage-security for
+downloading package metadata. We may even
+<a href="https://github.com/commercialhaskell/stack/tree/drop-git-index">remove support for Git-based indices entirely</a>,
+but that's a discussion for another day.</li>
+</ul>
+<p>One upside to this is more reliable package index download time. We
+have had complaints from some firewalled users of slow Git clone time,
+so this is a good thing. We're still planning on maintaining the
+Git-based package indices for people using them (to my knowledge they
+are still being used by Nix, and all-cabal-metadata is still used to
+power a lot of the information on stackage.org).</p>
+<p>However, there's one significant downside I've encountered in the
+current implementation that I want to discuss.</p>
+<h2 id="background">Background</h2>
+<p>Quick summary of how hackage-security works: there is a <code>01-index.tar</code>
+file, the contents of which I'll discuss momentarily. This is the file
+which is downloaded by Stack/cabal-install when you &quot;update your
+index.&quot; It is signed by a cryptographic algorithm specified within the
+hackage-security project, and whenever a client does an update, it
+must verify the signature. In theory, when that signature is verified,
+we know that the contents of the <code>01-index.tar</code> file are unmodified.</p>
+<p>Within this file are two (relevant) kinds of files: the <code>.cabal</code> files
+for every upload to Hackage (including revisions), and <code>.json</code> files
+containing metadata about the package tarballs
+themselves. Importantly, this includes a SHA256 checksum and the size
+of the tarball. Using these already-validated-to-be-correct JSON
+files, we can download and verify a package tarball, even over an
+insecure connection.</p>
+<p>The alternative Git-based approach that the Stackage team proposed has
+an almost-identical JSON file concept in the all-cabal-hashes
+repo. Originally, these were generated by downloading tarballs from
+https://hackage.haskell.org (note the HTTPS). However, a number of
+months back it became known that the connection between the CDN in
+front of Hackage and Hackage itself was not TLS-secured, and therefore
+reliance on HTTPS was not possible. We now rely on the JSON files
+provided by hackage-security to generate the JSON files used in the
+Git repo.</p>
+<h2 id="the-problem">The problem</h2>
+<p>With that background, the bug is easy to describe: sometimes the
+<code>.json</code> files are missing from the <code>01-index.tar</code> file. This was
+<a href="https://github.com/haskell/hackage-server/issues/488">originally opened in April 2016</a>
+(for Americans: on tax day no less), and then
+<a href="https://github.com/haskell/hackage-security/issues/183">I rediscovered the issue three weeks ago</a>
+when working on Stack.</p>
+<p>Over the weekend, another <code>.json</code> file went missing, resulting in
+<a href="https://github.com/hvr/hackage-mirror-tool/issues/2">the FP Complete mirror not receiving updates</a>
+until I
+<a href="https://github.com/hvr/hackage-mirror-tool/pull/3">manually updated the list of missing index files</a>.
+Due to the inability to securely generate the <code>.json</code> file in the
+<code>all-cabal-hashes</code> Git repo without the file existing upstream, that
+file is now missing in <code>all-cabal-hashes</code>, causing downstream issues
+to the Nix team.</p>
+<h2 id="how-it-manifests">How it manifests</h2>
+<p>There are a number of outcomes to be aware of from this issue:</p>
+<ul>
+<li>The FP Complete mirror, and any other mirror using Herbert's tool,
+will sometimes stop updating if a new JSON file is missing. This is
+an annoyance for end users, and a frustration for the mirror
+maintainers. Fortunately, updating the mirror tool code with the
+added index isn't too heavy a burden. Unfortunately, due to the lack
+of HTTPS between Hackage and its CDN, there's no truly secure way to
+do this update.</li>
+<li>End users cannot currently use packages securely if they are
+affected by this bug. You can
+<a href="https://github.com/snoyberg/hackage-mirror-tool/blob/c58d3fe3ab893e57346130bae2e5906c0efedc4a/src/IndexShaSum.hs#L161">see the full list</a>
+at the time of writing this post.</li>
+<li>Stack has had code in place to reject indices that do not provide
+complete signature cover for a long while (I <em>think</em> since its
+initial release). Unfortunately, this code cannot be turned on for
+hackage-security (which is how I discovered this bug in the first
+place). We can implement a new functionality with weaker
+requirements (refuse to download a package that is missing signature
+information), but ideally we could use the more strict semantics.</li>
+<li>The Nix team cannot rely on hashes being present in
+<code>all-cabal-hashes</code>. I can't speak to the Nix team internal
+processes, and cannot therefore assess how big an impact that is.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Overall, I'm still very happy that we've moved Stack over to
+hackage-security:</p>
+<ul>
+<li>It fixed an immediate problem for users behind a firewall, which we
+otherwise would have needed to work around with new code
+(downloading a Git repo snapshot). Avoiding writing new code is
+always a win :).</li>
+<li>Layering the HTTPS/Git-based security system on top of
+hackage-security doesn't make things more secure, it just adds two
+layers for security holes to exist in instead of one. From a
+security standpoint, if Hackage is providing a security mechanism,
+it makes sense to leverage it directly. Said another way: if it
+turns out that hackage-security is completely insecure, our
+Git-based layer would have been vulnerable anyway since it relied on
+hackage-security.</li>
+<li>By moving both Stack and cabal-install over to hackage-security for
+client access, we'll be able to test that code more thoroughly,
+hopefully resulting in a more reliable security mechanism for both
+projects to share
+(<a href="https://github.com/haskell/hackage-security/issues/184">small example of such stress-testing</a>).</li>
+<li>Stack has always maintained compatibility with some form of non-Git
+index, so we've always had two code paths for index updates. As
+hinted at above, this change opens the door to removing the
+Git-based code path. And removing code is almost as good as avoiding
+writing new code.</li>
+<li>I would still feel more comfortable with the security of Hackage if
+HTTPS was used throughout, if only as a level of sanity in case all
+else fails. I hope that in the future the connection between Hackage
+and its CDN switches from insecure to secure. I also hope that
+cabal-install is still planning on moving over to using HTTPS for
+its downloads.</li>
+</ul>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

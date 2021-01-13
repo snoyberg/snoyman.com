@@ -1,0 +1,340 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Stop supporting older GHCs</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Stop supporting older GHCs">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="An argument for dropping support in libraries for older versions of GHC">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Stop supporting older GHCs</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published July  1, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Stop%20supporting%20older%20GHCs https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;07&#x2F;stop-supporting-older-ghcs&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;07&#x2F;stop-supporting-older-ghcs&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;07&#x2F;stop-supporting-older-ghcs&#x2F;&amp;title=Stop%20supporting%20older%20GHCs" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;07&#x2F;stop-supporting-older-ghcs&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;stop-supporting-older-ghcs.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>Vincent Hanquez and I have been playing a proverbial game of hot
+potato over the past few months about writing this blog post. A
+cabal-install bug recently came to my attention that finally pushed me
+over the edge into writing this myself. I'll discuss that a bit later.</p>
+<p>The basic claim here is simple:</p>
+<ul>
+<li>Supporting older GHCs together with new ones adds a real maintenance
+cost to a library.</li>
+<li>This is even higher if your goal is to make the code compile without
+warnings across all supported versions. You'll often end up
+resorting to CPP or weird import hacks to work around redundant
+imports.</li>
+<li>There's nothing wrong with maintaining a code base using an old
+version of tools and libraries. However, you should make sure that
+you are pinning your dependencies in any such project, and therefore
+missing out on the latest updates to a library is not a critical
+issue, excluding security patches.</li>
+</ul>
+<p>Usually, when I drop support for an older version of GHC in a library,
+I receive no complaints. Occasionally, if I do receive a concern about
+it, it's from someone trying to maintain their own CI matrix with
+older GHC support. I rarely, if ever, receive a complaint from someone
+trying to actually use an older version of GHC <em>and</em> the newest
+version of my code.</p>
+<p>Instead of spinning wheels to maintain compatibility on the off chance
+that someone may desire bleeding-edge libraries with years-old
+compilers, I recommend cutting out support for older GHCs, updating
+your cabal files to reflect this decision, and keeping your CI build
+matrix curated appropriately. Only if a user has a specific request
+for a feature to work with an older GHC would I consider changing
+direction on this.</p>
+<p>A generally accepted rule of thumb is <strong>three major GHC releases</strong>. At
+the time of writing, that would mean supporting GHC 8.0, 8.2, and
+8.4. I recommend only supporting the latest minor version of each
+line, which would mean GHC 8.0.2, 8.2.2, and 8.4.3.</p>
+<h2 id="updating-cabal-files">Updating cabal files</h2>
+<p>The most common method for specifying which GHC versions you support
+is to use the version of the <code>base</code> library that ships with GHC. You
+can use this <a href="https://www.snoyman.com/base">handy lookup table</a> I put
+together, which I made because I can never remember this
+information. Using that table, if you decided &quot;I want to support GHC
+8.0.2 and later&quot;, you'd look up the corresponding base version, find
+that it's 4.9.1.0, and add the following to your cabal file:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">build-depends: base &gt;= 4.9.1.0
+</span></code></pre>
+<p>(Or equivalent if using hpack/package.yaml.)</p>
+<p>Even though this is the standard approach today, there are a few
+problems with it:</p>
+<ul>
+<li>The meaning isn't immediately clear. Most people in my experience
+think about GHC versions, <em>not</em> <code>base</code> versions. Someone reading
+that line will need to go look up what GHC version that corresponds
+to.</li>
+<li>Newer users may not understand that <code>base</code> is a special,
+non-upgradeable package, and not realize that this is pinning the
+GHC version. (Many bug reports and support requests about both
+cabal-install and Stack back up this claim.)</li>
+<li>At some point in the future, in theory, <code>base</code> may in fact be
+upgradeable, at which point this approach won't work.</li>
+<li><code>base</code> library versions don't always bump with new versions of
+GHC. For example, both GHC 8.4.2 and 8.4.3 ship with
+<code>base-4.11.1.0</code>. If you wanted to state that you only support GHC
+8.4.3, you can't use the base approach.</li>
+<li>It's quite possible to write some code which is compatible with an
+older <code>base</code> library version, but depends on newer features of GHC,
+like a new language extension.</li>
+</ul>
+<p>Therefore, I recommend taking a two-pronged approach for dropping
+support for older GHC versions:</p>
+<ul>
+<li>Add a lower bound on <code>base</code> as mentioned above. It's the standard
+approach, and some tooling may depend on it.</li>
+<li>Add a stanza to your cabal file using cabal conditionals based on
+the GHC version, e.g:</li>
+</ul>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">if impl(ghc &lt; 8.0.2)
+  build-depends: unsupported-ghc-version &gt; 1 &amp;&amp; &lt; 1
+</span></code></pre>
+<p>Originally, Vincent and I had discussed using <code>buildable: False</code>, but
+that's not an option, because...</p>
+<h2 id="recently-uncovered-cabal-install-bug">Recently uncovered cabal-install bug</h2>
+<p>I received a bug report on Friday about my new release of <code>yaml</code>
+causing Travis build breakages for GHC 7.10.3. Later this was
+<a href="https://github.com/haskell-infra/hackage-trustees/issues/165">opened as a Hackage Trustee issue</a>,
+where I found out that the same bug was being triggered by an earlier
+http-client release.</p>
+<p>It turns out that with all released versions of cabal-install, there's
+a bug that works something like this: if a component is <code>buildable: False</code>, then all of its dependencies are ignored. However, the
+dependency solver will still select such a package as a library
+dependency, even though the library component is marked as
+non-buildable. Then, when trying to build this dependency,
+<code>cabal-install</code> will (rightfully) complain that it cannot build a
+package with no library or executables.</p>
+<p>This bug has been fixed on cabal-install HEAD (and maybe the 2.2
+maintenance branch? I'm not 100% sure). However, it's unreasonable to
+expect people to upgrade to bleeding-edge versions of tooling. So
+instead of the <code>buildable: False</code> approach, I've adapted the cabal
+files in question to use an impossible-to-satisfy constraint, which
+the dependency solver does better with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">if impl(ghc &lt; 8.0.2)
+  -- Disable building with GHC before 8.0.2.
+  -- Due to a cabal bug, do not use buildable: False,
+  -- but instead give it an impossible constraint.
+  -- See: https://github.com/haskell-infra/hackage-trustees/issues/165
+  build-depends: unsupported-ghc-version &gt; 1 &amp;&amp; &lt; 1
+</span></code></pre>
+<p>The dependency solver realizes that it cannot find a version of the
+(non-existent) <code>unsupported-ghc-version</code> package which is both greater
+than and less than version 1, and so ignores this version of the
+package when using GHC before 8.0.2. Problem solved!</p>
+<p>I strongly recommend added a comment explaining this unusual
+formulation, as it's not clear to a reader why such a constraint is
+being added instead of the arguably clearer <code>buildable: False</code>.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

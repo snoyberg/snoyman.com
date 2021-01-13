@@ -1,0 +1,463 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Effective Ways to Get Help from Maintainers</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Effective Ways to Get Help from Maintainers">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Tapping into the human nature of open source contributors for fun and profit">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Effective Ways to Get Help from Maintainers</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October 23, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Effective%20Ways%20to%20Get%20Help%20from%20Maintainers https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;10&#x2F;effective-ways-help-from-maintainers&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;10&#x2F;effective-ways-help-from-maintainers&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;10&#x2F;effective-ways-help-from-maintainers&#x2F;&amp;title=Effective%20Ways%20to%20Get%20Help%20from%20Maintainers" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;10&#x2F;effective-ways-help-from-maintainers&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;effective-ways-help-from-maintainers.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This blog post was previously titled &quot;Manipulating Maintainers,&quot; but
+has been retitled to more accurately reflect what it's about (with a
+less cheeky tone). It's about how to most effectively interact with
+and request assistance from maintainers of open source projects, and
+open source community members in general.</p>
+<p>There's an old &quot;ha ha, only serious&quot; joke. If you go to a Linux forum
+and ask for help fixing your WiFi driver, everyone will ignore
+you. If, instead, you say &quot;Linux sucks, you can't even get a f*&amp;$ing
+WiFi driver working!&quot; thousands of people will solve the problem for
+you.</p>
+<p>This story is a great example of manipulating people, but it's
+obviously a negative take on it. I'd like to share some thoughts on
+this from a much more positive standpoint, which will help you get
+people to pay more attention, be more helpful, and—perhaps most
+importantly—create a healthier open source community over all.</p>
+<p>These items will appear in no particular order, and will almost all
+fall into either the <em>attractor</em> or <em>obstacle</em> category. An attractor
+is something you can do to make people want to participate with
+you. An obstacle is something you should not do, which would prevent
+people from interacting with you.</p>
+<p>And it should go without saying, but I'll say it anyway: this is an
+opinionated list, written by one guy. I'm including in here things
+that I personally care about, and things which friends and colleagues
+have shared with me. No example is specific to any individual, so
+don't think I'm calling you out: I'm most certainly <em>not</em>. And some
+people may disagree, or have other items for this list. Sharing such
+differing thoughts would be very healthy.</p>
+<h2 id="don-t-waste-people-s-time">Don't waste people's time</h2>
+<p>This is my biggest one to be honest. Remember that for the most part,
+people you interact with in open source settings are doing this in
+their free time. Either because they love a project, they want to help
+people, they want to change the world, or something else. You're
+asking for a slice of their lives. Make that slice as small as
+possible.</p>
+<p>The advice is vague, so let me follow up with some concrete examples:</p>
+<ul>
+<li><strong>File a good bug report.</strong> If you write an issue that says &quot;my code
+doesn't compile,&quot; and don't include the error message, full code,
+OS, compiler version, and other such things, people will have to
+spend time prying it out of you. Be forthcoming with relevant
+information.</li>
+<li>In slight contradiction to that: <strong>be concise</strong>. Start off with the
+most highly pertinent information. Make it clear what you're trying
+to do. If you have a 400 line error message, perhaps put it in an
+lpaste or Gist and link to it.</li>
+<li>Provide a <strong>minimal repro</strong>. &quot;Here's a link to my 1500 SLOC project
+that doesn't compile, kthxbye&quot; is a bad start. As someone helping
+you, I'm going to have to strip off the extraneous bits until I'm
+staring the problem in the face. Why should I spend my time doing
+that, when you—the person asking for help—could be?</li>
+<li>Make sure to mention <strong>any custom configuration</strong>. If I spend 5 days
+trying to fix an issue with your code not linking, and then you say
+&quot;oh, I've been trying out the prerelease linker, I forgot to mention
+that, you think that could be the problem?&quot; I'm going to be
+annoyed. Don't do that. Be forthcoming with all relevant info, and
+call out in particular custom things on your system.</li>
+<li>Don't fall into <strong>the XY problem</strong>. And don't get offended if you
+get accused of hitting the XY problem. Instead of trying to explain
+what this problem is, I'll just
+<a href="http://xyproblem.info/">provide a link</a>.</li>
+</ul>
+<h2 id="demonstrate-you-ve-tried">Demonstrate you've tried</h2>
+<p>You've been staring at your screen for the past 5 days. The code
+hasn't compiled. You have no idea why. You're pulling out your hair at
+this point (side note: bald is awesome). You finally, in a fit of
+desperation, go to Stack Overflow and say:</p>
+<blockquote>
+<p>I'm trying to make an HTTP request in Haskell and can't figure it
+out. Any advice?</p>
+</blockquote>
+<p>Good luck. Not only is your question vague, but it sounds like you're
+asking for help on a homework assignment and are too lazy to do any
+research. Make it clear that you're not just getting someone else to
+do your work, and are really deserving of assistance.</p>
+<blockquote>
+<p>Below you'll find a snippet of code I've been trying to get working
+to make an HTTP PUT request and parse the response body as XML in a
+streaming fashion. As you can see, I'm trying to connect the source
+body to the <code>parseXML</code> function from <code>xml-conduit</code>, but I get the
+error message below. If anyone could point me in the right
+direction, I'd appreciate it.</p>
+</blockquote>
+<p>Make sure to include the import statements and language extensions
+too, so that anyone reading can just copy-paste your example and get
+the same error message. (I like using
+<a href="https://haskell-lang.org/tutorial/stack-script">reproducible Stack scripts</a>
+for this.) You may notice an overlap with <em>minimal repro</em> from above:
+that's intentional.</p>
+<h2 id="help-other-people">Help other people</h2>
+<p>If I see people answering questions on a mailing list or Stack
+Overflow, I'm appreciative. I consider them a comrade-in-arms. And I
+consider them assets to the community. They've earned my respect, I'm
+indebted to them, and I want to entice them to continue. Honestly: all
+of you helpers are awesome in my book. If one of those people asks a
+question, I want to help more.</p>
+<p>In addition to all of the feelings I mentioned above, there's also a
+more basic one: if <em>this</em> person is having trouble, it's probably not
+the most basic, boring question. In reality, the person may be barely
+a beginner, and may be asking beginner questions. But I know
+statistically that just having that helpful person's name associated
+with the question increases the likelihood of it being interesting. In
+other words: I'm nerd sniped.</p>
+<p>This points out something which really applies to all of these
+sections: people have memories. As soon as you start interacting with
+the community, you're building a reputation. You can change that
+reputation over time (for better or worse), but you have to
+acknowledge that it's there.</p>
+<h2 id="don-t-be-rude">Don't be rude</h2>
+<p>Compare:</p>
+<blockquote>
+<p>Thank you for your great software, I really appreciate the time
+you've taken to make it. I'd appreciate your help with...</p>
+</blockquote>
+<p>With:</p>
+<blockquote>
+<p>I've been pulling my hair out trying to parse your documentation for
+the past two days. You think you can help me make sense of it? I'm
+trying to...</p>
+</blockquote>
+<p>And even further:</p>
+<blockquote>
+<p>Since I'm stuck using your piece of s*&amp;# software with crappy
+documentation, the least you can do is help me overcome...</p>
+</blockquote>
+<p>If your goal is to get someone to help you, I'd place a large wager
+that the first approach will attract the most assistance. It doesn't
+matter if the other two approaches really do capture your current
+mental state. Are you trying to vent at someone, or get help?</p>
+<p>I recently had someone argue a few times that the tone of a question
+shouldn't matter. (In fact, those interactions were partially what
+encouraged this blog post.) I argue that that's not only naive, but
+dangerous:</p>
+<ul>
+<li>We're human beings, and we like being treated nicely. As I mentioned
+above, open source community members are giving up a portion of
+their lives to help strangers. You should make that sacrifice feel
+as rewarding as possible.</li>
+<li>Rude comments like this scare other people away. Encouraging people
+to continue with them by rewarding them with a helpful answer has
+the real possibility of scaring away more constructive community
+members.</li>
+<li>All of life is a series of choices between different things I can be
+doing. If you make it miserable enough to interact with you, I may
+very well choose &quot;watch paint dry and see this jerk badmouth my
+project in public&quot; over &quot;give this guy any more of my time.&quot;</li>
+<li>Whether correct or not, being rude is a signal to me of other likely
+tendencies. I'm likely to guess that someone rude is also selfish,
+unwilling to minimize time wastage for others, and unlikely to
+contribute back by helping people. If I have to make a snap
+judgement on you based on a question and your tone of voice, a rude
+tone is not going to help you.</li>
+</ul>
+<p>I honestly haven't found the best approach to this specific
+problem. In some cases, a private message saying &quot;your message would
+be more well received if you modified it&quot; can help. But if I'm honest,
+by the time I think about writing such a message, I've basically
+decided that this is a person not worth my time, and trying to
+encourage him/her to behave better isn't worth it.</p>
+<p>The situation is slightly different if someone has been in the
+community for a while, and suddenly has an outburst of rudeness. I'm
+not excusing it, but I am saying I'd be more willing to consider that
+he/she is having a bad day, or that the problem is really bad, instead
+of &quot;this person is just a jerk.&quot; Also, the reverse is true: if you've
+been rude to someone for the past 10 interactions, it may be very
+difficult to convince them to help you on the 11th, even if the
+rudeness disappears. (Overwhelming <em>niceness</em>, however, can help.)</p>
+<p>Side note: I implied above that the project documentation sucks. That
+may be the case. See &quot;offer to help&quot; for advice on pointing that out.</p>
+<h2 id="say-thank-you">Say thank you</h2>
+<p>I'll preface this one with a few caveats so I don't get a flurry of
+guilt-ridden &quot;thank you&quot; notes. Most people don't say thank you in
+open source. I rarely write a thank you note to a package author. I
+don't expect it, I've never met anyone who expects it, it is not
+necessary.</p>
+<p>When someone has received assistance on a mailing list, I get
+happy. When that person responds with a sincere thank you, I get
+happier. When I'm the person who did the helping, I'm even happier
+still. It's simple, it's trivial, but it's often missed. Most people
+are only doing open source work to help others. Gratitude may be their
+only reward.</p>
+<p>Taking it a step farther: there have been a few times over the years
+where, out of nowhere, I've received a very kind personal email
+thanking me for work I've done. You can
+<a href="https://twitter.com/LambdaMom">ask my wife</a> and she'll confirm: it's
+truly touching to receive such messages.</p>
+<p>I know I've had views of open source maintainers as being far beyond
+the lowly likes of me in the past. I don't think it's generally
+true. Most people are, at the end of the day, just people. And they
+respond like any other people to kind words.</p>
+<p>Though I have a feeling that Linus Torvalds may be a bit confused if
+you pop him an email saying &quot;love Linux, thanks!&quot;</p>
+<h2 id="admit-if-you-re-new">Admit if you're new</h2>
+<p>This one works one time per community. If you're new, you don't know
+what you're doing, and are asking for help, say straight out that
+you're new. It will get you some sympathy (unless you're lying, then
+people will hate you). It will get a more softball answer, and likely
+some guides to places explaining how to interact better. For example:
+if you come to the Yesod issue tracker and say &quot;I'm new, I'm not sure
+if this is the best place to ask about installing GHC,&quot; you'll likely
+get pointed to an install page and Stack Overflow for further &quot;please
+help me&quot; questions.</p>
+<h2 id="offer-to-help">Offer to help</h2>
+<p>This may be the first surprising piece of advice. Let's say the docs
+on my library suck. You <em>could</em> come in and say &quot;help me solve X
+because your docs suck.&quot; And I might answer. Now consider this:</p>
+<blockquote>
+<p>I was having trouble doing X with your library (thank you for it by
+the way!). I'd be happy to prepare a documentation PR to help other
+people in my situation, if you'd be able to guide me towards an
+answer.</p>
+</blockquote>
+<p>Whoa, what is this? Help someone and they'll take away the dreaded
+documentation writing task from my plate? Awesome, I'll get right on
+it!</p>
+<p>In addition to docs, similar thoughts apply to:</p>
+<ul>
+<li>Offering to write test cases</li>
+<li>Offering to add some missing functionality</li>
+<li>Offering to answer people's questions on other issues/the mailing
+list/Stack Overflow</li>
+</ul>
+<p>The point is: convince the maintainer (or whoever) that giving time to
+you is an investment.</p>
+<h2 id="give-money">Give money</h2>
+<p>This isn't at all a universal one. And to be clear: I'm not asking for
+it, if I have an envelope with unmarked bills on my doorstep tomorrow,
+I'll be weirded out.</p>
+<p>Some people just need money. They like contributing to open source
+work, but they have to pay the bills. If they've at all expressed a
+willingness to accept money for their work (like setting up Flattr or
+Patreon or whatever is popular these days), considering donating.</p>
+<p>Consider how much of their time you're taking. Consider how much of
+your time they would be saving you. Consider what a typical software
+developer hourly rate is. And then realize that buying someone a beer,
+or even a nice dinner, is probably a cheap price to pay for an answer
+to a question.</p>
+<p>And for those who aren't asking for any money, offering to buy the
+beer/coffee/soda when you meet up at a conference is a nice way to
+make this one a reality too.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

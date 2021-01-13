@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Everything you didn&#x27;t want to know about monad transformer state</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+### Monad Transformer State
+
+*Everything you didn&#x27;t want to know*
+
+* Michael Snoyman
+* VP of Engineering, FP Complete
+* LambdaWorld 2017
+
+&lt;div style=&quot;text-align:center&quot;&gt;
+&lt;div&gt;&lt;img src=&quot;&#x2F;static&#x2F;fpcomplete-logo.png&quot; style=&quot;border:0;margin:0&quot;&gt;&lt;&#x2F;div&gt;
+&lt;div&gt;&lt;img src=&quot;&#x2F;static&#x2F;lambdaworld-logo.png&quot; style=&quot;border:0;margin:0&quot;&gt;&lt;div&gt;
+&lt;&#x2F;div&gt;
+
+
+---
+
+## What&#x27;s a monad transformer?
+
+* (What&#x27;s a monad? They&#x27;re like burritos...)
+* Adds extra functionality to an existing monad
+* Convenient way to get this functionality
+* Example: `ReaderT` avoids needing to pass an extra argument to functions
+* I&#x27;ll explain transformer _environment_ and _state_ during the talk
+
+----
+
+## Which transformers are we covering?
+
+* `ReaderT`, `StateT`, `ExceptT`: covered explicitly
+* `IdentityT`, `WriterT`, `LoggingT`, `MaybeT`: covered implicitly
+    * They&#x27;re isomorphic to something mentioned above
+* Continuation-based transformers (`ContT`, `Conduit`): out of scope
+    * Feel free to ask me about them later!
+* Also, only doing shallow transformers (1 layer)
+
+----
+
+## Meet the transformers
+
+```haskell
+newtype ReaderT r m a = ReaderT (r -&gt; m a)
+newtype StateT  s m a = StateT  (s -&gt; m (a, s))
+newtype ExceptT e m a = ExceptT (     m (Either e a))
+```
+
+Or specialized to `IO` and turned into functions:
+
+```haskell
+type ReaderIO r a = r -&gt; IO a
+type StateIO  s a = s -&gt; IO (a, s)
+type ExceptIO e a =      IO (Either e a)
+```
+
+Let&#x27;s motivate some problems
+
+---
+
+## A concurrent problem
+
+*No trick question here*
+
+I have `foo :: IO a` and `bar :: IO b`. I want to run both at the same
+time in separate threads. How do I do that?
+
+```haskell
+-- In Control.Concurrent.Async
+concurrently :: IO a -&gt; IO b -&gt; IO (a, b)
+concurrently foo bar :: IO (a, b)
+```
+
+----
+
+## An extra argument
+
+Let&#x27;s slightly modify things:
+
+```haskell
+foo :: MyEnv -&gt; IO a
+bar :: MyEnv -&gt; IO b
+
+baz :: MyEnv -&gt; IO (a, b)
+baz myEnv = concurrently (foo myEnv) (bar myEnv)
+```
+
+So far so good?
+
+----
+
+## What about ReaderT?
+
+Explicit arguments are so boring! Let&#x27;s move over to `ReaderT`.
+
+```haskell
+foo :: ReaderT MyEnv IO a
+bar :: ReaderT MyEnv IO b
+
+baz :: ReaderT MyEnv IO (a, b)
+baz = concurrently foo bar -- bad!
+```
+
+* Now `concurrently` doesn&#x27;t type check!
+* Can we make this work anyway?
+
+----
+
+## Unwrap the `ReaderT`!
+
+```haskell
+concurrentlyR
+  :: ReaderT env IO a
+  -&gt; ReaderT env IO b
+  -&gt; ReaderT env IO (a, b)
+concurrentlyR (ReaderT foo) (ReaderT bar) =
+  ReaderT $ \env -&gt;
+    concurrently
+      (foo env)
+      (bar env)
+```
+
+After all, `ReaderT` is just a convenient way to avoid argument
+passing.
+
+----
+
+## Ask, lift, and run
+
+* Don&#x27;t need to use explicit data constructor unwrapping
+
+```haskell
+concurrentlyR foo bar = do
+  env &lt;- ask
+  lift $ concurrently
+    (runReaderT foo env)
+    (runReaderT bar env)
+```
+
+* This all feels tedious, and unfortunately non-general
+* _Leading question_ Surely there must be some general way to write
+  `concurrently`, right?
+
+----
+
+## lifted-async
+
+* Ask and ye shall receive!
+
+```haskell
+-- Control.Concurrent.Async.Lifted from lifted-async
+concurrently
+  :: MonadBaseControl IO m
+  =&gt; m a
+  -&gt; m b
+  -&gt; m (a, b)
+```
+
+* `MonadBaseControl` is from `monad-control`
+* Things that can be turned into `IO` and back... sort of
+* Lots of instances, including `ReaderT`, `StateT` and `ExceptT`
+
+---
+
+## Pop quiz!
+
+What is the output of this program?
+
+```haskell
+import Control.Monad.State.Strict
+import Control.Concurrent.Async.Lifted
+
+putter :: StateT Int IO ()
+putter = do
+  put 2
+  concurrently_ (put 3) (put 4)
+
+main :: IO ()
+main = do
+  res &lt;- execStateT putter 1
+  print res
+```
+
+* Outputs `4`
+* What happened to `3`?
+
+----
+
+## Playing with bracket_
+
+Guess the output (again)
+
+```haskell
+foo :: StateT [String] IO ()
+foo = bracket_
+  (modify (++ [&quot;1&quot;])) -- acquire
+  (modify (++ [&quot;3&quot;])) -- release
+  (modify (++ [&quot;2&quot;])) -- inner
+main = do
+  res &lt;- execStateT foo []
+  print res
+```
+
+Trick question! Depends on which `bracket_` you use
+
+* lifted-base: `[&quot;2&quot;]`
+* exceptions: `[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;]`
+
+Ahhhhh!!!
+
+----
+
+## Implement concurrently for StateT
+
+Why does this happen? Let&#x27;s implement `concurrently` for `StateT`
+
+```haskell
+concurrentlyS
+  :: StateT s IO a
+  -&gt; StateT s IO b
+  -&gt; StateT s IO (a, b)
+concurrentlyS (StateT f) (StateT g) = StateT $ \s0 -&gt; do
+  ((a, s1), (b, s2)) &lt;- concurrently (f s0) (g s0)
+  return ((a, b), s1)
+```
+
+We generated two states, and have to discard one of them!
+
+----
+
+## Implement bracket_ for StateT
+
+```haskell
+bracket_S
+  :: StateT s IO a
+  -&gt; StateT s IO b
+  -&gt; StateT s IO c
+  -&gt; StateT s IO c
+bracket_S (StateT f) (StateT g) (StateT h) = StateT $ \s0 -&gt;
+  bracket_ (f s0) (g s0) (h s0)
+```
+
+`h` doesn&#x27;t see the new state from `f`, and `g` doesn&#x27;t see the new
+state from either `f` or `h`!
+
+----
+
+## How about `ExceptT`?
+
+```haskell
+concurrentlyE
+  :: ExceptT e IO a
+  -&gt; ExceptT e IO b
+  -&gt; ExceptT e IO (a, b)
+concurrentlyE (ExceptT f) (ExceptT g) = ExceptT $ do
+  (ea, eb) &lt;- concurrently f g
+  return $ case (ea, eb) of
+    (Right a, Right b) -&gt; Right (a, b)
+    (Left e, Right _) -&gt; Left e
+    (Right _, Left e) -&gt; Left e
+    (Left e, Left _discarded) -&gt; Left e
+```
+
+More discarding!
+
+---
+
+## Take a step back
+
+1. This is not just a bug in implementation
+2. The ambiguity and discarding is inherent to implementing the algorithm
+3. We cannot implement some classes of functions for some classes of
+   transformers without discarding
+
+Next: let&#x27;s define those classes
+
+----
+
+## Control functions
+
+* Arguably bad term, but it&#x27;s used a lot
+* Functions which take `IO`&#x2F;`m` as arguments
+* Aka contravariant in the monad
+* Aka monad appears in negative position
+* More info on nomenclature: https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;blog&#x2F;2016&#x2F;11&#x2F;covariance-contravariance
+
+---
+
+## But does it lift?
+
+Which of these functions can be converted to `StateT s IO` with `lift`?
+
+```haskell
+putStrLn :: String -&gt; IO a
+forkIO :: IO () -&gt; IO ThreadId
+catch :: Exception e =&gt; IO a -&gt; (e -&gt; IO a) -&gt; IO a
+try :: Exception e =&gt; IO a -&gt; IO (Either e a)
+atomicModifyIORef :: IORef a -&gt; (a -&gt; (a, b)) -&gt; IO b
+modifyMVar_ :: MVar a -&gt; (a -&gt; IO a) -&gt; IO ()
+```
+
+----
+
+## Monad transformer environment versus state
+
+```haskell
+newtype ReaderT r m a = ReaderT (r -&gt; m a)
+newtype StateT s m a  = StateT  (s -&gt; m (a,s))
+newtype ExceptT e m a = ExceptT (     m (Either e a))
+```
+
+* `ReaderT` has a transformer _environment_ (the `r`), but does not
+  modify the output (`m a`)
+* `ExceptT` has no environment, but has an output _state_ (`m (Either
+  e a)` instead of `m a`)
+* `StateT` has both (`s` as input, `m (a, s)` as output)
+
+----
+
+## Unlifting
+
+* Also a made up term :)
+* Unlifting is taking a control operation living in `IO` and moving it
+  into a transformer
+* Transformers with no monadic state can safely &quot;unlift&quot; control
+  operations
+* Transformers with monadic state may require discarding when
+  unlifting
+
+----
+
+## ReaderT-like things
+
+Any transformer without state is isomorphic to `ReaderT`. Examples:
+
+* `IdentityT` (pretend `()` is the environment)
+* `LoggingT` (the logging function is the environment)
+* `NoLoggingT` (it&#x27;s just a newtype on `IdentityT`)
+
+---
+
+## Unlifting without discarding
+
+If a control function only takes one action as input, you can get away
+without discarding.
+
+```haskell
+tryS (StateT f) = StateT $ \s -&gt; do
+  eres &lt;- try (f s)
+  return $
+    case eres of
+      Left e -&gt; (Left e, s)
+      Right (a, s&#x27;) -&gt; (Right a, s&#x27;)
+```
+
+----
+
+## Natural linear call path
+
+Even though `catch` has two input actions, the handler is only called
+_after_ the main action completes.
+
+```haskell
+catchS (StateT f) onErr = StateT $ \s -&gt;
+  f s `catch` (flip runStateT s . onErr)
+```
+
+No updated state is available from main action, since an exception was
+thrown. This is safe!
+
+----
+
+## Finally a problem
+
+Loses state updates in `g`:
+
+```haskell
+finallyS (StateT f) (StateT g) = StateT $ \s -&gt;
+  f s `finally` g s
+```
+
+Instead have to reimplement functionality:
+
+```haskell
+finallyS (StateT f) (StateT g) =
+  StateT $ \s0 -&gt; mask $ \restore -&gt; do
+    res &lt;- try $ restore $ f s0
+    case res of
+      Left e -&gt; do
+        _ &lt;- restore $ g s0
+        throwIO (e :: SomeException)
+      Right (s1, x) -&gt; do
+        (s2, _) &lt;- restore $ g s1
+        return (s2, x)
+```
+
+----
+
+## The problem cases
+
+Two categories of problem cases
+
+1. Things like `finally`: can manually reimplement them to get the
+   state retaining behavior desired. Problems:
+     * End up with mismatched semantics between libraries (the
+       `bracket_` example).
+     * Tedious and error-prone to reimplement these functions.
+2. Things which _cannot_ be solved, like `concurrently`
+
+----
+
+## Cheating
+
+Could define a safe-for-`StateT` `bracket_`:
+
+```haskell
+bracket_
+  :: MonadBaseControl IO m
+  =&gt; IO a
+  -&gt; IO b
+  -&gt; m c
+  -&gt; m c
+```
+
+But it&#x27;s not exactly the type signature people expect.
+
+---
+
+## Existing generic solutions
+
+Two basic approaches today for typeclass-based control function
+lifting.
+
+----
+
+## exceptions
+
+Define an `mtl`-style typeclass for each operation.
+
+```haskell
+class Monad m =&gt; MonadThrow m where
+  throwM :: Exception e =&gt; e -&gt; m a
+class MonadThrow m =&gt; MonadCatch m where
+  catch :: Exception e =&gt; m a -&gt; (e -&gt; m a) -&gt; m a
+```
+
+Need an extra typeclass for each operation (forking, timeout, etc).
+
+----
+
+## monad-control
+
+Define a generic interface for all unlifting.
+
+```haskell
+class MonadBase b m =&gt; MonadBaseControl b m | m -&gt; b where
+  type StM m a :: *
+  liftBaseWith :: (RunInBase m b -&gt; b a) -&gt; m a
+  restoreM :: StM m a -&gt; m a
+```
+
+Difficult to understand, easy to write buggy instances, more likely to
+implement bad discard behavior.
+
+----
+
+## unliftio
+
+New entry in the market for control-like things
+
+```haskell
+class MonadIO m =&gt; MonadUnliftIO m where
+  askUnliftIO :: m (m a -&gt; IO a)
+```
+
+* Slightly different in practice (impredicativity...)
+* Only has valid instances for `ReaderT`-like things
+* Specialized to `IO` for simplicity
+* Can do similar things with type hackery on `MonadBaseControl`
+    * https:&#x2F;&#x2F;www.stackage.org&#x2F;package&#x2F;monad-unlift
+    * Control.Concurrent.Async.Lifted.Safe
+
+----
+
+## Providing StateT and ExceptT features
+
+But I want to have state and deal with failures! Practical
+recommendations:
+
+* Feel free to use any monad transformer &quot;in the small,&quot; where you&#x27;re
+  not forking threads or acquiring resources
+* Keep your overall applications to `ReaderT env IO` (or use `RIO`)
+
+Prepare torches and pitchforks for the next two slides
+
+----
+
+## Use mutable variables
+
+* `StateT` is inherently non-thread-safe
+* It also doesn&#x27;t allow state to survive a runtime exception
+* Use a mutable variable and keep it in a `ReaderT`
+* Choose the correct mutable variable based on concurrency needs
+* Recommendation: default to `TVar` unless you have a good reason to
+  do otherwise
+
+----
+
+## Use runtime exceptions
+
+* If you&#x27;re in `IO`, you have to deal with them anyway
+* Less type safe than `ExceptT`? Yes
+* But that&#x27;s the Haskell runtime system
+* Also, you have to deal with async exceptions anyway
+* Caveat emptor: Many people disagree with me here
+
+---
+
+## Conclusion
+
+* We like our `StateT` and `ExceptT` transformers
+* We want to naturally lift functions into them
+* It simply doesn&#x27;t work in many cases
+* Use libraries that don&#x27;t silently discard your state
+* You&#x27;ll sometimes get stuck using less elegant things...
+* But at least they work :)
+
+----
+
+## References
+
+This talk is based on a series of blog posts. Get even more gory details!
+
+* https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;blog&#x2F;2017&#x2F;06&#x2F;tale-of-two-brackets
+* https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;blog&#x2F;2017&#x2F;06&#x2F;readert-design-pattern
+* https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;blog&#x2F;2017&#x2F;07&#x2F;the-rio-monad
+* https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;blog&#x2F;2017&#x2F;07&#x2F;announcing-new-unliftio-library
+
+----
+
+## Questions?
+
+Thanks everyone!
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>

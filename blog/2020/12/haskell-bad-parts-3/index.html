@@ -1,0 +1,330 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Haskell: The Bad Parts, part 3</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Haskell: The Bad Parts, part 3">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="The third part of a blog post series on the parts of Haskell we should avoid using.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Haskell: The Bad Parts, part 3</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published December  9, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Haskell%3A%20The%20Bad%20Parts%2C%20part%203 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;12&#x2F;haskell-bad-parts-3&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;12&#x2F;haskell-bad-parts-3&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;12&#x2F;haskell-bad-parts-3&#x2F;&amp;title=Haskell%3A%20The%20Bad%20Parts%2C%20part%203" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;12&#x2F;haskell-bad-parts-3&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;haskell-bad-parts-3.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>If you didn't see it, please check out <a href="/blog/2020/10/haskell-bad-parts-1">part 1 of this series</a> to understand the purpose of this. You can also check out <a href="/blog/2020/11/haskell-bad-parts-2">part 2</a>. Now, for more bad parts!</p>
+<p>Note that this is the last blog post in this series where I had specific ideas queued up. So it's likely that this will be the last post for a while until I get annoyed by something again. So if you really want to see a continuation, find some bit of Haskell code that will annoy me and share it with me!</p>
+<h2 id="pattern-matching">Pattern matching</h2>
+<p>OK, this section title is a complete troll. I don't think pattern matching is a bad part of Haskell. I think pattern matching is one of the most powerful features in all of Haskell, especially when combined with sum types/ADTs. If someone asked me for a singular reason to consider using Haskell, this is what I'd point to.</p>
+<p>Which is why the bad parts of pattern matching in Haskell are so bad. My &quot;Haskell elevator pitch&quot; is almost immediately undermined by terrible defaults.</p>
+<p>My elevator pitch goes something like this: with sum types, you get to define your data types far more explicitly than in languages with only product types. And then you can rely on the compiler to tell you when you've made a change to a data constructor, or added a new data constructor. I usually try to understand first what someone's field of experience is and then build a real-ish example of sum types from that.</p>
+<p>Unfortunately, that's all a lie, at least by default. Some specific parts of pattern matching <em>do</em> in fact let the compiler tell you when you've screwed up. (And if it's not clear: my favorite part of GHC is when it tells me I've screwed up.) If I delete a data constructor, or if I add a new field to a data constructor and I was pattern matching on positionally, the compiler will error.</p>
+<p>But this code compiles just fine, and I wish it didn't!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">data </span><span style="color:#cb4b16;">MySum </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Foo </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Bar </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Baz
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO</span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=
+    case </span><span style="color:#cb4b16;">Baz </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Foo </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Foo</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Bar </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bar</span><span style="color:#839496;">&quot;
+
+</span></code></pre>
+<p>Not only does it compile just fine, but <em>there are no warnings</em>! &quot;OK Michael,&quot; you say. &quot;Who cares? <em>Everyone</em> knows that you should compile with <code>-Wall</code> turned on.&quot; To that, I say three things:</p>
+<ol>
+<li>No, not everyone knows it</li>
+<li>Because of spurious warnings in <code>-Wall</code>, like unused import warnings, important warnings like this often get drowned out. (Yes, it's better to be warning-free for this reason...)</li>
+<li>Yeah, but it gets worse</li>
+</ol>
+<p>Let's elaborate on (3). I'm a good programmer. So I turn on <code>-Wall</code>. Now I'm guaranteed a warning on incomplete pattern matches... right? Right?!? Right!!!!!!1111oneoneone</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">{-# </span><span style="color:#859900;">OPTIONS_GHC</span><span style="color:#b58900;"> -Wall #-}
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">MySum </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Foo </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Bar </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Baz
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO</span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> (</span><span style="color:#859900;">\</span><span style="color:#cb4b16;">Foo </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Foo</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">) </span><span style="color:#cb4b16;">Bar
+</span></code></pre>
+<p>Nope, denied! I get no warning here. Even though I have a <em>refutable pattern match</em> in my lambda, the compiler provides no warnings. &quot;Didn't you know you needed to turn on <code>incomplete-uni-patterns</code> for that?&quot; Actually, no, for a long time I didn't know that.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">{-# </span><span style="color:#859900;">OPTIONS_GHC</span><span style="color:#b58900;"> -Wall -Wincomplete-uni-patterns #-}
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">MySum </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Foo </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Bar </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Baz
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO</span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> (</span><span style="color:#859900;">\</span><span style="color:#cb4b16;">Foo </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Foo</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">) </span><span style="color:#cb4b16;">Bar
+</span></code></pre>
+<p>Fortunately, there's some <a href="https://gitlab.haskell.org/ghc/ghc/-/issues/15656">hope on the horizon</a> for this one.</p>
+<p>One more annoyance, only tangentially related. GHC: please stop generating partial functions on my behalf!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">data </span><span style="color:#cb4b16;">Staff
+    </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Principal
+    </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Teacher</span><span style="color:#657b83;"> { subject </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">String</span><span style="color:#657b83;"> }
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO</span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Your subject is </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> subject </span><span style="color:#cb4b16;">Principal
+</span></code></pre>
+<p>I just discovered that this can be detected with <code>-Wpartial-fields</code>, which is nice, but not part of <code>-Wall</code>. I've been giving advice for a long time to not include any field labels in sum types, and I'll continue to give that advice.</p>
+<p>Note that some Haskellers won't like: this topic came up for me recently while writing a blog post comparing pattern matching in Haskell and Rust (probably going live next week). And, yet again, Rust does this better than Haskell. Yes, Rust is strict and Haskell is lazy. But as far as I'm concerned, in this case, Rust is simply more type safe than Haskell.</p>
+<h2 id="slow-compilation">Slow compilation</h2>
+<p>Let's get an elephant in the room out in the open. Compiling is slow. Some of this is because of GHC. Some of this is because our libraries are trying to do overly complicated things (like stream fusion in <code>vector</code> and <code>text</code>). This is a bane for Haskell, constantly.</p>
+<p>As a recent example, I needed to add a flag to <code>http-conduit</code> to disable the <code>aeson</code> dependency:</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">.<a href="https://twitter.com/snoyberg?ref_src=twsrc%5Etfw">@snoyberg</a> kindly provided &quot;-aeson&quot; flag to http-conduit which saves my time very much. Thanks.<br>BTW, why does building aeson take so much time?</p>&mdash; 山本和彦 (@kazu_yamamoto) <a href="https://twitter.com/kazu_yamamoto/status/1334988010434150401?ref_src=twsrc%5Etfw">December 4, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>I'm not going to beat up on this too much, since GHC is a complicated project and people are trying hard to both improve the existing support <em>and</em> add new features. And library authors (myself included) are caught between providing features and speeding up compilation.</p>
+<p>There is a part of me that wonders if part of the problem is that our standard library (<code>base</code>) doesn't provide enough functionality out of the box, and leaves a lot of external libraries to implement and reimplement similar functionality. As more time goes on, I think Vincent Hanquez was <a href="https://github.com/haskell-foundation">completely correct about how to improve Haskell</a> and I wish I'd embraced it.</p>
+<h2 id="text">Text</h2>
+<p>There's so much wrong here. And I can't even blame it all on the <code>text</code> package. But I can blame a lot of it on the <code>text</code> package. Consider this section incoherent rambling instead of well reasoned arguments. (Typically a fair assumption with anything I say to be honest.)</p>
+<ul>
+<li>Why oh why is it UTF-16 instead of UTF-8? This is terrible! Except...</li>
+<li>It's completely irrelevant what encoding <code>text</code> uses under the surface, because <em>you can't directly interact with its underlying representation</em>. And <em>that's</em> because...</li>
+<li><code>text</code> uses unpinned memory to avoid heap fragmentation, which is a Good Thing, but then <code>text</code> can't be directly used in FFI calls. Which is probably a good thing, since it uses the wrong character encoding under the surface.</li>
+<li><code>text</code> defines its own <code>Builder</code> type. It shouldn't. We should be using the <code>ByteString</code> <code>Builder</code> everywhere, and have a <code>newtype</code> wrapper around it to encode the invariant &quot;must be UTF-8 encoded.&quot; <code>Builder</code> is a <em>wonderful</em> thing in Haskell, and it gets used far less than it should because it's such a PITA to deal with all of this. (I tried to address that in <code>rio</code>.) This is exactly the same as how we don't use <code>Vector</code> enough because of all the flaws with using it.</li>
+<li>And, of course, <code>text</code> has stream fusion, which is shouldn't. I'll touch on this even more in the next section.</li>
+</ul>
+<p>Again, Vincent got this all right. We need a singular packed data type. It should underly a <code>ByteString</code> and a <code>Text</code>. A <code>Text</code> should be a simple newtype around a <code>ByteString</code>. Users should never have to make a decision around pinned vs unpinned memory, that should be an implementation detail. (And sure, why not, give users a knob somewhere to control this when they know better than the defaults.) Have a single <code>Builder</code> type that builds up <code>Vector</code>s, and have it work for <code>ByteString</code> and <code>Text</code> too.</p>
+<p>Oh, and just a side note...</p>
+<p><strong>MAKE TEXT UBIQUITOUS</strong></p>
+<p>We are now more than 10 years since the first release of <code>text</code> to Hackage. And people are still regularly using <code>String</code>. <strong>I</strong> regularly use <code>String</code> in examples. We really should be able to move our ecosystem over to better types.</p>
+<p>We've broken everyone's code for far less important things many times in the past. Just to rile you all up: Foldable/Traversable Proposal wasn't important or interesting, this should have taken precedence.</p>
+<h2 id="lazy-data-structures">Lazy data structures</h2>
+<p>There should be no lazy <code>ByteString</code>. There should be no lazy <code>Text</code>. There isn't a lazy <code>Vector</code>, and that's a Good Thing.</p>
+<p>&quot;But what if I want to read a 10GB file into memory lazily?&quot; You're using the wrong abstraction.</p>
+<p>&quot;But what if I want to lazily generate a massive file?&quot; You're using the wrong abstraction.</p>
+<p>Here's the problem: we don't have the right abstraction in <code>base</code>. We ended up at a local minimum.</p>
+<ul>
+<li>Lazy lists get used for &quot;generators&quot; and for data storage, when they're only half good for the former</li>
+<li>We don't get a real generator type in <code>base</code>, because we have lazy lists</li>
+<li>We don't get a real data storage type in <code>base</code>, because <code>vector</code> exists and sucks</li>
+</ul>
+<p>Here's what we need to do:</p>
+<ul>
+<li>Get rid of lazy lists from the language entirely</li>
+<li>Add a streaming data interface to <code>base</code> that properly handles side-effects without hacks like lazy I/O</li>
+<li>Provide great tooling around that streaming data interface, like stream fusion</li>
+<li>Add a <code>Vector</code>-like type to <code>base</code> that only handles storage, no fusion or generation, and have it work with the streaming data interface</li>
+</ul>
+<p>Again, I'll say: Vincent got it right.</p>
+<h2 id="qualified-imports">Qualified imports</h2>
+<p>Since everyone loves to fixate on trivial syntactic issues, let me include one of those here at the end so everyone can ignore my other points. Qualified imports suck. Actually, modules suck. Actually, modules and packages suck. Actually, it all sucks.</p>
+<p>The first problem? Our names are too verbose. <code>import qualified Control.Monad.Trans.Class as Trans</code>. I've actually typed that, many times. That's too much typing. Why is it <code>Control.Monad</code>? How does it help me?</p>
+<p>What package does that module live in? You can't tell from the name. It's <code>transformers</code>. I think. Oh wait, no, now it's in <code>base</code>. My bad. Anyway, packages are able to just trample all over each others' namespaces like this. It's annoying.</p>
+<p>And because Haskell doesn't have object syntax, importing identifiers directly, or qualified importing modules, is an absolute must for accessing most functionality on types. OOP kinda beat us here.</p>
+<p>Yay, more incoherent rambling!</p>
+<h2 id="should-we-fix-this">Should we fix this?</h2>
+<p>OK, serious talk here. I think the warnings issue I mentioned above should absolutely be fixed. For the last section: I don't see a reality where a holistic change to Haskell syntax, module hierarchy, etc, could ever be possible. We're stuck with what we've got, possibly with minor ergonomic improvements.</p>
+<p>I don't know what to say about the standard library stuff I've been raising. I really do believe that a combination of good streaming abstraction, built-in packed data, and more sensible <code>ByteString</code> and <code>Text</code> types in the standard library itself could be a huge improvement. It's also the kind of thing that takes a huge amount of buy in and effort, and I don't think it would happen easily.</p>
+<p>The biggest questions that pop up for me would be:</p>
+<ol>
+<li>What would the streaming abstraction be? Contrary to what I bet you're thinking, I don't think it should be based on <code>conduit</code> or anything like it. Instead, I'd base it on the stream fusion types directly. I think it's a simpler abstraction, and fits the goals better.</li>
+<li>Where do these types live? I think long term, if we want this kind of thing to succeed, we need them to be part of <code>base</code>. But we'd need to have a community-wide effort around building a separate library first, get huge buy-in, and then consider adding them to <code>base</code>. And <code>foundation</code> is probably already pretty close to what we'd end up building.</li>
+</ol>
+<p>My gut feeling is that no one has the stomach for this. I don't think I do. It's certainly tempting though.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

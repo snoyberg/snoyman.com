@@ -1,0 +1,576 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Stack(age): History, philosophy, and future</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Stack(age): History, philosophy, and future">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="A personal review of the history of the Stackage and Stack projects, their philosophy, and some thoughts on their future.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Stack(age): History, philosophy, and future</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November 18, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Stack%28age%29%3A%20History%2C%20philosophy%2C%20and%20future https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;stackage-history-philosophy-future&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;stackage-history-philosophy-future&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;stackage-history-philosophy-future&#x2F;&amp;title=Stack%28age%29%3A%20History%2C%20philosophy%2C%20and%20future" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;stackage-history-philosophy-future&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;stackage-history-philosophy-future.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>Both the Stackage and Stack projects originated many years ago. At the
+time they started, they had specific goals geared at solving problems
+at the time. Some of those problems remain, some have changed. Also,
+as the projects have continued, some goals have morphed as well.</p>
+<p>I recently received some questions from newer members of the Haskell
+community who were uncertain of some design points in Stackage. As I'm
+wont to do, instead of giving a targeted answer to those questions,
+I'm going to take the opportunity to provide a more in depth review of
+the history of these projects, the philosophy governing how they work,
+and some (highly opinionated) thoughts on what the future may hold for
+them.</p>
+<h2 id="further-reading">Further reading</h2>
+<p>To start off with, let's give some historical links. I've typically
+been pretty vocal about what I'm working on, so there are quite a few
+posts available. I'm also assuming people aren't going to go through
+and read all these posts, so I'll be covering a simplified view of the
+history next.</p>
+<ul>
+<li><a href="https://www.yesodweb.com/blog/2012/03/cabal-nirvana">Avoid cabal hell: find nirvana</a></li>
+<li><a href="https://www.yesodweb.com/blog/2012/03/announcing-yesod-platform">Announcing the Yesod Platform</a></li>
+<li><a href="https://www.yesodweb.com/blog/2012/11/solving-cabal-hell">Solving Cabal Hell</a></li>
+<li><a href="https://www.yesodweb.com/blog/2012/11/stable-vetted-hackage">Stable, Vetted Hackage: Call for Participation</a></li>
+<li><a href="https://www.yesodweb.com/blog/2014/08/deprecating-yesod-platform">Deprecating yesod-platform</a></li>
+<li><a href="https://www.fpcomplete.com/blog/2014/12/backporting-bug-fixes">Backporting bug fixes: Towards LTS Haskell</a></li>
+<li><a href="https://www.yesodweb.com/blog/2014/11/case-for-curation">The case for curation: Stackage and the PVP</a></li>
+<li><a href="https://www.yesodweb.com/blog/2015/02/brittle-haskell-toolchain">The brittle Haskell toolchain</a></li>
+<li><a href="https://www.yesodweb.com/blog/2015/04/announcing-stackage-update">Announcing stackage-update</a></li>
+<li><a href="https://www.yesodweb.com/blog/2015/09/true-root-pvp-debate">The true root of the PVP debate</a></li>
+<li><a href="https://www.fpcomplete.com/blog/2016/04/stackage-data-flow">The Stackage data flow</a></li>
+<li><a href="https://www.snoyman.com/blog/2017/01/stackage-design-choices">Stackage design choices: making Haskell curated package sets</a></li>
+<li><a href="https://www.snoyman.com/blog/2017/02/hackage-security-stack">Hackage Security and Stack</a></li>
+<li><a href="https://www.snoyman.com/blog/2017/04/stackages-no-revisions-field">Stackage's no-revisions (experimental) field</a></li>
+<li><a href="https://www.snoyman.com/blog/2018/01/slurp">SLURP</a></li>
+<li><a href="https://www.snoyman.com/blog/2018/02/stack-patching-policy">Stack patching policy</a></li>
+<li><a href="https://www.snoyman.com/blog/2018/02/haskell-ecosystem-requests">Haskell Ecosystem Requests</a></li>
+</ul>
+<p>There are also a bunch more on the FP Complete blog, but I decided
+this was probably enough for the moment. Finally, I'd like to include
+a write-up by Matt Parsons on <a href="https://gist.github.com/parsonsmatt/0d75877ea14974647621b21f8492fb43">the Stack
+timeline</a>. His
+write-up provides a far more concise summary than mine, with dates to
+boot. What I'll describe below talks far more to the motivations for
+each decision.</p>
+<h2 id="goals">Goals</h2>
+<p>I am going to state as plainly as I can the goals I have always had
+for these two projects. I know many people out there have attributed
+ulterior and sometimes nefarious motives to me. To those who question
+my sincerity: you may as well stop reading this blog post now. For
+people willing to take me at my word, here's the goal:</p>
+<p><strong>Increase the adoption of Haskell.</strong></p>
+<p>I work for FP Complete, and our goal is slightly different:</p>
+<p><strong>Increase the commercial adoption of Haskell.</strong></p>
+<p>That's really it. I haven't always made the best decisions towards
+this end. In 20-20 hindsight, there are certainly other ways I would
+have approached things, <em>especially</em> on how I would have presented the
+language to non-Haskellers. But that's the goal.</p>
+<p>You may say, &quot;Well, obviously that's the goal.&quot; But that's not
+true. There are <em>many</em> different goals that may exist. &quot;Design the
+most elegant solution to problem X,&quot; or &quot;Generate a bunch of research
+papers,&quot; or &quot;Convince one really wealthy company to pay me a lot of
+money to work on Haskell.&quot; I'm not saying those are other people's
+goals, or that they are somehow other goals of mine. I'm pointing out
+that the goal I had was simple to state, explains many of my
+decisions, and is in fact opinionated.</p>
+<p>One final note: I'm willing to make trade-offs to achieve that goal,
+to an extent. I'm willing to giving up on some level of elegance in
+the solution to solve an immediate problem. I know others disagree
+with me on this. That's a fair thing to disagree on, but it also
+explains why differing solutions have arisen.</p>
+<h2 id="history-of-stackage">History of Stackage</h2>
+<p>The origins of this start in a simple place. I wrote Yesod. For better
+or worse, I designed Yesod as a large collection of packages to allow
+people to mix-and-match components (e.g., use Warp the webserver or
+Shakespeare the templating engine without Yesod itself). For years, I
+received many, many complaints from users about how difficult it was to
+build Yesod.</p>
+<p>I tried following the Package Versioning Policy (PVP), but at the
+time, this actually made the problem worse, not better. It's really
+not worth debating this point, though some will want to. This is
+absolutely what I thought at the time, and why I stopped following the
+PVP. I believe this was due to limitations in the dependency solver at
+the time. Regardless of whether those problems have now been fixed, or
+whether I just had a fundamental misunderstanding at the time, I
+became convinced that a versioning policy was insufficient to escape
+dependency hell.</p>
+<p>The Haskell Platform solved some level of the dependency hell issue,
+by providing a predetermined set of package versions that were known
+to work well together. However, it wasn't nearly enough to solve my
+problems, since it only covered a relatively small number of
+packages. (This was by design, and it was the <em>right</em> design for HP.)
+To work around this, and finally stop losing prospective users, I put
+together the Yesod Platform: a collection of package versions known to
+work together. This helped.</p>
+<p>When I started working for FP Complete, we ran into similar dependency
+issues, as did our customers. Yesod Platform was the right idea, but
+it only covered Yesod. What about people working with completely
+different libraries, or using a different web framework? We cobbled
+together some internal tooling for coming up with package sets.</p>
+<p>Eventually, I realized that the entire community would be able to take
+advantage of this. We created the Stackage project, started publishing
+snapshots, and folded Yesod Platform into it.</p>
+<p>Much of the community viewed Stackage as a &quot;community wide CI,&quot; in the
+sense that it gave feedback to maintainers for when their builds
+failed. I thought there was much more potential to Stackage. I
+believed it could dramatically increase usability of Haskell for new
+users. After all, out of the gate, most Haskellers were still
+regularly hitting dependency issues.</p>
+<p>The history of Stackage continues on from here, including adding a
+curator team, formalizing our processes, figuring out how to make
+tricky decisions around when to boot out packages, and so on. However,
+we're going to skip all of that history as it's less interesting for
+now, and continue chronologically with the inception of Stack.</p>
+<h2 id="history-of-stack">History of Stack</h2>
+<p>Let me start by saying that many of the problems of cabal I'm about to
+allude to have been addressed, either with improvements to the
+standard workflow, the addition of sandboxes, or the <code>new-build</code>
+system. However, I'm addressing the history here.</p>
+<p>At the point our history is continuing from, <code>cabal-install</code> had
+addressed some of the more serious dependency solver issues from the
+past. However, dependency solving was still unreliable. You could
+certainly make the claim that I was part of the problem by not
+following the PVP. However, it's also irrelevant:
+the design of the dependency solver till today means once you have one
+piece of bad historical data, the solver cannot be guaranteed to work
+correctly. I strongly believe that no matter what you do, people will
+make mistakes, so trusting PVP-guided dependency solving wasn't going
+to be a solution for me.</p>
+<p>The Hackage Trustees introduced the concept of Hackage metadata
+revisions at the same time. I did at the time, and still today,
+strongly oppose this decision. It has made tooling much more complex,
+and introduced new layers of trust into our system. Using this wasn't
+an option when Stack first came onto the scene, since the system was
+not fully developed (e.g., the <code>01-index.tar.gz</code> archive didn't exist
+yet). There were many alternative solutions if PVP-guided dependency
+solving was a goal (like ignoring previous patch releases), but we
+ended up with metadata revisions instead.</p>
+<p>Anyway, back to the history. The out-of-the-box <code>cabal-install</code>
+experience involved a lot of user frustration. At FP Complete, we
+ended up writing a number of scripts around <code>cabal-install</code> usage to
+ensure our software could be developed and deployed reliably. We heard
+the same kind of story from many other Haskell shops we spoke with. We
+realized wrapping <code>cabal-install</code> was a pattern repeating across the
+ecosystem.</p>
+<p>My next goal was a simple one. Combining Stackage and cabal sandboxes,
+the user experience was fairly decent, with mostly reproducible build
+plans (ignoring the incoming metadata revisions). I tried to work with
+the Hackage, Cabal, and Haskell Platform teams to get Stackage
+included in the system. Ultimately, this resulted in a plan called GPS
+Haskell, devised in person at ICFP 2014. I made some changes to
+Stackage to accomodate (removing the local patching we did to work
+around restrictive upper bounds). However, there was no further
+response from the other teams, so I had to consider this a dead end.</p>
+<p>At FP Complete, we were working on an FDA regulated medical device
+written in Haskell. There were dozens of people working on this, many
+of whom were not Haskell engineers by trade. We needed to make
+guarantees to the FDA that the build plan was reproducible. For the OS
+level, we used Docker. But at the Haskell layer, we needed to do
+something based on Stackage. We could have done this with
+<code>cabal-install</code>, but we needed something that worked reliably across
+three OSes, was easy enough for non-Haskellers to use, including QA
+engineers and auditors within the client company. We were looking at
+writing yet another set of wrapper scripts around <code>cabal-install</code>.</p>
+<p>This is the environment in which Stack was born. We'd already written
+these scripts multiple times. We already knew how unreliable it was to
+try and wrap around <code>cabal-install</code> like this. We were already
+reinventing a bunch of the logic inside <code>cabal-install</code>. The presence
+of the dependency solver was—for our purposes—a bug, not a
+feature. We had requirements for automatic Docker support.</p>
+<p>We discussed with our customer, and made the decision that it was time
+to invest in a new tool. I promise you that this decision was not
+taken lightly. For internal usage, we realized we didn't have much
+choice. Releasing it as a competitor to <code>cabal-install</code> was another
+matter. But it came back to the &quot;promote (commercial) adoption of
+Haskell.&quot; We had lots of anecdotal evidence to suggest that a new
+build tool would help that case.</p>
+<p>So we released Stack. It was a calculated trade-off between the
+downsides of forking part of the ecosystem versus providing a better
+user experience and hopefully encouraging Haskell adoption. Was it the
+right decision? I still believe so. I know others do not.</p>
+<p>I'll leave one last note in the history section, which has been a
+recurring theme. No one has the ability or right to force anyone to do
+anything they don't want. I could not force the <code>cabal-install</code> team
+to add Stackage support. I made that request, and nothing came of
+it. That's their prerogative. However, in an open source world, if you
+don't listen to the requests of users, the only responses they have
+are to give up on the features they want, or to fork. We elected to go
+the latter route with a new tool, because the benefit of having a new
+tool that did what we wanted outweighed the costs involved, at least
+in our judgement.</p>
+<h2 id="philosophy">Philosophy</h2>
+<p>Alright, that's the history. And the goal of all of this is hopefully
+clear. Over the years of building, maintaining, and modifying these
+projects, the philosophy driving them has evolved and solidified. As
+one person involved in these projects, let me describe the underlying
+philosophy I see.</p>
+<ul>
+<li>Build plan creation should <em>always</em> be an explicit step. There
+should never be a point where you run a command and are unexpectedly
+in build plan construction mode. One approach to ensuring this is to
+have lock files (Rust's cargo does this, among many others). Freeze
+files with cabal-install seem to go in this direction too. However,
+I'm a big fan of what we did with Stack: the available packages (aka the source map) is always
+defined in a <code>stack.yaml</code> file, and there is a separate set of
+commands (<code>init</code>, <code>solver</code>, etc) involved in modifying that
+file. Changes to your <code>.cabal</code> or <code>package.yaml</code> file have no impact
+on the set of packages available.</li>
+<li>Documentation guides design. There must always be a clear onboarding
+story for users, both new and those trying new things. Tools should
+be designed from that perspective. It is irrelevant to argue about
+&quot;which tool is best for a user.&quot; The real question is: what workflow
+is best? One of the issues that has complicated discussion of Stack
+vs cabal-install is that there are multiple different cabal-install
+workflows that end up discussed concurrently. (To some extent, this
+applies to Stack as well, with scripting vs building, but I'd argue
+to a lesser extent.)
+<ul>
+<li>To get a better idea of what I mean, check out the &quot;Next Steps&quot;
+on the <a href="https://haskell-lang.org/get-started">getting started</a>
+page. Certainly people can and do use Stack differently than
+these three links. But we've optimized for these kinds of use
+cases, and documented clearly how people can use them.</li>
+</ul>
+</li>
+<li>There is an inherent, awkward piece of work in the world called
+&quot;making the build plan.&quot; It's sometimes trivial, it's sometimes
+difficult. The work is inherent, though different approaches can to
+some extent make the work larger or smaller.  The Stackage approach
+is based on curation. It's a tried-and-tested approach from the
+Linux distribution world, and it centralizes a lot of the pain and
+work. Dependency solving is a more flexible and distributed
+approach. However, it depends on the cooperation, compliance, and
+correctness of a large group of people, and/or a large amount of
+work by a centralized group to edit the metadata. As a result, my
+personal view is:
+<ul>
+<li>We should focus on curation for the most common use case</li>
+<li>For the cases where, for whatever reason, curation ends up not
+being sufficient, falling back to manual build plan construction
+is painful, but limited in scope. I <a href="https://www.reddit.com/r/haskell/comments/9bkd6m/errors_when_installing_grapefruit_with_stack/e5579f9/?context=3">gave an
+example</a>
+of doing this on Reddit.</li>
+</ul>
+</li>
+<li>Reproducibility is a great goal, but there's <em>always</em> a limit to how
+reproducible you can be. Stack aims for reproducible build plans,
+but nothing at the OS level. Nix goes a step farther, but doesn't
+for example ensure identical hardware. My point is: define a level
+of reproducibility you want from the tool at hand and strive to
+ensure it. I think Stack has the right idea for a build tool, and
+OS-level reproducibility should be handled externally, such as via
+Docker, Nix, or VMs.</li>
+<li>It is vital to observe the new user experience and respond to
+it. I'm still upset (with myself) that there were so many potential
+Haskell and Yesod users who almost immediately dropped the language
+because of the bad onboarding experience. If I have one biggest
+regret in all of this, it's that I wasn't more proactive in looking
+for a solution to these problems far earlier. In other words, I wish
+I'd thought of Stackage and Stack about 5 years before I did!</li>
+<li>There will be use cases we don't address, and that's fine. Stack's
+goal is not, has never been, and (if I have my way) never will be,
+to defeat all other build tools. Stack has a defined set of use
+cases it works well for. If it doesn't distract and people want it,
+we can add additional such use cases. But the existance and
+improvement of other tools is a Good Thing.</li>
+<li>We've had a running philosophy in Stack of including extra
+functionality, such as built in Docker and Nix integration. But see
+the future section for some evolved thoughts on this.</li>
+<li>Decouple and avoid needless forking. I obviously made some decisions
+that include forking. I've also been very careful to make those fork
+points as minimal as possible. Stackage and Stack both use Hackage
+as a package repository, instead of having their own. Both projects
+continue to use Cabal (the file format, build system, and library)
+instead of creating a completely separate build system. I can assure
+you, there were strong technical arguments to do things differently,
+and there have been large, ongoing costs (to me personally in many
+cases) for having <em>not</em> forked. But overall, I believe in the goal
+of decoupling the selection of tooling, and making the build tool
+selection orthogonal to the package store is a Good Thing.</li>
+</ul>
+<h2 id="future">Future</h2>
+<p>One thing we've already been doing in the Stack code base is
+decoupling extra functionality. We've split off a few libraries
+already. I've spent some time working on Pantry as a means to separate
+out the package source logic from Stack. I'd like to see that trend
+continue. Another idea is <a href="https://github.com/commercialhaskell/stack/issues/4261">separating out the GHC installation
+logic</a> so it
+can be used separately. In my ideal world, &quot;how you install the tools&quot;
+would be orthogonal to &quot;which tools you use.&quot; It's part of why I
+ultimately opposed to the original Haskell Platform (now HP Full): it
+bundled opinionated concepts about which libraries you should use with
+the less opinionated installer for GHC.</p>
+<p>There's <a href="https://github.com/commercialhaskell/stack/issues/4217">open
+work</a> on
+improving the <code>stackage-curator</code> tool. This follows directly from the
+Pantry work, and will hopefully allow a few improvements:</p>
+<ol>
+<li>Make it easier for people to create their own snapshots. I strongly
+believe in decoupling, and allowing others to create their own,
+opinionated snapshots separate from Stackage Nightly and LTS
+Haskell would be great.</li>
+<li>Make it easier to integrate with Nix. I know they have some scripts
+in place already to use Stackage snapshots, and I'm aware of at
+least one shortcoming (not respecting the Hackage revision pinned
+by Stackage).</li>
+<li>Make the process of choosing which packages to hold back in LTS
+minor bumps more transparent. The current tooling makes it hard to
+be clear about what decisions were made.</li>
+</ol>
+<p>For security sensitive use cases (like the FDA regulated medical
+device I mentioned above), including more secure source information is
+vital. Currently, Stack relies upon the package tarball hashes from
+Hackage Security. This introduces a layer of trust that those hashes
+are not modified or corrupted over time, which is hard to justify in
+highly-security-sensitive setups. The upcoming Pantry-based Stack will
+include far more hashing information so that you can demonstrate
+provenance of the source files exclusively from what's in your source
+tree. I want to see further improvements to the security story like
+this.</p>
+<p>As you may have noticed, I've talked a lot about community processes
+over the past year or so. I find the area fascinating and
+underexplored. I'm already trying to take a back seat in the code
+writing aspect of these projects, and involve myself more in
+organization and support. The Stackage Curator team has worked out
+really well, and the much newer Stack Issue Triagers initiative seems
+to be working out nicely as well.</p>
+<h3 id="collaboration-with-cabal">Collaboration with cabal?</h3>
+<p>As a final point, let me address this question, which comes up a
+lot. Despite what many people claim, neither FP Complete nor I have
+any vested interest—or even desire—to maintain a separate
+build tool (Stack). Stackage is a project I started because I saw a
+gap in the ecosystem. But my preference had always been to have
+Stackage become part of the rest of the tooling, not have a separate
+set of tooling.</p>
+<p>At this point, many people and companies rely on the Stack tooling and
+workflow. <code>cabal-install</code> has certainly made improvements in the past
+5 years, but it is still different. It has different goals, a
+different UX, and supports different features. There is not a 1-to-1
+mapping between the functionality.</p>
+<p>I'd love to see the gap close. I'd still love to see support for
+Stackage snapshots added to <code>cabal-install</code>. I think Stack has done some
+great work with things like the script interpreter, the approach we
+have to the implicit global project, the reproducible-by-default build
+plans, and the security we're introducing with Pantry.</p>
+<p>In my ideal world, and I mean this with complete sincerity, enough of
+these features would move into <code>cabal-install</code> that we could declare
+Stack no longer needed. While forking isn't inherently evil, if it can
+be avoided it would be a good thing. I don't think the current plans
+for <code>cabal-install</code> take it in the direction I'd like to see, so this
+is unlikely to happen. But I say in all good faith: if enough of the
+Stack community's needs and desires could be met with <code>cabal-install</code>,
+I'd advocate for a some kind of deprecation cycle for Stack.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

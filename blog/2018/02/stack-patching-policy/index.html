@@ -1,0 +1,329 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Stack Patching Policy</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Stack Patching Policy">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Discussion of a potential policy change for Stack">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Stack Patching Policy</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published February 14, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Stack%20Patching%20Policy https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;02&#x2F;stack-patching-policy&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;02&#x2F;stack-patching-policy&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;02&#x2F;stack-patching-policy&#x2F;&amp;title=Stack%20Patching%20Policy" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;02&#x2F;stack-patching-policy&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;stack-patching-policy.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This blog post is about a potential policy decision affecting the
+maintenance of the Stack code base itself. It will affect contributors
+to the project, and those building Stack for other purposes (such as
+maintainers of Linux distro packages). It will only indirectly affect
+end users, as hopefully is made clear in the discussion below.</p>
+<p><a href="https://github.com/commercialhaskell/stack/issues/3866"><strong>Github issue for official discussion</strong></a></p>
+<h2 id="today">Today</h2>
+<p>Until now, every version of Stack that has been released (or even
+merged to <code>master</code>, unless I'm mistaken) has exclusively used versions
+of dependencies available on Hackage. It has not used the <code>extra-dep</code>
+archive or Git repo feature, or submodules to include alternative
+versions of source code. This means that, for the most part, you get
+the same Stack whether you get an official download, run <code>stack build</code>
+inside the source tree, use <code>stack build</code> using a Stackage snapshot,
+or run <code>cabal install stack</code>.</p>
+<p>Now, as it happens, this isn't <em>completely</em> true either. The official
+Stack binaries pin the dependencies to exact versions which have been
+tested together, via the <code>stack.yaml</code> file. This means that the latter
+two approaches of getting Stack binaries may have different behavior,
+due to the snapshot or the dependency solver choosing different
+versions. Some distros have
+<a href="https://github.com/commercialhaskell/stack/issues/3848">already run into bugs</a>
+because of this.</p>
+<p>To pull all of that back in: the official way to get Stack today will
+guarantee a specific set of dependencies which have gone through the
+full Stack integration test suite. Some alternative methods may not
+provide the same level of guarantees. But with a bit of effort, you
+can force Stack or cabal-install to build exactly the same thing the
+official binaries provide.</p>
+<h2 id="the-new-problem">The new problem</h2>
+<p>One issue that pops up is: what do we do in a situation where an
+upstream package has a bug, and either cannot (within the timeframe
+desired) or will not release a new version with a fix? The concrete
+example that pops up is
+<a href="https://github.com/haskell/hackage-security/pull/203">hackage-security pull request #203</a>
+(addressing
+<a href="https://github.com/haskell/hackage-security/issues/187">issue #187</a>),
+though the specific details aren't too important for the discussion
+here. The discussion here is about the general rule: <em>what should
+Stack do in this case</em>?</p>
+<h2 id="four-options">Four options</h2>
+<p>Others may be more creative than me, but I can see four different
+options to respond in a situation like this:</p>
+<ol>
+<li>Continue using the officially released upstream version of
+hackage-security, bugs and all</li>
+<li>Fork hackage-security on Hackage, and depend on the fork</li>
+<li>Inline the code from hackage-security into Stack itself, and drop
+the explicit dependency on hackage-security</li>
+<li>Include hackage-security via an <code>extra-dep</code> pointing at a Git
+commit. Our official builds will use the patched version of
+hackage-security, and anyone building from Hackage will end up with
+the unpatched version</li>
+</ol>
+<p>Option (1) is the status quo: we cannot fix this bug until upstream
+fixes it. This is a disappointing outcome for users, as we know how to
+fix the bug, and can imminently do so, but users will continue to
+suffer regardless. However, it makes maintenance of Stack relatively
+easy, and has no impact on packagers.</p>
+<p>Options (2) and (3) are relatively similar: you end up with a forked
+version of the codebase feeding into Stack, but all of the code
+necessary is still available from Hackage. Packagers, and people
+building with a command like <code>cabal install stack</code>, will still be able
+to get the right version of the executable, assuming they pin their
+dependencies the same way we do (as mentioned above).</p>
+<p>Option (4) is a more radical departure. It means that <code>cabal install stack</code>, without quite a bit of extra work, will <em>not</em> result in the
+same executable. You can argue that, given the assumed lack of pinning
+of dependency versions, this isn't too terribly different from the
+status quo. And with the patch I've written for hackage-security now,
+that's basically true. However, it's theoretically possible that, in
+the future, we could have a patch that changes the API, and makes it
+impossible to build Stack against the Hackage version of a package. So
+let's break up option 4 into two subchoices:</p>
+<ul>
+<li>Option 4a: we can use an extra-dep, but we must ensure that the
+Stack codebase continues to build against the Hackage version of the
+package, even if it's missing a bug fix, performance enhancement, or
+whatever else we wrote</li>
+<li>Option 4b: free-for-all: use whatever extra-deps we want, and state
+that there is no support for building from Hackage alone.</li>
+</ul>
+<h2 id="my-recommendation">My recommendation</h2>
+<p>I lean towards option 4a. I don't want to upload forks to Hackage
+(option (2)); it's a confusing situation for users, and may be seen as
+an aggressive move (which is certainly not the intent here). Option
+(3) could work, but makes it more painful than it should be to work on
+the Stack codebase. I'd rather not subject contributors (or myself!)
+to that.</p>
+<p>Option 4b is IMO a step too far: we'd be uploading something to
+Hackage which we know for a fact could never be built there. At that
+point, there's not really any reason for uploading to Hackage. And
+option 1 (we cannot fix bugs) is just too limiting.</p>
+<p>The biggest impact I can see is how others will end up packaging
+Stack. But frankly, this is already a situation that deserves an
+official discussion. There have certainly been plenty of cases in the
+past where users tripped on bugs that didn't exist in the official
+Stack releases, and the Stack team needed to spend inordinate time
+tracing this back to a bad build. So if nothing else, hopefully this
+post will spawn some discussion of correct packaging behavior.</p>
+<h2 id="official-discussion">Official discussion</h2>
+<p>As mentioned above, I've created a Github issue for an official
+discussion of this topic:
+<a href="https://github.com/commercialhaskell/stack/issues/3866">issue #3866</a>. Other
+discussions (Disqus below, mailing list, etc) are welcome, but may not
+receive the full attention of the Stack team.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

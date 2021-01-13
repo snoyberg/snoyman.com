@@ -1,0 +1,1148 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Lifetimes and Slices - Rust Crash Course lesson 6</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Lifetimes and Slices - Rust Crash Course lesson 6">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 6 in the Rust crash course: Lifetimes and Slices.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Lifetimes and Slices - Rust Crash Course lesson 6</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November 26, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Lifetimes%20and%20Slices%20-%20Rust%20Crash%20Course%20lesson%206 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-06-lifetimes-slices&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-06-lifetimes-slices&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-06-lifetimes-slices&#x2F;&amp;title=Lifetimes%20and%20Slices%20-%20Rust%20Crash%20Course%20lesson%206" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-06-lifetimes-slices&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-06-lifetimes-slices.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>We've glossed over some details of lifetimes and sequences of values so far.
+It's time to dive in and learn about lifetimes and <em>slices</em> correctly.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<h2 id="printing-a-person">Printing a person</h2>
+<p>Let's look at some fairly unsurprising code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#859900;">String</span><span style="color:#657b83;">&gt;,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt;,
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_person</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> person.name {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(name) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name),
+        </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No name provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+    }
+
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> person.age {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(age) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Age is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, age),
+        </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No age provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">print_person</span><span style="color:#657b83;">(Person {
+        name: </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)),
+        age: </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">),
+    });
+}
+</span></code></pre>
+<p>Fairly simple, and a nice demonstration of pattern matching. However,
+let's throw in one extra line. Try adding this at the beginning of the
+<code>print_person</code> function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Full Person value: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, person);
+</span></code></pre>
+<p>All good. We're printing the full contents of the <code>Person</code> and then
+pattern matching. But try adding that line to the <em>end</em> of the
+function, and you'll get a compilation error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: use of partially moved value: `person`
+  --&gt; main.rs:18:41
+   |
+9  |         Some(name) =&gt; println!(&quot;Name is {}&quot;, name),
+   |              ---- value moved here
+...
+18 |     println!(&quot;Full Person value: {:?}&quot;, person);
+   |                                         ^^^^^^ value used here after move
+   |
+   = note: move occurs because the value has type `std::string::String`, which does not implement the `Copy` trait
+
+error: aborting due to previous error
+</span></code></pre>
+<p><strong>NOTE</strong> This is an error with the Rust compiler I'm using,
+1.30.1. However, there are plans in place to improve this situation.</p>
+<p>The problem is that we've consumed a part of the <code>person</code> value, and
+therefore cannot display it. We can fix that by setting it
+again. Let's make the <code>person</code> argument <code>mut</code>able, and then fill
+in the moved <code>person.name</code> with a default <code>None</code> value:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_person</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> person.name {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(name) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name),
+        </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No name provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+    }
+
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> person.age {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(age) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Age is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, age),
+        </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No age provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+    }
+
+    person.name = </span><span style="color:#859900;">None</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Full Person value: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, person);
+}
+</span></code></pre>
+<p>That compiles, but now the output is confusingly:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Name is Alice
+Age is 30
+Full Person value: Person { name: None, age: Some(30) }
+</span></code></pre>
+<p>Notice how the <code>name</code> in the last line in <code>None</code>, when ideally it should be
+<code>Some(Alice)</code>. We can do better, by returning the name from the <code>match</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">person.name = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> person.name {
+    </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(name) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(name)
+    },
+    </span><span style="color:#859900;">None =&gt; </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No name provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#859900;">None
+    </span><span style="color:#657b83;">}
+};
+</span></code></pre>
+<p>But that's decidely inelegant. Let's take a step back. Do we actually
+need to consume/move the <code>person.name</code> at all? Not really. It should
+work to do everything by reference. So let's go back and avoid the
+move entirely, by using a borrow:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match &amp;</span><span style="color:#657b83;">person.name {
+    </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(name) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name),
+    </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No name provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+}
+</span></code></pre>
+<p>Much better! We don't need to put the borrow on <code>person.age</code> though,
+since the <code>u32</code> is <code>Copy</code>able. Here, we're pattern matching on a
+reference, and therefore the <code>name</code> is <em>also</em> a reference.</p>
+<p>However, we can be more explicit about that with the <code>ref</code>
+keyword. This keyword says that, when pattern matching, we want the
+pattern to be a reference, <em>not</em> a move of the original value. (<a href="https://doc.rust-lang.org/book/second-edition/ch18-03-pattern-syntax.html#creating-references-in-patterns-with-ref-and-ref-mut">More
+info in the Rust
+book.</a>)
+We end up with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match</span><span style="color:#657b83;"> person.name {
+    </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#586e75;">ref</span><span style="color:#657b83;"> name) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name),
+    </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No name provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+}
+</span></code></pre>
+<p>In our case, this is the same basic result as <code>&amp;person.name</code>.</p>
+<h2 id="birthday">Birthday!</h2>
+<p>Let's modify our code so that, when printing the age, we also increase
+the age by 1. First stab is below. Note that the code won't compile,
+try to predict why:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match</span><span style="color:#657b83;"> person.age {
+    </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(age) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Age is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, age);
+        age += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    }
+    </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No age provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+}
+</span></code></pre>
+<p>We're trying to mutate the local <code>age</code> binding, but it's
+immutable. Well, that's easy enough to fix, just replace <code>Some(age)</code>
+with <code>Some(mut age)</code>. That compiles, but with a warning:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: value assigned to `age` is never read
+  --&gt; src/main.rs:16:13
+   |
+16 |             age += 1;
+   |             ^^^
+   |
+   = note: #[warn(unused_assignments)] on by default
+</span></code></pre>
+<p>And then the output is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Name is Alice
+Age is 30
+Full Person value: Person { name: Some(&quot;Alice&quot;), age: Some(30) }
+</span></code></pre>
+<p>Notice how on the last line, the age is still 30, not 31. Take a
+minute and try to understand what's happening here... Done? Cool.</p>
+<ol>
+<li>We pattern match on <code>person.age</code></li>
+<li>If it's <code>Some</code>, we need to move the age into the local <code>age</code>
+binding</li>
+<li>But since the type is <code>u32</code>, it will make a copy and move the copy</li>
+<li>When we increment the age, we're incrementing a copy, which is never used.</li>
+</ol>
+<p>We can try solving this by taking a mutable reference to <code>person.age</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_person</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> person.name {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#586e75;">ref</span><span style="color:#657b83;"> name) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name),
+        </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No name provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+    }
+
+    </span><span style="color:#859900;">match &amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> person.age {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(age) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Age is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, age);
+            age += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+        }
+        </span><span style="color:#859900;">None =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">No age provided</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+    }
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Full Person value: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, person);
+}
+</span></code></pre>
+<p>The compiler complains: <code>age</code> is a <code>&amp;mut u32</code>, but we're trying to use
+<code>+=</code> on it:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0368]: binary assignment operation `+=` cannot be applied to type `&amp;mut u32`
+  --&gt; src/main.rs:16:13
+   |
+16 |             age += 1;
+   |             ---^^^^^
+   |             |
+   |             cannot use `+=` on type `&amp;mut u32`
+   |
+   = help: `+=` can be used on &#39;u32&#39;, you can dereference `age`: `*age`
+</span></code></pre>
+<p>The compiler taketh, and the compiler giveth as well: we just need to
+dereference the <code>age</code> reference. Close, but one more error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow field `person.age` of immutable binding as mutable
+  --&gt; src/main.rs:13:16
+   |
+7  | fn print_person(person: Person) {
+   |                 ------ consider changing this to `mut person`
+...
+13 |     match &amp;mut person.age {
+   |                ^^^^^^^^^^ cannot mutably borrow field of immutable binding
+
+error: aborting due to previous error
+</span></code></pre>
+<p>Again, the compiler tells us exactly how to solve the problem: make
+<code>person</code> <code>mut</code>able. Go ahead and make that change, and everything
+should work.</p>
+<p><strong>Exercise 1</strong> In the case of <code>person.name</code>, we came up with two
+solutions: borrow the <code>person.name</code>, or use the <code>ref</code> keyword. The
+same two styles of solutions will work for our current problem. We've
+just demonstrated the borrow approach. Try to solve this instead using
+the <code>ref</code> keyword.</p>
+<h2 id="the-single-iterator">The single iterator</h2>
+<p>Let's make a silly little iterator which produces a single
+value. We'll track whether or not the value has been produced by using
+an <code>Option</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Single</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">next</span><span style="color:#657b83;">: </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt;,
+}
+</span></code></pre>
+<p>Let's make a helper function to create <code>Single</code> values:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">single</span><span style="color:#657b83;">&lt;T&gt;(</span><span style="color:#268bd2;">t</span><span style="color:#657b83;">: T) -&gt; Single&lt;T&gt; {
+    Single {
+        next: </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(t),
+    }
+}
+</span></code></pre>
+<p>And let's write a <code>main</code> that tests that this works as expected:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> actual: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">single</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">42</span><span style="color:#657b83;">).</span><span style="color:#859900;">collect</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">assert_eq!</span><span style="color:#657b83;">(</span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">42</span><span style="color:#657b83;">], actual);
+}
+</span></code></pre>
+<p>If you try to compile that, you'll get an error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0599]: no method named `collect` found for type `Single&lt;{integer}&gt;` in the current scope
+  --&gt; src/main.rs:12:39
+   |
+1  | struct Single&lt;T&gt; {
+   | ---------------- method `collect` not found for this
+...
+12 |     let actual: Vec&lt;u32&gt; = single(42).collect();
+   |                                       ^^^^^^^
+   |
+   = note: the method `collect` exists but the following trait bounds were not satisfied:
+           `&amp;mut Single&lt;{integer}&gt; : std::iter::Iterator`
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following trait defines an item `collect`, perhaps you need to implement it:
+           candidate #1: `std::iter::Iterator`
+</span></code></pre>
+<p>We need to provide an <code>Iterator</code> implementation in order to use
+<code>collect()</code>. The <code>Item</code> is going to be <code>T</code>. And we've already got a
+great <code>Option&lt;T&gt;</code> available for the return value from the <code>next</code>
+function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;T&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Single</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= T;
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt; {
+        </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next
+    }
+}
+</span></code></pre>
+<p>Unfortunately this doesn't work:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0507]: cannot move out of borrowed content
+  --&gt; src/main.rs:21:9
+   |
+21 |         self.next
+   |         ^^^^ cannot move out of borrowed content
+
+error: aborting due to previous error
+</span></code></pre>
+<p>Oh, right. We can't move the result value out, since our <code>next</code>
+function only mutable borrows <code>self</code>. Let's try some pattern matching:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next {
+    </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(next) </span><span style="color:#859900;">=&gt; Some</span><span style="color:#657b83;">(next),
+    </span><span style="color:#859900;">None =&gt; None</span><span style="color:#657b83;">,
+}
+</span></code></pre>
+<p>Except this <em>also</em> involves moving out of a borrow, so it fails. Let's
+try one more time: we'll move into a local variable, set <code>self.next</code>
+to <code>None</code> (so it doesn't repeat the value again), and return the local
+variable:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> res = </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next;
+    </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next = </span><span style="color:#859900;">None</span><span style="color:#657b83;">;
+    res
+}
+</span></code></pre>
+<p>Nope, the compiler is <em>still</em> not happy! I guess we'll just have to
+give up on our grand vision of a <code>Single</code> iterator. We could of course
+just cheat:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#859900;">None
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>But while that compiles, it fails our test at runtime:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">thread &#39;main&#39; panicked at &#39;assertion failed: `(left == right)`
+  left: `[42]`,
+ right: `[]`&#39;, src/main.rs:13:5
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</span></code></pre><h2 id="swap">Swap</h2>
+<p>What we did above was attempt to swap the <code>self.next</code> with a local
+variable. However, the borrow checker wasn't a fan of the approach we
+took. However, there's a helper function in the standard library,
+<code>std::mem::swap</code>, which may be able to help us. It looks like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">swap</span><span style="color:#657b83;">&lt;T&gt;(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> T, </span><span style="color:#268bd2;">y</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> T)
+</span></code></pre>
+<p>And sure enough, we can use it to solve our problem:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> res = </span><span style="color:#859900;">None</span><span style="color:#657b83;">;
+    std::mem::swap(res, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next);
+    res
+}
+</span></code></pre>
+<p><strong>Exercise 2</strong> The code above doesn't quite compile, though the
+compiler can guide you to a correct solution. Try to identify the
+problems above and fix them yourself. Failing that, ask the compiler
+to help you out.</p>
+<h2 id="replace-and-take">replace and take</h2>
+<p>Did you find that whole create-a-temp-variable thing a bit verbose?
+Yeah, it does to the authors of the Rust standard library too. There's
+a helper function that bypasses that temporary variable:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt; {
+    std::mem::replace(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next, </span><span style="color:#859900;">None</span><span style="color:#657b83;">)
+}
+</span></code></pre>
+<p>Much nicer! However, that <strong>still</strong> seems like more work for something
+that should be really easy. And fortunately, yet again, it does to the
+authors of the Rust standard library too. This pattern of replacing
+the value in an <code>Option</code> with <code>None</code> and then working with the
+original value is common enough that they've given it a name and a
+method: <code>take</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.next.</span><span style="color:#859900;">take</span><span style="color:#657b83;">()
+}
+</span></code></pre>
+<p>And we're done!</p>
+<h2 id="lifetimes">Lifetimes</h2>
+<p>We've briefly mentioned lifetimes in previous lessons, but it's time
+to get a bit more serious about them. Let's look at a simple usage of
+references:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_name</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person) -&gt; String {
+    person.name
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">get_name</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">alice);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Name: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+}
+</span></code></pre>
+<p>This code doesn't compile. Our <code>get_name</code> function takes a reference
+to a <code>Person</code>, and then tries to move that person's <code>name</code> in its
+result. This isn't possible. One solution would be to clone the name:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_name</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person) -&gt; String {
+    person.name.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">()
+}
+</span></code></pre>
+<p>While this works, it's relatively inefficient. We like to avoid making
+copies when we can. Instead, let's simply return a reference to the
+name:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_name</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String {
+    </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">person.name
+}
+</span></code></pre>
+<p>Hurrah! But let's make our function a little bit more complicated. We
+now want a function that will take <em>two</em> <code>Person</code>s, and return the
+name of the older one. That sounds fairly easy to write:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_older_name</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person1</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person, </span><span style="color:#268bd2;">person2</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String {
+    </span><span style="color:#859900;">if</span><span style="color:#657b83;"> person1.age &gt;= person2.age {
+        </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">person1.name
+    } </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">person2.name
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> bob = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">35</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">get_older_name</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">alice, </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">bob);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Older person: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+}
+</span></code></pre>
+<p>Unfortunately, the compiler is quite cross with us:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0106]: missing lifetime specifier
+ --&gt; src/main.rs:6:58
+  |
+6 | fn get_older_name(person1: &amp;Person, person2: &amp;Person) -&gt; &amp;String {
+  |                                                          ^ expected lifetime parameter
+  |
+  = help: this function&#39;s return type contains a borrowed value, but the signature does not say whether it is borrowed from `person1` or `person2`
+</span></code></pre>
+<p>That error message is remarkably clear. Our function is returning a
+borrowed value. That value must be borrowed from <em>somewhere</em>. The only
+two options* are <code>person1</code> and <code>person2</code>. And it seems that Rust
+needs to know this for some reason.</p>
+<p>* This is a small fib, see &quot;static lifetime&quot; below.</p>
+<p>Remember how we have some rules about references? References cannot
+outlive the original values they come from. We need to track how long
+the result value is allowed to live, which must be less than or equal
+to the time the value it came from lives. This whole concept is
+<em>lifetimes</em>.</p>
+<p>For reasons we'll get to in a bit (under &quot;lifetime elision&quot;), we can
+often bypass the need to explicitly talk about lifetimes. However,
+sometimes we do need to be explicit. To do this, we introduce some new
+parameters. But this time, they are <em>lifetime parameters</em>, which begin
+with a single quote and are lower case. Usually, they are just a
+single letter. For example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_older_name</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">, </span><span style="color:#586e75;">&#39;b</span><span style="color:#657b83;">&gt;(</span><span style="color:#268bd2;">person1</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> Person, </span><span style="color:#268bd2;">person2</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;b</span><span style="color:#657b83;"> Person) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String
+</span></code></pre>
+<p>We still get an error from the compiler because our return value
+doesn't have a lifetime. Should we choose <code>'a</code> or <code>'b</code>? Or maybe we
+should create a new <code>'c</code> and try that? Let's start off with <code>'a</code>. We
+get the error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0623]: lifetime mismatch
+  --&gt; src/main.rs:10:9
+   |
+6  | fn get_older_name&lt;&#39;a, &#39;b&gt;(person1: &amp;&#39;a Person, person2: &amp;&#39;b Person) -&gt; &amp;&#39;a String {
+   |                                                         ----------     ----------
+   |                                                         |
+   |                                                         this parameter and the return type are declared with different lifetimes...
+...
+10 |         &amp;person2.name
+   |         ^^^^^^^^^^^^^ ...but data from `person2` is returned here
+</span></code></pre>
+<p>That makes sense: since our result may come from <code>person2</code>, we have no
+guarantee that the <code>'a</code> lifetime parameter is less than or equal to
+the <code>'b</code> lifetime parameter. Fortunately, we can explicitly state
+that, in the same way that we state that types implement some traits:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_older_name</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">, </span><span style="color:#586e75;">&#39;b</span><span style="color:#657b83;">: </span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt;(</span><span style="color:#268bd2;">person1</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> Person, </span><span style="color:#268bd2;">person2</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;b</span><span style="color:#657b83;"> Person) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> String {
+</span></code></pre>
+<p>And this actually compiles! Alternatively, in this case, we can just
+completely bypass the second lifetime parameter, and say that
+<code>person1</code> and <code>person2</code> must have the same lifetime, which must be the
+same as the return value:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">get_older_name</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt;(</span><span style="color:#268bd2;">person1</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> Person, </span><span style="color:#268bd2;">person2</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> Person) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> String {
+</span></code></pre>
+<p>If you're like me, you may think that this would be overly
+limiting. For example, I initially thought that with the signature
+above, this code wouldn't compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">alice);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">alice</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person) {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> bob = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">35</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">get_older_name</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">alice, </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">bob);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Older person: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+}
+</span></code></pre>
+<p>After all, the lifetime for <code>alice</code> is demonstrably bigger than the
+lifetime for <code>bob</code>. However, the semantics for lifetimes in functions
+signatures is that all of the values have at least the same
+lifetime. If they happen to live a bit longer, no harm, no foul.</p>
+<h2 id="requirement-for-multiple-lifetime-parameters">Requirement for multiple lifetime parameters</h2>
+<p>So can we cook up an example where multiple lifetime parameters are absolutely necessary? Sure!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">message_and_return</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String, </span><span style="color:#268bd2;">ret</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Printing the message: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+    ret
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">This is the message</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> ret = </span><span style="color:#859900;">message_and_return</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">msg, </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">name);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Return value: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, ret);
+}
+</span></code></pre>
+<p>This code won't compile, because we need some lifetime parameters. So
+let's use our trick from above, and use the same parameter:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">message_and_return</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt;(</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> String, </span><span style="color:#268bd2;">ret</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> String) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;"> String {
+</span></code></pre>
+<p>That compiles, but let's make our calling code a bit more complicated:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> ret = </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">name);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Return value: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, ret);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">This is the message</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">message_and_return</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">msg, </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">name)
+}
+</span></code></pre>
+<p>Now the compiler isn't happy:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0597]: `msg` does not live long enough
+  --&gt; src/main.rs:14:25
+   |
+14 |     message_and_return(&amp;msg, &amp;name)
+   |                         ^^^ borrowed value does not live long enough
+15 | }
+   | - borrowed value only lives until here
+   |
+note: borrowed value must be valid for the anonymous lifetime #1 defined on the function body at 12:1...
+  --&gt; src/main.rs:12:1
+   |
+12 | / fn foo(name: &amp;String) -&gt; &amp;String {
+13 | |     let msg = String::from(&quot;This is the message&quot;);
+14 | |     message_and_return(&amp;msg, &amp;name)
+15 | | }
+   | |_^
+</span></code></pre>
+<p>We've stated that the return value must live the same amount of time
+as the <code>msg</code> parameter. But we return the return value <em>outside</em> of
+the <code>foo</code> function, while the <code>msg</code> value will not live beyond the end
+of <code>foo</code>.</p>
+<p>The calling code should be fine, we just need to tell Rust that it's
+OK if the <code>msg</code> parameter has a shorter lifetime than the return
+value.</p>
+<p><strong>Exercise 3</strong> Modify the signature of <code>message_and_return</code> so that
+the code compiles and runs.</p>
+<h2 id="lifetime-elision">Lifetime elision</h2>
+<p>Why do we sometimes get away with skipping the lifetimes, and
+sometimes we need to include them? There are rules in the language
+called &quot;lifetime elision.&quot; Instead of trying to cover this myself,
+I'll refer to the Nomicon:</p>
+<p>https://doc.rust-lang.org/nomicon/lifetime-elision.html</p>
+<h2 id="static-lifetime">Static lifetime</h2>
+<p>Above, I implied that if you return a reference, then it must have the
+same lifetime as one of its input parameters. This mostly makes sense,
+because otherwise we'd have to conjure some arbitrary lifetime out of
+thin air. However, it's also a lie. There's one special lifetime that
+survives the entire program, called <code>'static</code>. And here's some fun
+news: you've implicitly used it since the first Hello World we wrote
+together!</p>
+<p>Every single string literal is in fact a reference with the lifetime
+of <code>'static</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">name</span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;static </span><span style="color:#268bd2;">str </span><span style="color:#657b83;">{
+    </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#859900;">name</span><span style="color:#657b83;">());
+}
+</span></code></pre><h2 id="arrays-slices-vectors-and-string">Arrays, slices, vectors, and String</h2>
+<p>Here's another place where we've been cheeky. What's the difference
+between <code>String</code> and <code>str</code>? Both of these have popped up quite a
+bit. We'll get to those in a little bit. First, we need to talk about
+arrays, slices, and vectors.</p>
+<h3 id="arrays">Arrays</h3>
+<p>To my knowledge, the best official documentation on arrays is in <a href="https://doc.rust-lang.org/std/primitive.array.html">the
+API docs
+themselves</a>. Arrays
+are contiguous blocks of memory containing a single type of data with
+a fixed length. The type is represented as <code>[T; N]</code>, where <code>T</code> is the
+type of value, and <code>N</code> is the length of the array. And like any sane
+programming language, arrays are 0-indexed in Rust.</p>
+<p>There are two syntaxes for initiating arrays. List literal syntax
+(like Javascript, Python, or Haskell):</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums: [</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">] = [</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, nums);
+}
+</span></code></pre>
+<p>And a repeat expression:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums: [</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">] = [</span><span style="color:#6c71c4;">42</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, nums);
+}
+</span></code></pre>
+<p>You can make arrays mutable and then, well, mutate them:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> nums: [</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">] = [</span><span style="color:#6c71c4;">42</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    nums[</span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">] += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, nums);
+}
+</span></code></pre>
+<p>That's very nice, but what if you need something more dynamic? For
+that, we have...</p>
+<h3 id="vec">Vec</h3>
+<p>A <code>Vec</code> is a &quot;contiguous, growable array type.&quot; You can <code>push</code> and
+<code>pop</code>, check its length, and access via index in O(1) time. We also
+have a nifty <code>vec!</code> macro for constructing them:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> v: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">];
+    v.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">assert_eq!</span><span style="color:#657b83;">(v.</span><span style="color:#859900;">pop</span><span style="color:#657b83;">(), </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">));
+    v.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">);
+    v.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">);
+    v.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">6</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">assert_eq!</span><span style="color:#657b83;">(v.</span><span style="color:#859900;">pop</span><span style="color:#657b83;">(), </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">6</span><span style="color:#657b83;">));
+    </span><span style="color:#859900;">assert_eq!</span><span style="color:#657b83;">(v[</span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">], </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, v); </span><span style="color:#93a1a1;">// 1, 2, 3, 4, 5
+</span><span style="color:#657b83;">}
+</span></code></pre><h3 id="slices">Slices</h3>
+<p>I'm going to write a helper function that prints all the values in a
+<code>Vec</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> v: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">print_vals</span><span style="color:#657b83;">(v);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">v</span><span style="color:#657b83;">: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt;) {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> v {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>Of course, since this is a pass-by-value, the following doesn't compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> v: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">print_vals</span><span style="color:#657b83;">(v);
+    v.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">print_vals</span><span style="color:#657b83;">(v);
+}
+</span></code></pre>
+<p>Easy enough to fix: have <code>print_vals</code> take a reference to a <code>Vec</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> v: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">v);
+    v.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">v);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">v</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt;) {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> v {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>Unfortunately, this doesn't generalize to, say, an array:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> a: [</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">] = [</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">a);
+}
+</span></code></pre>
+<p>This fails since <code>print_vals</code> takes a <code>&amp;Vec&lt;u32&gt;</code>, but we've provided
+a <code>&amp;[u32; 5]</code>. But this is pretty disappointing. A dynamic vector and
+a fixed length array behave the same for so many things. Wouldn't it
+be nice if there was something that generalized both of these?</p>
+<p>Enter slices. To quote the Rust book:</p>
+<blockquote>
+<p>Slices let you reference a contiguous sequence of elements in a
+collection rather than the whole collection.</p>
+</blockquote>
+<p>To make this all work, we need to change the signature of <code>print_vals</code>
+to:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">v</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">]) {
+</span></code></pre>
+<p><code>&amp;[u32]</code> is a reference to a <em>slice</em> of <code>u32</code>s. A slice can be created
+from an array <em>or</em> a <code>Vec</code>, not to mention some other cases as
+well. (We'll discuss how the <code>&amp;</code> borrow operator works its magic in a
+bit.) As a general piece of advice, if you're receiving a parameter
+which is a sequence of values, try to use a slice, as it will give the
+caller much more control about where the data comes from.</p>
+<p>I played a bit of a word game above, switching between &quot;reference to a
+slice&quot; and &quot;a slice.&quot; Obviously we're using a reference. Can we
+dereference a slice reference and get the slice itself? Let's try!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">print_vals</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">vref</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">]) {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> v = *vref;
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> v {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>The compiler is cross with us again:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: the size for values of type `[u32]` cannot be known at compilation time
+ --&gt; src/main.rs:7:9
+  |
+7 |     let v = *vref;
+  |         ^ doesn&#39;t have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `[u32]`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/second-edition/ch19-04-advanced-types.html#dynamically-sized-types-and-sized&gt;
+  = note: all local variables must have a statically known size
+
+error[E0277]: the size for values of type `[u32]` cannot be known at compilation time
+ --&gt; src/main.rs:8:14
+  |
+8 |     for i in v {
+  |              ^ doesn&#39;t have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `[u32]`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/second-edition/ch19-04-advanced-types.html#dynamically-sized-types-and-sized&gt;
+  = note: required by `std::iter::IntoIterator::into_iter`
+
+error[E0277]: the trait bound `[u32]: std::iter::Iterator` is not satisfied
+ --&gt; src/main.rs:8:14
+  |
+8 |     for i in v {
+  |              ^ `[u32]` is not an iterator; maybe try calling `.iter()` or a similar method
+  |
+  = help: the trait `std::iter::Iterator` is not implemented for `[u32]`
+  = note: required by `std::iter::IntoIterator::into_iter`
+</span></code></pre>
+<p>Basically, there's no way to dereference a slice. It logically makes
+sense in any event to just keep a reference to the block of memory
+holding the values, whether it's on the stack, heap, or the executable
+itself (like string literals, which we'll get to later).</p>
+<h2 id="deref">Deref</h2>
+<p>There's something fishy; why does the ampersand/borrow operator give
+us different types? The following compiles just fine!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> v = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">];
+    </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">v;
+    </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">] = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">v;
+}
+</span></code></pre>
+<p>It turns out that the borrow operator interacts with &quot;<code>Deref</code>
+coercion.&quot; If you're curious about this, please check out <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html">the docs
+for the <code>Deref</code>
+trait</a>. As an
+example, I can create a new struct which can be borrowed into a slice:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::ops::Deref;
+
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">MyArray</span><span style="color:#657b83;">([</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">; 5]);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#b58900;">MyArray </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">() -&gt; MyArray {
+        MyArray([</span><span style="color:#6c71c4;">42</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">])
+    }
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Deref </span><span style="color:#859900;">for </span><span style="color:#b58900;">MyArray </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Target </span><span style="color:#657b83;">= [</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">];
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">deref</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Target {
+        </span><span style="color:#859900;">&amp;</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0
+    </span><span style="color:#657b83;">}
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> ma = MyArray::new();
+    </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">MyArray = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">ma;
+    </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">] = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">ma;
+}
+</span></code></pre>
+<p>Thanks to udoprog for <a href="https://stackoverflow.com/questions/53250856/can-i-borrow-a-custom-type-into-a-slice">answering this
+question</a>. Also,
+just because you <em>can</em> do this <a href="https://stackoverflow.com/questions/45086595/is-it-considered-a-bad-practice-to-implement-deref-for-newtypes">doesn't necessarily mean you
+should</a>.</p>
+<h2 id="using-slices">Using slices</h2>
+<p>Slices are data types like any others. You can check out the
+<a href="https://doc.rust-lang.org/std/slice/index.html"><code>std::slice</code> module
+documentation</a> and the
+<a href="https://doc.rust-lang.org/std/primitive.slice.html"><code>slice</code> primitive
+type</a>.</p>
+<p>Some common ways to interact with them include:</p>
+<ul>
+<li>Using them as <code>Iterator</code>s</li>
+<li>Indexing them with <code>slice[idx]</code> syntax</li>
+<li>Taking subslices with <code>slice[start..end]</code> syntax</li>
+</ul>
+<h2 id="byte-literals">Byte literals</h2>
+<p>If you put a lower case <code>b</code> in front of a string literal, you'll get a
+byte array. You can either treat this as a fixed length array or, more
+commonly, as a slice:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> bytearray1: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u8</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">22</span><span style="color:#657b83;">] = </span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello World in binary!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> bytearray2: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">[</span><span style="color:#268bd2;">u8</span><span style="color:#657b83;">] = </span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello World in binary!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, bytearray1);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, bytearray2);
+}
+</span></code></pre>
+<p>Note that you always receive a <em>reference</em> to the value, not the value
+itself. The data is stored in the program executable itself, and
+therefore cannot be modified (thus always receiving an immutable
+reference).</p>
+<p><strong>Exercise 4</strong> Add lifetime parameters to the <code>bytearray1</code> and
+<code>bytearray2</code> types above.</p>
+<h2 id="strings">Strings</h2>
+<p>And finally we can talk about strings! You may think that a string
+literal would be a fixed length array of <code>char</code>s. You can in fact
+create such a thing:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> char_array: [</span><span style="color:#268bd2;">char</span><span style="color:#657b83;">; </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">] = [</span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">H</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">, </span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">e</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">, </span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">l</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">, </span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">l</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">, </span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">o</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, char_array);
+}
+</span></code></pre>
+<p>However, this is <em>not</em> what a <code>str</code> is. The representation above is
+highly inefficient. Since a <code>char</code> in Rust has full Unicode support,
+it takes up 4 bytes in memory (32 bits). However, for most data, this
+is overkill. A character encoding like UTF-8 will be far more
+efficient.</p>
+<p><strong>NOTE</strong> If you're not familiar with Unicode and character encodings,
+it's safe to gloss over these details here. It's not vitally important
+to understanding how strings work in Rust.</p>
+<p>Instead, a string slice (<code>&amp;str</code>) is essentially a newtype wrapper
+around a byte slice (<code>&amp;[u8]</code>), which is guaranteed to be in UTF-8
+encoding. This has some important trade-offs:</p>
+<ul>
+<li>You can cheaply (freely?) convert from a <code>&amp;str</code> to a <code>&amp;[u8]</code>, which
+can be great for making system calls</li>
+<li>You cannot get O(1) random access within strings, since the UTF-8
+encoding doesn't allow for this. Instead, you need to work with a
+character iterator to view the individual characters.</li>
+</ul>
+<p><strong>Exercise 5</strong> Use <code>std::env::args</code> and the <code>chars()</code> method on
+<code>String</code> to print out the number of characters in each command line
+arguments. Bonus points: also print out the number of bytes. Sample
+usage:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run שלום
+arg: target/debug/foo, characters: 16, bytes: 16
+arg: שלום, characters: 4, bytes: 8
+</span></code></pre>
+<p>Don't forget, the first argument is the name of the executable.</p>
+<h2 id="lifetimes-in-data-structures">Lifetimes in data structures</h2>
+<p>One final topic for today is lifetimes in data structures. It's
+entirely possible to keep references in your data structures. However,
+when you do so, you need to be explicit about their lifetimes. For
+example, this will fail to compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+</span></code></pre>
+<p>Instead, you would need to write it as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt; {
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a </span><span style="color:#268bd2;">str</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+</span></code></pre>
+<p>The general recommendation I've received, and which I'd pass on, is
+avoid this when possible. Things end up getting significantly more
+complicated when dealing with lifetime parameters in data
+structures. Typically, you should use owned versions of values
+(e.g. <code>String</code> instead of <code>&amp;str</code>, or <code>Vec</code> or array instead of a
+slice) inside your data structures. In such a case, you need to
+ensure that the lifetime of the reference within the structure
+outlives the structure itself.</p>
+<p>There are times when you can avoid some extra cloning and allocation
+if you use references in your data structure, and the time will
+probably come when you need to do it. But I'd recommend waiting until
+your profiling points you at a specific decision being the bottleneck.
+For more information, see <a href="https://doc.rust-lang.org/book/second-edition/ch10-03-lifetime-syntax.html#lifetime-annotations-in-struct-definitions">the Rust book</a>.</p>
+<h2 id="references-and-slices-in-apis">References and slices in APIs</h2>
+<p>Some general advice which I received and has mostly steered me
+correctly is:</p>
+<blockquote>
+<p>When receiving parameters, prefer slices when possible</p>
+</blockquote>
+<p>However, there are times when this is overly simplistic. If you want a
+deeper dive, there a great blog post covering some trade-offs in
+public APIs: <a href="https://phaazon.net/blog/on-owning-borrowing-pub-interface">On dealing with owning and borrowing in public
+interfaces</a>. The
+<a href="https://www.reddit.com/r/rust/comments/9tzygo/on_dealing_with_owning_and_borrowing_in_public/">Reddit
+discussion</a>
+is also great.</p>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

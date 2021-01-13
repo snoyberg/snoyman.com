@@ -1,0 +1,685 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Kick the Tires - Rust Crash Course lesson 1</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Kick the Tires - Rust Crash Course lesson 1">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 1 in the Rust crash course: kicking the tires with some basic usage of Rust.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Kick the Tires - Rust Crash Course lesson 1</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October 22, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Kick%20the%20Tires%20-%20Rust%20Crash%20Course%20lesson%201 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-01-kick-the-tires&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-01-kick-the-tires&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-01-kick-the-tires&#x2F;&amp;title=Kick%20the%20Tires%20-%20Rust%20Crash%20Course%20lesson%201" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-01-kick-the-tires&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-01-kick-the-tires.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>In this lesson, we just want to get set up with the basics: tooling,
+ability to compile, basic syntax, etc. Let's start off with the
+tooling, you can keep reading while things download.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<h2 id="tooling">Tooling</h2>
+<p>Your gateway drug to Rust will be the <code>rustup</code> tool, which will
+install and manage your Rust toolchains. I put that in the plural,
+because it can manage both multiple versions of the Rust compiler, as
+well as cross compilers for alternative targets. For now, we'll be
+doing simple stuff.</p>
+<ul>
+<li><a href="https://www.rust-lang.org/en-US/install.html">Installation page on rust-lang.org</a></li>
+<li><a href="https://rustup.rs/">rustup.rs page</a></li>
+</ul>
+<p>Both of these pages will tell you to do the same thing:</p>
+<ul>
+<li>On Unix-like systems, run <code>curl https://sh.rustup.rs -sSf | sh</code></li>
+<li>Or run a Windows installer, probably the <a href="https://win.rustup.rs/x86_64">64-bit installer</a></li>
+</ul>
+<p>Read the instructions on the rust-lang page about setting up your
+<code>PATH</code> environment variable. For Unix-like systems, you'll need
+<code>~/.cargo/bin</code> in your <code>PATH</code>.</p>
+<p>Along with the <code>rustup</code> executable, you'll also get:</p>
+<ul>
+<li><code>cargo</code>, the build tool for Rust</li>
+<li><code>rustc</code>, the Rust compiler</li>
+</ul>
+<h2 id="hello-world">Hello, world!</h2>
+<p>Alright, this part's easy: <code>cargo new hello &amp;&amp; cd hello &amp;&amp; cargo run</code>.</p>
+<p>We're <em>not</em> learning all about Cargo right now, but to give you the
+basics:</p>
+<ul>
+<li><code>Cargo.toml</code> contains the metadata on your project, including
+dependencies. We won't be using dependencies quite yet, so the
+defaults will be fine.</li>
+<li><code>Cargo.lock</code> is generated by <code>cargo</code> itself</li>
+<li><code>src</code> contains your source files, for now just <code>src/main.rs</code></li>
+<li><code>target</code> contains generated files</li>
+</ul>
+<p>We'll get to the source code itself in a bit, first a few more tooling
+comments.</p>
+<h3 id="building-with-rustc">Building with rustc</h3>
+<p>For something this simple, you don't need <code>cargo</code> to do the
+building. Instead, you can just use: <code>rustc src/main.rs &amp;&amp; ./main</code>.
+If you feel like experimenting with code this way, go for it. But
+typically, it's a better idea to create a scratch project with <code>cargo new</code> and experiment in there. Entirely your decision.</p>
+<h3 id="running-tests">Running tests</h3>
+<p>We won't be adding any tests to our code yet, but you can run tests in
+your code with <code>cargo test</code>.</p>
+<h3 id="extra-tools">Extra tools</h3>
+<p>Two useful utilities are the <code>rustfmt</code> tool (for automatically
+formatting your code) and <code>clippy</code> (for getting code advice). Note
+that <code>clippy</code> is still a work in progress, and sometimes gives false
+positives. To get them set up, run:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ rustup component add clippy-preview rustfmt-preview
+</span></code></pre>
+<p>And then you can run them with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo fmt
+$ cargo clippy
+</span></code></pre><h3 id="ide">IDE</h3>
+<p>There is some IDE support for those who want it. I've heard great
+things about IntelliJ IDEA's Rust add-on. Personally, I haven't used
+it much yet, but I'm also not much of an IDE user in the first
+place. This crash course won't assume any IDE, just basic text editor
+support.</p>
+<h2 id="macros">Macros</h2>
+<p>Alright, we can finally look out our source code in <code>src/main.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, world!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>Simple enough. <code>fn</code> says we're writing a function. The name is
+<code>main</code>. It takes no arguments, and has no return value. (Or, more
+accurately, it returns the <em>unit type</em>, which is kind of like void in
+C/C++, but really closer to the unit type in Haskell.) String literals
+look pretty normal, and function calls look almost identical to other
+C-style languages.</p>
+<p>Alright, here's the first &quot;crash course&quot; part of this: why is there an
+exclamation point after the <code>println</code>? I say &quot;crash course&quot; because
+when I first learned Rust, I didn't see an explanation of this, and it
+bothered me for a while.</p>
+<p><code>println</code> is <em>not</em> a function. It's a macro. This is because it takes
+a <em>format string</em>, which needs to be checked at compile time. To prove
+the point, try changing the string literal to include <code>{}</code>. You'll get
+an error message along the lines of:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error: 1 positional argument in format string, but no arguments were given
+</span></code></pre>
+<p>This can be fixed by providing an argument to fill into the
+placeholder:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello , world! </span><span style="color:#cb4b16;">{} {} {}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">, </span><span style="color:#b58900;">true</span><span style="color:#657b83;">, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>Take a guess at what the output will be, and you'll probably be
+right. But that leaves us with a question: how does the <code>println!</code>
+macro know how to display these different types?</p>
+<h2 id="traits-and-display">Traits and Display</h2>
+<p>More crash course time! To get a better idea of how displaying works,
+let's trigger a compile time error. To do this, we're going to define
+a new data type called <code>Person</code>, create a value of that type, and try
+to print it:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Person: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice);
+}
+</span></code></pre>
+<p>We'll get into more examples on defining your own <code>struct</code>s and
+<code>enum</code>s later, but you can <a href="https://doc.rust-lang.org/book/2018-edition/ch05-00-structs.html">cheat and read the Rust
+book</a>
+if you're curious.</p>
+<p>If you try to compile that, you'll get:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: `Person` doesn&#39;t implement `std::fmt::Display`
+  --&gt; src/main.rs:11:28
+   |
+11 |     println!(&quot;Person: {}&quot;, alice);
+   |                            ^^^^^ `Person` cannot be formatted with the default formatter
+   |
+   = help: the trait `std::fmt::Display` is not implemented for `Person`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+   = note: required by `std::fmt::Display::fmt`
+</span></code></pre>
+<p>That's a bit verbose, but the important bit is <code>the trait `std::fmt::Display` is not implemented for `Person` </code>. In Rust, a
+<em>trait</em> is similar to an interface in Java, or even better like a
+typeclass in Haskell. (Noticing a pattern of things being similar to
+Haskell concepts? Yeah, I did too.)</p>
+<p>We'll get to all of the fun of defining our own traits, and learning
+about implementing them later. But we're crashing forward right
+now. So let's throw in an implementation of the trait right here:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Display </span><span style="color:#859900;">for </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+}
+</span></code></pre>
+<p>That didn't work:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0405]: cannot find trait `Display` in this scope
+ --&gt; src/main.rs:6:6
+  |
+6 | impl Display for Person {
+  |      ^^^^^^^ not found in this scope
+help: possible candidates are found in other modules, you can import them into scope
+  |
+1 | use core::fmt::Display;
+  |
+1 | use std::fmt::Display;
+  |
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0405`.
+error: Could not compile `foo`.
+</span></code></pre>
+<p>We haven't imported <code>Display</code> into the local namespace. The compiler
+helpfully recommends two different traits that we may want, and tells
+us that we can use the <code>use</code> statement to import them into the local
+namespace. We saw in an earlier error message that we wanted
+<code>std::fmt::Display</code>, so adding <code>use std::fmt::Display;</code> to the top of
+<code>src/main.rs</code> will fix this error message. But just to prove the
+point, no <code>use</code> statement is necessary! We can instead us:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">std::fmt::Display </span><span style="color:#859900;">for </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+}
+</span></code></pre>
+<p>Awesome, our previous error message has been replaced with something
+else:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0046]: not all trait items implemented, missing: `fmt`
+ --&gt; src/main.rs:6:1
+  |
+6 | impl std::fmt::Display for Person {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `fmt` in implementation
+  |
+  = note: `fmt` from trait: `fn(&amp;Self, &amp;mut std::fmt::Formatter&lt;&#39;_&gt;) -&gt; std::result::Result&lt;(), std::fmt::Error&gt;`
+</span></code></pre>
+<p>We're quickly approaching the limit of things we're going to cover in
+a &quot;kicking the tires&quot; lesson. But hopefully this will help us plant
+some seeds for next time.</p>
+<p>The error message is telling us that we need to include a <code>fmt</code> method
+in our implementation of the <code>Display</code> trait. It's also telling us
+what the type signature of this is going to be. Let's look at that
+signature, or at least what the error message says:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">fn(&amp;Self, &amp;mut std::fmt::Formatter&lt;&#39;_&gt;) -&gt; std::result::Result&lt;(), std::fmt::Error&gt;
+</span></code></pre>
+<p>There's a lot to unpack there. I'm going to apply terminology to each
+bit, but you shouldn't expect to fully grok this yet.</p>
+<ul>
+<li><code>Self</code> is the type of the thing getting the implementation. In this
+case, that's <code>Person</code>.</li>
+<li>Adding the <code>&amp;</code> at the beginning makes it a <em>reference</em> to the value,
+not the value itself. C++ developers are used to that concept
+already. Many other languages talk about pass by reference too. In
+Rust, this plays in quite a bit with <em>ownership</em>. Ownership is a
+massively important topic in Rust, and we're not going to discuss it
+more now.</li>
+<li><code>&amp;mut</code> is a <em>mutable reference</em>. By default, everything in Rust is
+immutable, and you have to explicitly say that things are
+mutable. We'll later get into why mutability of references is
+important to ownership in Rust.</li>
+<li>Anyway, the second argument is a mutable reference to a
+<code>Formatter</code>. What's the <code>&lt;'_&gt;</code> thing after <code>Formatter</code>? That's a
+<em>lifetime parameter</em>. That <em>also</em> has to do with ownership. We'll
+get to lifetimes later as well.</li>
+<li>The <code>-&gt;</code> indicates that we're providing the return type of the
+function.</li>
+<li><code>Result</code> is an <code>enum</code>, which is a <em>sum type</em>, or a <em>tagged
+union</em>. It's generic on two <em>type parameters</em>: the value in case of
+success and the value in case of error.</li>
+<li>In the case of success, our function returns a <code>()</code>, or unit
+value. This is another way of saying &quot;I don't return any useful
+value if things go well.&quot; In the case of an error, we return
+<code>std::fmt::Error</code>.</li>
+<li>Rust has no runtime exceptions. Instead, when something goes wrong,
+you return it explicitly. Almost all code uses the <code>Result</code> type to
+track things going wrong. This is more explicit than exception-based
+languages. But unlike languages like C, where it's easy to forget to
+check the type of a return to see if it succeeded, or tedious to do
+error handling properly, Rust makes this much less painful. We'll
+deal with it later.
+<ul>
+<li>
+<p><strong>NOTE</strong> Rust <em>does</em> have the concept of panics, which in practice behave similarly to runtime exceptions. However, there are two important differences. Firstly, by convention, code is not supposed to use the panic mechanism for signaling normal error conditions (like file not found), and instead reserve panics for completely unexpected failures (like logic errors). Secondly, panics are (mostly) unrecoverable, meaning they take down the current thread.</p>
+<p>A previous version of this document said that panics are unrecoverable, and that they take down the entire thread. However, as pointed out by <a href="https://twitter.com/debugsteven">J Haigh</a>, this isn't quite true: the function <a href="https://doc.rust-lang.org/std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a> allows you to usually capture and recover from a panic without losing the current thread. I'm not going to go into more details here.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Awesome, that type signature all on its own gave us enough material
+for about 5 more lessons! Don't worry, you'll be able to write some
+Rust code without understanding all of those details, as we'll
+demonstrate in the rest of this lesson. But if you're really
+adventurous, feel free to explore the Rust book for more information.</p>
+<h2 id="semicolons">Semicolons</h2>
+<p>Let's get back to our code, and actually implement our <code>fmt</code> method:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">std::fmt::Display </span><span style="color:#859900;">for </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">fmt</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">fmt</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#657b83;">std::fmt::Formatter) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;(), std::fmt::Error&gt; {
+        </span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> (</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> years old)</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.name, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.age)
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice = Person {
+        name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        age: </span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">,
+    };
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Person: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice);
+}
+</span></code></pre>
+<p>We're using the <code>write!</code> macro now, to write content into the
+<code>Formatter</code> provided to our method. This is beyond the scope of our
+discussion, but this allows for more efficient construction of values
+and production of I/O than producing a bunch of intermediate
+strings. Yay efficiency.</p>
+<p>The <code>&amp;self</code> parameter of the method is a special way of saying &quot;this
+is a method that works on this object.&quot; This is quite similar to how
+you'd write code in Python, though in Rust you have to deal with pass
+by value vs pass by reference.</p>
+<p>The second parameter is named <code>fmt</code>, and <code>&amp;mut Formatter</code> is its type.</p>
+<p>The very observant among you may have noticed that, above, the error
+message mentioned <code>&amp;Self</code>. In our implementation, however, we made a
+lower <code>&amp;self</code>. The difference is that <code>&amp;Self</code> refers to the <em>type</em> of
+the value, and the lower case <code>&amp;self</code> is the value itself. In fact,
+the <code>&amp;self</code> parameter syntax is basically sugar for <code>self: &amp;Self</code>.</p>
+<p>Does anyone notice something missing? You may think I made a
+typo. Where's the semicolon at the end of the <code>write!</code> call? Well,
+first of all, copy that code in and run it to prove to yourself that
+it's <em>not</em> a typo, and that code works. Now add the semicolon and try
+compiling again. You'll get something like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+ --&gt; src/main.rs:7:81
+  |
+7 |       fn fmt(&amp;self, fmt: &amp;mut std::fmt::Formatter) -&gt; Result&lt;(), std::fmt::Error&gt; {
+  |  _________________________________________________________________________________^
+8 | |         write!(fmt, &quot;{} ({} years old)&quot;, self.name, self.age);
+  | |                                                              - help: consider removing this semicolon
+9 | |     }
+  | |_____^ expected enum `std::result::Result`, found ()
+  |
+  = note: expected type `std::result::Result&lt;(), std::fmt::Error&gt;`
+             found type `()`
+</span></code></pre>
+<p>This is potentially a huge confusion in Rust. Let me point out
+something else that you may have noticed, especially if you come from
+a C/C++/Java background: we have a return value from our method, but
+we never used <code>return</code>!</p>
+<p>The answer to that second concern is easy: the last value generated in
+a function in Rust is taken as its return value. This is similar to
+Ruby and—yet again—Haskell. <code>return</code> is only needed for
+early termination.</p>
+<p>But we're still left with our first question: why don't we need a
+semicolon here, and why does adding the semicolon break our code?
+Semicolons in Rust are used for terminating <em>statements</em>. A statement
+is something like the <code>use</code> statement we saw before, or the <code>let</code>
+statement we briefly demonstrated here. The value of a
+statement is always unit, or <code>()</code>. That's why, when we add the
+semicolon, the error message says <code>found type `()` </code>. Leaving off
+the semicolon, the expression itself is the return value, which is
+what we want.</p>
+<p>You'll see the phrase that Rust is an <em>expression-oriented language</em>,
+and this kind of thing is what it's referring to. You can <a href="https://www.rust-lang.org/en-US/faq.html#when-should-i-use-an-implicit-return">see mention
+of this in the
+FAQ</a>. Personally,
+I find that the usage of semicolon like this can be subtle, and I
+still instinctively trip up on it occasionally when my C/C++/Java
+habits kick in. But fortunately the compiler helps identify these
+pretty quickly.</p>
+<h2 id="numeric-types">Numeric types</h2>
+<p>Last concept before we just start dropping in some code. We're going
+to start off by playing with numeric values. There's a really good
+reason for this in Rust: they are <em>copy values</em>, values which the
+compiler automatically clones for us. Keep in mind that a
+big part of Rust is ownership, and tracking who owns what is
+non-trivial. However, with the primitive numeric types, making copies
+of the values is so cheap, the compiler will do it for you
+automatically. This is some of that automatic magic I mentioned in my
+intro post.</p>
+<p>To demonstrate, let's check out some code that works fine with numeric
+types:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> val: </span><span style="color:#268bd2;">i32 </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">42</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">printer</span><span style="color:#657b83;">(val);
+    </span><span style="color:#859900;">printer</span><span style="color:#657b83;">(val);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">printer</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">val</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">The value is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, val);
+}
+</span></code></pre>
+<p>We've used a <em>let statement</em> to create a new variable, <code>val</code>. We've
+explicitly stated that its type is <code>i32</code>, or a 32-bit signed
+integer. Typically, these kinds of type annotations are not needed in
+Rust, as it will usually be able to infer types. Try leaving off the
+type annotation here. Anyway, we then call the function <code>printer</code> on
+<code>val</code> twice. All good.</p>
+<p>Now, let's use a <code>String</code> instead. A <code>String</code> is a heap-allocated
+value which can be created from a string literal with
+<code>String::from</code>. (Much more on the many string types later). It's
+expensive to copy a <code>String</code>, so the compiler won't do it for us
+automatically. Therefore, this code won't compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> val: </span><span style="color:#859900;">String </span><span style="color:#657b83;">= </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, World!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">printer</span><span style="color:#657b83;">(val);
+    </span><span style="color:#859900;">printer</span><span style="color:#657b83;">(val);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">printer</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">val</span><span style="color:#657b83;">: String) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">The value is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, val);
+}
+</span></code></pre>
+<p>You'll get this intimidating error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: use of moved value: `val`
+ --&gt; src/main.rs:4:13
+  |
+3 |     printer(val);
+  |             --- value moved here
+4 |     printer(val);
+  |             ^^^ value used here after move
+  |
+  = note: move occurs because `val` has type `std::string::String`, which does not implement the `Copy` trait
+
+error: aborting due to previous error
+</span></code></pre>
+<p><strong>Exercise 1</strong> there are two easy ways to fix this error message: one
+using the <code>clone()</code> method of <code>String</code>, and one that changes <code>printer</code>
+to take a reference to a <code>String</code>. Implement both
+solutions. (Solutions will be posted separately in a few days.)</p>
+<h2 id="printing-numbers">Printing numbers</h2>
+<p>We're going to tie off this lesson with a demonstration of three
+different ways of looping to print the numbers 1 to 10. I'll let
+readers guess which is the most idiomatic approach.</p>
+<h3 id="loop">loop</h3>
+<p><code>loop</code> creates an infinite loop.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> i = </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">i == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">if</span><span style="color:#657b83;"> i &gt;= </span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">break</span><span style="color:#657b83;">;
+        } </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+            i += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+        }
+    }
+}
+</span></code></pre>
+<p><strong>Exercise 2</strong> This code doesn't quite work. Try to figure out why
+without asking the compiler. If you can't find the problem, try to
+compile it. Then fix the code.</p>
+<p>If you're wondering: you could equivalently use <code>return</code> or <code>return ()</code> to exit the loop, since the end of the loop is also the end of the
+function.</p>
+<h3 id="while">while</h3>
+<p>This is similar to C-style while loops: it takes a condition to check.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> i = </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">while</span><span style="color:#657b83;"> i &lt;= </span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">i == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        i += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    }
+}
+</span></code></pre>
+<p>This has the same bug as the previous example.</p>
+<h3 id="for-loops">for loops</h3>
+<p>For loops let you perform some action for each value in a
+collection. The collections are generated lazily using iterators, a
+great concept built right into the language in Rust. Iterators are
+somewhat similar to generators in Python.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">i == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre><h2 id="exercise-3-extra-semicolons">Exercise 3: Extra semicolons</h2>
+<p>Can you leave out any semicolons in the examples above? Instead of
+just slamming code into the compiler, try to think through when you
+can and cannot drop the semicolons.</p>
+<h2 id="exercise-4-fizzbuzz">Exercise 4: FizzBuzz</h2>
+<p>Implement fizzbuzz in Rust. The rules are:</p>
+<ul>
+<li>Print the numbers 1 to 100</li>
+<li>If the number is a multiple of 3, output fizz instead of the number</li>
+<li>If the number is a multiple of 5, output buzz instead of the number</li>
+<li>If the number is a multiple of 3 <strong>and</strong> 5, output fizzbuzz instead of the number</li>
+</ul>
+<h2 id="next-time">Next time</h2>
+<p>Next time, the plan is to get into more details on ownership, though
+plans are quite malleable in this series. Stay tuned!</p>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

@@ -1,0 +1,366 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Kids Coding, Part 1</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Kids Coding, Part 1">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="I just started teaching my kids some coding. Here are the notes from the first lesson.">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Kids Coding, Part 1</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published August 23, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Kids%20Coding%2C%20Part%201 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-1&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-1&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-1&#x2F;&amp;title=Kids%20Coding%2C%20Part%201" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-1&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;kids-coding-part-1.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <h1 id="kids-coding-part-1">Kids Coding, Part 1</h1>
+<p>I've been wanting to give my eldest child (Eliezer, now 10) a chance
+to learn to code for about a year now, with little success. My second
+child (Gavriella, now 8) is also ready to start learning some
+coding. &quot;Ready&quot; to me means &quot;they have a decent enough grasp of
+written English.&quot; (Yakov, my 6 year old, also wants in, but
+unfortunately is going to have to wait a bit.)</p>
+<p>I know how I learned to code: sitting at a DOS prompt since the age of
+2 and reading a massive &quot;Teach Yourself QBasic in 21 Days&quot; book. For
+various reasons, this doesn't seem to apply to the next
+generation. I've looked into other modern approaches, including the
+graphical programming environments. My kids enjoyed some of this, but
+this week told me that &quot;it's fun, but we're not learning anything.&quot;</p>
+<p>Previously, I tried teaching Eliezer some Haskell by <a href="https://github.com/snoyberg/magical-guide-haskell">writing up
+lessons for
+him</a>. Whether
+because of my writing or his interest, it didn't work at the time. I
+decided to not go down this path again, and an hour ago sat down with
+Eliezer and Gavriella for their first lesson. I'm winging this
+completely, but here's the approach I'm taking:</p>
+<ul>
+<li>Keep the computer in front of me and show them things</li>
+<li>See what confuses them, what interests them, and follow that</li>
+<li>Give them one or two exercises at the end to reinforce the ideas</li>
+<li>Keep the lessons short to keep their interest</li>
+<li>Write up a blog post right afterward to record what happened, so I
+can learn for the future. After all, Yakov and Lavi (the baby, aka
+<a href="https://twitter.com/search?f=tweets&amp;q=%23youngesthaskeller&amp;src=typd">#YoungestHaskeller</a>)
+need to learn too</li>
+</ul>
+<p>This is the first of these summary blog posts. Caveats:</p>
+<ul>
+<li>This will likely be incomplete</li>
+<li>The material is very much geared towards my kids and probably won't
+generalize</li>
+<li>I have no idea how long or frequently I'll be doing this.</li>
+</ul>
+<p>I considered making these private notes for myself instead, but
+thought some others may be interested, so I'm posting publicly.</p>
+<p>Without further ado!</p>
+<h2 id="python-portion">Python portion</h2>
+<ul>
+<li>Previous experience with Haskell made Eliezer think it was too hard
+for him, so we decided to learn Python instead. He has some
+experience with that from Code Combat.</li>
+<li>I started at the REPL and demonstrated printing strings. We made
+some typical jokes (yes, they were fart jokes) in text form, which
+made the kids giggle. Upshot: they learned about strings, and stayed
+interested.</li>
+<li>I demonstrated that basic arithmetic works at the REPL.</li>
+<li>I opened up a <code>hello-world.py</code> file and demonstrated you could write
+the same stuff from the REPL in a file.</li>
+</ul>
+<p>This was the point where Eliezer commented that it looked a lot like
+the Haskell he'd seen. I'm not sure what it was, but somehow it
+clicked with him that whatever scared him off of Haskell previously
+wasn't a real issue. We decided together to switch over to learning
+Haskell instead, which I'm quite happy about (more because I know the
+language better than anything else).</p>
+<h2 id="haskell-portion">Haskell portion</h2>
+<ul>
+<li>Did the same <code>print</code>, string, and arithmetic stuff at the GHCi
+prompt and in a file</li>
+<li>Asked them what <code>2 + 3 + 4</code> was, they got that</li>
+<li>Asked them what <code>2 * 3 + 4</code> was, they got that too</li>
+<li>Then <code>2 + 3 * 4</code>, and I was surprised to find out that they knew
+about order of operations already. Yay school system.</li>
+<li>They mentioned parentheses, and I told them that would be the same
+way to do things in programming, and showed them <code>(2 + 3) * 4</code>.</li>
+<li>Next we talked about <code>print 2 + 3</code>. They had some inkling that this
+wouldn't work, but couldn't be sure of why.</li>
+<li>I then branched into the next topics...</li>
+</ul>
+<h2 id="types">Types</h2>
+<ul>
+<li>Types are really important in Haskell programming</li>
+<li>Everything has a &quot;type&quot; (this raised confusion and interest, as expected)</li>
+<li>Explained that 2 is a number, that's its type (yes, it's a bit of a
+lie, <code>Int</code>, and defaulting to <code>Integer</code>, and <code>Num a =&gt; a</code>, blah blah
+blah, this is fine for first lesson)</li>
+<li>Is 2 a string? No. Is 2 a dog? (giggles) No. Is 2 a missile?
+(Eliezer got to explain that concept to Gavriella.)</li>
+<li><code>print 2 + 3</code> because of order of operations (just like math) really
+is <code>(print 2) + 3</code>, what does <em>that</em> mean?</li>
+<li>What's the type of <code>print</code>? Confusion</li>
+<li>We've discussed functions a lot before, so pointed out that <code>print</code>
+is a function that takes a number (here) and returns <em>something
+else</em>. What is that <em>something else</em>?</li>
+<li>I introduce the idea of <em>actions</em>. Eliezer got this, Gavriella was
+more confused. So more humor to explain this.</li>
+<li><code>fart = print &quot;Sorry, I farted&quot;</code> lots of giggling. What is the type
+of fart? Is it a number? No. Is it a dog? No. It's something that
+you do, or the computer does. That's what an action is. (Gavriella
+translated some words into Hebrew at that point, and the ideas
+clicked. Got to remember: they're learning both programming
+languages and how to learn things in English at the same time.)</li>
+<li>OK, you can add two numbers together. Does it make sense to add an
+action and a number together? No. So <code>print 2 + 3</code> doesn't make
+sense!</li>
+<li>Now, what's <code>print</code>? It's a function that takes a number and gives
+you back an action. And that's how you use functions in Haskell:
+just stick things next to each other.</li>
+<li>They figured out really quickly at this point that they needed
+parens to fix the program, and ended up with <code>print (2 + 3)</code>.</li>
+</ul>
+<h2 id="today-s-excercise">Today's excercise</h2>
+<p>Note: Somewhere above, I briefly showed them that you could use <code>do</code>
+notation and put multiple <code>print</code> calls on different lines. No
+confusion from this at all. Relevant to the exercise:</p>
+<ul>
+<li>Write a program that print &quot;2 + 3 + 4&quot;, first as a string, and then
+as a number.</li>
+</ul>
+<p>I started them off with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">= do
+  | </span><span style="color:#93a1a1;">-- prompt started here
+</span></code></pre>
+<p>They both got the answer, one of them with a bit of help:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  print </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">2+3+4</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  print (</span><span style="color:#6c71c4;">2</span><span style="color:#859900;">+</span><span style="color:#6c71c4;">3</span><span style="color:#859900;">+</span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>Things to note:</p>
+<ul>
+<li>They naturally left off the spaces, despite me using the spaces
+throughout my typing.</li>
+<li>They never questioned why <code>print &quot;Hello World&quot;</code> resulted in output
+that kept the double quotes. I'll have to explain at <em>some</em> point
+about <code>putStrLn</code>, but that can come much, much later.</li>
+</ul>
+<h2 id="to-figure-out">To figure out</h2>
+<ul>
+<li>How much shell do I teach them?</li>
+<li>What editor will I set them up with?</li>
+</ul>
+<h2 id="next-lesson">Next lesson</h2>
+<p>I don't want to plan out what to cover next time too intricately,
+because I want to experiment with them and bounce things around. I'm
+thinking about showing them how to create their own functions, maybe
+with lambda syntax, not sure.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

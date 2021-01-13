@@ -1,0 +1,340 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>There are no mutable parameters in Rust</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="There are no mutable parameters in Rust">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="A quick description of the difference between mutable values and variables in Rust, as an addendum to the Begin Rust book.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">There are no mutable parameters in Rust</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published May 10, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=There%20are%20no%20mutable%20parameters%20in%20Rust https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;05&#x2F;no-mutable-parameters-in-rust&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;05&#x2F;no-mutable-parameters-in-rust&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;05&#x2F;no-mutable-parameters-in-rust&#x2F;&amp;title=There%20are%20no%20mutable%20parameters%20in%20Rust" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;05&#x2F;no-mutable-parameters-in-rust&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;no-mutable-parameters-in-rust.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>While reviewing the second-to-last chapter in the <a href="https://www.beginrust.com/">Begin Rust</a> book, a slightly more advanced topic came up. This is a topic that has intrigued me for a while, in particular because it demonstrates some fundamental differences in how Rust and Haskell approach mutability. The topic is too advanced for the book, but I wanted to provide an external source to reference for people who are curious. So here it is!</p>
+<p>Let's build this up bit by bit. Does the following program compile?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>Answer: no! <code>x</code> is an immutable variable, and therefore you can't use <code>+= 1</code> on it. Fixing this is easy: add <code>mut</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>But since adding 1 and printing is such an important operation in my application (yes, that's sarcasm), I've decided to extract it to its own function. Tell me, does <em>this</em> code compile?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">add_and_print</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">) {
+    x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>No, and for the same reason as the first example: <code>x</code> is immutable. Fixing that is easy enough here too:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">add_and_print</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">) {
+    x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>Now we have <code>x</code> as the only parameter to <code>add_and_print</code>. Its type is <code>i32</code>, and it is mutable. OK, cool. Finally we're in a position to use this function from <code>main</code>. Tell me, will this program compile and run? And as some really great foreshadowing, will the program generate any warnings?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">add_and_print</span><span style="color:#657b83;">(x);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">add_and_print</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">) {
+    x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>Answer: it compiles, runs, and generates the output <code>x == 6</code>. However, it <em>does</em> have a warning:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: variable does not need to be mutable
+ --&gt; src/main.rs:2:9
+  |
+2 |     let mut x = 5;
+  |         ----^
+  |         |
+  |         help: remove this `mut`
+  |
+</span></code></pre>
+<p>Initially, at least for me, this was really surprising. <code>add_and_print</code> needs to receive a mutable <code>i32</code> as its first parameter. We provide it with a mutable <code>i32</code>. And then the compiler says that the <code>mut</code> in <code>main</code> is unnecessary. What gives?!?</p>
+<p>There's a mistake in my explanation above. The function <code>add_and_print</code>, perhaps very confusingly, does <em>not</em> take a mutable <code>i32</code> as a parameter. &quot;But it says <code>mut</code>!!!&quot; you argue. That's true. However, that detail is <em>internal to the function</em>, not part of its type signature. That sounds confusing, so let me explain.</p>
+<p>There's a pattern that appears all over Rust which I call the <a href="https://www.snoyman.com/blog/2018/11/rust-crash-course-05-rule-of-three">rule of three</a>. This covers the fact that in many cases, we end up having three &quot;versions&quot; of things:</p>
+<ul>
+<li>An immutable borrow</li>
+<li>A mutable borrow</li>
+<li>A move</li>
+</ul>
+<p>That can apply to function parameters, for example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">immutable_borrow</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String)
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">mutable_borrow</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> String)
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">move</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: String)
+</span></code></pre>
+<p>Notice that the difference is entirely <em>after</em> the colon. These three things are different types, and the types are what make up the signature of the function.</p>
+<p>However, the stuff before the colon, in this case the <code>x</code>, does <em>not</em> affect the signature of the function. What name you choose for the variable that captures the parameter is irrelevant to the signature of the function. Once you pass in a value of the right type to the function, the function gets to decide what to call it.</p>
+<p>But this rule applies to more than just the variable name. It applies to the variable <em>mutability</em> as well. You see, mutability in Rust is a feature of the <em>variable</em>, not the value. When I say <code>let mut x = 5</code>, I'm saying &quot;I'm creating a variable called <code>x</code>, it's pointing a value <code>5</code>, and I'm allowed to use <code>x</code> to mutate that value.&quot; If I drop the <code>mut</code>, I'm no longer allowed to mutate that value via the variable <code>x</code>.</p>
+<p>A gut reaction you might have is, if you can't mutate the variable, the only thing you can do is read it. This is where my Haskeller spidey-senses lead me to at least. But it's not true in Rust. There's one other thing you're allowed to do: move the value into another scope. <code>add_and_print</code> accepts the value by move, and even if <code>x</code> is an immutable variable, I'm still allowed to move the value that it references.</p>
+<p>Once I've moved the value, it's entirely up to <code>add_and_print</code> to decide what to do with it. And it's allowed to call it mutable, even though the original variable was immutable. That's because the <em>value itself</em> is passed in, not the variable. And the value is perfectly comfortable being mutated.</p>
+<p>So a warning-free version of the program is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">add_and_print</span><span style="color:#657b83;">(x);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">add_and_print</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">) {
+    x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>In fact, moving-into-mutable is something that can happen even without a function call. For example, you can &quot;upgrade&quot; from an immutable variable to a mutable one inside a single function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> y = x;
+    y += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">y == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, y);
+}
+</span></code></pre>
+<p>&quot;But wait,&quot; you complain, &quot;you can't just 'upgrade' an immutable reference to a mutable reference!&quot; Or maybe a dozen other similar complaints about my explanation. What I'm slightly glossing over here is that, when it comes to references, the mutability <em>is</em> baked into the value. That's because with something like <code>x: &amp;i32</code>, <code>x</code> doesn't have a number, it has a <em>reference</em> to a number. And references themselves are types that do in fact enforce mutable vs immutable rules. Therefore, you can't simply upgrade an immutable reference to a mutable one. This code is broken:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x: </span><span style="color:#268bd2;">i32 </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">i32 </span><span style="color:#657b83;">= </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> z: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">i32 </span><span style="color:#657b83;">= y; </span><span style="color:#93a1a1;">// b0rken!
+
+    </span><span style="color:#657b83;">*z += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">x == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>So, pulling it back together:</p>
+<ul>
+<li>You can have values, immutable references to values, and mutable references to values</li>
+<li>Values are neither immutable or mutable</li>
+<li>Instead, variables are immutable or mutable</li>
+<li>When you move a value into a new variable (via a <code>let</code> or a function call), you can change the mutability of the variable</li>
+<li>The mutability and names of variables in function signatures do not affect the signature of the function</li>
+<li>The mutability of a reference is built into the type itself, so you can't &quot;upgrade&quot; an immutable reference to a mutable one</li>
+</ul>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

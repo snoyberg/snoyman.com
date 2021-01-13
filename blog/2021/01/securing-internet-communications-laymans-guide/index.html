@@ -1,0 +1,399 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Securing internet communications: a layman&#x27;s guide (2021)</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Securing internet communications: a layman&#x27;s guide (2021)">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="A hopefully helpful guide to understanding private communications and censorship-proof social media in 2021. Targeted at non tech people trying to understand this crazy world.
+">
+
+
+
+<meta property="og:image" content="https:&#x2F;&#x2F;www.snoyman.com/thumbs/securing-internet-communications-laymans-guide.png">
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Securing internet communications: a layman&#x27;s guide (2021)</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published January 10, 2021</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Securing%20internet%20communications%3A%20a%20layman%27s%20guide%20%282021%29 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2021&#x2F;01&#x2F;securing-internet-communications-laymans-guide&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2021&#x2F;01&#x2F;securing-internet-communications-laymans-guide&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2021&#x2F;01&#x2F;securing-internet-communications-laymans-guide&#x2F;&amp;title=Securing%20internet%20communications%3A%20a%20layman%27s%20guide%20%282021%29" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2021&#x2F;01&#x2F;securing-internet-communications-laymans-guide&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;securing-internet-communications-laymans-guide.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>There has been rising concern over the past number of years around security in personal communications. More recently, with censorship on social media platforms occurring on a grand scale, people are wondering about securing social media platforms. I wouldn't call myself an expert on either topic, but I have good knowledge of the underlying technologies and principles, and have done some investigative work into the specific platforms for work. With many friends and family suddenly interested in this topic, I figured I would write up a layman's guide.</p>
+<p>One word of caveat, since everything is politically charged today. I definitely have my own political views, and I mostly elect to keep them separate from my discussions of technology. I'm going to do so here as well. I'm not endorsing or objecting to any recent actions or desires of people to communicate in certain ways. If I ever decided to publicly share my political views, I would do that separately. For now, I'm simply going through the technological implications.</p>
+<p><strong>UPDATE</strong> I decided to make a video version of this information as well for those who prefer getting the content in that format. You can check it out <a href="https://www.youtube.com/watch?v=RT69LwB2Pyk">on YouTube</a> or <a href="https://www.bitchute.com/video/zuT7MMGdEX7c/">on BitChute</a>.</p>
+<h2 id="executive-summary">Executive summary</h2>
+<p>I know there are a lot of details below, but I strongly encourage people to read through it, or at least skim, to understand my recommendations here. But for the busy (or lazy), here are my recommendations:</p>
+<ul>
+<li>Private communication:
+<ul>
+<li>Use <a href="https://www.signal.org/">Signal</a>, <a href="https://wire.com/en/">Wire</a>, or <a href="https://matrix.org/">Matrix</a></li>
+<li>Be careful about what you say in a group chat</li>
+<li>Assume anything you say will last forever</li>
+<li>If you want semi-secure email, use <a href="https://protonmail.com/">ProtonMail</a>, but don't rely on it</li>
+</ul>
+</li>
+<li>Social media
+<ul>
+<li>Your best bet for censorship freedom: host the content yourself, but that's hard, and you have to find a place to host it</li>
+<li>When you use <em>any</em> platform, you're at their mercy regarding censorship</li>
+<li>Each platform is pretty upfront at this point about what you're getting. Facebook and Twitter will remove some voices, Gab and Parler claim they won't</li>
+</ul>
+</li>
+<li>General security
+<ul>
+<li>Use a password manager!!!</li>
+<li>Don't install random executables and extensions</li>
+<li>Don't trust messages from people, confirm who they are, check URLs</li>
+</ul>
+</li>
+</ul>
+<p>OK, with that out of the way: the analysis.</p>
+<h2 id="security-doesn-t-mean-anything">Security doesn't mean anything</h2>
+<p>This is the first major point to get across. People often use the term &quot;security&quot; for lots of different things. In a vacuum, the term doesn't mean much. That's because security only applies in the presence of a specific kind of attack, and we haven't defined that attack. It could be a Denial of Service attack, where someone tries to prevent the service from working. It could be a physical attack, like stealing your phone.</p>
+<p>What I hear people concerned about right now are two kinds of attacks. They think they're related, but in reality they are not. Let me explain those attacks:</p>
+<ul>
+<li>I'm worried that my private communications are being read by Big Tech or the government</li>
+<li>I'm worried that my social media posts are going to be censored by Big Tech</li>
+</ul>
+<p>Notice that, in many ways, these are <em>opposite</em> concerns. The former is about ensuring you can say something without anyone else knowing it. The latter is about ensuring you can say something loudly without anyone stopping it. The two different threats necessitate two different analyses, which I'll provide below.</p>
+<p>Also, let me address a threat I'm <em>not</em> addressing, since it's an inherent contradiction. You can't worry about privacy on social media, not in the &quot;blast to the world&quot; public concept it's typically used in. If you want something to be private, don't put it on social media. This may seem obvious, but many people seem to want to have their cake and eat it too. If you post on social media, you can always be held accountable for what you've said there. If you want privacy, use private communications.</p>
+<h2 id="metadata-versus-data">Metadata versus data</h2>
+<p>Metadata is a term like &quot;algorithm&quot; which has a real meaning, but is (ab)used in the media so much to make it seem like scary, unknowable information. It's not. Metadata is just &quot;data about data.&quot; Let's take a simple private communication example. My doctor wants to send me a message about my test results. Most people, and most governments in fact, recognize a right to privacy for this, and enforce this through law (e.g., HIPAA).</p>
+<p>In this example, the &quot;data&quot; would be the results themselves: what test I took, who administered the test, when I took the test, and the results. The metadata would be information about sending the message: who the sender is, who the receiver is, the size of the message, the timestamp of when it was sent, etc.</p>
+<p>Many messaging protocols try to ensure two things:</p>
+<ul>
+<li>The data is completely private to only the participants of the conversation</li>
+<li>The metadata has as little useful information in it as possible</li>
+</ul>
+<p>The reason is that, often times, metadata can be read by intervening services. In our test result example, it would be best to assume that a nefarious party will be able to find out that my doctor sent me <em>some message</em> at 4:32pm on Tuesday, and that it was 5mb in size. Most messaging systems try to hide even that, but you don't usually get the same guarantees as with the underlying data.</p>
+<p>And that brings us to the first important point.</p>
+<h2 id="email-is-busted">Email is busted</h2>
+<p>Don't use email for private communications, full stop. It's an antiquated, poorly designed system. There are a lot of tools out there to try to secure email, but they are all as holey (not holy) as swiss cheese. The primary issue: most of them have no ability to secure your metadata, and that will often include the subject. Imagine your nefarious character can read:</p>
+<blockquote>
+<p>From: Dr. Smith <a href="mailto:drsmith@prostatecancer.org">drsmith@prostatecancer.org</a><br />
+To: John Doe <a href="mailto:john@doe.com">john@doe.com</a><br />
+Subject: Test results, not looking good</p>
+</blockquote>
+<p>Sure, the rest of the message is secure, but does it matter?</p>
+<p>Email is a necessary evil. Many services require it as some kind of identity provider. You'll have to use it. But don't consider anything you put in email safe.</p>
+<p>With major providers like Gmail and Outlook, you can safely assume that the companies are spying on everything you're saying. I use both, and assume nothing that goes on there is truly private. If you want to harden your email usage a bit, <a href="https://protonmail.com/">ProtonMail</a> is a good choice.</p>
+<h2 id="messaging-apps">Messaging apps</h2>
+<p>Perhaps surprisingly, your best bet for privately communicating with others is messaging apps. These include options like WhatsApp, Telegram, and Signal, and I'll get into the trade-offs. As with most things in security, there's a major trade-off between <em>security</em> and <em>convenience</em>. Since I'm writing this for a general purpose audience, I'm not going to go into the intricacies of things like secure key transfer, since I don't think most people will have the stomach for what's involved here. Suffice it to say: these options are, in my opinion, the best options that I think most people will be comfortable using. And they're secure enough for me to use, as you'll see.</p>
+<h3 id="encryption">Encryption</h3>
+<p>The primary question for messaging apps is <em>encryption</em>, and specifically <em>public key cryptography</em>. With public key cryptography, I can send you a message that only you can read, and you can verify that I'm in fact the one who sent it. Done correctly, public key cryptography prevents many kinds of attacks.</p>
+<p>But there's a twist here. Let's say Alice and Bob are trying to talk to each other using a messaging app called SecureTalk. Alice uses the SecureTalk app on her iPhone, and it sends messages to the SecureTalk server, which sends the messages on to Bob's Samsung device. Alice encrypts her message, so only the recipient can read it. The question is: who is the recipient? This may seem obvious (Bob), but it's not. There are two different possibilities here:</p>
+<ol>
+<li>In something called <em>end-to-end encryption</em>, Alice will encrypt the message so only Bob can read it. She'll send the encrypted message and some metadata to the SecureTalk server. The server will be able to read the metadata, but won't know what the message itself says. Then the SecureTalk server sends the metadata and encrypted message to Bob, who is the only person who can read the message itself.</li>
+<li>The simpler approach is that Alice will encrypt the message so that the SecureTalk server can read it. This prevents random other people on the internet from reading the message, but doesn't prevent SecureTalk from reading the message. SecureTalk then reencrypts the message for Bob and sends it to him.</li>
+</ol>
+<p>You may think that (1) actually sounds simpler than (2), but for various technical reasons it isn't. And therefore, a lot of systems out there still do not provide end-to-end encryption. The primary culprit I want to call out here is Telegram. Telegram is viewed as a secure messaging platform. And it <em>does</em> provide end-to-end encryption, but only if you use its &quot;secret chat&quot; feature. But you lose features with it, and most people don't use it most of the time. In other words:</p>
+<blockquote>
+<p>Telegram is not a good choice for security, despite its reputation to the contrary</p>
+</blockquote>
+<h3 id="identity">Identity</h3>
+<p>How do you identify yourself to the messaging service and your colleagues? Most apps use one of two methods: phone number (verified via SMS) and email address (verified via confirmation email). For the most part, the former is most popular, and is used exclusively by systems like WhatsApp, Telegram, and Signal. This is good from an ease of use standpoint. But there's a major issue to be aware of:</p>
+<blockquote>
+<p>Your secure chat identity is tied to your phone number, and most countries track ownership of phones</p>
+</blockquote>
+<p>Maybe you can buy a burner phone without the number being tied to your identity, I'm not sure. I've never needed that level of privacy. But the other system, email address, is easier for creating a more anonymous identity. Most people can easily create a ProtonMail account and have an anonymous experience.</p>
+<p>This is outside the bounds of security, but another advantage of email-based identity is that family members without their own cell phones (like my kids) can use those systems.</p>
+<p>If you want to use email as your identity, and make it easier for people to communicate fully anonymously, systems like <a href="https://wire.com/">Wire</a> and <a href="https://matrix.org">Matrix</a> are your best bet. Wire honestly overall seems like the best system for secure communication to me, but it has the downside of not being as popular.</p>
+<h3 id="exploding-messages">Exploding messages</h3>
+<p>Many systems offer a feature called &quot;exploding messages&quot; or similar. It's a nice idea: you can send a message, and the message will be deleted in a certain amount of time. I've used it at work for sending temporary passwords to people when signing into new accounts. It works great when you have full trust in the other side.</p>
+<p><strong>DO NOT RELY ON EXPLODING MESSAGES</strong></p>
+<p>There is no way at all to prevent a nefarious message receiver from screenshotting or otherwise capturing the contents of the message. We've probably all heard horror stories of highschool girls sending their boyfriends inappropriate Snapchat messages, and the boyfriend screenshotting and sharing those pictures with his friends.</p>
+<h3 id="group-chats">Group chats</h3>
+<p>The easiest way to keep a secret among three people is to kill two of them. Group chats are the same. Security is always multilayered, and there are lots of ways of breaching it. In the case of secure messaging, group conversations are far easier to intercept, since:</p>
+<ul>
+<li>If you break into just one person's device, you've won</li>
+<li>If you can get just one bad actor included in the group, you've won</li>
+<li>If you can spoof just one person (pretending that you are that person), you've won</li>
+</ul>
+<p>Treat as suspect any group chats, unless you absolutely know and trust every single person in the group. And maybe not even then. Like email, consider group chats semi-compromised at all times.</p>
+<h3 id="ownership">Ownership</h3>
+<p>WhatsApp ostensibly uses the same secure protocol as Signal. WhatsApp is widely used. In principle, it's an ideal platform for secure communication, assuming you're OK with phone number based identity. But there's a huge elephant in the room: WhatsApp is owned by Facebook.</p>
+<p>If you trust their claims, the messages in WhatsApp are fully end-to-end encrypted. WhatsApp cannot read what you're sending to your friends and family. But they can definitely read the metadata. And their privacy policy is troubling at best.</p>
+<p>I used to recommend WhatsApp, but I no longer feel comfortable doing so. It's not the worst communication platform, not by far. But at this point, I would recommend that you move over to a different platform, and begin recommending the same to your friends and family.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>The top contenders in this category are WhatsApp, Telegram, and Signal. I've eliminated Telegram due to poor encryption, and WhatsApp due to privacy policy and corporate ownership. Signal wins by default. Additionally, if you're looking for a platform that allows more anonymity, Wire lets you identify yourself via email, and is just as easy to use. The downside is that it's less popular. Finally, Matrix is more sophisticated, and offers some really nice features I haven't touched on (specifically, federation). But it's not as easy to use as the others. Look to it if you're trying to create a community, but it's probably not the best choice.</p>
+<p>Also, start considering using Signal's voice chat as an alternative to normal phone calls, it's also end-to-end encrypted.</p>
+<h2 id="the-platform">The platform</h2>
+<p>As I said above, security is multilayered. You can have the most secure message protocol, with the best encryption, and the most well written application to communicate. But if your platform (your phone, tablet, or computer) are compromised, none of that will matter.</p>
+<p>I honestly don't know what to say about phones. Apple has a good reputation here. Android has a middling reputation here. There are concerns on spying from certain manufacturers, I don't know if there's validity. Windows and Mac computers presumably don't spy on people, but they might.</p>
+<p>Again, I'm writing this for normal people, so I don't want to go too deep on the options here. Experts in the field will start looking at hardened operating systems, and hardware vulnerabilities, and other such things. For the most part, for most people, I'd recommend making sure your devices are secured. That means good passwords, two factor authentication where relevant, and not losing the physical device.</p>
+<h2 id="social-media">Social media</h2>
+<p>If you want to share cat pictures with your family, probably any social media platform will allow you to do it. That is assuming, of course, that you don't express the wrong ideas elsewhere. Ultimately the thing to keep in mind is:</p>
+<blockquote>
+<p>If you use someone's service, they control your voice</p>
+</blockquote>
+<p>There's no value judgement in that statement, it's a statement of fact. If you use Twitter, they currently have the full authority, with no legal impediments, to silence you at will, for any reason. Some people believe that they are judiciously exercising a necessary power to protect people from violence. Others believe that they are capriciously censoring people with WrongThink. Again, this post isn't about the politics of it, just the facts.</p>
+<p>I'm assuming here that your goal is to get your message out to the world without being stifled. The bad news is: you can't do it. Any social media platform can ultimately exercise control over you, despite what they claim. And even if you trust the people running the company, the company may be purchased. Or the people running the computers that the social media platform is using may deny <em>them</em> usage. Or the government may shut them down.</p>
+<p>If you want a message out there that no one can stop, your best bet is hosting it yourself. Even <em>that</em> is difficult. I run this website myself (snoyman.com). I bought a domain name. The government could decide I don't have a right to have that domain name and take it away. That's happened in the past with copyright claims and pirating. I use Amazon as a cloud provider. Amazon may decide I'm not entitled to use their services. So you have more control with your own hosting, but not total control.</p>
+<p>There are more sophisticated censorship-resistant ideas in the world. These focus on decentralization, and leveraging technologies like blockchain to mathematically prevent removal of data. Those systems are not yet mainstream, and there are many practical things that may prevent them.</p>
+<p>So if you want your message out there without censorship, here is my advice:</p>
+<ul>
+<li>Recognize the reality that if you say the wrong thing <em>anywhere</em> on the internet, some platforms my remove you.</li>
+<li>Look for providers that espouse a speech policy that you agree with. If you like Twitter and Facebook's policies on hate speech, awesome, use them! If you like Gab and Parler's approach to free speech, use them!</li>
+<li>Don't be afraid to use multiple platforms simultaneously. I anticipate an uptick in tooling to automatically post to multiple platforms, though for now simply having a presence in multiple places is possible manually.</li>
+</ul>
+<p>You may notice that we're heading towards a world of bifurcated communication. Not passing a value judgement, but it's likely that Twitter and Facebook will become more filled with people in favor of censoring hate speech, and Gab, Parler, and others will become more filled with people who believe there's no such thing as hate speech.</p>
+<h2 id="specific-options">Specific options</h2>
+<p>Here's a short analysis of different platforms I'm aware of for different purposes. I don't actually use all of these, and can't really speak to how well they work, what kind of content they have, or what their censorship practices are. There are <em>many</em>, <em>many</em> other options out there too.</p>
+<h3 id="text-based-microblogging">Text based microblogging</h3>
+<ul>
+<li>Twitter is the obvious king here, with the largest platform by far. It's also clearly on the side of censoring some content.</li>
+<li>Gab is one of the oldest free speech competitors to Twitter. It's been labeled as &quot;Nazi Twitter,&quot; and so far has stood up to all attempts to censor it. It runs its own physical machines to avoid companies like Amazon, and has been banned from many payment processors. It has no mobile apps in the app stores, since Apple and Google have banned them. Without much experience with it, it's probably the best &quot;free speech microblogging&quot; platform out there. It's also developing additional features, like news aggregation, video hosting, and commenting.</li>
+<li>Parler is recently becoming popular as a free speech competitor. Unlike Gab, it has (or, at least, had) mobile apps. And it hosts on Amazon. Unlike Gab, it seems to have a strong presence from major right-wing political figures, which has seemingly given in meteoric popularity. However, as I'm writing this, Parler is being banned from the Google PlayStore, may be banned by Apple, and Amazon is planning on kicking them off their servers. Ultimately, it looks like Parler may simply be relearning lessons Gab already learned.</li>
+</ul>
+<p>You likely will be tarred and feathered as a Nazi for using Gab or Parler. I'll admit that I've mostly avoided Gab because the content I discuss is purely technical and not at censorship risk, and I didn't feel like bringing ire down upon myself. But I am starting to post my content to Gab and Parler as well. Getting ever so slightly political: I hope people start using these platforms for everyday posts so that we don't have two raging political extremes yelling at each other from separate platforms.</p>
+<h3 id="video-hosting">Video hosting</h3>
+<ul>
+<li>YouTube is the clear winner here. It's owned by Google, and has been pretty much in line with Twitter and Facebook's approaches to censorship.</li>
+<li>Vimeo is one of the oldest alternatives to YouTube. I've used it in the past. I honestly have no idea what its take is on censorship.</li>
+<li>BitChute and Rumble are two alternative video hosting platforms I've seen. I've barely used either one. I will admit that I was a little shocked one of the times I checked out BitChute to see some hardcore Nazi videos. Whether you see that statement as an indictment or endorsement of BitChute should give you an indication of whether you embrace anti-hate speech or free speech more.</li>
+</ul>
+<h3 id="live-streaming">Live streaming</h3>
+<ul>
+<li>YouTube and Twitch are the two most popular live streaming platforms, and both have embraced some level of censorship.</li>
+<li>I've heard of DLive as an alternative, and tested it out briefly when I was learning about live streaming myself, but haven't investigated it further. I've also heard it referred to as &quot;Nazi Twitch.&quot;</li>
+<li>I've heard that Rumble is going to be adding live streaming functionality.</li>
+</ul>
+<h3 id="others">Others</h3>
+<ul>
+<li>I don't know anything about photo sharing ala Instragram</li>
+<li>I don't know about podcast apps, I've recently given up on podcasts to spend more time on more useful activities</li>
+<li>I don't think there's a real alternative to Facebook from a &quot;stay in touch with family&quot; standpoint</li>
+<li>I can't even begin to guess at what would be considered a &quot;good&quot; news aggregator.</li>
+<li>Reddit is the largest forum/discussion board. Famously, they blocked <code>r/thedonald</code>, which created its own site TheDonald.win.</li>
+</ul>
+<h2 id="network-effects">Network effects</h2>
+<p>With any of these systems, an important aspect is what's known as &quot;network effects.&quot; That means that the system becomes more valuable the more people that use them. WhatsApp is dominant <em>because it's dominant</em>. The more people using it, the more people want to use it. In economic terms, these might be termed <em>natural monopolies</em>.</p>
+<p>The fact that people who use alternative platforms can be attacked for this increases the network effects. &quot;You're using Signal? What are you, some tinfoil hat conspiracy theorist?&quot; &quot;You're using Gab? What are you, a Nazi?&quot; Again, not passing judgement, just an honest assessment. It's mostly considered non-controversial to use Twitter, Facebook, YouTube, and WhatsApp. You must have some weird reason to use the others.</p>
+<p>Keep that in mind when making your decisions. If you decide to ask your family to communicate on Signal, give them a reason for why you're doing it. And if you can't justify it, maybe the privacy and anti-censorship arguments don't really resonate with you.</p>
+<h2 id="blockchain">Blockchain?</h2>
+<p>No blog post in the past 5 years is complete without mentioning blockchain. I've worked extensively in blockchain for the past four years or so. My company has built blockchain systems, and we've audited a number of them as well. I can tell you a few things:</p>
+<ul>
+<li>There are a <em>lot</em> of incorrect ideas out there about blockchain</li>
+<li>Blockchain concepts could definitely be used to build private communications systems and anti-censorship social media</li>
+<li>There is a majorly incorrect belief that systems like Bitcoin are &quot;anonymous.&quot; They are not. All transactions are publicly recorded. If anyone figures out what your address is, they know what you've done with your money. Caveat emptor.</li>
+</ul>
+<p>There are other blockchain systems that introduce true privacy through very sophisticated means. I personally don't use cryptocurrencies in any meaningful way, and I'm not going to recommend them to everyday people. Maybe at some point in the future I'll write more about them, but not today. For now: I don't consider blockchain any kind of solution to the problems listed here, for most normal people, at today's level of maturity of the technology.</p>
+<h2 id="other-security-recommendations">Other security recommendations</h2>
+<p>If you've gotten this far, congratulations. I've covered everything I promised I'd cover. But since you're here, let me lay out a few other security recommendations for laymen.</p>
+<ul>
+<li>Install a password manager! Stop using the same password on every site. Password managers are secure and easy to use. I personally use <a href="https://bitwarden.com/">BitWarden</a> and have gotten my family and company onto it. Others include LastPass, 1Password, and KeePass.</li>
+<li>Don't install random software for the internet. You're far more likely to lose privacy by installing some spyware than anything else.</li>
+<li>Limit the number of browser extensions you use. Each extension is a potential intrusion into your online communications. I use the BitWarden extension, with some level of trepidation.</li>
+<li>Look at URLs before clicking a link to avoid phishing. Phishing attacks, and social engineering attacks in general, are a primary way to be compromised online.</li>
+<li>Secure your devices. Make sure you have a password or biometric lock on your devices. Don't lose your devices. If you do lose your device, reset your passwords.</li>
+<li>Use advanced credential management like two factor auth whenever possible. <em>Especially</em> if you use the same password everywhere. But seriously: use a password manager. Consider using a system with cloud backup like Authy.</li>
+</ul>
+<p>OK, that's it, I promise. Let me know in the comments below, or on <a href="https://twitter.com/snoyberg">Twitter</a> or <a href="https://gab.com/snoyberg">Gab</a>, if you have additional questions that you'd like me to answer. And if people want, I may turn this blog post into a video as well.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

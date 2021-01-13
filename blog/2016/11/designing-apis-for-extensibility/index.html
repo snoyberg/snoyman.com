@@ -1,0 +1,342 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Designing APIs for Extensibility</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Designing APIs for Extensibility">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Designing APIs for Extensibility</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November  3, 2016</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Designing%20APIs%20for%20Extensibility https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;11&#x2F;designing-apis-for-extensibility&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;11&#x2F;designing-apis-for-extensibility&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;11&#x2F;designing-apis-for-extensibility&#x2F;&amp;title=Designing%20APIs%20for%20Extensibility" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;11&#x2F;designing-apis-for-extensibility&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;designing-apis-for-extensibility.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This is an old bit of content that I wrote, and I'm relocating to this
+blog for posterity. I've actually been using this technique in
+practice to a large extent over the past few libraries with settings
+I've written, and overall like it. But it's definitely opinionated,
+your mileage may vary.</p>
+<p>Every time you make a breaking change in your API, it means that- potentially-
+one or more of your users will need to change his/her code to adapt. Even if
+this update is trivial, it adds friction to the code maintenance process. On
+the other hand, we don't want to be constrained by bad design choices early on
+in a project, and sometimes a breaking API change is the best option.</p>
+<p>The point of this document, however, is to give you a third option: design your
+APIs from the outset to be extensible. There are common techniques employed in
+the Haskell world to make APIs that are resilient to changing feature-sets, and
+by employing them early on in your design process, you can hopefully avoid the
+painful choices between a better API and happy users.</p>
+<p>Almost all techniques start with implementation hiding. Guidelines here are
+simple: don't expose anything non-public. For example, if you write a number of
+helper functions, you may not want to start off by exposing them, since you're
+then telling users that these are good, stable functions to be relied upon.
+Instead, use explicit export lists on your modules and only include functions
+that are intended for public consumption.</p>
+<p>More important- and more tricky- than functions are data constructors. In many
+cases, you want to avoid exposing the internals of your data types to users, to
+allow you to expand on them in the future. A common use case for this is some
+kind of a data type providing configuration information. Consider that you're
+going to communicate with some web services, so you write up the following API:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">module MyAPI
+    </span><span style="color:#657b83;">( </span><span style="color:#268bd2;">Settings </span><span style="color:#b58900;">(..)
+    </span><span style="color:#657b83;">, </span><span style="color:#b58900;">makeAPICall</span><span style="color:#657b83;">
+    ) </span><span style="color:#859900;">where
+
+data </span><span style="color:#cb4b16;">Settings </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Settings</span><span style="color:#657b83;">
+    { apiKey </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Text
+    </span><span style="color:#657b83;">, hostName </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Text</span><span style="color:#657b83;">
+    }
+
+</span><span style="color:#b58900;">makeAPICall </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Settings </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Foo </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO Bar
+</span></code></pre>
+<p>The way your users will access this will be something like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">makeAPICall </span><span style="color:#cb4b16;">Settings</span><span style="color:#657b83;">
+    { apiKey </span><span style="color:#859900;">=</span><span style="color:#657b83;"> myAPIKey
+    , hostName </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">www.example.com</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    } myFoo
+</span></code></pre>
+<p>Now suppose a user points out that, in some cases, the standard port 80 is
+<em>not</em> used for the API call. So you add a new field <code>port :: Int</code> to your
+<code>Settings</code> constructor. This will break your user's code, since the <code>port</code>
+field will not be set.</p>
+<p>Instead, a more robust way of specifying your API will look like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">module MyAPI
+    </span><span style="color:#657b83;">( </span><span style="color:#268bd2;">Settings
+    </span><span style="color:#657b83;">, </span><span style="color:#b58900;">mkSettings
+    </span><span style="color:#657b83;">, </span><span style="color:#b58900;">setHostName
+    </span><span style="color:#657b83;">, </span><span style="color:#b58900;">makeAPICall</span><span style="color:#657b83;">
+    ) </span><span style="color:#859900;">where
+
+data </span><span style="color:#cb4b16;">Settings </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Settings</span><span style="color:#657b83;">
+    { apiKey </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Text
+    </span><span style="color:#657b83;">, hostName </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Text</span><span style="color:#657b83;">
+    }
+
+</span><span style="color:#93a1a1;">-- | Create a @Settings@ value. Uses default value for host name.
+</span><span style="color:#b58900;">mkSettings </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Text </span><span style="color:#93a1a1;">-- ^ API Key
+           </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Settings
+</span><span style="color:#657b83;">mkSettings key </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Settings</span><span style="color:#657b83;">
+    { apiKey </span><span style="color:#859900;">=</span><span style="color:#657b83;"> key
+    , hostName </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">www.example.com</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    }
+
+</span><span style="color:#b58900;">setHostName </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Text </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Settings </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Settings
+</span><span style="color:#657b83;">setHostName hn s </span><span style="color:#859900;">=</span><span style="color:#657b83;"> s { hostName </span><span style="color:#859900;">=</span><span style="color:#657b83;"> hn }
+
+</span><span style="color:#b58900;">makeAPICall </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Settings </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Foo </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO Bar
+</span></code></pre>
+<p>Now your user code will instead look like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">makeAPICall (mkSettings myAPIKey) myFoo
+</span></code></pre>
+<p>This has the following benefits:</p>
+<ul>
+<li>The user is not bothered to fill in default values (in this case, the hostname).</li>
+<li>Extending this API to allow for more fields in the future is trivial: add a new <code>set*</code> function. Internally, you'll add a field to <code>Settings</code> and set a default value in <code>mkSettings</code>.</li>
+</ul>
+<p>One thing to note: please do <em>not</em> expose the field accessors directly. If you
+want to provide getter functions in addition to setters, write them explicitly,
+e.g.:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">getHostName </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Settings </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Text
+</span><span style="color:#657b83;">getHostName </span><span style="color:#859900;">=</span><span style="color:#657b83;"> hostName
+</span></code></pre>
+<p>The reason for this is that by exposing field accessors, users will be able to write code such as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">(mkSettings myAPIKey) { hostName </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">www.example.org</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;"> }
+</span></code></pre>
+<p>This ties your hand for future internal improvements, since you are now
+required to keep a field of name <code>hostName</code> with type <code>Text</code>. By just using
+<code>set</code> and <code>get</code> functions, you can change your internal representation
+significantly and still provide a compatibility layer.</p>
+<p>For those of you familiar with other languages: this is in fact quite similar
+to the approach taken in Java or C#. Just because Java does it doesn't mean
+it's wrong.</p>
+<p>Note that this advice is different to, and intended to supersede, <a href="http://www.yesodweb.com/book/settings-types">the settings
+type approach</a>. Projects like Warp
+which previously used that settings type approach are currently migrating to
+this more extensible approach.</p>
+<p>Also, while settings have been used here as a motivating example, the same
+advice applies to other contexts.</p>
+<h2 id="internal-modules">Internal modules</h2>
+<p>One downside of implementation hiding is that it can make it difficult for
+users to do things you didn't intend for them to do with your API. You can
+always add more functionality on demand, but the delay can be a major nuissance
+for users. A compromise solution in the Haskell community is to provide a
+<code>.Internal</code> module for your project which exports not-quite-public components.
+For example, in wai, the <code>Response</code> constructors are exposed in a
+<code>Network.Wai.Internal</code> module. Normally, users are supposed to use smart
+constructors like <code>responseFile</code>, but occasionally they'll want more
+fine-grained control.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

@@ -1,0 +1,326 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Haskell: The Bad Parts, part 2</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Haskell: The Bad Parts, part 2">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="The second part of a blog post series on the parts of Haskell we should avoid using.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Haskell: The Bad Parts, part 2</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November  9, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Haskell%3A%20The%20Bad%20Parts%2C%20part%202 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;11&#x2F;haskell-bad-parts-2&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;11&#x2F;haskell-bad-parts-2&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;11&#x2F;haskell-bad-parts-2&#x2F;&amp;title=Haskell%3A%20The%20Bad%20Parts%2C%20part%202" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;11&#x2F;haskell-bad-parts-2&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;haskell-bad-parts-2.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>If you didn't see it, please check out <a href="/blog/2020/10/haskell-bad-parts-1">part 1 of this series</a> to understand the purpose of this. Now, for more bad parts!</p>
+<h2 id="partial-functions-in-general">Partial functions (in general)</h2>
+<p>Laziness very likely belongs in this list. My favorite part of criticizing laziness is how quickly people jump to defend it based on edge cases. So let's be a bit more nuanced before I later get far <em>less</em> nuanced. Laziness is <strong>obviously</strong> a good thing. Strictness is <strong>obviously</strong> a good thing. They also both suck. It depends on context and purpose. Each of them introduce different kinds of issues. The real question is: what's a more sensible default? We'll get to that another time.</p>
+<p>I called this section partial functions. Am I having a senior moment? Maybe, but I intentionally started with laziness. In a strict language, function calls can result in exceptions being thrown, segfaulting occurring, or panicking. (And if I write a &quot;Rust: The Bad Parts&quot;, believe me, I'll be mentioning panicking.) The fact that a function <em>acts</em> like it can successfully perform something, but in fact fails in a predictable way (like failing a <code>HashMap</code> lookup), it should be reflected at the type level. If not, ya dun goofed.</p>
+<p>Also, if you have a language that doesn't let you reflect this information at the type level: ya dun goofed.</p>
+<p>Partial functions are the antithesis of this concept. They allow you to say &quot;yeah dude, I can <em>totally</em> give you the first value in an empty list.&quot; Partial functions are like politicians: you can tell they're lying because their lips are moving. (&quot;But Michael,&quot; you say. &quot;Functions don't have lips!&quot; Whatever, I'm waxing poetical.)</p>
+<p>Alright, so plenty of languages screw this up. Haskell tells those languages &quot;hold my beer.&quot;</p>
+<img src="/static/images/holdmybeer.jpg" style="max-width:90%">
+<p>Haskell screws up partial functions way, way worse than other languages:</p>
+<ol>
+<li>It promotes a whole bunch of them in the standard libraries and <code>Prelude</code>.</li>
+<li>Some libraries, like <code>vector</code> (I'm getting to you, don't worry) make it <em>really</em> confusing by providing an <code>index</code> and <code>unsafeIndex</code> function. Hint: <code>index</code> isn't really safe, it's just less unsafe.</li>
+<li>There's no obvious way to search for usages of these partial functions.</li>
+<li>And, by far, the worst...</li>
+</ol>
+<h3 id="values-are-partial-too">Values are partial too!</h3>
+<p>Only in a lazy language does this exist. You call a function. You get a result. You continue working. In any other non-lazy language, that means you have a value. If I have a <code>u32</code> in Rust, I actually have a <code>u32</code> in Rust. Null pointers in languages like C and Java somewhat muddy this situation, but at least primitive types are really there if they say they're there.</p>
+<p>No, not Haskell. <code>x :: Int</code> may in fact not exist. It's a lie. <code>let x = head [] :: [Int]</code> is a box waiting to explode. And you find out <em>much</em> later. And it's even worse than that. <code>let alice = Person { name = &quot;Alice&quot;, age = someAge }</code> may give you a valid <code>Person</code> value. You can evaluate it. But Cthulhu help you if you evaluate <code>age alice</code>. Maybe, just maybe, <code>someAge</code> is a bottom value. Boom! You've smuggled a dirty bomb out.</p>
+<p>I'm not advocating for removing laziness in Haskell. In fact I'm not really advocating for much of anything in this series. I'm just complaining, because I like complaining.</p>
+<p>But <em>if</em> I was to advocate some changes:</p>
+<ul>
+<li>Deprecate partial functions</li>
+<li>Introduce a naming scheme for partial functions to be more obvious</li>
+<li>Introduce a compiler warning to note partial function use (with a pragma to turn off specific usages)</li>
+<li>Warn by default on partial pattern matches</li>
+<li>Advocate strict data fields by default</li>
+</ul>
+<h3 id="but-ackshualllly-infinite-loops">But ackshualllly, infinite loops</h3>
+<p>Someone's gonna say it. So I'll say it. Yes, without major language changes, you can't prevent partial functions. You can't even detect them, unless Turing was wrong (and I have my suspicions.) But Haskell community, please, please learn this lesson:</p>
+<p><strong>DON'T LET THE PERFECT BE THE ENEMY OF THE GOOD</strong></p>
+<p>We can get rid of many of the most common partial functions trivially. We can detect many common cases by looking for partial pattern matches and usage of <code>throw</code> (again, horribly named function). &quot;But we can't get everything&quot; doesn't mean &quot;don't try to get something.&quot;</p>
+<h2 id="hubris">Hubris</h2>
+<p>Given what I just said, we Haskellers have a lot of hubris. Each time you say &quot;if it compiles it works,&quot; a thunk dies and collapses into a blackhole. We've got plenty of messes in Haskell that don't sufficiently protect us from ourselves. The compiler can only do as good a job as our coding standards and our libraries allow.</p>
+<p>&quot;But Haskell's at least better than languages like PHP.&quot; I mean, obviously I agree with this, or I'd be writing PHP. But since I'm being ridiculously hyperbolic here, let me make a ridiculous claim:</p>
+<blockquote>
+<p><strong>PHP is better than Haskell, since at least you don't get a false sense of security</strong></p>
+<p><em>- Michael Snoyman, totally 100% what he actually believes, you should totally quote this out of context</em></p>
+</blockquote>
+<p>I've said this so many times. So I'll say it again. Using a great language with safety features is one tiny piece of the puzzle.</p>
+<ul>
+<li>Did you get the software requirements right?</li>
+<li>Did you leverage the type system to prevent the bugs you're trying to prevent?</li>
+<li>Do your underlying libraries have bugs?</li>
+<li>Did you find a way to implement a function with correct types but incorrect semantics?</li>
+<li>Did you host the thing on a dinky server sitting under your desk and forget that you have power outages on a daily basis?</li>
+<li>Did you forget to write a single test case?</li>
+<li>Do your test cases actually test anything meaningful?</li>
+</ul>
+<p>There are <em>so many ways</em> for software to fail outside the purview of the type system. We've got to stop thinking that somehow Haskell (or, for that matter, Rust, Scala, and other strongly typed languages) are some kind of panacea. Seriously: the PHP people at least know their languages won't protect them from anything. We should bring some of that humility back to Haskell.</p>
+<p>Haskell provides me tools to help prevent certain classes of bugs, so I can spend more of my time catching a bunch of other bugs that I'm absolutely going to write. Because I'm dumb. And we need to remember: we're all dumb.</p>
+<h2 id="more-partial-functions">More partial functions!</h2>
+<p>You know what's worse than partial functions? Insidiously partial functions. We've all been screaming about <code>head</code> and <code>tail</code> for years. My hackles rise every time I see a <code>read</code> instead of <code>readMaybe</code>. I can't remember the last time I saw the <code>!!</code> operator in production code.</p>
+<p>But there are plenty of other functions that are just as dangerous, if not more so. More dangerous because they aren't well known to be partial. They are commonly used. People don't understand why they're dangerous. And they fail only in edge cases that people aren't thinking about.</p>
+<p>Exhibit A: I present <code>decodeUtf8</code>. (Thanks <a href="https://twitter.com/kerckhove_ts/status/1321390954172063745?s=20">Syd</a>.)</p>
+<p>Go ahead, search your codebase. Be dismayed that you've found it present.</p>
+<p>What's wrong with <code>decodeUtf8</code>? As we established last time, character encoding crap breaks stuff in production. UTF-8 works about 99% of the time, especially for people in Western countries. You'll probably forget to even test for it. And that function looks so benign: <code>decodeUtf8 :: ByteString -&gt; Text</code>.</p>
+<p><strong>DO NOT BE FOOLED</strong></p>
+<p>This function is a ticking time bomb. Use <code>decodeUtf8'</code> (yes, it's named that badly, just like <code>foldl'</code>) and explicitly handle error cases. Or use I/O functions that explicitly handle UTF-8 decoding errors and throw a runtime exception.</p>
+<p>&quot;I can't believe Michael still thinks runtime exceptions are a good idea.&quot; I'll get to that another time. I don't really believe they're a good idea. I believe they are omnipresent, better than bottom values, and our least-bad-option.</p>
+<h2 id="law-abiding-type-classes">Law-abiding type classes</h2>
+<p>Now I've truly lost it. What in tarnation could be wrong with law-abiding type classes? They're good, right? Yes, they are! The section heading is complete clickbait. Haha, fooled you!</p>
+<p>There's a concept in the Haskell community that all type classes should be law-abiding. I've gone to the really bad extreme opposing this in the past with early versions of <code>classy-prelude</code>. In my defense: it was an experiment. But it was a bad idea. I've mostly come around to the idea of type classes being lawful. (Also, the original namespacing issues that led to <code>classy-prelude</code> really point out a much bigger bad part of Haskell, which I'll get to later. Stay tuned! Hint: Rust beat us again.)</p>
+<p>Oh, right. Speaking of Rust: they do <em>not</em> believe in law-abiding type classes. There are plenty of type classes over there (though they call them <code>trait</code>s) that are completely ad-hoc. I'm looking at you, <code>FromIterator</code>. This is Very, Very Bad of course. Or so my Haskell instincts tell me. And yet, it makes code Really, Really Good. So now I'm just confused.</p>
+<p>Basically: I think we need much more nuanced on this in the Haskell community. I'm leaning towards my <em>very</em> original instincts having been spot on. So:</p>
+<ul>
+<li>Law abiding type classes: great</li>
+<li>Flippantly non-law-abiding type classes ala the original <code>classy-prelude</code>: bad</li>
+<li>&quot;You know what I meant&quot; typeclasses like <code>ToContent</code> in Yesod: also great</li>
+</ul>
+<p>This isn't exactly in line with a &quot;bad part&quot; of Haskell. Up until now I've been giving a nuanced reflection on my journeys in Haskell. Let me try something better then. Ahem.</p>
+<p><strong>DON'T LECTURE ME ON LAW ABIDING TYPE CLASSES AND FLAGRANTLY VIOLATE LAWS</strong></p>
+<p>I'm staring at you, <code>Eq Double</code>. No, you cannot do equality on a <code>Double</code>. (And thanks again to Syd for this idea.) Rust, again, Got It Right. See <code>PartialEq</code> vs <code>Eq</code>. Floating point values do not allow for total equality. This makes things like <code>Map Double x</code> dangerous. Like, super dangerous. Though maybe not as dangerous as <code>HashMap Double x</code>, which deserves its own rant later.</p>
+<p>So come down from your high horses. We don't have law abiding type classes. We have &quot;if I close my eyes and pretend enough then maybe I have law abiding type classes.&quot;</p>
+<h2 id="unused-import-warnings">Unused import warnings</h2>
+<p>Haskell has a dumb set of default warnings enabled. (&quot;I think you mean GHC, one implementation of Haskell, not Haskell the language itself.&quot; Uh-huh.) How can we <em>not</em> generate a warning for a partial pattern match? Come on! ADTs and pattern matching is <em>the</em> killer feature to first expose people to. And it's a total lie: the compiler by default doesn't protect us from ourselves.</p>
+<p>So of course, we all turn on <code>-Wall</code>. Because we're good kids. We want to do the right thing. And this, of course, turns on unused import warnings. And because each new release of GHC and every library on Hackage likes to mess with us, we are <em>constantly</em> exporting new identifiers from different modules.</p>
+<p>The amount of time I have spent adding weird hacks to account for the fact that <code>&lt;&gt;</code> is suddenly exposed from <code>Prelude</code>, and therefore my <code>import Data.Monoid ((&lt;&gt;))</code> isn't necessary, is obscene. The introduction of fiddly CPP to work around this sucks. In fact, this all sucks. It's horrible.</p>
+<p>I didn't realize how bad it was until I spent more time writing Rust. It reminded me that I never had these problems back as a Java developer. Or C++. This has been a Haskell-only problem for me. Maybe I'll get into this later.</p>
+<p>Side note: I'm trying to avoid turning this series into &quot;Rust is better than Haskell.&quot; But the fact is that many of the problems we face in Haskell <em>don't</em> exist in Rust, for one reason or another. This specific issue is due to a better crate/module system, and object syntax. As long as we're getting our cards on the table, I also think Rust demonstrates what a good freeze/unfreeze story would look like (I'm looking at you <code>Map</code> and <code>HashMap</code>), what a good standard library would be, and what a regular release schedule with backwards compat should look like. Oh, and of course good community processes.</p>
+<h2 id="the-vector-package">The vector package</h2>
+<p>Did I just mention that Rust can show us what a good standard library is? Yes I did! I'm only going to begin to scratch the surface on how bad <code>vector</code> is here. It's really bad. <code>vector</code> is at the level of being <em>just bad enough</em> that no one wants to use it, but being <em>just barely serviceable enough</em> and <em>just wide spread enough</em> that no one wants to replace it. There are two Haskellers I deeply trust who have taken on efforts to do just that, and even I haven't moved over.</p>
+<p>Firstly, the <code>vector</code> package is a package. It shouldn't be. Packed arrays should be in the standard library. Rust got this right. <code>Vec</code> is completely core to the language. And it ties in nicely with built-in syntax for arrays and slices, plus the <code>vec!</code> macro. Haskell's got lists. You can turn on <code>OverloadedLists</code>, but I don't know if anyone does. And besides, you've gotta reach outside of <code>base</code> to get a <code>Vector</code>.</p>
+<p><code>vector</code> is slow to compile. Dog slow. Sloth-recovery-from-Thanksgiving-dinner slow. I'm peeved by this right now because I had to compile it recently.</p>
+<p><code>vector</code> seems to have a litany of runtime performance issues. I haven't tested these myself. But people regularly complain to me about them. Enough people, with enough Haskell experience, that I believe them. (And <code>text</code>: you're in this list too.)</p>
+<p>Oh, right, <code>text</code>. <code>vector</code> is completely different from <code>bytestring</code> and <code>text</code>. And there's the pinned-vs-unpinned memory issue that screws things up. I'm unaware of any other language needing to make that distinction. (If there <em>are</em> examples, please let me know. I'd love to read about it.)</p>
+<p>Stream fusion is dumb. I mean, it's not dumb, I love it. &quot;Stream fusion should be a default when performing array operations so that you magically mostly fuse away intermediate buffers but sometimes it doesn't work because rewrite rules are really fiddly and then my program consumes 8GB of memory whoopsie daisy&quot; is dumb. Really, really dumb.</p>
+<p>The API for <code>vector</code> is lacking. Sure, for what it does, it's fine. But every time I use <code>.push()</code> in Rust, I'm reminded that it could and should be better. I don't want to work with lists all the time. I want to have a mutable vector API that I'm happy to use. I want to sprinkle more <code>runST</code> throughout my code. I want phrases like &quot;freeze&quot; and &quot;thaw&quot; to be common place, much like <code>mut</code> is regularly used in Rust.</p>
+<p>Oh, and there's no such thing as a strict, boxed vector. Boo.</p>
+<p>So in sum:</p>
+<ul>
+<li><code>vector</code> tries to do two things (streaming library and packed buffers)</li>
+<li>It does neither particularly well</li>
+<li>There are enough friction points that people don't use it where it should be used, making lists overused</li>
+<li>It's not core to the language and libraries, but it's &quot;kinda core,&quot; preventing better options from succeeding</li>
+</ul>
+<p>&quot;Michael, you're not being very nice to the maintainers of this library.&quot; I mean these comments in complete respect. I've <em>advocated</em> for many of the things I'm now saying are bad. We learn new stuff and move on. If I had a vision for how to make <code>vector</code> better, I'd propose it. I'm just airing my concerns. I have a vague idea on a nicer library, where you have a typeclass and associated type determining the preferred storage format for each type that can be stored, growable storage, an easy-to-use freeze/thaw, minimal dependencies, quick compile, and associated but separate stream fusion library. But I think working on it would be like <a href="https://xkcd.com/927/">adding a new standard</a>, so I'm not jumping into the fray.</p>
+<h2 id="next-time">Next time...</h2>
+<p>I've dropped plenty of hints for future parts in this series. But I'd really love to hear ideas from others. Thanks to Syd for providing some of the fodder this round. And thanks to a number of people for mentioning partial functions.</p>
+<p>I kind of think I owe some attacks on async exceptions. Stay tuned!</p>
+<h2 id="clarification">Clarification</h2>
+<p>Someone's gonna get upset about my Turing comment above. No, I'm not challenging Turing on the halting problem. I only wanted to imply I was for poops and giggles.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

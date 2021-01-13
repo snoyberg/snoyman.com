@@ -1,0 +1,287 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Force your code to break</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Force your code to break">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="I prefer using Haskell and Rust, first and foremost, because of strong typing. I like languages and tools that protect me from myself. That&#x27;s why I love it when my code breaks.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Force your code to break</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October  8, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Force%20your%20code%20to%20break https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;force-code-to-break&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;force-code-to-break&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;force-code-to-break&#x2F;&amp;title=Force%20your%20code%20to%20break" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;force-code-to-break&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;force-code-to-break.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>I'm assuming most people reading this post like static types, given my typical audience. I love both static types and strong typing. (I'll define the difference in a second.) I've been in the functional programming community for a long time via Haskell. But in all honesty, as much as I like many of the ideas of functional programming (immutability, declarative programming, higher order functions, etc.), all of them pale in comparison to just one feature of Haskell: strong, static typing. That's part of the reason I've been so happy to add Rust to my toolchain: it's not as functional as Haskell, and requires me to think at a lower level of abstraction than I'm accustomed to, but it gives me basically all of the type safety that I want.</p>
+<p>Static typing is easy to understand. All languages, even Javascript or Python, have some level of notion of types. Static typing means whether the types are checked at compile time or runtime. There are some more nuanced points around gradual typing, optional typing, and add-on type systems, but the basic idea stands: static typing is a binary. Since I don't believe in it and never have, I won't try to make an argument for the dynamic typing side. But I can definitely make an argument for static typing:</p>
+<blockquote>
+<p>I want to find out, as early as possible, that my code is broken</p>
+</blockquote>
+<p>If I'm in my editor working on a feature, and a red line pops up saying &quot;hey, this argument is supposed to be a <code>Person</code>, not a <code>String</code>,&quot; I'm <em>happy</em>. Sure, it's annoying having to break my flow right then and fix that. But (1) I can batch up those errors to address at the end of my current workflow and (2) spending five minutes fixing that now can possibly save hours of frantic repairs to a production system.</p>
+<p>&quot;But wait!&quot; you say. &quot;Testing can address that too!&quot; Absolutely, and you should write tests! I won't go quite this far, but a coworker of mine says that if the test doesn't exist, the feature doesn't exist. Tests are necessary, and they can and do prevent many bugs from going to production. Never, ever listen to someone who says &quot;if it compiles it works.&quot; That's a lie. The point here is: use as many layers of protection as possible.</p>
+<p>Strong typing is more nuanced than static typing. I don't think there's such a thing as a &quot;strong typing language.&quot; I don't think there's an easy test for &quot;this is strong typing.&quot; Strong typing is a spectrum of how a code base is set up. Stronger typing means that more things are enforced at the type level, and therefore caught by the type checker at compiler time. My go-to example for this would be replacing usage of a plain <code>String</code>, which could be <em>anything</em>, with appropriate newtype wrappers like <code>Name</code> or <code>EmailAddress</code>. This allows the type system to prevent you from accidentally using the wrong value in the wrong place.</p>
+<p>In this world, no language is &quot;strongly typed.&quot; Nothing in Haskell or Rust, for example, forces you to define such newtype wrappers. And on the other hand, languages like Java or C that most would think of as <em>not</em> strongly typed still allow you to create newtype wrappers. I judge languages as being &quot;strong typing friendly&quot; by how easy they make it to do these things. Both Haskell and Rust make newtype wrapper definitions easy, and provide robust deriving mechanisms so that you can easily do things like create a <code>HashMap</code> with a <code>Name</code> newtype as a key. In my book, that's what makes these languages great.</p>
+<p>That last paragraph buried an important concept, and really the heart of this blog post. My phrase was &quot;how easy they make it to do these things.&quot; I have a philosophy around software, and the philosophy is simple. Software is written by humans. Humans make mistakes. And humans will take shortcuts, especially when under pressure of a deadline (like virtually all commercial software is).</p>
+<p>Once when working on Java code, I mocked sum types via church encoding. If you don't know what that means, don't worry. The important point is that, what would have been 5 lines of Haskell became 5 20-line Java files. And it didn't work as elegantly as Haskell. I wrote that because I was stubborn, and honestly because I was a little curious if it would work. From a cost/benefit trade-off, it's unclear that this effort was worth the added stability in the code. In fact, if the me of today was my manager back then, I would have rejected that code as &quot;too much effort to maintain, and not idiomatic Java.&quot;</p>
+<p>Alright, to summarize my points up to here, the idea is:</p>
+<ul>
+<li>Catching mistakes early is a good thing</li>
+<li>Static types is one way to do that</li>
+<li>Tests are another way to do that</li>
+<li>The more strongly typed your code, the most mistakes you'll catch early on with static types</li>
+<li>Humans <em>will</em> make mistakes, so we need tools that protect us</li>
+<li>Humans <em>will</em> take shortcuts, so we should make it as easy as possible to do the right thing</li>
+</ul>
+<p>One more simple example to throw in, and then I'll get into my final point. External analysis tools are <em>wonderful</em>. <code>cargo clippy</code> is so trivially easy to run on a Rust codebase that people actually do it. Linters, memory tools, and so on, are awesome. Include them in your CI process, and they'll have even more power, because everyone will pay attention to them. Humans may take shortcuts, but machines do not.</p>
+<h2 id="learning-from-clojure">Learning from Clojure</h2>
+<p>Funnily enough, while searching for the original quotes for this section, I landed on a <a href="http://blog.ezyang.com/2016/12/thoughts-about-spec-ulation-rich-hickey/">blog post by Edward Yang</a>, so apparently I'm not the only Haskeller to take these ideas to heart.</p>
+<p>Clojure is not a statically typed language. Rich Hickey is perhaps famous to the rest of the FP world for being opposed to static typing. (I haven't heard comments from him directly in a while, so if I'm misrepresenting him, I apologize, and please correct me.) I disagree with this premise, which should be obvious from the comments above. However, this line of thinking is vital, because even in a dynamically typed world, no one wants bugs to appear at production. Rich has approaches to mitigating these in the absence of static typing. And I think it behooves us in the statically typed world to adopt these practices, adjusted accordingly for the power of static types.</p>
+<p>Leveraging Edward's breakdown of Rich's points, there are two different ideas I want to focus on:</p>
+<ol>
+<li>Never remove a function</li>
+<li>Never mutate a function</li>
+</ol>
+<p>Edward's post is great, and I agree with a lot of what he says there, so I won't repeat too much. I agree in principle that removing a function puts a burden onto users of a library. And taking such actions should be weighed carefully, and only undertaken if there's strong motivation. Many Haskellers, including myself, have a tendency too strongly in favor of &quot;clean up the APIs&quot; instead of &quot;don't break people's code.&quot; Therefore, I think we can learn a lot from Rich's opposing point.</p>
+<p>However, I strongly disagree with <em>never</em> removing a function. I think the word &quot;never&quot; may apply correctly in a dynamically typed world, where removing a function may break things silently in a way that is only discovered in production. Yes, tests can help mitigate that. But as I said: humans will take shortcuts, humans will make mistakes, and I want multiple layers of protection. I see where Rich's approach comes from. I'm glad we don't need to take such an approach in statically typed languages. Instead, here's my viewpoint:</p>
+<blockquote>
+<p>When deciding whether to remove a function, weight the benefits of cleaning up the API/reducing maintenance burden/preventing usage of a bad function against the costs of all users of that function needing to update their codebase.</p>
+</blockquote>
+<p>For economics afficiandos, you may be thinking about negative externalities now and the tragedy of the commons.</p>
+<p>The second point is far more interesting. With static types, mutating a function to take an extra argument, but behave the same way, acts just like removing the function. Everyone using your API incurs a cost. You have to weigh that. That's why I've been moving many of my libraries gradually towards using settings types, since it's easier to extend parameters without causing any breakage.</p>
+<p>On the other hand, mutating a function in a semantic way is really dangerous. If you change the API in some way, and you have static typing, the damage is <em>mostly</em> mitigated, since a user of the function will be forced to do something. However, even in that case, they may blindly apply some changes until the code compiles, not noticing line 243 in the ChangeLog noting the important semantic change that goes along with it. Testing, again, can help. But (1) see my repeated points above about human behavior, and (2) unfortunately types give us a false sense of security, and statically typed code bases are often lacking in necessary testing. (Yes, point (2) is really an extension of point (1), this is all about lazy humans.)</p>
+<p>So I'll pull in a <em>never</em> from Rich, slightly modified: never semantically mutate functionality under the same name. If your new version of a function does something different, give it a new name. If you can, keep the old version under the original name as a compatibility shim. Add a <code>DEPRECATED</code> if you feel you must.</p>
+<h2 id="typeclass-instances">Typeclass instances</h2>
+<p>The most painful example of all of this is typeclass instances. Let's say you have two law abiding versions of a typeclass instance. As a crazy example, consider <code>Semigroup</code> for <code>Int</code>. Both addition and multiplication form a semigroup. Let's say that in one version of base, we introduce an instance that uses addition. And then a consensus is reached that, for some reason, multiplication is clearly better.</p>
+<p>You have basically four options:</p>
+<ol>
+<li>Leave the original addition instance</li>
+<li>Immediately move to the multiplication instance, noting it in the changelog</li>
+<li>Remove the addition instance completely, never adding a new instance</li>
+<li>Remove the addition instance completely, then later add a new multiplication instance</li>
+</ol>
+<p>Of these options, using my framework of thinking above, (2) is by far the worst. It all but guarantees that code will break. And it will break in horribly surprising ways. I would place a large sum of money down that no one, in the entire history of software development, has ever gone through every single line of code in their codebase when upgrading major versions, and compared each of those lines of code against every comment in a changelog. Maybe in some regulated industry where it's contractually required. But I bet even there they took shortcuts.</p>
+<p>The reason why (2) is so bad is that it's a complete betrayal of the ethos of static typing. We know we're breaking code. We know people are using a language like Haskell because they want things to fail at compile time. We know that this change will <em>never</em> break code at compile time. We know this change will almost certain cause incorrect behavior at runtime. And we're including it anyway.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, to tie all of this together:</p>
+<ul>
+<li>No one wants errors in production</li>
+<li>Catching errors early is therefore a Good Thing</li>
+<li>Static typing helps catch some errors early, so it's also a Good Thing</li>
+<li>Following strong typing principles strengthens static typing, so it's also a Good Thing</li>
+<li>Adding more layers of protection via tests, linters, and static analysis is also a Good Thing</li>
+<li>Languages without static types need to find other ways to avoid errors in production, and we can learn from them</li>
+<li>Learning from them: avoid silent, semantic API changes like the plague</li>
+<li>Weigh the impact on your users of changes that will be caught by the compiler</li>
+<li>Do as much as you can to make the Good Things easy and the Bad Things awkward and difficult</li>
+</ul>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

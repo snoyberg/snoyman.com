@@ -1,0 +1,1089 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Iterators and Errors - Rust Crash Course lesson 3</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Iterators and Errors - Rust Crash Course lesson 3">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 3 in the Rust crash course: iterators and errors.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Iterators and Errors - Rust Crash Course lesson 3</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November  5, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Iterators%20and%20Errors%20-%20Rust%20Crash%20Course%20lesson%203 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-03-iterators-and-errors&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-03-iterators-and-errors&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-03-iterators-and-errors&#x2F;&amp;title=Iterators%20and%20Errors%20-%20Rust%20Crash%20Course%20lesson%203" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-03-iterators-and-errors&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-03-iterators-and-errors.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>Last time, we finished off with a <a href="https://gist.github.com/snoyberg/5307d493750d7b48c1c5281961bc31d0">bouncy ball
+implementation</a>
+with some downsides: lackluster error handling and ugly buffering. It
+also had another limitation: a static frame size. Today, we're going
+to address all of these problems, starting with that last one: let's
+get some command line arguments to control the frame size.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<p>Like last time, I'm going to expect you, the reader, to be making
+changes to the source code along with me. Make sure to <em>actually type
+in the code while reading</em>!</p>
+<h2 id="command-line-arguments">Command line arguments</h2>
+<p>We're going to modify our application as follows:</p>
+<ul>
+<li>Accept two command line arguments: the width and the height</li>
+<li>Both must be valid <code>u32</code>s</li>
+<li>Too many or too few command line arguments will result in an error message</li>
+</ul>
+<p>Sounds easy enough. In a real application, we would use a proper
+argument-handling library, like
+<a href="https://crates.io/crates/clap">clap</a>. But for now, we're going lower
+level. Like we did for the sleep function, let's start by <a href="https://doc.rust-lang.org/std/index.html?search=args">searching
+the standard library
+docs</a> for the
+word <code>args</code>. The first two entries both look relevant.</p>
+<ul>
+<li><code>std::env::Args</code> An iterator over the arguments of a process, yielding a <code>String</code> value for each argument.</li>
+<li><code>std::env::args</code> Returns the arguments which this program was started with (normally passed via the command line).</li>
+</ul>
+<p>Now's a good time to mention that, by strong convention:</p>
+<ul>
+<li>Module names (like <code>std</code> and <code>env</code>) and function names (like <code>args</code>) are <code>snake_cased</code></li>
+<li>Types (like <code>Args</code>) are <code>PascalCased</code>
+<ul>
+<li>Exception: primitives like <code>u32</code> and <code>str</code> are lower case</li>
+</ul>
+</li>
+</ul>
+<p>The <code>std</code> module has an <code>env</code> module. The <code>env</code> module has both an
+<code>Args</code> type and a <code>args</code> function. Why do we need both? Even more
+strangely, let's look at the type signature for the <code>args</code> function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">args</span><span style="color:#657b83;">() -&gt; Args
+</span></code></pre>
+<p>The <code>args</code> <em>function</em> returns a value of type <code>Args</code>. If <code>Args</code> was a
+type synonym for, say, a vector of <code>String</code>s, this would make
+sense. But that's not the case. And if you <a href="https://doc.rust-lang.org/std/env/struct.Args.html">check out its
+docs</a>, there
+aren't any fields or methods exposed on <code>Args</code>, only trait
+implementations!</p>
+<h2 id="the-extra-datatype-pattern">The extra datatype pattern</h2>
+<p>Maybe there's a proper term for this in Rust, but I haven't seen it
+myself yet. (If someone has, please let me know so I can use the
+proper term.) There's a pervasive pattern in the Rust ecosystem, which
+in my experience starts with iterators and continues to more advanced
+topics like futures and async I/O.</p>
+<ul>
+<li>We want to have composable interfaces</li>
+<li>We also want high performance</li>
+<li>Therefore, we define lots of helper data types that allow the
+compiler to perform some great optimizations</li>
+<li>And we define traits as an interface to let these types compose
+nicely with each other</li>
+</ul>
+<p>Sound abstract? Don't worry, we'll make that concrete in a bit. Here's
+the practical outcome of all of this:</p>
+<ul>
+<li>We end up programming quite a bit against traits, which provide a
+common abstractions and lots of helper functions</li>
+<li>We get a matching data type for many common functions</li>
+<li>Often times, our type signatures will end up being massive,
+representing all of the different composition we performed (though
+the new-ish <code>-&gt; impl Iterator</code> style helps with that significantly,
+see <a href="https://blog.rust-lang.org/2018/05/10/Rust-1.26.html#impl-trait">the announcement blog post</a>
+for more details)</li>
+</ul>
+<p>Alright, with that out of the way, let's get back to command line
+arguments!</p>
+<h2 id="cli-args-via-iterators">CLI args via iterators</h2>
+<p>Let's play around in an empty file before coming back to bouncy. (Either use <code>cargo new</code> and <code>cargo run</code>, or use <code>rustc</code> directly, your call.) If I click on the expand button next to the <code>Iterator</code> trait on the <code>Args</code> docs page, I see this function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#859900;">String</span><span style="color:#657b83;">&gt;
+</span></code></pre>
+<p>Let's play with that a bit:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// Yes, that name shadowing works
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">());
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">());
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">());
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">());
+}
+</span></code></pre>
+<p>Notice that we had to use <code>let mut</code>, since the <code>next</code> method will
+mutate the value. Now I'm going to run this with <code>cargo run foo bar</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run foo bar
+   Compiling args v0.1.0 (/Users/michael/Desktop/tmp/args)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.60s
+     Running `target/debug/args foo bar`
+Some(&quot;target/debug/args&quot;)
+Some(&quot;foo&quot;)
+Some(&quot;bar&quot;)
+None
+</span></code></pre>
+<p>Nice! It gives us the name of our executable, followed by the command
+line arguments, returning <code>None</code> when there's nothing left. (For
+pedants out there: command line arguments aren't technically
+<em>required</em> to have the command name as the first argument, it's just a
+really strong convention most tools follow.)</p>
+<p>Let's play with this some more. Can you write a loop that prints out
+all of the command line arguments and then exits? Take a minute, and
+then I'll provide some answers.</p>
+<p>Alright, done? Cool, let's see some examples! First, we'll <code>loop</code> with
+<code>return</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">None =&gt; return</span><span style="color:#657b83;">,
+            </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(arg) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg),
+        }
+    }
+}
+</span></code></pre>
+<p>We also don't need to use <code>return</code> here. Instead of returning from the
+function, we can just <code>break</code> out of the loop:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">None =&gt; break</span><span style="color:#657b83;">,
+            </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(arg) </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg),
+        }
+    }
+}
+</span></code></pre>
+<p>Or, if you want to save on some indentation, you can use the <code>if let</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">if </span><span style="color:#268bd2;">let </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(arg) = args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg);
+        } </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">break</span><span style="color:#657b83;">;
+            </span><span style="color:#93a1a1;">// return would work too, but break is nicer
+            // here, as it is more narrowly scoped
+        </span><span style="color:#657b83;">}
+    }
+}
+</span></code></pre>
+<p>You can <em>also</em> use <code>while let</code>. Try to guess what that would look like
+before checking the next example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">while </span><span style="color:#268bd2;">let </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(arg) = args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg);
+    }
+}
+</span></code></pre>
+<p>Getting better! Alright, one final example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in args</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg);
+    }
+}
+</span></code></pre>
+<p>Whoa, what?!? Welcome to one of my favorite aspects of Rust. Iterators
+are a concept built into the language directly, via <code>for</code> loops. A
+<code>for</code> loop will automate the calling of <code>next()</code>. It also hides away
+the fact that there's some mutable state at play, at least to some
+extent. This is a powerful concept, and allows a lot of code to end up
+with a more functional style, something I happen to be a big fan of.</p>
+<h2 id="skipping">Skipping</h2>
+<p>It's all well and good that the first arguments in the name of the
+executable. But we typically don't care about that. Can we somehow
+skip that in our output? Well, here's one approach:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">();
+    </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_ </span><span style="color:#657b83;">= args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// drop it on the floor
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in</span><span style="color:#657b83;"> args {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg);
+    }
+}
+</span></code></pre>
+<p>That works, but it's a bit clumsy, especially compared to our previous
+version that had no mutable variables. Maybe there's some other way to
+skip things. Let's <a href="https://doc.rust-lang.org/std/env/struct.Args.html?search=skip">search the standard library
+again</a>. I
+see the first results as
+<a href="https://doc.rust-lang.org/std/iter/struct.Skip.html"><code>std::iter::Skip</code></a>
+and
+<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.skip"><code>std::iter::Iterator::skip</code></a>. The
+former is a data type, and the latter is a method on the <code>Iterator</code>
+trait. Since our <code>Args</code> type implements the <code>Iterator</code> trait, we can
+use it. Nice!</p>
+<p><strong>Side note</strong> Haskellers: <code>skip</code> is like <code>drop</code> in most Haskell
+libraries, like <code>Data.List</code> or <code>vector</code>. <code>drop</code> has a totally
+different meaning in Rust (dropping owned data), so <code>skip</code> is a better
+name in Rust.</p>
+<p>Let's look at some signatures from the docs above:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub </span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Skip</span><span style="color:#657b83;">&lt;I&gt; { </span><span style="color:#93a1a1;">/* fields omitted */ </span><span style="color:#657b83;">}
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">skip</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">n</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">usize</span><span style="color:#657b83;">) -&gt; Skip&lt;</span><span style="color:#268bd2;">Self</span><span style="color:#657b83;">&gt;
+</span></code></pre>
+<p>Hmm... deep breaths. <code>Skip</code> is a data type that is <em>parameterized</em>
+over some data type, <code>I</code>. This is a common pattern in iterators:
+<code>Skip</code> wraps around an existing data type and adds some new
+functionality to how it iterates. The <code>skip</code> method will <em>consume</em> an
+existing iterator, take the number of arguments to skip, and return a
+new <code>Skip&lt;OrigDataType&gt;</code> value. How do I know it consumes the original
+iterator? The first parameter is <code>self</code>, not <code>&amp;self</code> or <code>&amp;mut self</code>.</p>
+<p>That seemed like a lot of concepts. Fortunately, <em>usage</em> is pretty
+easy:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in args</span><span style="color:#657b83;">().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg);
+    }
+}
+</span></code></pre>
+<p>Nice!</p>
+<p><strong>Exercise 1</strong> Type inference lets the program above work just fine
+without any type annotations. However, it's a good idea to get used to
+the generated types, since you'll see them <a href="https://twitter.com/snoyberg/status/1054393245122334720">all too
+often</a> in
+error messages. Get the program below to compile by fixing the type
+signature. Try to do it without using compiler at first, since the
+error messages will almost give the answer away.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::{args, Args};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::iter::Skip;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> args: Args = </span><span style="color:#859900;">args</span><span style="color:#657b83;">().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in</span><span style="color:#657b83;"> args {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg);
+    }
+}
+</span></code></pre>
+<p>This layering-of-datatypes approach, as mentioned above, is a real
+boon to performance. Iterator-heavy code will often compile down to an
+efficient loop, comparable with the best hand-rolled loop you could
+have written. However, iterator code is much higher level, more
+declarative, and easy to maintain and extend.</p>
+<p>There's a lot more to iterators, but we're going to stop there for the
+moment, since we still want to process our command line parameters,
+and we need to learn one more thing first.</p>
+<h2 id="parsing-integers">Parsing integers</h2>
+<p>If you search the standard library for <code>parse</code>, you'll find the
+<a href="https://doc.rust-lang.org/std/primitive.str.html#method.parse"><code>str::parse</code>
+method</a>. The
+documentation does a good job of explaining things, I won't repeat
+that here. Please go read that now.</p>
+<p>OK, you're back? Turbofish is a funny name, right?</p>
+<p>Take a crack at writing a program that prints the result of parsing
+each command line argument as a <code>u32</code>, then check my version:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in </span><span style="color:#657b83;">std::env::args().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg.parse::&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt;());
+    }
+}
+</span></code></pre>
+<p>And let's try running it:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run one 2 three four 5 6 7
+Err(ParseIntError { kind: InvalidDigit })
+Ok(2)
+Err(ParseIntError { kind: InvalidDigit })
+Err(ParseIntError { kind: InvalidDigit })
+Ok(5)
+Ok(6)
+Ok(7)
+</span></code></pre>
+<p>When the parse is successful, we get the <code>Ok</code> variant of the <code>Result</code>
+enum. When the parse fails, we get the <code>Err</code> variant, with a
+<a href="https://doc.rust-lang.org/std/num/struct.ParseIntError.html"><code>ParseIntError</code></a>
+telling us what went wrong. (The type signature on <code>parse</code> itself uses
+some associated types to indicate this type, we're not going to get
+into that right now.)</p>
+<p>This is a common pattern in Rust. Rust has no runtime exceptions, so
+we track potential failure at the type level with actual values.</p>
+<p><strong>Side note</strong> You may think of <code>panic</code>s as similar to runtime
+exceptions, and to some extent they are. However, you're not able to
+properly recover from <code>panic</code>s, making them different in practice from
+how runtime exceptions are used in other languages like Python.</p>
+<h2 id="parse-our-command-line">Parse our command line</h2>
+<p>We're finally ready to get started on our actual command line parsing!
+We're going to be overly tedious in our implementation, especially
+with our data types. After we finish implementing this in a blank
+file, we'll move the code into the bouncy implementation
+itself. First, let's define a data type to hold a successful parse,
+which will contain the width and the height.</p>
+<p><strong>Challenge</strong> Will this be a struct or an enum? Can you try
+implementing this yourself first?</p>
+<p>Since we want to hold onto multiple values, we'll be using a
+<code>struct</code>. I'd like to use named fields, so we have:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Frame </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">width</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">height</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+</span></code></pre>
+<p>Next, let's define an error type to represent all of the things that
+can go wrong during this parse. We have:</p>
+<ul>
+<li>Too few arguments</li>
+<li>Too many arguments</li>
+<li>Invalid integer</li>
+</ul>
+<p><strong>Challenge</strong> Are we going to use a struct or an enum this time?</p>
+<p>This time, we'll use an enum, because we'll only detect one of these
+problems (whichever we notice first). Officianados of web forms and
+applicative parsing may scoff at this and say we should detect <em>all</em>
+errors, but we're going to be lazy.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">enum </span><span style="color:#b58900;">ParseError </span><span style="color:#657b83;">{
+    TooFewArgs,
+    TooManyArgs,
+    InvalidInteger(</span><span style="color:#859900;">String</span><span style="color:#657b83;">),
+}
+</span></code></pre>
+<p>Notice that the <code>InvalidInteger</code> variant takes a payload, the <code>String</code>
+it failed parsing. This is what makes <code>enum</code>s in Rust so much more
+powerful than enumerations in most other languages.</p>
+<p><strong>Challenge</strong> We're going to write a <code>parse_args</code> helper function. Can
+you guess what its type signature will be?</p>
+<p>Combining all of the knowledge we established above, here's an
+implementation:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Frame </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">width</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">height</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">enum </span><span style="color:#b58900;">ParseError </span><span style="color:#657b83;">{
+    TooFewArgs,
+    TooManyArgs,
+    InvalidInteger(</span><span style="color:#859900;">String</span><span style="color:#657b83;">),
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">parse_args</span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;Frame, ParseError&gt; {
+    </span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::ParseError::*; </span><span style="color:#93a1a1;">// bring variants into our namespace
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = std::env::args().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; Err</span><span style="color:#657b83;">(TooFewArgs),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(width_str) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+                </span><span style="color:#859900;">None =&gt; Err</span><span style="color:#657b83;">(TooFewArgs),
+                </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(height_str) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+                    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+                        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; Err</span><span style="color:#657b83;">(TooManyArgs),
+                        </span><span style="color:#859900;">None =&gt; </span><span style="color:#657b83;">{
+                            </span><span style="color:#859900;">match</span><span style="color:#657b83;"> width_str.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">() {
+                                </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; Err</span><span style="color:#657b83;">(InvalidInteger(width_str)),
+                                </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(width) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+                                    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> height_str.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">() {
+                                        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; Err</span><span style="color:#657b83;">(InvalidInteger(height_str)),
+                                        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(height) </span><span style="color:#859900;">=&gt; Ok</span><span style="color:#657b83;">(Frame {
+                                            width,
+                                            height,
+                                        }),
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#859900;">parse_args</span><span style="color:#657b83;">());
+}
+</span></code></pre>
+<p>Holy nested blocks Batman, that is a <em>lot</em> of indentation! The pattern
+is pretty straightforward:</p>
+<ul>
+<li>Pattern match</li>
+<li>If we got something bad, stop with an <code>Err</code></li>
+<li>If we got something good, keep going</li>
+</ul>
+<p>Haskellers at this point are screaming about <code>do</code> notation and
+monads. Ignore them. We're in the land of Rust, we don't take
+<strong>kind</strong>ly to those things around here. (Someone please yell at me for
+that terrible pun.)</p>
+<p><strong>Exercise 2</strong> Why didn't we need to use the turbofish on the call to
+<code>parse</code> above?</p>
+<p>What we want to do is <em>return</em> early from our function. You know what
+keyword can help with that? That's right: <code>return</code>!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">parse_args</span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;Frame, ParseError&gt; {
+    </span><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::ParseError::*;
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = std::env::args().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> width_str = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; return Err</span><span style="color:#657b83;">(TooFewArgs),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(width_str) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> width_str,
+    };
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> height_str = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; return Err</span><span style="color:#657b83;">(TooFewArgs),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(height_str) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> height_str,
+    };
+
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; return Err</span><span style="color:#657b83;">(TooManyArgs),
+        </span><span style="color:#859900;">None =&gt; </span><span style="color:#657b83;">(),
+    }
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> width = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> width_str.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; return Err</span><span style="color:#657b83;">(InvalidInteger(width_str)),
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(width) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> width,
+    };
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> height = </span><span style="color:#859900;">match</span><span style="color:#657b83;"> height_str.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; return Err</span><span style="color:#657b83;">(InvalidInteger(height_str)),
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(height) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> height,
+    };
+
+    </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Frame {
+        width,
+        height,
+    })
+}
+</span></code></pre>
+<p>Much nicer to look at! However, it's still a bit repetitive, and
+littering those <code>return</code>s everywhere is subjectively not very nice. In
+fact, while typing this up, I accidentally left off a few of the
+<code>return</code>s and got to stare at some long error messages. (Try that for
+yourself.)</p>
+<h2 id="question-mark">Question mark</h2>
+<p><strong>Side note</strong> The trailing question mark we're about to introduce used
+to be the <code>try!</code> macro in Rust. If you're confused about the seeming
+overlap: it's simply a transition to new syntax.</p>
+<p>The pattern above is so common that Rust has built in syntax for
+it. If you put a question mark after an expression, it basically does
+the whole match/return-on-Err thing for you. It's more powerful than
+we'll demonstrate right now, but we'll get to that extra power a bit
+later.</p>
+<p>To start off, we're going to define some helper functions to:</p>
+<ul>
+<li>Require another argument</li>
+<li>Require that there are no more arguments</li>
+<li>Parse a <code>u32</code></li>
+</ul>
+<p>All of these need to return <code>Result</code> values, and we'll use a
+<code>ParseError</code> for the error case in all of them. The first two
+functions need to take a mutable reference to our arguments. (As a
+side note, I'm going to stop using the <code>skip</code> method now, because if I
+do it will give away the solution to exercise 1.)</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::env::Args;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">args</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Args) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;</span><span style="color:#859900;">String</span><span style="color:#657b83;">, ParseError&gt; {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; Err</span><span style="color:#657b83;">(ParseError::TooFewArgs),
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(s) </span><span style="color:#859900;">=&gt; Ok</span><span style="color:#657b83;">(s),
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">require_no_args</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">args</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Args) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;(), ParseError&gt; {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> args.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; Err</span><span style="color:#657b83;">(ParseError::TooManyArgs),
+        </span><span style="color:#93a1a1;">// I think this looks a little weird myself.
+        // But we&#39;re wrapping up the unit value ()
+        // with the Ok variant. You get used to it
+        // after a while, I guess
+        </span><span style="color:#859900;">None =&gt; Ok</span><span style="color:#657b83;">(()),
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">parse_u32</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">s</span><span style="color:#657b83;">: String) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">, ParseError&gt; {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> s.</span><span style="color:#859900;">parse</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt; Err</span><span style="color:#657b83;">(ParseError::InvalidInteger(s)),
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(x) </span><span style="color:#859900;">=&gt; Ok</span><span style="color:#657b83;">(x),
+    }
+}
+</span></code></pre>
+<p>Now that we have these helpers defined, our <code>parse_args</code> function is
+much easier to look at:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">parse_args</span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;Frame, ParseError&gt; {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = std::env::args();
+
+    </span><span style="color:#93a1a1;">// skip the command name
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> _command_name = </span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> width_str = </span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> height_str = </span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">require_no_args</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> width = </span><span style="color:#859900;">parse_u32</span><span style="color:#657b83;">(width_str)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> height = </span><span style="color:#859900;">parse_u32</span><span style="color:#657b83;">(height_str)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Frame { width, height })
+}
+</span></code></pre>
+<p>Beautiful!</p>
+<h2 id="forgotten-question-marks">Forgotten question marks</h2>
+<p>What do you think happens if you forget the question mark on the <code>let width_str</code> line? If you do so:</p>
+<ul>
+<li><code>width_str</code> will contain a <code>Result&lt;String, ParseError&gt;</code> instead of a <code>String</code></li>
+<li>The call to <code>parse_u32</code> will not type check</li>
+</ul>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+  --&gt; src/main.rs:50:27
+   |
+50 |     let width = parse_u32(width_str)?;
+   |                           ^^^^^^^^^ expected struct `std::string::String`, found enum `std::result::Result`
+   |
+   = note: expected type `std::string::String`
+              found type `std::result::Result&lt;std::string::String, ParseError&gt;`
+</span></code></pre>
+<p>That's nice. But what will happen if we forget the question mark on
+the <code>require_no_args</code> call? We never use the output value there, so it
+will type check just fine. Now we have the age old problem of C: we're
+accidentally ignoring error codes!</p>
+<p>Well, not so fast. Check out this wonderful warning from the compiler:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: unused `std::result::Result` which must be used
+  --&gt; src/main.rs:49:5
+   |
+49 |     require_no_args(&amp;mut args);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(unused_must_use)] on by default
+   = note: this `Result` may be an `Err` variant, which should be handled
+</span></code></pre>
+<p>That's right: Rust will detect if you've ignored a potential
+failure. There <em>is</em> a hole in this in the current code sample:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> _command_name = </span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args);
+</span></code></pre>
+<p>That doesn't trigger the warning, since in <code>let _name = blah;</code>, the
+leading underscore says &quot;I know what I'm doing, I don't care about
+this value.&quot; Instead, it's better to write the code without the <code>let</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args);
+</span></code></pre>
+<p>Now we get a warning, which can be solved with the added trailing
+question mark.</p>
+<h2 id="exercise-3">Exercise 3</h2>
+<p>It would be more convenient to use method call syntax. Let's define a
+helper data type to make this possible. Fill in the implementation of
+the code below.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Frame </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">width</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">height</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">enum </span><span style="color:#b58900;">ParseError </span><span style="color:#657b83;">{
+    TooFewArgs,
+    TooManyArgs,
+    InvalidInteger(</span><span style="color:#859900;">String</span><span style="color:#657b83;">),
+}
+
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">ParseArgs</span><span style="color:#657b83;">(std::env::Args);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#b58900;">ParseArgs </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">() -&gt; ParseArgs {
+        </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()
+    }
+
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">require_arg</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;</span><span style="color:#859900;">String</span><span style="color:#657b83;">, ParseError&gt; {
+        </span><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        }
+    }
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">require_no_args</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;(), ParseError&gt; {
+        </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">parse_args</span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;Frame, ParseError&gt; {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> args = ParseArgs::new();
+
+    </span><span style="color:#93a1a1;">// skip the command name
+</span><span style="color:#657b83;">    args.</span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">()</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> width_str = args.</span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">()</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> height_str = args.</span><span style="color:#859900;">require_arg</span><span style="color:#657b83;">()</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    args.</span><span style="color:#859900;">require_no_args</span><span style="color:#657b83;">()</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> width = </span><span style="color:#859900;">parse_u32</span><span style="color:#657b83;">(width_str)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> height = </span><span style="color:#859900;">parse_u32</span><span style="color:#657b83;">(height_str)</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(Frame { width, height })
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#859900;">parse_args</span><span style="color:#657b83;">());
+}
+</span></code></pre><h2 id="updating-bouncy">Updating bouncy</h2>
+<p>This next bit should be done as a Cargo project, not with
+<code>rustc</code>. Let's start a new empty project:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo new bouncy-args --bin
+$ cd bouncy-args
+</span></code></pre>
+<p>Next, let's get the <a href="https://gist.githubusercontent.com/snoyberg/5307d493750d7b48c1c5281961bc31d0/raw/8f467e87f69a197095bda096cbbb71d8d813b1d7/main.rs">old
+code</a>
+and place it in <code>src/main.rs</code>. You can copy-paste manually, or run:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ curl https://gist.githubusercontent.com/snoyberg/5307d493750d7b48c1c5281961bc31d0/raw/8f467e87f69a197095bda096cbbb71d8d813b1d7/main.rs &gt; src/main.rs
+</span></code></pre>
+<p>Run <code>cargo run</code> and make sure it works. You can use <code>Ctrl-C</code> to kill
+the program.</p>
+<p>We already wrote fully usable argument parsing code above. Instead of
+putting it in the same source file, let's put it in its own file. In
+order to do so, we're going to have to play with modules in Rust.</p>
+<p>For convenience, you can <a href="https://gist.github.com/snoyberg/568899dc3ae6c82e54809efe283e4473">view the full source code</a> as a Gist. We need to put this in <code>src/parse_args.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ curl https://gist.githubusercontent.com/snoyberg/568899dc3ae6c82e54809efe283e4473/raw/2ee261684f81745b21e571360b1c5f5d77b78fce/parse_args.rs &gt; src/parse_args.rs
+</span></code></pre>
+<p>If you run <code>cargo build</code> now, it won't even look at
+<code>parse_args.rs</code>. Don't believe me? Add some invalid content to the top
+of that file and run <code>cargo build</code> again. Nothing happens, right? We
+need to tell the compiler that we've got another module in our
+project. We do that by modifying <code>src/main.rs</code>. Add the following line
+to the top of your file:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">mod </span><span style="color:#b58900;">parse_args</span><span style="color:#657b83;">;
+</span></code></pre>
+<p>If you put in that invalid line before, running <code>cargo build</code> should
+now result in an error message. Perfect! Go ahead and get rid of that
+invalid line and make sure everything compiles and runs. We won't be
+accepting command line arguments yet, but we're getting closer.</p>
+<h2 id="use-it">Use it!</h2>
+<p>We're currently getting some dead code warnings, since we aren't using
+anything from the new module:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: struct is never constructed: `Frame`
+ --&gt; src/parse_args.rs:2:1
+  |
+2 | struct Frame {
+  | ^^^^^^^^^^^^
+  |
+  = note: #[warn(dead_code)] on by default
+
+warning: enum is never used: `ParseError`
+ --&gt; src/parse_args.rs:8:1
+  |
+8 | enum ParseError {
+  | ^^^^^^^^^^^^^^^
+
+warning: function is never used: `parse_args`
+  --&gt; src/parse_args.rs:14:1
+   |
+14 | fn parse_args() -&gt; Result&lt;Frame, ParseError&gt; {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</span></code></pre>
+<p>Let's fix that. To start off, add the following to the top of your
+<code>main</code> function, just to prove that we can, in fact, use our new module:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, parse_args::parse_args());
+</span><span style="color:#859900;">return</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// don&#39;t start the game, our output will disappear
+</span></code></pre>
+<p>Also, add a <code>pub</code> in front of the items we want to access from the
+<code>main.rs</code> file, namely:</p>
+<ul>
+<li><code>struct Frame</code></li>
+<li><code>enum ParseError</code></li>
+<li><code>fn parse_args</code></li>
+</ul>
+<p>Running this gets us:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run
+   Compiling bouncy-args v0.1.0 (/Users/michael/Desktop/tmp/bouncy-args)
+warning: unreachable statement
+   --&gt; src/main.rs:115:5
+    |
+115 |     let mut game = Game::new();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: #[warn(unreachable_code)] on by default
+
+warning: variable does not need to be mutable
+   --&gt; src/main.rs:115:9
+    |
+115 |     let mut game = Game::new();
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: #[warn(unused_mut)] on by default
+
+    Finished dev [unoptimized + debuginfo] target(s) in 0.67s
+     Running `target/debug/bouncy-args`
+Err(TooFewArgs)
+</span></code></pre>
+<p>It's nice that we get an unreachable statement warning. It's also a
+bit weird that <code>game</code> is no longer required to be
+mutable. Strange. But most importantly: our argument parsing is
+working!</p>
+<p>Let's try to use this. We'll modify the <code>Game::new()</code> method to accept
+a <code>Frame</code> as input:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#b58900;">Game </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">frame</span><span style="color:#657b83;">: Frame) -&gt; Game {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> ball = Ball {
+            x: </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">,
+            y: </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">,
+            vert_dir: VertDir::Up,
+            horiz_dir: HorizDir::Left,
+        };
+        Game {frame, ball}
+    }
+
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>And now we can rewrite our <code>main</code> function as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main </span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">match </span><span style="color:#657b83;">parse_args::parse_args() {
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(e) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#93a1a1;">// prints to stderr instead of stdout
+            </span><span style="color:#859900;">eprintln!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Error parsing args: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, e);
+        },
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(frame) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> game = Game::new(frame);
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleep_duration = std::time::Duration::from_millis(</span><span style="color:#6c71c4;">33</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, game);
+                game.</span><span style="color:#859900;">step</span><span style="color:#657b83;">();
+                std::thread::sleep(sleep_duration);
+            }
+        }
+    }
+}
+</span></code></pre><h2 id="mismatched-types">Mismatched types</h2>
+<p>We're good, right? Not quite:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+   --&gt; src/main.rs:114:38
+    |
+114 |             let mut game = Game::new(frame);
+    |                                      ^^^^^ expected struct `Frame`, found struct `parse_args::Frame`
+    |
+    = note: expected type `Frame`
+               found type `parse_args::Frame`
+</span></code></pre>
+<p>We now have two different definitions of <code>Frame</code>: in our <code>parse_args</code>
+module, and in <code>main.rs</code>. Let's fix that. First, delete the <code>Frame</code>
+declaration in <code>main.rs</code>. Then add the following after our <code>mod parse_args;</code> statement:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#d33682;">self</span><span style="color:#657b83;">::parse_args::Frame;
+</span></code></pre>
+<p><code>self</code> says we're finding a module that's a child of the current
+module.</p>
+<h2 id="public-and-private">Public and private</h2>
+<p>Now everything will work, right? Wrong again! <code>cargo build</code> will vomit
+a bunch of these errors:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0616]: field `height` of struct `parse_args::Frame` is private
+  --&gt; src/main.rs:85:23
+   |
+85 |         for row in 0..self.frame.height {
+   |
+</span></code></pre>
+<p>By default, identifiers are private in Rust. In order to expose them
+from one module to another, you need to add the <code>pub</code> keyword. For
+example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub</span><span style="color:#657b83;"> width: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+</span></code></pre>
+<p>Go ahead and add <code>pub</code> as needed. Finally, if you run <code>cargo run</code>, you
+should see <code>Error parsing args: TooFewArgs</code>. And if you run <code>cargo run 5 5</code>, you should see a much smaller frame than before. Hurrah!</p>
+<h2 id="exercise-4">Exercise 4</h2>
+<p>What happens if you run <code>cargo run 0 0</code>? How about <code>cargo run 1 1</code>?
+Put in some better error handling in <code>parse_args</code>.</p>
+<h2 id="exit-code">Exit code</h2>
+<p>Alright, one final irritation. Let's provide some invalid arguments
+and inspect the exit code of the process:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run 5
+Error parsing args: TooFewArgs
+$ echo $?
+0
+</span></code></pre>
+<p>For those not familiar: a 0 exit code means everything went OK. That's
+clearly not the case here! If we search the standard library, it seems
+the
+<a href="https://doc.rust-lang.org/std/process/fn.exit.html"><code>std::process::exit</code></a>
+can be used to address this. Go ahead and try using that to solve the
+problem here.</p>
+<p>However, we've got one more option: we can return a <code>Result</code> straight
+from <code>main</code>!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main </span><span style="color:#657b83;">() -&gt; </span><span style="color:#859900;">Result</span><span style="color:#657b83;">&lt;(), self::parse_args::ParseError&gt; {
+    </span><span style="color:#859900;">match </span><span style="color:#657b83;">parse_args::parse_args() {
+        </span><span style="color:#859900;">Err</span><span style="color:#657b83;">(e) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">return Err</span><span style="color:#657b83;">(e);
+        },
+        </span><span style="color:#859900;">Ok</span><span style="color:#657b83;">(frame) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+            </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> game = Game::new(frame);
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleep_duration = std::time::Duration::from_millis(</span><span style="color:#6c71c4;">33</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, game);
+                game.</span><span style="color:#859900;">step</span><span style="color:#657b83;">();
+                std::thread::sleep(sleep_duration);
+            }
+        }
+    }
+}
+</span></code></pre>
+<p><strong>Exercise 5</strong> Can you do something to clean up the nesting a bit here?</p>
+<h2 id="better-error-handling">Better error handling</h2>
+<p>The error handling problem we had in the last lesson involved the call
+to <code>top_bottom</code>. I've already included a solution to that in the
+download of the code provided. Guess what I changed since last time
+and then check the code to confirm that you're right.</p>
+<p>If you're following <em>very</em> closely, you may be surprised that there
+aren't more warnings about unused <code>Result</code> values coming from other
+calls to <code>write!</code>. As far as I can tell, this is in fact a <a href="https://github.com/rust-lang/rust/issues/55240">bug in the
+Rust compiler</a>.</p>
+<p>Still, it would be good practice to fix up those calls to
+<code>write!</code>. Take a stab at doing so.</p>
+<h2 id="next-time">Next time</h2>
+<p>We still didn't fix our double buffering problem, we'll get to that
+next time. We're also going to introduce some more error handling from
+the standard library. And maybe we'll get to play a bit more with
+iterators as well.</p>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Your Second Haskell Web App</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+## Your Second Haskell Web App
+
+### A Yesod Workshop
+
+* Michael Snoyman
+* VP Engineering, FP Complete&lt;br&gt;&lt;img alt=&quot;FP Complete logo&quot; src=&quot;https:&#x2F;&#x2F;tech.fpcomplete.com&#x2F;images&#x2F;fp-complete-logo-small.png&quot; style=&quot;border:0&quot;&gt;
+* Berlin Functional Programming Group
+    * c&#x2F;o COVID-19
+* Thursday, April 23, 2020
+
+---
+
+## Last time, on Functional Conf
+
+* Previous talk: first web app with WAI and Warp
+* We&#x27;ll do a quick recap of that...
+* Then explain what Yesod is
+* This is an **interactive** workshop
+* Get your keyboards ready!
+* https:&#x2F;&#x2F;tech.fpcomplete.com&#x2F;haskell&#x2F;get-started
+
+```
+stack new mysecondapp yesodweb&#x2F;simple
+cd mysecondapp
+stack build . yesod-bin
+```
+
+---
+
+## Who are the players?
+
+* Haskell: strongly typed functional programming language
+* GHC: the compiler
+* Stack: the build tool, wraps around GHC
+* WAI: interface between apps and servers
+* Warp: a Haskell web server
+* Yesod: a web framework, built on WAI
+
+---
+
+## What is &quot;built on WAI?&quot;
+
+* Yesod applications are WAI applications
+* Can apply all of the WAI middleware on a Yesod app
+* Can embed another WAI app inside a Yesod app
+* Can run Yesod app on any WAI handler
+
+---
+
+## What is Yesod?
+
+* It&#x27;s boring!
+* Standard MVC framework approach
+* Original goal: what if a web framework had awesomeness of Haskell&#x27;s type system?
+* Want to prevent common bugs at compile time
+* Want to enforce boundaries
+
+---
+
+## Type system can stop bugs?
+
+* Yes it can!
+* Cross-site scripting (XSS) by having an `HTML` data type
+    * Generally: great way to avoid string escaping bugs
+* Well-formed URLs are guaranteed by route data type
+    * Can still get 404s due to, e.g., missing database ID
+    * In practice, catches many common bugs
+
+---
+
+## Is boilerplate evil?
+
+* Yes and no
+* Yes: when it can lead to bugs
+* Use codegen to avoid the problem
+* High level DSL for routes
+* Generates:
+    * Route datatype
+    * Parser
+    * Renderer
+    * Dispatcher
+
+---
+
+## Isn&#x27;t this a workshop?
+
+* Oh, right, it is
+* Hold onto your butts
+* __LIVE CODING__
+
+Fair warning: first time I&#x27;ve ever done live coding in a talk.
+
+---
+
+## Scaffolding
+
+* Run `stack new mysecondapp yesodweb&#x2F;simple`
+* Multiple scaffoldings, different DB backends
+* Skipping database entirely here
+* Run `cd mysecondapp`
+* Run `stack build . yesod-bin`
+* Run `stack exec yesod devel`
+* Open http:&#x2F;&#x2F;localhost:3000
+
+---
+
+## Homepage
+
+* Open up `templates&#x2F;homepage.hamlet`
+* Modify some of the text on the page
+* Watch the recompile happen
+* Reload the page, voila!
+
+---
+
+## Routing
+
+* Open up `config&#x2F;routes`
+* Subsites: embed functionality
+    * We&#x27;re using static file serving
+    * Create `static&#x2F;foo.txt`
+    * `curl -i http:&#x2F;&#x2F;localhost:3000&#x2F;static&#x2F;foo.txt`
+    * Another common one: authentication
+* `&#x2F;` is called `HomeR`, supports `GET` and `POST`
+* `&#x2F;comments` is called `CommentR`, supports `POST`
+
+---
+
+## Our first route
+
+* Say hi!
+* Add `&#x2F;greet GreetR GET`
+* Recompile fails
+* Add `import Handler.Greet` in `Application`
+* Create `Handler.Greet`, copy stuff from `Handler.Home`
+* Force recompile with enter
+
+```haskell
+getGreet :: Handler Html
+getGreet = undefined
+```
+
+---
+
+## Add some code
+
+```haskell
+{-# LANGUAGE QuasiQuotes #-}
+
+getGreetR :: Handler Html
+getGreetR = do
+  defaultLayout $ do
+    setTitle &quot;Hello there!&quot;
+    [whamlet|&lt;p&gt;Hello there!&lt;&#x2F;p&gt;|]
+```
+
+---
+
+## Add a link
+
+* Open `templates&#x2F;homepage.hamlet`
+* Go to `Starting`
+* Add `&lt;a href=&quot;&#x2F;greet&quot;&gt;Greetings!`
+* That&#x27;s bad, mkay?
+* `href=@{GreetR}`
+
+---
+
+## URL parameters
+
+* What&#x27;s your name?
+* Change route: `&#x2F;greet&#x2F;#{Text}`
+* `homepage.hamlet` breaks
+* Error messages are difficult, sorry
+* Change `getGreetR`
+* Warning about unused variable
+* Use the variable `#{name}`
+* What about `&#x2F;greet&#x2F;&lt;script&gt;`
+
+---
+
+## Footgun
+
+* `preEscapedToHtml`
+* Add `import Text.Blaze.Html`
+* Add `blaze-html` dependency
+* Go to http:&#x2F;&#x2F;localhost:3000&#x2F;greet&#x2F;%3Cscript%3Ealert(%22danger%20will%20robinson%22)%3C%2fscript%3E
+
+---
+
+## Serving JSON
+
+* `pure $ object [&quot;name&quot; .= name]`
+* `Value` is a funny type
+* Can provide multiple representations too
+
+```haskell
+getGreetR :: Text -&gt; Handler TypedContent
+getGreetR name = selectRep $ do
+  provideRep $ pure $ object [&quot;name&quot; .= name]
+  provideRep $ defaultLayout $ do
+    setTitle &quot;Hello there!&quot;
+    [whamlet|&lt;p&gt;Hello there #{preEscapedToHtml name}!&lt;&#x2F;p&gt;|]
+```
+
+curl -i http:&#x2F;&#x2F;localhost:3000&#x2F;greet&#x2F;Michael
+
+---
+
+## More info
+
+* Check out the rest of the scaffolding
+* Check out the book https:&#x2F;&#x2F;www.yesodweb.com&#x2F;book
+* What else do you want to see?
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>

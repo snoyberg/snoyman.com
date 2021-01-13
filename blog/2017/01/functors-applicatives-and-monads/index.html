@@ -1,0 +1,784 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Functors, Applicatives, and Monads</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Functors, Applicatives, and Monads">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Functors, Applicatives, and Monads</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published January  3, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Functors%2C%20Applicatives%2C%20and%20Monads https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;functors-applicatives-and-monads&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;functors-applicatives-and-monads&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;functors-applicatives-and-monads&#x2F;&amp;title=Functors%2C%20Applicatives%2C%20and%20Monads" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;01&#x2F;functors-applicatives-and-monads&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;functors-applicatives-and-monads.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This content originally appeared on
+<a href="https://www.schoolofhaskell.com/user/snoyberg/general-haskell/basics/functors-applicative-functors-and-monads">School of
+Haskell</a>.
+Thanks for Julie Moronuki for encouraging me to update/republish, and for all
+of the edits/improvements.</p>
+<p><strong>NOTE</strong> Code snippets below can be run using the <a href="https://haskell-lang.org/get-started">Stack build
+tool</a>, by saving to a file <code>Main.hs</code> and
+running with <code>stack Main.hs</code>. More information is available in the <a href="https://haskell-lang.org/tutorial/stack-script">How to
+Script with Stack tutorial</a>.</p>
+<p>Let's start off with a very simple problem. We want to let a user input his/her
+birth year, and tell him/her his/her age in the year 2020.
+Using the function <code>read</code>, this is really simple:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    year </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In 2020, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show (</span><span style="color:#6c71c4;">2020 </span><span style="color:#859900;">-</span><span style="color:#657b83;"> read year)
+</span></code></pre>
+<p>If you run that program and type in a valid year, you'll get the right result.
+However, what happens when you enter something invalid?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Please enter your birth year
+hello
+main.hs: Prelude.read: no parse
+</span></code></pre>
+<p>The problem is that the user input is coming in as a <code>String</code>, and <code>read</code> is
+trying to parse it into an <code>Integer</code>. But not all <code>String</code>s are valid
+<code>Integer</code>s. <code>read</code> is what we call a <strong>partial function</strong>, meaning that under
+some circumstances it will return an error instead of a valid result.</p>
+<p>A more resilient way to write our code is to use the <code>readMaybe</code> function, which
+will return a <code>Maybe Integer</code> value. This makes it clear with the types
+themselves that the parse may succeed or fail. To test this out, try running
+the following code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+main </span><span style="color:#859900;">= do
+    </span><span style="color:#93a1a1;">-- We use explicit types to tell the compiler how to try and parse the
+    -- string.
+</span><span style="color:#657b83;">    print (readMaybe </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">1980</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Maybe Integer</span><span style="color:#657b83;">)
+    print (readMaybe </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">hello</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Maybe Integer</span><span style="color:#657b83;">)
+    print (readMaybe </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">2000</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Maybe Integer</span><span style="color:#657b83;">)
+    print (readMaybe </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">two-thousand</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Maybe Integer</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>So how can we use this to solve our original problem? We need to now determine
+if the result of <code>readMaybe</code> was successful (as <code>Just</code>) or failed (a <code>Nothing</code>).
+One way to do this is with pattern matching:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    yearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">case</span><span style="color:#657b83;"> readMaybe yearString </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided an invalid year</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> year </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In 2020, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show (</span><span style="color:#6c71c4;">2020 </span><span style="color:#859900;">-</span><span style="color:#657b83;"> year)
+</span></code></pre><h2 id="decoupling-code">Decoupling code</h2>
+<p>This code is a bit coupled; let's split it up to have a separate function for
+displaying the output to the user and another separate function for
+calculating the age.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided an invalid year</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In 2020, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearToAge year </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">2020 </span><span style="color:#859900;">-</span><span style="color:#657b83;"> year
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    yearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">=
+            case</span><span style="color:#657b83;"> readMaybe yearString </span><span style="color:#859900;">of
+                </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Nothing
+                Just</span><span style="color:#657b83;"> year </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> (yearToAge year)
+    displayAge maybeAge
+</span></code></pre>
+<p>This code does exactly the same thing as our previous version. But the
+definition of <code>maybeAge</code> in <code>main</code> looks pretty repetitive to me.
+We check if the parse year is <code>Nothing</code>. If it's <code>Nothing</code>, we return
+<code>Nothing</code>. If it's <code>Just</code>, we return <code>Just</code>, after applying the function
+<code>yearToAge</code>. That seems like a lot of line noise to do something simple. All we
+want is to conditionally apply <code>yearToAge</code>.</p>
+<h2 id="functors">Functors</h2>
+<p>Fortunately, we have a helper function to do just that. <code>fmap</code>, or <strong>functor
+mapping</strong>, will apply some function over the value contained by a <strong>functor</strong>.
+<code>Maybe</code> is one example of a functor; another common one is a list. In the case
+of <code>Maybe</code>, <code>fmap</code> does precisely what we described above. So we can replace
+our code with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided an invalid year</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In 2020, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearToAge year </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">2020 </span><span style="color:#859900;">-</span><span style="color:#657b83;"> year
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    yearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">=</span><span style="color:#657b83;"> fmap yearToAge (readMaybe yearString)
+    displayAge maybeAge
+</span></code></pre>
+<p>Our code definitely got shorter, and hopefully a bit clearer as well. Now it's
+obvious that all we're doing is applying the <code>yearToAge</code> function over the
+contents of the <code>Maybe</code> value.</p>
+<p>So what <em>is</em> a functor? It's some kind of container of values. In <code>Maybe</code>, our
+container holds zero or one values. With lists, we have a container for zero or
+more values. Some containers are even more exotic; the <code>IO</code> functor is actually
+providing an action to perform in order to retrieve a value. The only thing
+functors share is that they provide some <code>fmap</code> function which lets you modify
+their contents.</p>
+<h2 id="do-notation">do-notation</h2>
+<p>We have another option as well: we can use <code>do</code>-notation. This is the same way
+we've been writing <code>main</code> so far. That's because- as we
+mentioned in the previous paragraph- <code>IO</code> is a functor as well. Let's see how
+we can change our code to not use <code>fmap</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided an invalid year</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In 2020, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearToAge year </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">2020 </span><span style="color:#859900;">-</span><span style="color:#657b83;"> year
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    yearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+            yearInteger </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe yearString
+            return </span><span style="color:#859900;">$</span><span style="color:#657b83;"> yearToAge yearInteger
+    displayAge maybeAge
+</span></code></pre>
+<p>Inside the <code>do-</code>block, we have the <strong>slurp operator</strong> <code>&lt;-</code>. This
+operator is special for <code>do</code>-notation and is used to pull a value out of its
+wrapper (in this case, <code>Maybe</code>). Once we've extracted the value, we can
+manipulate it with normal functions, like <code>yearToAge</code>. When we complete our
+<code>do</code>-block, we have to return a value wrapped up in that container again. That's
+what the <code>return</code> function does.</p>
+<p><code>do</code>-notation isn't available for all <code>Functor</code>s; it's a special feature reserved
+only for <code>Monad</code>s. <code>Monad</code>s are an extension of <code>Functor</code>s that provide a
+little extra power. We're not really taking advantage of any of that extra
+power here; we'll need to make our program more complicated to demonstrate
+it.</p>
+<h2 id="dealing-with-two-variables">Dealing with two variables</h2>
+<p>It's kind of limiting that we have a hard-coded year to compare against. Let's
+fix that by allowing the user to specify the &quot;future year.&quot; We'll start off
+with a simple implementation using pattern matching and then move back to <code>do</code>-notation.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">=
+            case</span><span style="color:#657b83;"> readMaybe birthYearString </span><span style="color:#859900;">of
+                </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Nothing
+                Just</span><span style="color:#657b83;"> birthYear </span><span style="color:#859900;">-&gt;
+                    case</span><span style="color:#657b83;"> readMaybe futureYearString </span><span style="color:#859900;">of
+                        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Nothing
+                        Just</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> (futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear)
+    displayAge maybeAge
+</span></code></pre>
+<p>OK, it gets the job done... but it's very tedious. Fortunately, <code>do</code>-notation makes this kind of code really simple:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearDiff futureYear birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+            birthYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe birthYearString
+            futureYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe futureYearString
+            return </span><span style="color:#859900;">$</span><span style="color:#657b83;"> yearDiff futureYear birthYear
+    displayAge maybeAge
+</span></code></pre>
+<p>This is very convenient: we've now slurped our two values in our <code>do</code>-notation.
+If either parse returns <code>Nothing</code>, then the entire <code>do</code>-block will return
+<code>Nothing</code>. This demonstrates an important property about <code>Maybe</code>: it provides
+<strong>short circuiting</strong>.</p>
+<p>Without resorting to other helper functions or pattern matching, there's no way
+to write this code using just <code>fmap</code>. So we've found an example of code that
+requires more power than <code>Functor</code>s provide, and <code>Monad</code>s provide that power.</p>
+<h2 id="partial-application">Partial application</h2>
+<p>But maybe there's something else that provides enough power to write our
+two-variable code without the full power of <code>Monad</code>. To see what this might be,
+let's look more carefully at our types.</p>
+<p>We're working with two values: <code>readMaybe birthYearString</code> and <code>readMaybe futureYearString</code>. Both of these values have the type <code>Maybe Integer</code>. And we
+want to apply the function <code>yearDiff</code>, which has the type <code>Integer -&gt; Integer -&gt; Integer</code>.</p>
+<p>If we go back to trying to use <code>fmap</code>, we'll seemingly run into a bit of a
+problem. The type of <code>fmap</code>- specialized for <code>Maybe</code> and <code>Integer</code>- is
+<code>(Integer -&gt; a) -&gt; Maybe Integer -&gt; Maybe a</code>. In other words, it takes a
+function that takes a single argument (an <code>Integer</code>) and returns a value of
+some type <code>a</code>, takes a second argument of a <code>Maybe Integer</code>, and gives back a
+value of type <code>Maybe a</code>. But our function- <code>yearDiff</code>- actually takes two
+arguments, not one. So <code>fmap</code> can't be used at all, right?</p>
+<p>Not true. This is where one of Haskell's very powerful features comes
+into play. Any time we have a function of two arguments, we can also look at is
+as a function of one argument which returns a <strong>function</strong>. We can make this
+more clear with parentheses:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">yearDiff </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Integer
+</span><span style="color:#b58900;">yearDiff </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Integer</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>So how does that help us? We can look at the <code>fmap</code> function as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">fmap </span><span style="color:#859900;">::</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Integer</span><span style="color:#657b83;">))
+     </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Maybe Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Maybe</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Integer</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>Then when we apply <code>fmap</code> to <code>yearDiff</code>, we end up with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">fmap yearDiff </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Maybe Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Maybe</span><span style="color:#657b83;"> (</span><span style="color:#cb4b16;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Integer</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>That's pretty cool. We can apply <em>this</em> to our <code>readMaybe futureYearString</code> and
+end up with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">fmap yearDiff (readMaybe futureYearString) </span><span style="color:#859900;">:: </span><span style="color:#cb4b16;">Maybe</span><span style="color:#657b83;"> (</span><span style="color:#cb4b16;">Integer </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Integer</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>That's certainly very interesting, but it doesn't help us. We need to somehow
+apply this value of type <code>Maybe (Integer -&gt; Integer)</code> to our <code>readMaybe birthYearString</code> of type <code>Maybe Integer</code>. We can do this with <code>do</code>-notation:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearDiff futureYear birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+            yearToAge </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> fmap yearDiff (readMaybe futureYearString)
+            birthYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe birthYearString
+            return </span><span style="color:#859900;">$</span><span style="color:#657b83;"> yearToAge birthYear
+    displayAge maybeAge
+</span></code></pre>
+<p>We can even use <code>fmap</code> twice and avoid the second slurp:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearDiff futureYear birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+            yearToAge </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> fmap yearDiff (readMaybe futureYearString)
+            fmap yearToAge (readMaybe birthYearString)
+    displayAge maybeAge
+</span></code></pre>
+<p>But we don't have a way to apply our <code>Maybe (Integer -&gt; Integer)</code> function to
+our <code>Maybe Integer</code> directly.</p>
+<h2 id="applicative-functors">Applicative functors</h2>
+<p>And now we get to our final concept: applicative functors. The idea is simple:
+we want to be able to apply a function which is <em>inside</em> a functor to a value
+inside a functor. The magic operator for this is <code>&lt;*&gt;</code>. Let's
+see how it works in our example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearDiff futureYear birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">=</span><span style="color:#657b83;">
+            fmap yearDiff (readMaybe futureYearString)
+                </span><span style="color:#859900;">&lt;</span><span style="color:#657b83;">*</span><span style="color:#859900;">&gt;</span><span style="color:#657b83;"> readMaybe birthYearString
+    displayAge maybeAge
+</span></code></pre>
+<p>In fact, the combination of <code>fmap</code> and <code>&lt;*&gt;</code> is so common that we have a
+special operator, <code>&lt;$&gt;</code>, which is a synonym for <code>fmap</code>. That means we can make
+our code just a little prettier:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">=</span><span style="color:#657b83;"> yearDiff
+            </span><span style="color:#859900;">&lt;$&gt;</span><span style="color:#657b83;"> readMaybe futureYearString
+            </span><span style="color:#859900;">&lt;</span><span style="color:#657b83;">*</span><span style="color:#859900;">&gt;</span><span style="color:#657b83;"> readMaybe birthYearString
+</span></code></pre>
+<p>Notice the distinction between <code>&lt;$&gt;</code> and <code>&lt;*&gt;</code>. The former uses a function
+which is <em>not</em> wrapped in a functor, while the latter applies a function which
+is wrapped up.</p>
+<h2 id="so-we-don-t-need-monads">So we don't need Monads?</h2>
+<p>So if we can do such great stuff with functors and applicative functors, why do
+we need monads at all? The terse answer is <strong>context sensitivity</strong>: with a
+monad, you can make decisions on which processing path to follow based on
+previous results. With applicative functors, you have to always apply the same
+functions.</p>
+<p>Let's give a contrived example: if the future year is less than the birth year,
+we'll assume that the user just got confused and entered the values in reverse,
+so we'll automatically fix it by reversing the arguments to <code>yearDiff</code>.  With
+<code>do</code>-notation and an if statement, it's easy:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+displayAge maybeAge </span><span style="color:#859900;">=
+    case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+yearDiff futureYear birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+
+main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+            futureYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe futureYearString
+            birthYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe birthYearString
+            return </span><span style="color:#859900;">$
+                if</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">&lt;</span><span style="color:#657b83;"> birthYear
+                    </span><span style="color:#859900;">then</span><span style="color:#657b83;"> yearDiff birthYear futureYear
+                    </span><span style="color:#859900;">else</span><span style="color:#657b83;"> yearDiff futureYear birthYear
+    displayAge maybeAge
+</span></code></pre><h2 id="exercises">Exercises</h2>
+<ol>
+<li>
+<p>Implement <code>fmap</code> using <code>&lt;*&gt;</code> and <code>return</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Applicative </span><span style="color:#657b83;">(</span><span style="color:#b58900;">(&lt;*&gt;)</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">Applicative</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Prelude </span><span style="color:#657b83;">(</span><span style="color:#b58900;">return</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">Monad</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Prelude
+
+</span><span style="color:#b58900;">fmap </span><span style="color:#859900;">::</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">Applicative m</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">Monad m</span><span style="color:#657b83;">) </span><span style="color:#859900;">=&gt;</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">a </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">b</span><span style="color:#657b83;">) </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">m a </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">m b</span><span style="color:#657b83;">)
+</span><span style="color:#657b83;">fmap </span><span style="color:#859900;">... ... = </span><span style="color:#cb4b16;">FIXME
+
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">case</span><span style="color:#657b83;"> fmap (</span><span style="color:#cb4b16;">Prelude</span><span style="color:#859900;">.+ </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) (</span><span style="color:#cb4b16;">Prelude</span><span style="color:#859900;">.</span><span style="color:#cb4b16;">Just </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">) </span><span style="color:#859900;">of
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Prelude</span><span style="color:#859900;">.</span><span style="color:#cb4b16;">Just </span><span style="color:#6c71c4;">3 </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Prelude</span><span style="color:#859900;">.</span><span style="color:#657b83;">putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Good job!</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">        _ </span><span style="color:#859900;">-&gt; </span><span style="color:#cb4b16;">Prelude</span><span style="color:#859900;">.</span><span style="color:#657b83;">putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Try again</span><span style="color:#839496;">&quot;
+</span></code></pre><div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+<div class="panel-heading" role="tab">
+<h4 class="panel-title">
+<a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseOne" aria-expanded="true" aria-controls="collapseOne">
+Show Solution
+</a>
+</h4>
+</div>
+<div id="exerciseOne" class="panel-collapse collapse" role="tabpanel">
+<div class="panel-body">
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">myFmap function wrappedValue </span><span style="color:#859900;">=</span><span style="color:#657b83;"> return function </span><span style="color:#859900;">&lt;</span><span style="color:#657b83;">*</span><span style="color:#859900;">&gt;</span><span style="color:#657b83;"> wrappedValue
+
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> print </span><span style="color:#859900;">$</span><span style="color:#657b83;"> myFmap (</span><span style="color:#859900;">+ </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">Just </span><span style="color:#6c71c4;">5
+</span></code></pre></div></div>
+</li>
+<li>
+<p>How is <code>return</code> implemented for the <code>Maybe</code> monad? Try replacing <code>return</code>
+with its implementation in the code above.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#657b83;">returnMaybe </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">FIXME
+
+</span><span style="color:#657b83;">main
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> returnMaybe </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">== </span><span style="color:#cb4b16;">Just </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Correct!</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Incorrect, please try again</span><span style="color:#839496;">&quot;
+</span></code></pre><div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+<div class="panel-heading" role="tab">
+<h4 class="panel-title">
+<a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseTwo" aria-expanded="true" aria-controls="collapseTwo">
+Show Solution
+</a>
+</h4>
+</div>
+<div id="exerciseTwo" class="panel-collapse collapse" role="tabpanel">
+<div class="panel-body">
+<p><code>return</code> is simply the <code>Just</code> constructor. This gets defined as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">instance </span><span style="color:#268bd2;">Monad Maybe </span><span style="color:#859900;">where
+</span><span style="color:#657b83;">    return </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Just
+</span></code></pre></div></div>
+</li>
+<li>
+<p><code>yearDiff</code> is really just subtraction. Try to replace the calls to
+<code>yearDiff</code> with explicit usage of the <code>-</code> operator.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+
+</span><span style="color:#657b83;">displayAge maybeAge </span><span style="color:#859900;">=
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do
+</span><span style="color:#657b83;">    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter your birth year</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">    birthYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+</span><span style="color:#657b83;">    putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please enter some year in the future</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">    futureYearString </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> getLine
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">let</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">= do
+</span><span style="color:#657b83;">            futureYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe futureYearString
+</span><span style="color:#657b83;">            birthYear </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> readMaybe birthYearString
+</span><span style="color:#657b83;">            return </span><span style="color:#859900;">$
+</span><span style="color:#657b83;">                </span><span style="color:#93a1a1;">-- BEGIN CODE TO MODIFY
+</span><span style="color:#657b83;">                </span><span style="color:#859900;">if</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">&lt;</span><span style="color:#657b83;"> birthYear
+</span><span style="color:#657b83;">                    </span><span style="color:#859900;">then</span><span style="color:#657b83;"> yearDiff birthYear futureYear
+</span><span style="color:#657b83;">                    </span><span style="color:#859900;">else</span><span style="color:#657b83;"> yearDiff futureYear birthYear
+</span><span style="color:#657b83;">                </span><span style="color:#93a1a1;">-- END CODE TO MODIFY
+</span><span style="color:#657b83;">    displayAge maybeAge
+</span></code></pre><div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+<div class="panel-heading" role="tab">
+<h4 class="panel-title">
+<a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseThree" aria-expanded="true" aria-controls="collapseThree">
+Show Solution
+</a>
+</h4>
+</div>
+<div id="exerciseThree" class="panel-collapse collapse" role="tabpanel">
+<div class="panel-body">
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">                </span><span style="color:#859900;">if</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">&lt;</span><span style="color:#657b83;"> birthYear
+</span><span style="color:#657b83;">                    </span><span style="color:#859900;">then</span><span style="color:#657b83;"> birthYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> futureYear
+</span><span style="color:#657b83;">                    </span><span style="color:#859900;">else</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+</span></code></pre></div></div>
+</li>
+<li>
+<p>It's possible to write an applicative functor version of the
+auto-reverse-arguments code by modifying the <code>yearDiff</code> function. Try to do
+so.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Applicative </span><span style="color:#657b83;">(</span><span style="color:#b58900;">(&lt;$&gt;)</span><span style="color:#657b83;">, </span><span style="color:#b58900;">(&lt;*&gt;)</span><span style="color:#657b83;">)
+
+</span><span style="color:#657b83;">displayAge maybeAge </span><span style="color:#859900;">=
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+</span><span style="color:#657b83;">yearDiff futureYear birthYear </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">FIXME
+
+</span><span style="color:#657b83;">main
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> yearDiff </span><span style="color:#6c71c4;">5 6 </span><span style="color:#859900;">== </span><span style="color:#6c71c4;">1 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Correct!</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please try again</span><span style="color:#839496;">&quot;
+</span></code></pre><div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+<div class="panel-heading" role="tab">
+<h4 class="panel-title">
+<a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseFour" aria-expanded="true" aria-controls="collapseFour">
+Show Solution
+</a>
+</h4>
+</div>
+<div id="exerciseFour" class="panel-collapse collapse" role="tabpanel">
+<div class="panel-body">
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">yearDiff futureYear birthYear
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">&gt;</span><span style="color:#657b83;"> birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> birthYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> futureYear
+</span></code></pre></div></div>
+</li>
+<li>
+<p>Now try to do it without modifying <code>yearDiff</code> directly, but by
+using a helper function which is applied to <code>yearDiff</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Text.Read </span><span style="color:#657b83;">(</span><span style="color:#b58900;">readMaybe</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Applicative </span><span style="color:#657b83;">(</span><span style="color:#b58900;">(&lt;$&gt;)</span><span style="color:#657b83;">, </span><span style="color:#b58900;">(&lt;*&gt;)</span><span style="color:#657b83;">)
+
+</span><span style="color:#657b83;">displayAge maybeAge </span><span style="color:#859900;">=
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">case</span><span style="color:#657b83;"> maybeAge </span><span style="color:#859900;">of
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Nothing </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You provided invalid input</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">        </span><span style="color:#cb4b16;">Just</span><span style="color:#657b83;"> age </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> putStrLn </span><span style="color:#859900;">$ </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">In that year, you will be: </span><span style="color:#839496;">&quot; </span><span style="color:#859900;">++</span><span style="color:#657b83;"> show age
+
+</span><span style="color:#657b83;">yearDiff futureYear birthYear </span><span style="color:#859900;">=</span><span style="color:#657b83;"> futureYear </span><span style="color:#859900;">-</span><span style="color:#657b83;"> birthYear
+</span><span style="color:#657b83;">yourHelperFunction f </span><span style="color:#859900;">...
+
+</span><span style="color:#657b83;">main
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> yourHelperFunction yearDiff </span><span style="color:#6c71c4;">5 6 </span><span style="color:#859900;">== </span><span style="color:#6c71c4;">1 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Correct!</span><span style="color:#839496;">&quot;
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Please try again</span><span style="color:#839496;">&quot;
+</span></code></pre><div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+<div class="panel-heading" role="tab">
+<h4 class="panel-title">
+<a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseFive" aria-expanded="true" aria-controls="collapseFive">
+Show Solution
+</a>
+</h4>
+</div>
+<div id="exerciseFive" class="panel-collapse collapse" role="tabpanel">
+<div class="panel-body">
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">yourHelperFunction f x y
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> x </span><span style="color:#859900;">&gt;</span><span style="color:#657b83;"> y </span><span style="color:#859900;">=</span><span style="color:#657b83;"> f x y
+</span><span style="color:#657b83;">    </span><span style="color:#859900;">|</span><span style="color:#657b83;"> otherwise </span><span style="color:#859900;">=</span><span style="color:#657b83;"> f y x
+</span></code></pre></div></div>
+</li>
+</ol>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

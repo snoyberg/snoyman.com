@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Why Applied Haskell</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+## Why Applied Haskell
+
+* Quick introduction to why you&#x27;re here, and why I do this :)
+* Ties in with [Applied Haskell 101](https:&#x2F;&#x2F;tech.fpcomplete.com&#x2F;haskell&#x2F;tutorial&#x2F;applied-haskell-101)
+* __NOTE__ WIP slides, don&#x27;t throw things at me!
+
+&lt;div style=&quot;text-align:center&quot;&gt;
+&lt;div&gt;&lt;img src=&quot;&#x2F;static&#x2F;fpcomplete-logo.png&quot; style=&quot;border:0;margin:0&quot;&gt;&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+
+1. Install Stack! https:&#x2F;&#x2F;tech.fpcomplete.com&#x2F;haskell&#x2F;get-started
+2. Run `stack upgrade`
+3. Run `stack build rio --resolver lts-14.10`
+
+---
+
+## Haskell is revolutionary
+
+* Totally different than other languages
+* Lots of new concepts to absorb
+* 15 exciting ways to solve problems
+* Powers you never had elsewhere
+
+---
+
+## Haskell is powerful
+
+* Our goal: write normal, boring programs in Haskell
+* Get benefits of:
+    * Stronger types
+    * Better performance
+    * Better productivity
+    * Refactorable code
+    * Team scaling
+
+---
+
+## Haskell is a problem
+
+* How do I do all of that?
+* Most new Haskellers&#x2F;Haskell teams reinvent the wheel
+* Lots of paths seem alluring and stab you in the back
+* General wisdom in Haskell discussion boards is dangerous
+
+---
+
+## Haskell is boring
+
+* We&#x27;re going to write boring Haskell
+* Take the best revolutionary stuff
+* Combine with practices and libraries that are boring
+* Big value from today: identifying where to be boring, where to be exciting
+
+---
+
+## Haskell is mundane
+
+* Rest of the world is borrowing from Haskell
+* Some of Haskell&#x27;s craziest things are commonplace
+    * Anecdate: JS devs, Rust, and monads
+* It&#x27;s becoming ever easier to onboard people to Haskell
+* Haskell&#x27;s types make onboarding to codebases easier
+* But you have to make your code approachable!
+
+---
+
+## But I need this cool feature!
+
+* You probably don&#x27;t
+* Most of us have been there
+* Far too easy to have fun and go off the deep end
+* Strong recommendation: try solving the easy way first
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>

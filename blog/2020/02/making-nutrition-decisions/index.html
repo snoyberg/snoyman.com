@@ -1,0 +1,287 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Making nutrition decisions</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Making nutrition decisions">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="I&#x27;ve been trying out a new dietary pattern recently. This post is about how I make decisions on what to try, and some general rules I&#x27;ve been converging on.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Making nutrition decisions</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published February 25, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Making%20nutrition%20decisions https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;02&#x2F;making-nutrition-decisions&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;02&#x2F;making-nutrition-decisions&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;02&#x2F;making-nutrition-decisions&#x2F;&amp;title=Making%20nutrition%20decisions" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;02&#x2F;making-nutrition-decisions&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;making-nutrition-decisions.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>For various reasons, maybe not great ones, I've been experimenting with a <a href="https://fireinabottle.net/introducing-the-croissant-diet/">new diet plan</a>. I'm not advocating this diet generally, and not even sure if I like it for myself. I'm taking notes on how this goes, and intend to share more information later.</p>
+<p>This diet plan is radically different from what I normally eat. Getting together with family, this has led to some real confusion. So I wanted to put together a blog post covering two related topics:</p>
+<ul>
+<li>How do I make decisions about how I'm going to eat?</li>
+<li>What principles do I follow in my eating strategy, regardless of the specific diet plan I'm following?</li>
+</ul>
+<p>This post is a bit less structured than some of the others in this series, take it as a bit of a brain dump.</p>
+<h2 id="the-authorities">The authorities</h2>
+<p>The core about how I make decisions comes down to this: I don't trust the mainstream authorities to tell me what to eat. As crazy or egotistical as that may sound in a vacuum, this is far from a radical position. I'd argue it's the only sensible decision given the data: the correlation between health guidelines and modern diseases. Specifically, since the nutrition authorities have started inserting themselves into our food recommendations, the diseases they purport to prevent have become only worse.</p>
+<p>This kind of decision leads to a few immediate questions:</p>
+<p><strong>I'm feeling better and losing weight, but how do I know if I'm doing long term harm?</strong> This is a concern raised often about non-standard diets, and perhaps rightfully so. There's no long term data on the large scale health effects of a carnivore diet, for instance. That said, there is plenty of data on the long term effects of a standard diet, all bad. My approach: if you're feeling better, go for it.</p>
+<p><strong>It's working for me, but how do I know if it works for everyone? I'm just one person!</strong> Right, you're just one person. And that's the only person you need to worry about. If your diet is working for you, follow it. You don't need something that will work for all members of a population. If you give advice to friends and family, make them responsible for reviewing their own results.</p>
+<h2 id="observations">Observations</h2>
+<p>Many populations across the planet have had a wide variety of diets over the past hundreds and thousands of years. Most of those populations avoided the major degenerative diseases which plague us today (heart disease, cancer, etc). You may argue that this is because they died of other causes before they could die of those diseases. I encourage you to research the topic more fully; I don't believe the data says that.</p>
+<p>Anyway, these observations introduce what initially appear to be paradoxes: how can you have healthy populations that consume such varied diets as:</p>
+<ul>
+<li>Massively high animal products</li>
+<li>Mostly grains</li>
+<li>Mostly other starch sources</li>
+<li>Combinations of fat and starch</li>
+<li>Hunter gatherers consuming copious amounts of honey</li>
+</ul>
+<p>There are two potential answers, both of which I think are true:</p>
+<ul>
+<li>The lifestyles of these groups may have been different</li>
+<li>There's nothing inherently wrong with any of these diets, and our health issues stem from a different source</li>
+</ul>
+<p>Personally, I tend towards believing that the second answer is the stronger one, and mostly true. There are certainly some lifestyle factors we have today that differ meaningfully from other groups. Two strongly touted ones are:</p>
+<ul>
+<li>Hunter-gatherers who consumed large amounts of honey did so during specific times of the year, had periods of famine as well, and were highly physically active. That's quite a difference from a modern human guzzling Coca Cola in an air conditioned office.</li>
+<li>We may be metabolically damaged from our existing eating patterns, leading to what would have been a healthy diet turning into an unhealthy one</li>
+</ul>
+<p>In other words, my gut feeling is that you're probably safe following any historically accurate diet. But to account for possible lifestyle issues, you may want to hedge a bit and follow diets more well proven to work well in the modern age.</p>
+<h2 id="paleo-primal">Paleo/primal</h2>
+<p>The paleo/primal approach to eating fits in well here. I'll start by saying that, overall, I've had my best successes with health and weight loss on a primal approach, and I strongly encourage it. However, I don't really buy into the idea that everything introduced since the agricultural revolution is toxic.</p>
+<h2 id="why-i-experiment">Why I experiment</h2>
+<p>Based on all that: I think there are lots of healthy eating patterns. My default/baseline diet is mostly a primal, low carb diet, veering towards carnivore. However, I still like to experiment with alternatives. Some reasons:</p>
+<ul>
+<li>Variety is the spice of life. Trying out different food again is fun.</li>
+<li>I like to tinker and see if I can optimize things, such as improving my weight lifting.</li>
+<li>I'm curious from a scientific standpoint as to how different theories work out in practice.</li>
+<li>Finding eating styles that are healthy and easier to adopt than something like keto could be a boon for people's health in general.</li>
+</ul>
+<h2 id="constants">Constants</h2>
+<p>That said, I do try to stick to a few constants in any diet that I experiment with. This is based on the principles above and the information I've read. I evolve this list over time, but this represents where I'm at right now.</p>
+<ul>
+<li>Seed oils (soybean, corn oil, etc) should be avoided at almost all costs. They are a relatively brand new addition to our diets. Their addition correlates closely to many disease epidemics, and there are plausible mechanistic explanations for how they cause these diseases (see references below).</li>
+<li>Avoid trans fats as well. I put this as second to seed oils only because it's already well understood. If you see &quot;partially hydrogenated&quot; in an ingredient list, avoid it.</li>
+<li>Added sugar should either be avoided entirely, or at the very least limited. Sugar has been part of the human diet in one form or another for a long while, but the current levels regularly consumed far outpace what we've had historically.</li>
+<li>Focus on getting enough protein. It's necessary, it's satiating (so helps you avoid overeating), and outside of specific disease states like existing kidney disease, the claims of danger are in my reading without merit.</li>
+<li>Grains have been part of the human diet for a long time, so I find it hard to say that they're evil. There are some arguments about it, like new strains of wheat having different properties or the refinement process being different these days. But overall, I can't justify &quot;wheat is evil.&quot; That said, in my experience it's much easier to overeat on empty calories with grains than without them.</li>
+<li>Even more strongly, I don't see carbs as inherently evil either. However, I think focusing on fat tends to make more sense in a modern diet.</li>
+<li>Saturated fat isn't evil. The demonization of coconut oil by the American Heart Association is hard to see as anything but a paid hit job by the seed oil industry.</li>
+</ul>
+<h2 id="references">References</h2>
+<p>Here are some videos talking about the seed oil and sugar concerns that I'm sticking to the most:</p>
+<ul>
+<li><a href="https://youtu.be/pHnPinYI2Yc">Omega 6 Apocalypse</a></li>
+<li><a href="https://www.youtube.com/watch?v=f_4Q9Iv7_Ao">Why sugar is as bad as alcohol</a></li>
+<li><a href="https://www.youtube.com/watch?v=Q2UnOryQiIY">Vegetable oils: the unknown story</a></li>
+<li><a href="https://youtu.be/I_j-tBJ3Kss">Coconut Oil Kills</a> (fair warning: it's a parody)</li>
+</ul>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

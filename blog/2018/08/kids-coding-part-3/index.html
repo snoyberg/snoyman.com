@@ -1,0 +1,437 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Kids Coding, Part 3</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Kids Coding, Part 3">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Part 3 of teaching my kids to code, introducing pattern matches and enums">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Kids Coding, Part 3</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published August 28, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Kids%20Coding%2C%20Part%203 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-3&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-3&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-3&#x2F;&amp;title=Kids%20Coding%2C%20Part%203" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;08&#x2F;kids-coding-part-3&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;kids-coding-part-3.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>Eliezer asked me a few questions about programming yesterday, and I
+ended up demonstrating a little bit about pattern matching. He then
+had a lot of fun showing a friend of his how programming works. I may
+end up giving some lessons to some of my kids' friends in the next few
+weeks, which should be interesting.</p>
+<h2 id="kids-ide">Kids IDE</h2>
+<p>I've started using a minimalistic &quot;kids IDE&quot; I threw together for
+teaching the kids. It's helped us not worry about details like
+filepaths, saving, and running in a terminal. It's not a great tool,
+but good enough. I've included links to better tools in the README,
+though this fits my needs for the moment.</p>
+<p>https://github.com/snoyberg/kids-haskell-ide#readme</p>
+<p>I've set up AppVeyor to upload Windows executables to S3:</p>
+<p>https://s3.amazonaws.com/www.snoyman.com/kids-ide/bin/kids-ide.exe</p>
+<p>You'll also need to <a href="https://haskell-lang.org/get-started">install Stack</a>.</p>
+<h2 id="pattern-matching-strings">Pattern matching strings</h2>
+<p>This morning, Eliezer and Gavriella both had their next &quot;official&quot;
+lesson. I started over with that pattern matching
+demonstration. First, I showed them this example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Eliezer</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Gavriella</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Yakov</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Lavi</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+
+sayNickname realname </span><span style="color:#859900;">=</span><span style="color:#657b83;">
+  putStrLn (nickname realname)
+
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Eliezer</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Elie Belly</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Gavriella</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Galla Galla</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Lavi</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fat baby</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Yakov</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Koko</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>They got the basic idea of this. (And I ended up introducing
+<code>putStrLn</code> around here as well, which they were fine with.) However,
+as I had them typing out some of this on their own, they ended up with
+a lot of trouble around capitalization, which was a good introduction
+to Haskell's rules around that. We'll see how in a bit.</p>
+<h2 id="pattern-matching-ints">Pattern matching ints</h2>
+<p>After establishing that we could pattern match on strings, I switched
+the code to this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">
+
+sayNickname realname </span><span style="color:#859900;">=</span><span style="color:#657b83;">
+  putStrLn (nickname realname)
+
+nickname </span><span style="color:#6c71c4;">1 </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Elie Belly</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Gavriella</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Galla Galla</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Lavi</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fat baby</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+nickname </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Yakov</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Koko</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>And gave them the challenge to rewrite <code>nickname</code> so that the code
+worked, which wasn't too much of a problem. The misordering of <code>Lavi</code>
+and <code>Yakov</code> between <code>main</code> and <code>nickname</code> did cause some confusion,
+and then helped them understand better how pattern matching works. (I
+didn't intentionally put that in, it somehow slipped in while the kids
+were working on rewriting things.)</p>
+<h2 id="type-signatures">Type signatures</h2>
+<p>I asked them what the type of <code>nickname</code> was, and they said function
+(yay!). And then explained to them that you can tell Haskell
+explicitly what a thing's type is, and typed this in:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">nickname </span><span style="color:#859900;">::</span><span style="color:#657b83;"> ? </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> ?
+</span></code></pre>
+<p>The funny syntax didn't give them too much trouble, and then we got to
+fill in the question marks. I asked them what the output of the
+function was, pointing at the string. I was surprised: they said the
+type was &quot;nickname&quot; or &quot;name.&quot; They accepted that it was a string, but
+they didn't like that. (New theory: humans' brains are naturally
+strongly typed.)</p>
+<p>I then asked what the input was, and they said &quot;number.&quot; I hadn't
+taught them about <code>Int</code> yet, and didn't know about integers from math,
+so I told them that integer is a kind of number, and that in Haskell
+we call it <code>Int</code>. Filling in the type signature was fine.</p>
+<p>I pointed out that some things (like <code>Int</code> and <code>String</code>) were upper
+case, and some were lower case. I pointed out that concrete things
+that &quot;actually exist&quot; (maybe not the best terminology) are
+capitalized. We know what an <code>Int</code> is, for example. Variables are
+things we don't know yet, and those are lowercase. And finally, you
+can put whatever you want inside a string, but it has to match
+exactly. That seemed to click fairly well for them.</p>
+<h2 id="enums">Enums</h2>
+<p>I pointed out that referring to the kids as numbers isn't good. (He
+responded that I actually <em>do</em> call them 1, 2, 4, and 8 sometimes...)
+Anyway, I said that a better type for the <code>nickname</code> function would be
+to take a <code>Child</code> as input. He said &quot;can we say <code>Child = Int</code>,&quot; which
+was a great insight. I showed up that, yes, we can do <code>type Child = Int</code>, but that there's a better way.</p>
+<p>I introduced the idea that <code>data</code> defines a new datatype, and then
+showed them:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">data </span><span style="color:#cb4b16;">Child
+  </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Eliezer
+  </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Gavriella
+  </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Yakov
+  </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Lavi
+</span></code></pre>
+<p>Gavriella asked &quot;what are those lines?&quot; and I explained they mean
+&quot;or.&quot; Therefore, a child is Eliezer, or Gavriella, or Yakov, or
+Lavi. They got this.</p>
+<p>Exercise: fix the following program, uncommenting the lines in <code>main</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  sayNickname </span><span style="color:#cb4b16;">Eliezer
+  </span><span style="color:#93a1a1;">--sayNickname Gavriella
+  --sayNickname Yakov
+  --sayNickname Lavi
+</span><span style="color:#657b83;">
+sayNickname realname </span><span style="color:#859900;">=</span><span style="color:#657b83;">
+  putStrLn (nickname realname)
+
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">Child
+  </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">Eliezer
+  </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Gavriella
+  </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Yakov
+  </span><span style="color:#859900;">| </span><span style="color:#cb4b16;">Lavi
+
+</span><span style="color:#b58900;">nickname </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">Child </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">String
+</span><span style="color:#657b83;">nickname </span><span style="color:#cb4b16;">Eliezer </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Elie Belly</span><span style="color:#839496;">&quot;
+</span><span style="color:#93a1a1;">--nickname 2 = &quot;Galla Galla&quot;
+--nickname 3 = &quot;Fat baby&quot;
+--nickname 4 = &quot;Koko&quot;
+</span></code></pre>
+<p>Some caveats where they got stuck:</p>
+<ul>
+<li>Using lower case <code>lavi</code> instead of <code>Lavi</code>. I got to explain how
+pattern matching a variable works, and &quot;wildcards.&quot; They got this,
+though still needed to be coached on it.</li>
+<li>I'd been on the fence about including syntax highlighting in the
+kids IDE, but it turns out that the different colors of
+<code>Eliezer</code> and <code>lavi</code> helped Gavriella realize her mistake. Syntax
+highlighting is a <em>good thing</em> here.</li>
+<li>I did ultimately have to give her a hint: &quot;Lavi is BIG but you made
+him small.&quot;</li>
+</ul>
+<p>I started to try and define <code>data Person = Kid Child | Adult Parent</code>,
+but realized quickly it was too complicated for now and aborted.</p>
+<h2 id="recursion">Recursion</h2>
+<p>I did <em>not</em> teach this well, the children did not get the concepts
+correctly. However, they did understand the code as I wrote it.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> print total
+
+total </span><span style="color:#859900;">=</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">
+
+addUp </span><span style="color:#6c71c4;">10 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">10 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">9</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">9 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">9 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">8</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">8 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">8 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">7</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">7 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">7 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">6</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">6 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">6 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">5 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">4 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">4 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">3 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">3 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">2 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">2 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">1 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">1 </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">
+addUp </span><span style="color:#6c71c4;">0 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">0
+</span></code></pre>
+<p>They <em>really</em> hated how repetitive typing that out was, which was
+exactly the goal. It was easy to convince them that this was stupid. I
+then changed <code>total</code> to <code>addUp 11</code> and it broke. They understood why,
+and so we started working on something better.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> print total
+
+total </span><span style="color:#859900;">=</span><span style="color:#657b83;"> addUp </span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">
+
+addUp </span><span style="color:#6c71c4;">0 </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">
+addUp x </span><span style="color:#859900;">=</span><span style="color:#657b83;"> x </span><span style="color:#859900;">+</span><span style="color:#657b83;"> addUp (x </span><span style="color:#859900;">- </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">)
+</span></code></pre>
+<p>I stepped through the executable of this, complete with pattern
+matching. Doing this a few times in the future is probably a good
+idea.</p>
+<p>Eliezer asked what happens if we remove the <code>addUp 0 = 0</code> case. We
+discussed it, he said it wouldn't work, and said it would &quot;keep
+going.&quot; I told him it was called an infinite loop, and we got a stack
+overflow. Good insight.</p>
+<p>Gavriella asked how long it took me to learn this stuff. I told her 12
+years; after all, I only started learning Haskell in my twenties. It
+made them feel pretty good that they were learning this stuff earlier
+than I did.</p>
+<p>I gave them an exercise to implement <code>multTo</code> instead of <code>addUp</code>. They
+didn't understand this, or recursion, and I had to help them through
+the whole thing. Mea culpa completely.</p>
+<p>Gavriella asked for another exercise:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  sayAge </span><span style="color:#cb4b16;">Eliezer</span><span style="color:#657b83;">
+  sayAge </span><span style="color:#cb4b16;">Gavriella</span><span style="color:#657b83;">
+  sayAge </span><span style="color:#cb4b16;">Yakov</span><span style="color:#657b83;">
+  sayAge </span><span style="color:#cb4b16;">Lavi
+
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">Child </span><span style="color:#859900;">= ...</span><span style="color:#657b83;">
+
+sayAge child </span><span style="color:#859900;">=</span><span style="color:#657b83;"> print (age child)
+
+age </span><span style="color:#859900;">? = ?
+</span></code></pre>
+<p>She typed something like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">age </span><span style="color:#859900;">? = ?
+</span><span style="color:#cb4b16;">Eliezer</span><span style="color:#859900;">=</span><span style="color:#6c71c4;">10
+</span></code></pre>
+<p>I showed her that she needed:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">age </span><span style="color:#cb4b16;">Eliezer </span><span style="color:#859900;">= </span><span style="color:#6c71c4;">10
+</span></code></pre>
+<p>And then she got the rest just fine, though with a few capitalization
+mistakes.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

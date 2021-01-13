@@ -1,0 +1,2134 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Rule of Three - Parameters, Iterators, and Closures - Rust Crash Course lesson 5</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Rule of Three - Parameters, Iterators, and Closures - Rust Crash Course lesson 5">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 5 in the Rust crash course: Rule of Three - Parameters, Iterators, and Closures.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Rule of Three - Parameters, Iterators, and Closures - Rust Crash Course lesson 5</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November 19, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Rule%20of%20Three%20-%20Parameters%2C%20Iterators%2C%20and%20Closures%20-%20Rust%20Crash%20Course%20lesson%205 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-05-rule-of-three&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-05-rule-of-three&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-05-rule-of-three&#x2F;&amp;title=Rule%20of%20Three%20-%20Parameters%2C%20Iterators%2C%20and%20Closures%20-%20Rust%20Crash%20Course%20lesson%205" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-05-rule-of-three&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-05-rule-of-three.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>In this lesson, we're going to cover what I'm dubbing the &quot;rule of
+three,&quot; which applies to function parameters, iterators, and
+closures. We've already seen this rule applied to function parameters,
+but didn't discuss is so explicitly. We'll expand on parameters, and
+use that to launch into new information on both iterators and
+closures.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<h2 id="types-of-parameters">Types of parameters</h2>
+<p>The first thing I want to deal with is a potential misconception. This
+may be one of those &quot;my brain has been scrambled by Haskell&quot;
+misconceptions that imperative programmers won't feel, so apologies if
+I'm just humoring myself and other Haskellers.</p>
+<p>Do these two functions have the same type signature?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) { </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">() }
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">bar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) { </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">() }
+</span></code></pre>
+<p>The Haskeller in me screams &quot;they're different!&quot; However, they're
+<em>exactly the same</em>. The <em>inner mutability</em> of the <code>person</code> variable in
+the function is <em>irrelevant</em> to someone calling the function. The
+caller of the function will move the <code>Person</code> value into the function,
+regardless of whether the value can be mutated or not. We've already
+seen a hint of this: the fact that we can pass an immutable value to a
+function like <code>foo</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice = Person { name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">), age: </span><span style="color:#6c71c4;">30 </span><span style="color:#657b83;">};
+    </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(alice); </span><span style="color:#93a1a1;">// it works!
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>With that misconception out of the way, let's consider two other
+similar functions:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">baz</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Person) { </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">() }
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">bin</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Person) { </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">() }
+</span></code></pre>
+<p>Firstly, it's pretty easy to say that both <code>baz</code> and <code>bin</code> have
+different signatures than <code>foo</code>. These are taking references to a
+<code>Person</code>, not a <code>Person</code> itself. But what about <code>baz</code> vs <code>bin</code>? Are
+they the same or different? You may be tempted to follow the same
+logic as <code>foo</code> vs <code>bar</code> and decide that the <code>mut</code> is an internal
+detail of the function. But this isn't true! Observe:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> alice = Person { name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">), age: </span><span style="color:#6c71c4;">30 </span><span style="color:#657b83;">};
+    </span><span style="color:#859900;">baz</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">alice); </span><span style="color:#93a1a1;">// this works
+    </span><span style="color:#859900;">bin</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">alice); </span><span style="color:#93a1a1;">// this fails
+    </span><span style="color:#859900;">bin</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> alice); </span><span style="color:#93a1a1;">// but this works
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>The first call to <code>bin</code> will not compile, because <code>bin</code> requires a
+<em>mutable</em> reference, and we've provided an <em>immutable</em> reference. We
+need to use the second version of the call. And not only does this
+have a <em>syntactic</em> difference, but a <em>semantic</em> difference as well:
+we've taken a mutable reference, which means we can have no other
+references at the same time (remember our borrow rules from lesson 2).</p>
+<p>The upshot of this is that there are three different ways we can pass
+a value into a function which appear at the type level:</p>
+<ul>
+<li>Pass by value (move semantics), like <code>foo</code></li>
+<li>Pass by immutable reference, like <code>baz</code></li>
+<li>Pass by mutable reference, like <code>bin</code></li>
+</ul>
+<p>In addition, orthogonally, the variable that captures that parameters
+can itself be either immutable or mutable.</p>
+<h3 id="mutable-vs-immutable-pass-by-value">Mutable vs immutable pass-by-value</h3>
+<p>This one is relatively easy to see. What extra functionality do we get
+by having a mutable pass-by-value? The ability to mutate the value of
+course! Let's look at two different ways of implementing a birthday
+function, which increases someone's age by 1.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">birthday_immutable</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) -&gt; Person {
+    Person {
+        name: person.name,
+        age: person.age + </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">,
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">birthday_mutable</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: Person) -&gt; Person {
+    person.age += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    person
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice1 = Person { name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">), age: </span><span style="color:#6c71c4;">30 </span><span style="color:#657b83;">};
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice 1: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice1);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice2 = </span><span style="color:#859900;">birthday_immutable</span><span style="color:#657b83;">(alice1);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice 2: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice2);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> alice3 = </span><span style="color:#859900;">birthday_mutable</span><span style="color:#657b83;">(alice2);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice 3: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice3);
+}
+</span></code></pre>
+<p>Some important takeaways:</p>
+<ul>
+<li>Our <code>_immutable</code> implementation follows a more functional idiom,
+creating a new <code>Person</code> value by deconstructing the original
+<code>Person</code> value. This works just fine in Rust, but is not idiomatic,
+and potentially less efficient.</li>
+<li>We call both versions of this function in exactly the same way,
+reinforcing the claim that these two functions have the same
+signature.</li>
+<li>You cannot reuse the <code>alice1</code> or <code>alice2</code> values in <code>main</code>, since
+they've been moved during their calls.</li>
+<li><code>alice2</code> is an immutable variable, but it still gets passed in to a
+function which mutates it.</li>
+</ul>
+<h3 id="mutable-vs-immutable-pass-by-mutable-reference">Mutable vs immutable pass-by-mutable-reference</h3>
+<p>This one already gets significantly harder to observe, which indicates a simple fact of Rust: <em>it's unusual to want a mutable variable for references</em>. The example below is very contrived, and requires playing with the more advanced concept of explicit lifetime parameters to even make it make sense. But it does demonstrate the difference between where the <code>mut</code> appears.</p>
+<p>Before we dive in: parameters that begin with a single quote (<code>'</code>) are
+<em>lifetime parameters</em>, and indicate how long a reference needs to
+live. In the examples below, we're saying &quot;the two references must
+have the same lifetime.&quot; We won't cover this in more detail here, at
+least not yet. If you want to learn about lifetimes, please <a href="https://doc.rust-lang.org/book/2018-edition/ch10-03-lifetime-syntax.html">check out
+the Rust
+book</a>.</p>
+<p>OK, let's see a difference between an immutable variable holding a
+mutable reference and a mutable variable holding a mutable reference!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">birthday_immutable</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Person) {
+    person.age += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">birthday_mutable</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt;(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a mut</span><span style="color:#657b83;"> Person, </span><span style="color:#268bd2;">replacement</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a mut</span><span style="color:#657b83;"> Person) {
+    person = replacement;
+    person.age += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> alice = Person { name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">), age: </span><span style="color:#6c71c4;">30 </span><span style="color:#657b83;">};
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> bob = Person { name: </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">), age: </span><span style="color:#6c71c4;">20 </span><span style="color:#657b83;">};
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice 1: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#2aa198;">, Bob 1: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice, bob);
+    </span><span style="color:#859900;">birthday_immutable</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> alice);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice 2: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#2aa198;">, Bob 2: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice, bob);
+    </span><span style="color:#859900;">birthday_mutable</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> alice, </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> bob);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice 3: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#2aa198;">, Bob 3: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, alice, bob);
+}
+
+</span><span style="color:#93a1a1;">// does not compile
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">birthday_immutable_broken</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt;(</span><span style="color:#268bd2;">person</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a mut</span><span style="color:#657b83;"> Person, </span><span style="color:#268bd2;">replacement</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a mut</span><span style="color:#657b83;"> Person) {
+    person = replacement;
+    person.age += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+}
+</span></code></pre>
+<p><code>birthday_immutable</code> is fairly simple. We have a mutable reference,
+and we've stored it in an immutable variable. We've completely free to
+mutate the value pointed to by that reference. The takeaway is: we're
+mutating the value, <em>not</em> the variable, which is remaining the same.</p>
+<p><code>birthday_mutable</code> is a contrived, ugly mess, but it demonstrates our
+point. Here, we take <em>two</em> references: a <code>person</code>, and a
+<code>replacement</code>. They're both mutable references, but <code>person</code> is in a
+mutable variable. The first thing we do is <code>person = replacement;</code>. This changes what our <code>person</code> variable is pointing at,
+and <em>does not modify</em> the original value being pointed at by the
+reference at all. In fact, when compiling this, we'll get a warning
+that we never used the value passed to <code>person</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: value passed to `person` is never read
+</span></code></pre>
+<p>Notice that we needed to mark both <code>alice</code> and <code>bob</code> as mutable in
+<code>main</code> in this example. That's because we pass them by mutable
+reference, which requires that we have the ability to mutate
+them. This is different from pass-by-value with move semantics,
+because in our <code>main</code> function, we can directly observe the effect of
+mutating the references we've passed in.</p>
+<p>Also notice that we also have a <code>birthday_immutable_broken</code>
+version. As you may guess from the name, it doesn't compile. We cannot
+change what <code>person</code> points to if it is an immutable variable.</p>
+<p><strong>Challenge</strong> Figure out what the output of this program is going to
+be before you run it.</p>
+<h3 id="mutable-vs-immutable-pass-by-immutable-reference">Mutable vs immutable pass-by-immutable-reference</h3>
+<p>I'm not actually going to cover this case, since it's basically the
+same as the previous one. If you mark a variable as mutable, you can
+change which reference it holds. Feel free to play around with an
+example like the one above using immutable references.</p>
+<h3 id="mutable-to-immutable">Mutable to immutable</h3>
+<p>Let's point out one final bit:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">needs_mutable</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">) {
+    *x *= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">;
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">needs_immutable</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x: </span><span style="color:#268bd2;">u32 </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">u32 </span><span style="color:#657b83;">= </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x;
+    </span><span style="color:#859900;">needs_immutable</span><span style="color:#657b83;">(y);
+    </span><span style="color:#859900;">needs_mutable</span><span style="color:#657b83;">(y);
+    </span><span style="color:#859900;">needs_immutable</span><span style="color:#657b83;">(y);
+}
+</span></code></pre>
+<p>From what I've told you so far, you should expect this program to fail
+to compile. <code>y</code> is of type <code>&amp;mut u32</code>, but we're passing it to
+<code>needs_immutable</code> which requires a <code>&amp;u32</code>. Type mismatch, go home!</p>
+<p>Not so fast: since the guarantees of a mutable reference are strictly
+stronger than an immutable reference, you can always use a mutable
+reference where an immutable was needed. (Hold onto this, it will be
+important for closures below.)</p>
+<h3 id="summary-of-the-rule-of-three-for-parameters">Summary of the rule of three for parameters</h3>
+<p>There are three types of parameters:</p>
+<ul>
+<li>Pass by value</li>
+<li>Pass by immutable reference</li>
+<li>Pass by mutable reference</li>
+</ul>
+<p>This is what I'm calling the rule of three. The captured variables
+within a function can either be mutable or immutable, which is
+orthogonal to the type of the parameter. However, it's by far most
+common to have a mutable variable with a pass-by-value. Also, at the
+call site, a variable must be mutable if it is called on a pass by
+mutable reference functions. Finally, you can use a mutable reference
+where an immutable was requested.</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>Fix the program below so that it outputs the number 10. Ensure that
+there are no compiler warnings.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">double</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">) {
+    x *= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">;
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">double</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>Hint: you'll need to know how to <em>dereference</em> a reference, by putting
+a asterisk (<code>*</code>) in front of the variable.</p>
+<h2 id="iterators">Iterators</h2>
+<p>What's the output of the program below?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>That's right: it prints the numbers 1 to 5. How about this one?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">,</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+        }
+    }
+}
+</span></code></pre>
+<p>It prints <code>1,1</code>, <code>1,2</code>, ..., <code>1,5</code>, <code>2,1</code>, ..., <code>2,5</code>. Cool, easy
+enough. Let's move <code>nums</code> a bit. What does this do?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">,</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+        }
+    }
+}
+</span></code></pre>
+<p>Trick question: it doesn't compile!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: use of moved value: `nums`
+ --&gt; main.rs:4:18
+  |
+4 |         for j in nums {
+  |                  ^^^^ value moved here in previous iteration of loop
+  |
+  = note: move occurs because `nums` has type `std::vec::Vec&lt;i32&gt;`, which does not implement the `Copy` trait
+
+error: aborting due to previous error
+</span></code></pre>
+<p>Well, that kind of makes sense. The first time we run through the
+outer loop, we <em>move</em> the <code>nums</code> value into the inner loop. Then, we
+can't use the <code>nums</code> value again on the second pass through the
+loop. OK, logical.</p>
+<p><strong>Side note</strong> This was one of my personal &quot;mind blown&quot; moments with
+Rust, realizing how sophisticated lifetime tracking was to work
+through loops like this. Rust is pretty amazing.</p>
+<p>We can go back to our previous version and put <code>nums</code> inside the first
+<code>for</code> loop. That means recreating the value each time we pass through
+that outer <code>for</code> loop. For our little vector example, it's not a big
+deal. But imagine constructing <code>nums</code> was expensive. This would be a
+major overhead!</p>
+<p>If we want to avoid the move of <code>nums</code>, can we get away with just
+borrowing it instead? Yes we can!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in &amp;</span><span style="color:#657b83;">nums {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">,</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+        }
+    }
+}
+</span></code></pre>
+<p>This works, but I've got a question for you: what's the type of <code>j</code>?
+I've got a sneaky little trick to test out different options. If you
+throw this in just above the <code>println!</code> call, you'll get an error
+message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32 </span><span style="color:#657b83;">= j;
+</span></code></pre>
+<p>However, this will compile just fine:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">u32 </span><span style="color:#657b83;">= j;
+</span></code></pre>
+<p>By iterating over a reference to <code>nums</code>, we got a reference to each
+value instead of the value itself. That makes sense. Can we complete
+our &quot;rule of three&quot; with mutable references? Yet again, yes!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in &amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> nums {
+            </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">u32 </span><span style="color:#657b83;">= j;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">,</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+            *j *= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">;
+        }
+    }
+}
+</span></code></pre>
+<p><strong>Challenges</strong> First, there's a compilation error in the program above. Try to catch
+it before asking the compiler to help. Second, guess the output of
+this program before running it.</p>
+<p>Our rule of three translates into iterators as well! We have can
+iterators of values, iterators of references, and iterators of mutable
+references. Sweet!</p>
+<h3 id="new-nomenclature">New nomenclature</h3>
+<p>The <code>Vec</code> struct has three different methods on it that are relevant to our examples above. Starting with the mutable case, we can replace the line:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in &amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> nums {
+</span></code></pre>
+<p>with</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums.</span><span style="color:#859900;">iter_mut</span><span style="color:#657b83;">() {
+</span></code></pre>
+<p>The signature of that method is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">iter_mut</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; IterMut&lt;T&gt;
+</span></code></pre>
+<p>Similarly, we've got a <code>iter()</code> method that can replace our immutable
+reference case:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums.</span><span style="color:#859900;">iter</span><span style="color:#657b83;">() {
+            </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">u32 </span><span style="color:#657b83;">= j;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">,</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+        }
+    }
+}
+</span></code></pre>
+<p>And, finally, what about the iterator of values case? There, the
+nomenclature is <code>into_iter</code>. The idea is that we are <em>converting</em> the
+existing value <em>into</em> an iterator, consuming the previous value (the
+<code>Vec</code> in this case) completely. This code won't compile, go ahead and
+fix it by moving the <code>let nums</code> statement.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums = </span><span style="color:#859900;">vec!</span><span style="color:#657b83;">[</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">5</span><span style="color:#657b83;">];
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> j </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums.</span><span style="color:#859900;">into_iter</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">,</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+        }
+    }
+}
+</span></code></pre><h3 id="reexamining-for-loops">Reexamining for loops</h3>
+<p>Here's a cool little trick I didn't mention before. <code>for</code> loops are a
+bit more flexible than I'd implied. The <code>into_iter</code> method I mention
+is actually part of a trait, appropriately named
+<a href="https://doc.rust-lang.org/std/iter/trait.IntoIterator.html"><code>IntoIterator</code></a>. Whenever
+you use <code>for x in y</code>, the compiler automatically calls <code>into_iter()</code>
+on <code>y</code>. This allows you to loop over types which don't actually have
+their own implementation of <code>Iterator</code>.</p>
+<h3 id="exercise-2">Exercise 2</h3>
+<p>Make this program compile by defining an <code>IntoIterator</code>
+implementation for <code>InfiniteUnit</code>. Do <em>not</em> define an <code>Iterator</code>
+implementation for it. You'll probably want to define an extra
+datatype. (Extra credit: also try to find a helper function in the
+standard library that repeats values.)</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">InfiniteUnit</span><span style="color:#657b83;">;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> count = </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">for _ in</span><span style="color:#657b83;"> InfiniteUnit {
+        count += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">count == </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, count);
+        </span><span style="color:#859900;">if</span><span style="color:#657b83;"> count &gt;= </span><span style="color:#6c71c4;">5 </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">break</span><span style="color:#657b83;">;
+        }
+    }
+}
+</span></code></pre><h3 id="summary-of-the-rule-of-three-for-iterators">Summary of the rule of three for iterators</h3>
+<p>Just like function parameters, iterators come in three flavors,
+corresponding to the following naming scheme:</p>
+<ul>
+<li><code>into_iter()</code> is an iterator of values, with move semantics</li>
+<li><code>iter()</code> is an iterator of immutable references</li>
+<li><code>iter_mut()</code> is an iterator of mutable references</li>
+</ul>
+<p>Only <code>iter_mut()</code> requires that the original variable itself be mutable.</p>
+<h2 id="closures">Closures</h2>
+<p>We've danced around closures a bit throughout the crash course so
+far. Closures are like functions, in that they can be called on some
+arguments. Closures are unlike functions in that they can capture
+values from the local scope. We'll demonstrate this in an example,
+after a word of warning.</p>
+<p><strong>One word of warning</strong> If you're coming from a non-functional
+programming background, you'll likely find closures in Rust very
+powerful, and surprisingly common in library usage. If you come from a
+functional programming background, you'll likely be annoyed at how
+much you have to think about ownership of data when working with
+closures. As a Haskeller, this is still the aspect of Rust I most
+often get caught on. I promise, the trade-offs in the design are
+logical and necessary to achieve Rust's goals, but it can feel a bit
+onerous when compared to Haskell, or even compared to Javascript.</p>
+<p>Alright, back to our function vs closure thing. Did you know that you can define a function <em>inside another function</em>?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">say_hi</span><span style="color:#657b83;">() {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+    };
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>That's pretty nifty. Let's slightly refactor that:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">say_hi</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+    };
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>Unfortunately, Rust doesn't like that very much:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0434]: can&#39;t capture dynamic environment in a fn item
+ --&gt; main.rs:4:24
+  |
+4 |         println!(&quot;{}&quot;, msg);
+  |                        ^^^
+  |
+  = help: use the `|| { ... }` closure form instead
+
+error: aborting due to previous error
+</span></code></pre>
+<p>Fortunately, the compiler tells us <em>exactly</em> how to fix it: use a
+closure! Let's rewrite that:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+    };
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>We now have a closure (introduced by <code>||</code>) which takes 0
+arguments. And everything just works.</p>
+<p><strong>Note</strong> You can shorten this a bit with <code>let say_hi = || println!(&quot;{}&quot;, msg);</code>,
+which is more idiomatic.</p>
+<p><strong>Exercise 3</strong> Rewrite the above so that instead of taking 0
+arguments, <code>say_hi</code> takes a single argument: the <code>msg</code> variable. Then
+try out the <code>fn</code> version again.</p>
+<h2 id="the-type-of-a-closure">The type of a closure</h2>
+<p>What exactly is the type of <code>say_hi</code>? I'm going to use an ugly trick
+to get the compiler to tell us: give it the <em>wrong</em> type, and then try
+to compile. It's probably safe to assume that a closure isn't a <code>u32</code>,
+so let's try this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi: </span><span style="color:#b58900;">u32 </span><span style="color:#859900;">= </span><span style="color:#657b83;">|</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+}
+</span></code></pre>
+<p>And we get the error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[</span><span style="color:#cb4b16;">E0308</span><span style="color:#657b83;">]: mismatched types
+ --&gt; main.rs:</span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">:</span><span style="color:#6c71c4;">23
+  </span><span style="color:#859900;">|
+</span><span style="color:#6c71c4;">3 </span><span style="color:#859900;">|     </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi: </span><span style="color:#b58900;">u32 </span><span style="color:#859900;">= </span><span style="color:#657b83;">|</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+  |                       ^^^^^^^^^^^^^^^^^^^^^^^^^ expected </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">, found </span><span style="color:#268bd2;">closure
+  </span><span style="color:#657b83;">|
+  = note: expected </span><span style="color:#268bd2;">type</span><span style="color:#657b83;"> `</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">`
+             found </span><span style="color:#268bd2;">type</span><span style="color:#657b83;"> `[closure</span><span style="color:#859900;">@</span><span style="color:#657b83;">main.rs:</span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">:</span><span style="color:#6c71c4;">23</span><span style="color:#657b83;">: </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">:</span><span style="color:#6c71c4;">48</span><span style="color:#657b83;">]`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain </span><span style="color:#cb4b16;">E0308</span><span style="color:#657b83;">`.
+</span></code></pre>
+<p><code>[closure@main.rs:3:23: 3:48]</code> looks like a weird type... but let's
+just give it a shot and see what happens:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi: [closure</span><span style="color:#859900;">@</span><span style="color:#657b83;">main.rs:</span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">:</span><span style="color:#6c71c4;">23</span><span style="color:#657b83;">: </span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">:</span><span style="color:#6c71c4;">48</span><span style="color:#657b83;">] = |</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+}
+</span></code></pre>
+<p>But the compiler shoots us down:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error: expected one of `!`, `(`, `+`, `::`, `;`, `&lt;`, or `]`, found `@`
+ --&gt; main.rs:3:25
+  |
+3 |     let say_hi: [closure@main.rs:3:23: 3:48] = |msg| println!(&quot;{}&quot;, msg);
+  |         ------          ^ expected one of 7 possible tokens here
+  |         |
+  |         while parsing the type for `say_hi`
+
+error: aborting due to previous error
+</span></code></pre>
+<p>Oh well, that isn't a valid type. What exactly is the compiler telling
+us then?</p>
+<h2 id="anonymous-types">Anonymous types</h2>
+<p>The types of closures are anonymous in Rust. We cannot directly refer
+to them at all. But this leaves us in a bit of a pickle. What if we
+want to pass a closure into another function? For example, let's try
+out this program:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">say_message </span><span style="color:#859900;">= </span><span style="color:#657b83;">|</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+    </span><span style="color:#859900;">call_with_hi</span><span style="color:#657b83;">(say_message);
+    </span><span style="color:#859900;">call_with_hi</span><span style="color:#657b83;">(say_message);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_with_hi</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F) {
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>We've added a type annotation on the <code>msg</code> parameter in the
+closure. These are generally optional in closures, unless type
+inference fails. And with our current broken code, type inference is
+definitely failing. We're including it now to get better error
+messages later.</p>
+<p>We also now have a type parameter, called <code>F</code>, for the closure we're
+passing in. We don't know anything about <code>F</code> right now, but we're
+going to just try using it in a function call manner. If we compile
+this, we get:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0618]: expected function, found `F`
+ --&gt; main.rs:8:5
+  |
+7 | fn call_with_hi&lt;F&gt;(f: F) {
+  |                    - `F` defined here
+8 |     f(&quot;Hi!&quot;);
+  |     ^^^^^^^^ not a function
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0618`.
+</span></code></pre>
+<p>OK, fair enough: the compiler doesn't know that <code>F</code> is a function. It's time to finally introduce the magic that will make this compile: the <code>Fn</code> trait!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_with_hi</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: Fn(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">) -&gt; ()
+{
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>We've now put a constraint on <code>F</code> that it must be a function, which
+takes a single argument of type <code>&amp;str</code>, and returns a unit
+value. Actually, returning unit values is the default, so we can just
+omit that bit:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_with_hi</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: Fn(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">)
+{
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>Another nifty thing about the <code>Fn</code> trait is that it doesn't just apply
+to closures. It works on regular ol' functions too:</p>
+<blockquote>
+<p><strong>Exercise 4</strong> Rewrite <code>say_message</code> as a function <em>outside</em> of <code>main</code> and make the program above compile.</p>
+</blockquote>
+<p>This was a bit boring, since <code>say_message</code> isn't actually a
+closure. Let's change that a bit.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">say_something </span><span style="color:#859900;">= </span><span style="color:#657b83;">|</span><span style="color:#268bd2;">msg</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;">, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg, name);
+    </span><span style="color:#859900;">call_with_hi</span><span style="color:#657b83;">(say_something);
+    </span><span style="color:#859900;">call_with_hi</span><span style="color:#657b83;">(say_something);
+    </span><span style="color:#859900;">call_with_bye</span><span style="color:#657b83;">(say_something);
+    </span><span style="color:#859900;">call_with_bye</span><span style="color:#657b83;">(say_something);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_with_hi</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: Fn(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">)
+{
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hi</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_with_bye</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: Fn(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">)
+{
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bye</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre><h2 id="mutable-variables">Mutable variables</h2>
+<p>Remember the good old days of visitor counters on webpages? Let's
+recreate that beautiful experience!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> count = </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">;
+
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">6 </span><span style="color:#657b83;">{
+        count += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You are visitor #</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, count);
+    }
+}
+</span></code></pre>
+<p>That works, but it's so boring! Let's make it more interesting with a
+closure.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> count = </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">visit </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        count += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You are visitor #</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, count);
+    };
+
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">6 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">visit</span><span style="color:#657b83;">();
+    }
+}
+</span></code></pre>
+<p>The compiler disagrees:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow immutable local variable `visit` as mutable
+ --&gt; main.rs:9:9
+  |
+3 |     let visit = || {
+  |         ----- help: make this binding mutable: `mut visit`
+...
+9 |         visit();
+  |         ^^^^^ cannot borrow mutably
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0596`.
+</span></code></pre>
+<p>Huh... what? Apparently calling a function counts as borrowing
+it. Fine, that explains why we're allowed to call it multiple
+times. But now we need to borrow it <em>mutably</em> for some reason. How
+come?</p>
+<p>That reason is fairly simple: <code>visit</code> has captured and is mutating a
+local variable, <code>count</code>. Therefore, any borrow of it is implicitly
+mutably borrowing <code>count</code> as well. Logically, this makes sense. But
+how about at the type level? How is the compiler tracking this
+mutability? To see that, let's extend this a bit further with a helper
+function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> count = </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">visit </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        count += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">You are visitor #</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, count);
+    };
+
+    </span><span style="color:#859900;">call_five_times</span><span style="color:#657b83;">(visit);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_five_times</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+</span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    F: Fn(),
+{
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">6 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">f</span><span style="color:#657b83;">();
+    }
+}
+</span></code></pre>
+<p>We get the error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0525]: expected a closure that implements the `Fn` trait, but this closure only implements `FnMut`
+</span></code></pre>
+<p>Nice! Rust has two different traits for functions: one which covers
+functions that don't mutate their environment (<code>Fn</code>), and one for
+functions which do mutate their environment (<code>FnMut</code>). Let's try
+modifying our <code>where</code> to use <code>FnMut</code> instead. We get one more error
+message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow immutable argument `f` as mutable
+  --&gt; main.rs:16:9
+   |
+11 | fn call_five_times&lt;F&gt;(f: F)
+   |                       - help: make this binding mutable: `mut f`
+...
+16 |         f();
+   |         ^ cannot borrow mutably
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0596`.
+</span></code></pre>
+<p>Calling this mutating function requires taking a mutable borrow of the
+variable, and that requires defining the variable as mutable. Go ahead
+and stick a <code>mut</code> in front of the <code>f: F</code>, and you'll be golden.</p>
+<h2 id="multiple-traits">Multiple traits?</h2>
+<p>Is this closure a <code>Fn</code> or a <code>FnMut</code>?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">|| println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello World!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>Well, it doesn't modify any variables in the local scope, so
+presumably it's an <code>Fn</code>. Therefore, passing it to
+<code>call_five_times</code>—which expects a <code>FnMut</code>—should fail,
+right? Not so fast, it works just fine! Go ahead and add this line to
+the program above and prove it to yourself:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">call_five_times</span><span style="color:#657b83;">(|| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello World!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">));
+</span></code></pre>
+<p>Every value which is a <code>Fn</code> is <em>automatically</em> an <code>FnMut</code>. This is
+similar to what happens with a function parameter: if you have a
+mutable reference, you can automatically use it as an immutable
+reference, since the guarantees of a mutable reference are
+stronger. Similarly, if we're using a function in such a way that it's
+safe even if the function is mutable (<code>FnMut</code>), it's certainly safe to
+do the same thing with an immutable function (<code>Fn</code>).</p>
+<p>Does this sound a bit like subtyping? Good, it should :)</p>
+<h2 id="the-rule-of-three">The rule of three?</h2>
+<p>If you've noticed, we now have two different types of functions, in a
+lesson entitled &quot;the rule of three.&quot; What could possibly be coming
+next? We've seen functions that can be called multiple times in an
+immutable context, kind of like immutable references. We've seen
+functions that can be called multiple times in a mutable context, kind
+of like mutable references. That just leaves one thing... call by
+value/move semantics!</p>
+<p>We're going to define a closure that moves a local variable
+around. We're going to go back to use a <code>String</code> instead of a
+<code>u32</code>, to avoid the fact that a <code>u32</code> is <code>Copy</code>able. And we're going
+to use a weird bit of magic in the middle to force things to be moved
+instead of being treated as references. We'll go into gory detail on
+that trick later, and see alternatives.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">welcome </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = name; </span><span style="color:#93a1a1;">// here&#39;s the magic
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    };
+
+    </span><span style="color:#859900;">welcome</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>Alright, <code>name</code> is moved into the <code>welcome</code> closure. This is forced
+with the <code>let name = name;</code> bit. Still not 100% convinced that <code>name</code>
+was actually moved in? Watch this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name1 = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">welcome </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name2 = name1;
+        name2 += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name2);
+    };
+
+    </span><span style="color:#859900;">welcome</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p><code>name1</code> is defined as <em>immutable</em>. But <code>name2</code> is mutable, and we do
+in fact successfully mutate it. This can only happen if we pass by
+value instead of by reference. Want further proof? Try to use <code>name1</code>
+again after we've defined <code>welcome</code>.</p>
+<h2 id="the-third-function-trait">The third function trait</h2>
+<p>Let's complete our rule of three. Remember our <code>call_five_times</code>?
+Let's use it on <code>welcome</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">welcome </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = name;
+        name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    };
+
+    </span><span style="color:#859900;">call_five_times</span><span style="color:#657b83;">(welcome);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_five_times</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+</span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    F: Fn(),
+{
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">6 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">f</span><span style="color:#657b83;">();
+    }
+}
+</span></code></pre>
+<p>And we get a brand new error message, this time referencing <code>FnOnce</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0525]: expected a closure that implements the `Fn` trait, but this closure only implements `FnOnce`
+  --&gt; main.rs:4:19
+   |
+4  |     let welcome = || {
+   |                   ^^ this closure implements `FnOnce`, not `Fn`
+5  |         let mut name = name;
+   |                        ---- closure is `FnOnce` because it moves the variable `name` out of its environment
+...
+10 |     call_five_times(welcome);
+   |     --------------- the requirement to implement `Fn` derives from here
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0525`.
+</span></code></pre>
+<p>Replacing <code>Fn()</code> with <code>FnOnce()</code> should fix the compilation, right? Wrong!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: use of moved value: `f`
+  --&gt; main.rs:18:9
+   |
+18 |         f();
+   |         ^ value moved here in previous iteration of loop
+   |
+   = note: move occurs because `f` has type `F`, which does not implement the `Copy` trait
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0382`.
+</span></code></pre>
+<p>Our loop ends up calling <code>f</code> multiple times. But each time we call
+<code>f</code>, we're moving the value. Therefore, the function can <em>only be
+called once</em>. Maybe that's why they named it <code>FnOnce</code>.</p>
+<p>Let's rewrite this to have a helper function that only calls things
+once:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">welcome </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = name;
+        name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Welcome, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    };
+
+    </span><span style="color:#859900;">call_once</span><span style="color:#657b83;">(welcome);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_once</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F)
+</span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    F: FnOnce(),
+{
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>That works just fine. Hurrah!</p>
+<h2 id="further-function-subtyping">Further function subtyping</h2>
+<p>Previously, we said that every <code>Fn</code> is also an <code>FnMut</code>, since anywhere
+you can safely call a mutable function, you can also call an immutable
+function. It turns out that every <code>Fn</code> and every <code>FnMut</code> are also
+<code>FnOnce</code>s, because any context you can guarantee the function will
+only be called once is safe for running functions with mutable or
+immutable environments.</p>
+<h2 id="the-move-keyword">The move keyword</h2>
+<p>There's a subtle point we're about to get into, which I <a href="https://stackoverflow.com/q/53029622/369198">didn't
+understand till I wrote this
+lesson</a> (thanks to Sven
+Marnach for the explanation there). The <a href="https://doc.rust-lang.org/rust-by-example/fn/closures.html">Rust by Example section on closures</a>
+was the best resource for helping it all click for me. I'll do my best
+here explaining it myself.</p>
+<p>Functions accept parameters explicitly, complete with type
+signatures. You're able to explicitly state whether a parameter is
+pass by value, mutable reference, or immutable reference. Then, when
+you use it, you're able to choose any of the weaker forms
+available. For example, if you pass a parameter by mutable reference,
+you can later use it by immutable reference. However, you <em>cannot</em> use
+it by value:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">pass_by_value</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">_x</span><span style="color:#657b83;">: String) {}
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">pass_by_ref</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">_x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">String) {}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">pass_by_mut_ref</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> String) {
+    </span><span style="color:#859900;">pass_by_ref</span><span style="color:#657b83;">(x); </span><span style="color:#93a1a1;">// that&#39;s fine
+    </span><span style="color:#859900;">pass_by_value</span><span style="color:#657b83;">(*x); </span><span style="color:#93a1a1;">// that&#39;s a paddlin&#39;
+</span><span style="color:#657b83;">}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {}
+</span></code></pre>
+<p>Closures accept parameters, but they make the type annotations
+optional. If you omit them, they are implicit. In addition, closures
+allow you to capture variables. These never take a type annotation;
+they are <em>always</em> implicit. Nonetheless, there needs to be some
+concept of how these values were captured, just like we need to know
+how parameters are passed into a function.</p>
+<p>How a value is captured will imply the same set of borrow rules we're
+used to in Rust, in particular:</p>
+<ul>
+<li>If by reference, then other references can live concurrently with
+the closure</li>
+<li>If by mutable reference, then as long as the closure is alive, no
+other references to the values can exist. However, once the closure
+is dropped, other references can exist again.</li>
+<li>If by value, then the value cannot be used by anything ever
+again. (This automatically implies that the closure <em>owns</em> the
+value.)</li>
+</ul>
+<p>However, there's an important and (dare I repeat myself) subtle
+distinction between closures and functions:</p>
+<p><strong>Closures can own data, functions cannot</strong></p>
+<p>Sure, if you pass by value to a function, the function call takes
+ownership of the data during execution. But closures are different:
+the closure <em>itself</em> can own data, and use it while it is being
+called. Let's demonstrate:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#93a1a1;">// owned by main
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_outer = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#93a1a1;">// force a move, again, we&#39;ll get smarter in a second
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_inner = name_outer;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name_inner);
+    };
+
+    </span><span style="color:#93a1a1;">// main no longer owns name_outer, try this:
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Using name from main: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name_outer); </span><span style="color:#93a1a1;">// error!
+
+    // but name_inner lives on, in say_hi!
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// success
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>Try as you might, you could not achieve the same thing with a plain
+old function, you'd need to keep <code>name_outer</code> alive separately and
+then pass it in.</p>
+<p>Alright, let's get to that smarter way to force a move. In the closure
+above, we have <code>let name_inner = name_outer;</code>. This forces the closure
+to use <code>name_outer</code> by value. Since we use by value, we can only call
+this closure once, since it fully consumes <code>name_outer</code> on the first
+call. (Go ahead and try adding a second <code>say_hi()</code> call.) But in
+reality, we're only using the name by immutable reference inside the
+closure. We <em>should</em> be able to call it multiple times. If we skip the
+forced use by value, we can use by reference, leaving the <code>name_outer</code>
+in the original scope:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#93a1a1;">// owned by main
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_outer = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#93a1a1;">// use by reference
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_inner = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">name_outer;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name_inner);
+    };
+
+    </span><span style="color:#93a1a1;">// main still owns name_outer, this is fine
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Using name from main: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name_outer); </span><span style="color:#93a1a1;">// success
+
+    // but name_inner lives on, in say_hi!
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// success
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// success
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>However, if we change things around a bit, so that <code>name_outer</code> goes
+out of scope before <code>say_hi</code>, everything falls apart!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi = { </span><span style="color:#93a1a1;">// forcing the creation of a smaller scope
+        // owned by the smaller scope
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_outer = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+        </span><span style="color:#93a1a1;">// doesn&#39;t work, closure outlives captured values
+        </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            </span><span style="color:#93a1a1;">// use by reference
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_inner = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">name_outer;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name_inner);
+        }
+    };
+
+    </span><span style="color:#93a1a1;">// syntactically invalid, name_outer isn&#39;t in this scope
+    //println!(&quot;Using name from main: {}&quot;, name_outer); // error!
+
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>What we need is some way to say: I'd like the closure to own the
+values it captures, but I don't want to have to force a use by value
+to do it. That will allow a closure to outlive the original scope of
+the value, but still allow a closure to be called multiple times. And
+to do that, we introduce the <code>move</code> keyword:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi = { </span><span style="color:#93a1a1;">// forcing the creation of a smaller scope
+        // owned by the smaller scope
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_outer = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+
+        </span><span style="color:#93a1a1;">// now it works!
+        </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            </span><span style="color:#93a1a1;">// use by reference
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name_inner = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">name_outer;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name_inner);
+        }
+    };
+
+    </span><span style="color:#93a1a1;">// syntactically invalid, name_outer isn&#39;t in this scope
+    //println!(&quot;Using name from main: {}&quot;, name_outer); // error!
+
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">say_hi</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>The ownership of <code>name_outer</code> passes from the original scope to the
+closure itself. We still only use it by reference, and therefore we
+can call it multiple times. Hurrah!</p>
+<p>One final bit here. Using the <code>move</code> keyword like this moves all
+captured variables into the closure, and therefore they cannot be used
+after the closure. For example, this will fail to compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#859900;">_ </span><span style="color:#657b83;">= </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Using name from main: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name); </span><span style="color:#93a1a1;">// error!
+</span><span style="color:#657b83;">}
+</span></code></pre><h2 id="reluctant-rust">Reluctant Rust</h2>
+<p>Alright, one final point before we sum things up and dive into
+examples. The type of capture is implicit in a closure. How does Rust
+decide whether to capture by value, mutable reference, or immutable
+reference. I like to think of Rust as being reluctant here: it strives
+to capture the weakest way possible. To paraphrase the Rust by Example
+book:</p>
+<p><strong>Closures will preferentially capture by immutable reference, then by
+mutable reference, and only then by value.</strong></p>
+<p>In our previous examples with <code>let name_inner = name_outer;</code>, we
+forced Rust to capture by value. However, it doesn't like doing that,
+and will instead capture by reference (mutable or immutable) if it can
+get away with that. It does this based on the strongest kind of usage
+for that value. That is:</p>
+<ul>
+<li>If any part of the closure uses a variable by value, it must be
+captured by value.</li>
+<li>Otherwise, if any part of the closure uses a variable by mutable
+reference, it must be captured by mutable reference.</li>
+<li>Otherwise, if any part of the closure uses a variable by immutable
+reference, it must be captured by immutable reference.</li>
+</ul>
+<p>It does this reluctant capturing <em>even if it causes the program to
+fail to compile</em>. Capturing by reference instead of value can cause
+lifetime issues, as we've seen previously. However, Rust does not look
+at the full context of the usage of the closure to determine how to
+capture, it only looks at the body of the closure itself.</p>
+<p>But, since there are many legitimate cases where we want to force a
+capture by value to solve lifetime issues, we have the <code>move</code> keyword
+to force the issue.</p>
+<p><strong>Side note</strong> It may be a little annoying at times that Rust doesn't
+just look at your program as a whole and guess that you want that
+<code>move</code> added. However, I think it's a great decision in the language:
+that kind of &quot;do what I mean&quot; logic is fragile and often times
+surprising.</p>
+<h2 id="recap-ownership-capture-and-usage">Recap: ownership, capture, and usage</h2>
+<p>To recap the salient points:</p>
+<ul>
+<li>Within a closure, a variable can be used by value, mutable
+reference, or immutable reference</li>
+<li>In addition, all variables captured by a closure can be captured by
+value, by mutable reference, or by immutable reference</li>
+<li>We cannot use a variable in a stronger way than it was captured. If
+it was captured by mutable reference, it can be used by immutable
+reference, but not by value.</li>
+<li>To solve lifetime issues, we can force a closure to capture by value
+with the <code>move</code> keyword.</li>
+<li>Short of the <code>move</code> keyword, Rust will be reluctant, and capture in
+the weakest way allowed by the body of the closure.</li>
+<li>Regarding the traits of closures:
+<ul>
+<li>If a closure uses anything by value, then the closure is a
+<code>FnOnce</code></li>
+<li>Otherwise, if a closure uses anything by mutable reference, then
+the closure is a <code>FnMut</code>, which automatically implies <code>FnOnce</code>
+as well</li>
+<li>Otherwise, a closure is a <code>Fn</code>, which automatically implies both
+<code>FnMut</code> and <code>FnOnce</code></li>
+</ul>
+</li>
+</ul>
+<p>I consider the points above complicated enough that I'm included a
+number of further examples to help hammer the points home. These are
+inspired heavily by the Rust by Example examples.</p>
+<p>For all of the examples below, I'm going to assume the presence of the
+following three helper functions in the source:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_fn</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F) </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: Fn() {
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">()
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_fn_mut</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F) </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: FnMut() {
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">()
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">call_fn_once</span><span style="color:#657b83;">&lt;F&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F) </span><span style="color:#859900;">where</span><span style="color:#657b83;"> F: FnOnce() {
+    </span><span style="color:#859900;">f</span><span style="color:#657b83;">()
+}
+</span></code></pre><h3 id="examples">Examples</h3>
+<p>Consider this <code>main</code> function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    </span><span style="color:#859900;">call_fn</span><span style="color:#657b83;">(say_hi);
+    </span><span style="color:#859900;">call_fn_mut</span><span style="color:#657b83;">(say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(say_hi);
+}
+</span></code></pre>
+<p><code>name</code> lives longer than <code>say_hi</code>, and therefore there's no problem
+with the closure keeping an immutable reference to <code>name</code>. Since it
+only has immutable references to the environment and consumes no
+values, <code>say_hi</code> is a <code>Fn</code>, <code>FnMut</code>, and <code>FnOnce</code>, and the code above
+compiles.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#93a1a1;">// bad!
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi = {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        || </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name)
+    };
+}
+</span></code></pre>
+<p>By contrast, this example won't compile. <code>name</code> will go out of scope
+once we leave the curly braces. However, our closure is capturing it
+by reference, and so the reference outlives value. We could do our
+trick from before of forcing it to capture by value:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi = {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        || {
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = name;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name)
+        }
+    };
+    </span><span style="color:#93a1a1;">//call_fn(say_hi);
+    //call_fn_mut(say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(say_hi);
+}
+</span></code></pre>
+<p>But this only implements a <code>FnOnce</code>, since the value is captured and
+consumed, preventing it from being run again. There's a better way!
+Instead, we can force the closure to take ownership of <code>name</code>, but
+still capture by reference:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi = {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name)
+    };
+    </span><span style="color:#859900;">call_fn</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">say_hi);
+    </span><span style="color:#859900;">call_fn_mut</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">say_hi);
+}
+</span></code></pre>
+<p>Now we're back to having a <code>Fn</code>, <code>FnMut</code>, and <code>FnOnce</code>! To avoid the
+<code>say_hi</code> value itself from being moved with each call, we now pass a
+reference to the <code>call_fn</code> functions. I believe (though am not 100%
+certain) that this wasn't necessary in the first example since, above,
+there was no captured environment, and therefore the closure could be
+<code>Copy</code>ed. This closure, with a captured environment, cannot be
+<code>Copy</code>ed`.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> say_hi = {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        || std::mem::drop(name)
+    };
+    </span><span style="color:#93a1a1;">//call_fn(say_hi);
+    //call_fn_mut(say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(say_hi);
+}
+</span></code></pre>
+<p>This example uses the <code>drop</code> function to consume <code>name</code>. Since we use
+by value, we must capture by value, and therefore must take ownership
+of the value. As a result, sticking <code>move</code> at the front of the closure
+is unnecessary, though it will do no harm.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi = {
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+        }
+    };
+    </span><span style="color:#93a1a1;">//call_fn(say_hi);
+    </span><span style="color:#859900;">call_fn_mut</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+}
+</span></code></pre>
+<p>Using the <code>+=</code> operator on a <code>String</code> requires a mutable reference, so
+we're out of the territory of immutable reference capturing. Rust
+will fall back to capturing via mutable reference. That requires that
+the <code>name</code> also be declared mutable. And since <code>name</code> will go out of
+scope before the closure, we need to <code>move</code> ownership to the
+closure. And since calling <code>say_hi</code> will mutate data, we need to put a
+<code>mut</code> on its declaration too.</p>
+<p>When we pass <code>say_hi</code> to the call functions, we need to use <code>&amp;mut</code> to
+ensure (1) the value isn't moved, and (2) the value can be
+mutated. Also, <code>call_fn</code> is invalid here, since our closure is <code>FnMut</code>
+and <code>FnOnce</code>, but <em>not</em> <code>Fn</code>.</p>
+<p><strong>Challenge</strong> What will the output of this program be? How many times
+do we add the string <code>&quot; and Bob&quot;</code> to <code>name</code>?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    };
+    </span><span style="color:#93a1a1;">//call_fn(say_hi);
+    </span><span style="color:#859900;">call_fn_mut</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+}
+</span></code></pre>
+<p>We can also avoid the capture by letting the <code>name</code> live longer than the closure.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#93a1a1;">// bad!
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+    };
+    </span><span style="color:#93a1a1;">//call_fn(say_hi);
+    </span><span style="color:#859900;">call_fn_mut</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">And now name is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+}
+</span></code></pre>
+<p>Adding the <code>println!</code> at the end, which references <code>name</code>, is invalid,
+since <code>say_hi</code> is still in scope. This is due to <em>lexical
+lifetimes</em>. You can turn on the (at time of writing) experimental
+feature non-lexical lifetimes by adding <code>#![feature(nll)]</code> to the top
+of your source code. Or, you can explicitly use braces to denote the
+scope of the closure:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    {
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+            name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+        };
+        </span><span style="color:#93a1a1;">//call_fn(say_hi);
+        </span><span style="color:#859900;">call_fn_mut</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+        </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> say_hi);
+    }
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">And now name is: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name);
+}
+</span></code></pre>
+<p>You can also (perhaps somewhat obviously) use a value in multiple
+different ways:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> name = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut </span><span style="color:#b58900;">say_hi </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name); </span><span style="color:#93a1a1;">// use by ref
+</span><span style="color:#657b83;">        name += </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;"> and Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// use by mut ref
+        </span><span style="color:#657b83;">std::mem::drop(name); </span><span style="color:#93a1a1;">// use by value
+    </span><span style="color:#657b83;">};
+    </span><span style="color:#93a1a1;">//call_fn(say_hi);
+    //call_fn_mut(say_hi);
+    </span><span style="color:#859900;">call_fn_once</span><span style="color:#657b83;">(say_hi);
+}
+</span></code></pre>
+<p>In these cases, the most powerful use determines the kind of capture
+we need. Since we used by value above, we must also capture by value,
+and therefore must take ownership.</p>
+<h2 id="which-trait-to-use">Which trait to use?</h2>
+<p>It may be intimidating to try and think through which of these three
+traits you need. You can usually punt on this and let the compiler
+yell at you. To quote <a href="https://doc.rust-lang.org/book/2018-edition/ch13-01-closures.html#capturing-the-environment-with-closures">the Rust
+book</a>:</p>
+<blockquote>
+<p>Most of the time when specifying one of the <code>Fn</code> trait bounds, you
+can start with <code>Fn</code> and the compiler will tell you if you need
+<code>FnMut</code> or <code>FnOnce</code> based on what happens in the closure body.</p>
+</blockquote>
+<p>I'd give a slightly different piece of advice, following the dictum of
+&quot;be lenient in what you accept.&quot; When receiving functions as
+arguments, the most lenient thing to start with is a <code>FnOnce</code>. If your
+usage turns out to be more restrictive, then listen to the
+compiler.</p>
+<p>For more information on closures as output parameters, see <a href="https://doc.rust-lang.org/rust-by-example/fn/closures/output_parameters.html">Rust by Example's
+chapter</a>.</p>
+<h2 id="summary-of-the-rule-of-three-for-closures">Summary of the rule of three for closures</h2>
+<p>Both functions and closures are annotated using the <code>Fn</code> family of
+trait bounds. These form a subtyping relationship, where every <code>Fn</code> is
+also an <code>FnMut</code>, and every <code>FnMut</code> is also an <code>FnOnce</code>.</p>
+<ul>
+<li><code>FnOnce</code> works like pass by value</li>
+<li><code>FnMut</code> works like pass by mutable reference</li>
+<li><code>Fn</code> works like pass by immutable reference</li>
+</ul>
+<p>How these captured variables are used by the closure determines which
+of these three it is. Since functions, by definition, never capture
+local variables, they are always <code>Fn</code>.</p>
+<h2 id="exercise-5">Exercise 5</h2>
+<p>Putting together what we've learned about iterators and closures,
+modify line 5 below (the one starting with <code>for i in</code>) so that the
+program prints the numbers <code>2,4,6,..,20</code> twice.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> nums: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = (</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#657b83;">).</span><span style="color:#859900;">collect</span><span style="color:#657b83;">();
+
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">3 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> nums.</span><span style="color:#859900;">map</span><span style="color:#657b83;">(</span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()) {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        }
+    }
+}
+</span></code></pre><h2 id="guis-and-callbacks">GUIs and callbacks</h2>
+<p>What better way to tie this all off than by writing a GUI and some
+callbacks? I'm going to use GTK+ and the wonderful
+<a href="http://gtk-rs.org/">gtk-rs</a> set of crates. Our goal ultimately is to
+create a GUI with a single button on it. When that button is clicked,
+a message will be written to a file that says &quot;I was clicked.&quot;</p>
+<p>For this example, you'll definitely want to use a cargo project. Go
+ahead and run:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo new clicky
+$ cd clicky
+</span></code></pre>
+<p>Now add gtk as a dependency. Within the <code>[dependencies]</code> section of
+the <code>Cargo.toml</code>, add the line:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">gtk </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">0.5</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>And now we're going to rip off the sample code from gtk-rs's
+website. Put this in your <code>main.rs</code> (bonus points if you type it
+yourself instead of copy-pasting):</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> gtk;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">gtk::prelude::*;
+
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">gtk::{Button, Window, WindowType};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">if </span><span style="color:#657b83;">gtk::init().</span><span style="color:#859900;">is_err</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Failed to initialize GTK.</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#859900;">return</span><span style="color:#657b83;">;
+    }
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> window = Window::new(WindowType::Toplevel);
+    window.</span><span style="color:#859900;">set_title</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">First GTK+ Program</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    window.</span><span style="color:#859900;">set_default_size</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">350</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">70</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> button = Button::new_with_label(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Click me!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    window.</span><span style="color:#859900;">add</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">button);
+    window.</span><span style="color:#859900;">show_all</span><span style="color:#657b83;">();
+
+    window.</span><span style="color:#859900;">connect_delete_event</span><span style="color:#657b83;">(|_, _| {
+        gtk::main_quit();
+        Inhibit(</span><span style="color:#b58900;">false</span><span style="color:#657b83;">)
+    });
+
+    button.</span><span style="color:#859900;">connect_clicked</span><span style="color:#657b83;">(|_| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Clicked!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    });
+
+    gtk::main();
+}
+</span></code></pre>
+<p>Assuming you've got all of your system libraries set up correctly,
+running <code>cargo run</code> should get you a nice, simple GUI.</p>
+<p>If you do have trouble installing the crates, check out <a href="http://gtk-rs.org/docs-src/requirements.html">gtk-rs's
+requirements page</a>
+first.</p>
+<h2 id="replacing-the-callback">Replacing the callback</h2>
+<p>You may have noticed that sample code already includes a callback,
+which prints <code>Clicked!</code> to stdout each time the button is
+clicked. That certainly makes our life a little bit easier. Now,
+inside of that callback, we need to:</p>
+<ul>
+<li>Open up a file</li>
+<li>Write some data to the file</li>
+</ul>
+<p>We're going to take a first stab at this without doing any error
+handling. Instead, we'll use <code>.unwrap()</code> on all of the <code>Result</code>
+values, causing our program to <code>panic!</code> if something goes wrong. We'll
+clean that up a bit later.</p>
+<p><a href="https://doc.rust-lang.org/std/fs/struct.File.html">Searching the standard library for
+file</a> quickly finds
+<a href="https://doc.rust-lang.org/std/fs/struct.File.html"><code>std::fs::File</code></a>,
+which seems promising. It also seems like the <code>create</code> function will
+be the easiest way to get started. We'll write to <code>mylog.txt</code>. The example at the top of that page shows <code>write_all</code> (thanks Rust for awesome API docs!). First, try out this bit of code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> file = std::fs::File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">mylog.txt</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+file.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I was clicked.</span><span style="color:#dc322f;">\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>After addressing exercise 6 below, you'll see this error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0599]: no method named `write_all` found for type `std::fs::File` in the current scope
+  --&gt; src/main.rs:27:14
+   |
+27 |         file.write_all(b&quot;I was clicked.\n&quot;);
+   |              ^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+help: the following trait is implemented but not in scope, perhaps add a `use` for it:
+   |
+3  | use std::io::Write;
+</span></code></pre>
+<p>Oh, that's something new. In order to use items from a trait, the
+trait has to be in scope. Easy enough, we can just add <code>use std::io::Write;</code> to our closure:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::io::Write;
+</span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> file = std::fs::File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">mylog.txt</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+file.</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I was clicked.</span><span style="color:#dc322f;">\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p><strong>Exercise 6</strong> If you're following along with the code like you should
+be, you probably got a different error message above, and the code
+I've provided here doesn't actually fix everything. You need to add an
+extra method call to convert a <code>Result&lt;File, Error&gt;</code> into a
+<code>File</code>. Hint: I mentioned it above.</p>
+<p>Go ahead and run this program (via <code>cargo run</code>), click the button a
+few times, and close the window. Then look at the contents of
+<code>mylog.txt</code>. No matter how many times you clicked, you'll only get one
+line of output.</p>
+<p>The problem is that each time the callback is called, we call <code>create</code>
+from <code>File</code>, which overwrites the old file. One approach here would be
+to create an appending file handle (awesome bonus exercise for anyone
+who wants to take it on). We're going to take another approach.</p>
+<h2 id="share-the-file">Share the file</h2>
+<p>Let's move our <code>create</code> call to <em>outside</em> of the closure
+definition. We'll open the file in the <code>main</code> function itself, the
+closure can capture a mutable reference to the <code>file</code>, and all will be
+well in the world.</p>
+<p>Unfortunately, the compiler really dislikes this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow `file` as mutable, as it is a captured variable in a `Fn` closure
+  --&gt; src/main.rs:28:9
+   |
+28 |         file.write_all(b&quot;I was clicked.\n&quot;);
+   |         ^^^^ cannot borrow as mutable
+   |
+help: consider changing this to accept closures that implement `FnMut`
+  --&gt; src/main.rs:26:28
+   |
+26 |       button.connect_clicked(|_| {
+   |  ____________________________^
+27 | |         use std::io::Write;
+28 | |         file.write_all(b&quot;I was clicked.\n&quot;);
+29 | |     });
+   | |_____^
+
+error[E0597]: `file` does not live long enough
+  --&gt; src/main.rs:28:9
+   |
+26 |     button.connect_clicked(|_| {
+   |                            --- value captured here
+27 |         use std::io::Write;
+28 |         file.write_all(b&quot;I was clicked.\n&quot;);
+   |         ^^^^ borrowed value does not live long enough
+...
+32 | }
+   | - `file` dropped here while still borrowed
+   |
+   = note: borrowed value must be valid for the static lifetime...
+
+error: aborting due to 2 previous errors
+
+Some errors occurred: E0596, E0597.
+For more information about an error, try `rustc --explain E0596`.
+error: Could not compile `clicky`.
+</span></code></pre>
+<p>Or more briefly:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">cannot borrow `file` as mutable, as it is a captured variable in a `Fn` closure
+    help: consider changing this to accept closures that implement `FnMut`
+`file` does not live long enough
+    note: borrowed value must be valid for the static lifetime...
+</span></code></pre>
+<p>We can understand both of these by looking at the signature for <a href="http://gtk-rs.org/docs/gtk/trait.ButtonExt.html#tymethod.connect_clicked"><code>connect_clicked</code></a>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">connect_clicked</span><span style="color:#657b83;">&lt;F: </span><span style="color:#859900;">Fn</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">Self</span><span style="color:#657b83;">) </span><span style="color:#859900;">+ </span><span style="color:#586e75;">&#39;static</span><span style="color:#657b83;">&gt;(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F) -&gt; SignalHandlerId
+</span></code></pre>
+<p><code>connect_clicked</code> is a method which takes some function <code>f</code> of type
+<code>F</code> and returns a <code>SignalHandlerId</code>. We're not using that return
+value, so just ignore it. The function is a <code>Fn</code>. Therefore, we're
+<em>not</em> allowed to pass in a <code>FnMut</code> or an <code>FnOnce</code>. GTK must be allowed
+to call that function multiple times without the restrictions of a
+mutable context. So keeping a mutable reference won't work.</p>
+<p>The other interesting thing is <code>+ 'static</code>. We briefly mentioned
+lifetime parameters above. <code>'static</code> is a special lifetime parameter,
+which means &quot;can live for the entire lifetime of the program.&quot; As one
+nice example of this, all string literals have type <code>&amp;'static str</code>,
+though we usually just write <code>&amp;str</code>.</p>
+<p>The problem is that our <code>file</code> does <em>not</em> have <code>'static</code> lifetime. It
+is created in the <code>main</code> function, remains in the <code>main</code> function, and
+only lives as long as the <code>main</code> function. You may argue that the
+<code>main</code> function lives the entire length of the program, but that's not
+exactly true. In our example above, <code>button</code> will outlive <code>file</code> when
+calling <code>drop</code>s (since <code>drop</code>s are performed in FILO order). If the
+<code>drop</code> for a button decided to call the click
+callback one more time, we'd have memory unsafety.</p>
+<p>So what we're left with is: we need a closure which does not have a
+mutable reference to local data. How do we do that?</p>
+<h2 id="move-it">Move it</h2>
+<p>We can get the compiler to stop complaining about the lifetime by
+moving the variable into the closure. Now we're guaranteed that the
+<code>file</code> will live as long as the closure itself, meeting the guarantees
+demanded by <code>'static</code>. Do accomplish this, stick <code>move</code> in front of
+the closure.</p>
+<p>This still doesn't solve our <code>Fn</code> issue, however. How can we allow our
+callback to be called multiple times after moving the value in?</p>
+<h2 id="reference-counting-hint-nope">Reference counting (hint: nope)</h2>
+<p>We've reached a point where the normal borrow rules of Rust simply
+aren't enough. We cannot prove to the compiler that our callback will
+obey the mutable reference rules: exactly one mutable reference will
+exist at a given time. These kinds of situations occur often enough
+that the standard library provides built in support for reference
+counted types.</p>
+<p>Add the following statement to the top of your <code>main.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::rc::Rc;
+</span></code></pre>
+<p>An <code>Rc</code> is a single threaded reference counted value. There's also an
+<code>Arc</code> type, which is atomic, and can be used in multithreaded
+applications. Since GTK is a single-threaded library, we're safe using
+an <code>Rc</code> instead of an <code>Arc</code>. One really awesome thing about Rust is
+that if you make a mistake about this, the compiler can catch
+you. This is because <code>Rc</code> does not implement the <code>Sync</code> and <code>Send</code>
+traits. See more in the
+<a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a>
+documentation.</p>
+<p>Anyway, back to our example. We can wrap up our original <code>file</code> with
+reference counting with this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> file = std::fs::File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">mylog.txt</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">).</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+</span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> file = Rc::new(file);
+</span></code></pre>
+<p>How do we then get access to the underlying <code>File</code> to use it? Turns
+out: we don't need to do anything special. Keeping our original
+<code>file.write_all</code> does what we want. This is because <code>Rc</code> implements
+the <code>Deref</code> trait:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;T&gt; Deref </span><span style="color:#859900;">for </span><span style="color:#b58900;">Rc</span><span style="color:#657b83;">&lt;T&gt; {
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Target </span><span style="color:#657b83;">= T;
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>This means that you can get a reference to a <code>T</code> from a <code>Rc&lt;T&gt;</code>. Since
+method call syntax automatically takes a reference, everything
+works. Nice.</p>
+<p>Well, almost everything:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow data in a `&amp;` reference as mutable
+  --&gt; src/main.rs:32:9
+   |
+32 |         file.write_all(b&quot;I was clicked.\n&quot;);
+   |         ^^^^ cannot borrow as mutable
+</span></code></pre>
+<p>Reference counting allows us to have multiple references to a value,
+but they're all <em>immutable</em> references. Looks like we haven't actually
+made our situation any better than before, where we had ensured that
+the single owner of our data was the closure.</p>
+<h2 id="refcell">RefCell</h2>
+<p><code>RefCell</code> is designed to exactly solve this problem. I'm not going to
+go into detail explaining it, because the <a href="https://doc.rust-lang.org/std/cell/index.html">API docs for <code>std::cell</code> do
+that better than I
+could</a>. I recommend you
+go read that intro now, come back and work on this code, and then go
+read the docs again. Personally, I had to read that explanation about
+4 or 5 times and bash my head against some broken code before it
+finally sank in correctly.</p>
+<p>Anyway, add <code>use std::cell::RefCell;</code>, and then wrap a <code>RefCell</code>
+around the original <code>File</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> file = std::fs::File::create(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">mylog.txt</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">).</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+</span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> file = RefCell::new(file);
+</span></code></pre>
+<p>Now our code will fail to compile with a different message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0599]: no method named `write_all` found for type `std::cell::RefCell&lt;std::fs::File&gt;` in the current scope
+  --&gt; src/main.rs:29:14
+   |
+29 |         file.write_all(b&quot;I was clicked.\n&quot;).unwrap();
+   |
+</span></code></pre>
+<p>Unlike <code>Rc</code>, with <code>RefCell</code> we cannot rely on the <code>Deref</code>
+implementation to get us a <code>File</code>. Instead, we'll need to use a method
+on <code>RefCell</code> to get a reference to the <code>File</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">file.</span><span style="color:#859900;">borrow</span><span style="color:#657b83;">().</span><span style="color:#859900;">write_all</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">b</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I was clicked.</span><span style="color:#dc322f;">\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>But that doesn't quite work:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow data in a `&amp;` reference as mutable
+</span></code></pre>
+<p>Fortunately, that fix is as easy as using <code>borrow_mut()</code> instead. And
+now our program works, hurray!</p>
+<p><strong>NOTE</strong> Often, reference counting (<code>Rc</code> or <code>Arc</code>) and cells (<code>Cell</code>,
+<code>RefCell</code>, or <code>Mutex</code>) go hand in hand, which is why my first instinct
+in writing this lesson was to use both an <code>Rc</code> and a
+<code>RefCell</code>. However, in this case, it turns out that just the <code>RefCell</code>
+is sufficient.</p>
+<h2 id="exercise-7">Exercise 7</h2>
+<p>The error handling in this program is lackluster. There are three problems:</p>
+<ol>
+<li>If <code>gtk::init()</code> fails, the exit code of our program is still <code>0</code>
+(indicating success).</li>
+<li>If opening <code>mylog.txt</code> fails, we panic.</li>
+<li>If writing to the file fails, we panic.</li>
+</ol>
+<p>To fix this, have <code>main</code> return a value of type <code>Result&lt;(), Box&lt;std::error::Error&gt;&gt;</code>. Most other errors can be automatically
+coerced via <code>From::from</code> into <code>Box&lt;std::error::Error&gt;</code>. For problems
+(1) and (2), use the standard error handling mechanisms we discussed
+back in lesson 3. For problem (3), print an error message with
+<code>eprintln!</code> when an error occurs.</p>
+<h2 id="fearless-concurrency">Fearless concurrency!</h2>
+<p>It's finally time to do some fearless concurrency. We're going to
+write a program which will:</p>
+<ul>
+<li>Allocate a string containing the word &quot;Fearless&quot;</li>
+<li>Fork a thread every second for 10 iterations</li>
+<li>In the forked thread:
+<ul>
+<li>Add another exclamation point to the string</li>
+<li>Print the string</li>
+</ul>
+</li>
+</ul>
+<p>Before we begin, you can probably identify some complex pieces of
+ownership that are going to go on here:</p>
+<ul>
+<li>Multiple threads will have access to some mutable data</li>
+<li>We need to ensure only one writer at a time</li>
+<li>We need to ensure that the data is released when everyone is done
+with it</li>
+</ul>
+<p>Instead of trying to design a great solution to this from the
+beginning, we'll treat this like a proper crash course. We'll do the
+most naive stuff possible, look at the error messages, and try to
+improve. If you think you can implement the complete program yourself
+now, definitely give it a shot! Even if you don't think you can
+implement it yourself, it's worth trying. The effort will make the
+explanation below more helpful.</p>
+<h3 id="introducing-the-functions">Introducing the functions</h3>
+<p>We're going to use the following three functions:</p>
+<p><a href="https://doc.rust-lang.org/std/thread/fn.spawn.html"><code>std::thread::spawn</code></a>
+to spawn a thread. It has an interesting signature:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">spawn</span><span style="color:#657b83;">&lt;F, T&gt;(</span><span style="color:#268bd2;">f</span><span style="color:#657b83;">: F) -&gt; JoinHandle&lt;T&gt; </span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    F: FnOnce() -&gt; T,
+    F: Send + </span><span style="color:#586e75;">&#39;static</span><span style="color:#657b83;">,
+    T: Send + </span><span style="color:#586e75;">&#39;static</span><span style="color:#657b83;">,
+</span></code></pre>
+<p>The <code>Send</code> trait means that both the provided function and its return
+value must be values which can be sent to a different thread. The
+<code>'static</code> bit says that we cannot retain any references to local
+variables. And the <code>FnOnce()</code> bit says that <em>any</em> closure will work.</p>
+<p><a href="https://doc.rust-lang.org/std/thread/fn.sleep.html"><code>std::thread::sleep</code></a>
+to have the main thread sleep. It takes a value of type <code>Duration</code>,
+which brings us to our last function:</p>
+<p><a href="https://doc.rust-lang.org/std/time/struct.Duration.html"><code>std::time::Duration::new</code></a>
+takes the number of seconds and nanoseconds in a duration.</p>
+<p>Before we introduce the great fun which is spawning a new thread,
+let's try a single threaded version:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::sleep;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">String </span><span style="color:#657b83;">= </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fearless</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        msg.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">!</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">);
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::new(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">));
+    }
+}
+</span></code></pre>
+<p>We can even wrap up that <code>msg.push</code> and <code>println!</code> in a closure to get
+a bit closer to the call to <code>spawn</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::sleep;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> msg: </span><span style="color:#859900;">String </span><span style="color:#657b83;">= </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fearless</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">inner </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+            msg.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">!</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+        };
+        </span><span style="color:#859900;">inner</span><span style="color:#657b83;">();
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::new(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">));
+    }
+}
+</span></code></pre>
+<p>That gives us an error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow immutable local variable `inner` as mutable
+</span></code></pre>
+<p>Go ahead and fix that and make this compile.</p>
+<h3 id="introducing-spawn">Introducing spawn</h3>
+<p>The simplest way to introduce spawn is to replace the <code>inner()</code> call
+with <code>spawn(inner)</code>. Replace:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::sleep;
+</span></code></pre>
+<p>with</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep, spawn};
+</span></code></pre>
+<p>And add the <code>spawn</code> call. We get the error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0373]: closure may outlive the current function, but it borrows `msg`, which is owned by the current function
+ --&gt; main.rs:7:25
+  |
+7 |         let mut inner = || {
+  |                         ^^ may outlive borrowed value `msg`
+8 |             msg.push(&#39;!&#39;);
+  |             --- `msg` is borrowed here
+help: to force the closure to take ownership of `msg` (and any other referenced variables), use the `move` keyword
+  |
+7 |         let mut inner = move || {
+  |                         ^^^^^^^
+
+error: aborting due to previous error
+</span></code></pre>
+<p>Seems simple enough: we have to have a self contained closure to pass
+to <code>spawn</code>, which can't refer to values from the parent thread. Let's
+just add a <code>move</code> in front of the closure. We get an error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: capture of moved value: `msg`
+ --&gt; main.rs:8:13
+  |
+7 |         let mut inner = move || {
+  |                         ------- value moved (into closure) here
+8 |             msg.push(&#39;!&#39;);
+  |             ^^^ value captured here after move
+  |
+  = note: move occurs because `msg` has type `std::string::String`, which does not implement the `Copy` trait
+</span></code></pre>
+<p>I still don't find these error messages particularly enlightening. But
+it's telling us that we're trying to capture a moved value. This is
+happening because we're moving the value into the closure in the first
+iteration of the loop, and then trying to move it in again. That
+clearly won't work!</p>
+<h3 id="a-broken-solution">A broken solution</h3>
+<p>Let's just cheat and create a new copy of the string for each
+iteration. That's easy enough: add the following above <code>let mut inner</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> msg = msg.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+</span></code></pre>
+<p>This will compile (with a warning) and run, but it has the wrong
+output. We aren't adding extra exclamation points each time. We're not
+actually dealing with shared mutable data. Darn.</p>
+<p>But that cloning gives me another idea...</p>
+<h3 id="reference-counting">Reference counting</h3>
+<p>Maybe we can throw in that reference counting we mentioned previously,
+and let each thread keep a pointer to the same piece of data.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep, spawn};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::rc::Rc;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = Rc::new(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fearless</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">));
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> msg = msg.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> inner = </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            msg.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">!</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+        };
+        </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(inner);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::new(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">));
+    }
+}
+</span></code></pre>
+<p>Well, <em>that's</em> a new one:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: `std::rc::Rc&lt;std::string::String&gt;` cannot be sent between threads safely
+  --&gt; main.rs:13:9
+   |
+13 |         spawn(inner);
+   |         ^^^^^ `std::rc::Rc&lt;std::string::String&gt;` cannot be sent between threads safely
+   |
+</span></code></pre>
+<p>There's that fearless concurrency we've heard so much about! The
+compiler is preventing us from sending an <code>Rc</code> value between
+threads. It would be nice if the compiler mentioned it, but we already
+know that for multithreaded applications, we need an atomic reference
+counter, or <code>std::sync::Arc</code>. Go ahead and switch over to that. You
+should get a new error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow immutable borrowed content as mutable
+  --&gt; main.rs:10:13
+   |
+10 |             msg.push(&#39;!&#39;);
+   |             ^^^ cannot borrow as mutable
+
+error: aborting due to previous error
+</span></code></pre><h3 id="inner-mutability">Inner mutability</h3>
+<p>Above, I mentioned that <code>Rc</code> and <code>RefCell</code> usually go together. The
+<code>Rc</code> provides reference counting, and the <code>RefCell</code> provides
+mutability. Maybe we can combine <code>Arc</code> and <code>RefCell</code> too?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep, spawn};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::sync::Arc;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::cell::RefCell;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = Arc::new(RefCell::new(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fearless</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)));
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> msg = msg.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> inner = </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = msg.</span><span style="color:#859900;">borrow_mut</span><span style="color:#657b83;">();
+            msg.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">!</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+        };
+        </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(inner);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::new(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">));
+    }
+}
+</span></code></pre>
+<p>More fearless concurrency:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: `std::cell::RefCell&lt;std::string::String&gt;` cannot be shared between threads safely
+  --&gt; main.rs:15:9
+   |
+15 |         spawn(inner);
+   |         ^^^^^ `std::cell::RefCell&lt;std::string::String&gt;` cannot be shared between threads safely
+   |
+   = help: the trait `std::marker::Sync` is not implemented for `std::cell::RefCell&lt;std::string::String&gt;`
+   = note: required because of the requirements on the impl of `std::marker::Send` for `std::sync::Arc&lt;std::cell::RefCell&lt;std::string::String&gt;&gt;`
+   = note: required because it appears within the type `[closure@main.rs:10:25: 14:10 msg:std::sync::Arc&lt;std::cell::RefCell&lt;std::string::String&gt;&gt;]`
+   = note: required by `std::thread::spawn`
+</span></code></pre>
+<p>You could go search for more info, but the normal way to have a
+mutable, multithreaded cell is a <code>Mutex</code>. Instead of <code>borrow_mut()</code>,
+we have a <code>lock()</code> method, which ensures that only one thread at a
+time is using the mutex. Let's try that out:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep, spawn};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::sync::{Arc, Mutex};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = Arc::new(Mutex::new(</span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Fearless</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">)));
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11 </span><span style="color:#657b83;">{
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> msg = msg.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">();
+        </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> inner = </span><span style="color:#586e75;">move </span><span style="color:#859900;">|| </span><span style="color:#657b83;">{
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> msg = msg.</span><span style="color:#859900;">lock</span><span style="color:#657b83;">();
+            msg.</span><span style="color:#859900;">push</span><span style="color:#657b83;">(</span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">!</span><span style="color:#839496;">&#39;</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, msg);
+        };
+        </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(inner);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::new(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">));
+    }
+}
+</span></code></pre>
+<p>We get the error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0599]: no method named `push` found for type `std::result::Result&lt;std::sync::MutexGuard&lt;&#39;_, std::string::String&gt;, std::sync::PoisonError&lt;std::sync::MutexGuard&lt;&#39;_, std::string::String&gt;&gt;&gt;` in the current scope
+</span></code></pre>
+<p>Oh, right. <code>lock</code>ing can fail, due to something called
+poisoning. (<a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html#poisoning">Check out the
+docs</a>
+for more information.) To quote the docs:</p>
+<blockquote>
+<p>Most usage of a mutex will simply <code>unwrap()</code> these results,
+propagating panics among threads to ensure that a possibly invalid
+invariant is not witnessed.</p>
+</blockquote>
+<p>This is the closest to runtime exceptions I've seen the Rust docs
+mention, nice. If we add that <code>.unwrap()</code>, we get told that <code>msg</code>
+needs to be mutable. And if we add <code>mut</code>, we've written our first
+multithreaded Rust application using shared mutable state.</p>
+<p>Notice how the compiler prevented us from making some serious
+concurrency mistakes? That's pretty awesome.</p>
+<p>As a final step, see which <code>mut</code>s and <code>move</code>s you can and cannot
+remove from the final program. Make sure you can justify to yourself
+why the compiler does or does not accept each change.</p>
+<h2 id="next-time">Next time</h2>
+<p>You're now deep into the hard parts of Rust. What comes now is getting
+more comfortable with the hairy bits of ownership and closures, and to
+get more comfortable with the library ecosystem. We're ready to get
+much more real world next time, and learn about tokio, the de facto
+standard async I/O framework in Rust.</p>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

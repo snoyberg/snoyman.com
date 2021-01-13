@@ -1,0 +1,279 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Using AppVeyor for Haskell+Windows CI</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Using AppVeyor for Haskell+Windows CI">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Using AppVeyor for Haskell+Windows CI</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published August 31, 2016</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Using%20AppVeyor%20for%20Haskell%2BWindows%20CI https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;08&#x2F;appveyor-haskell-windows-ci&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;08&#x2F;appveyor-haskell-windows-ci&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;08&#x2F;appveyor-haskell-windows-ci&#x2F;&amp;title=Using%20AppVeyor%20for%20Haskell%2BWindows%20CI" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;08&#x2F;appveyor-haskell-windows-ci&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;appveyor-haskell-windows-ci.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>UPDATE August 2018</strong> As pointed out by Mark Wotton, the instructions below were out of date (see <a href="https://www.fpcomplete.com/blog/2018/06/sed-a-debugging-story">Sed: A Debugging Story</a> for more information). I've updated the contents below, but for future readers: please see the more up-to-date AppVeyor configuration on <a href="https://github.com/commercialhaskell/stack/blob/stable/doc/appveyor.yml">Stack's Github repo</a>.</p>
+<p>I don't think I ever documented this before, so just a quick post to get this
+out there. Many of us working on open source Haskell libraries already use
+<a href="https://travis-ci.org/">Travis CI</a> for doing continuous integration builds of
+our software. Some time ago they added support for OS X, making it possible to
+cover Linux and OS X with multiple configurations on their systems. For any
+project with a <a href="https://docs.haskellstack.org/en/stable/yaml_configuration/">stack.yaml
+file</a>, this can be
+easily achieved using the <a href="https://docs.haskellstack.org/en/stable/GUIDE/#travis-with-caching">Stack recommended Travis
+configuration</a>.</p>
+<p>Unfortunately, this leaves Windows testing out, which is unfortunate, because Windows is likely to be the most common build to fail. Fortunately, <a href="https://www.appveyor.com/">AppVeyor</a> provides a similar experience to Travis, but for Windows. In order to get set up, just:</p>
+<ol>
+<li>Sign in with their web interface and add your Github repo</li>
+<li>Add an <code>appveyor.yml</code> to your project</li>
+</ol>
+<p>Here's a simple file I've used on a few projects with succeess:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">build</span><span style="color:#657b83;">: </span><span style="color:#b58900;">off
+
+</span><span style="color:#268bd2;">before_test</span><span style="color:#657b83;">:
+</span><span style="color:#93a1a1;"># http://help.appveyor.com/discussions/problems/6312-curl-command-not-found
+</span><span style="color:#657b83;">- </span><span style="color:#268bd2;">set PATH=C:\Program Files\Git\mingw64\bin;%PATH%
+
+</span><span style="color:#657b83;">- </span><span style="color:#268bd2;">curl -sS -ostack.zip -L --insecure http://www.stackage.org/stack/windows-i386
+</span><span style="color:#657b83;">- </span><span style="color:#268bd2;">7z x stack.zip stack.exe
+
+clone_folder</span><span style="color:#657b83;">: </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">c:</span><span style="color:#dc322f;">\\</span><span style="color:#2aa198;">stack</span><span style="color:#839496;">&quot;
+</span><span style="color:#268bd2;">environment</span><span style="color:#657b83;">:
+  </span><span style="color:#268bd2;">global</span><span style="color:#657b83;">:
+    </span><span style="color:#268bd2;">STACK_ROOT</span><span style="color:#657b83;">: </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">c:</span><span style="color:#dc322f;">\\</span><span style="color:#2aa198;">sr</span><span style="color:#839496;">&quot;
+
+    </span><span style="color:#93a1a1;"># Override the temp directory to avoid sed escaping issues
+    # See https://github.com/haskell/cabal/issues/5386
+    </span><span style="color:#268bd2;">TMP</span><span style="color:#657b83;">: </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">c:</span><span style="color:#dc322f;">\\</span><span style="color:#2aa198;">tmp</span><span style="color:#839496;">&quot;
+
+</span><span style="color:#268bd2;">test_script</span><span style="color:#657b83;">:
+- </span><span style="color:#2aa198;">stack setup &gt; nul
+</span><span style="color:#93a1a1;"># The ugly echo &quot;&quot; hack is to avoid complaints about 0 being an invalid file
+# descriptor
+</span><span style="color:#657b83;">- </span><span style="color:#2aa198;">echo &quot;&quot; | stack --no-terminal test
+</span></code></pre>
+<p>All this does is:</p>
+<ul>
+<li>Downloads the Stack zip file</li>
+<li>Unpacks the stack.exe executable</li>
+<li>Changes the <code>STACK_ROOT</code> to deal with Windows long path issues</li>
+<li>Run <code>stack setup</code> to get a toolchain</li>
+<li>Run <code>stack --no-terminal test</code> to build your package and run the test suites</li>
+</ul>
+<p>You're free to modify this in any way you want, e.g., add in <code>--bench</code> to build
+benchmarks, add <code>--pedantic</code> to fail on warnings, etc. If you have more system
+library dependencies, you'll need to consult the AppVeyor docs to see how to
+install them. And in our use cases for Stack, we found that using the AppVeyor
+caching functionality made builds unreliable (due to the large size of the
+cache). You may want to experiment with turning it back on, since this setup is
+<em>slow</em> (it downloads and installs a full GHC toolchain and builds all library
+dependencies each time).</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

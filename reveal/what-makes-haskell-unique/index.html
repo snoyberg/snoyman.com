@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>What Makes Haskell Unique</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+### What Makes Haskell Unique
+
+* Michael Snoyman
+* VP of Engineering, FP Complete
+* F(by) 2017
+
+&lt;div&gt;&lt;img src=&quot;&#x2F;static&#x2F;fpcomplete-logo.png&quot; style=&quot;border:0;margin:0&quot;&gt;&lt;&#x2F;div&gt;
+
+&lt;aside class=&quot;notes&quot;&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Good morning, welcome&lt;&#x2F;li&gt;
+&lt;li&gt;FP Complete helps people adopt Haskell&lt;&#x2F;li&gt;
+&lt;li&gt;Need to know: &lt;b&gt;What makes Haskell unique&lt;&#x2F;b&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;aside&gt;
+
+---
+
+## Why uniqueness matters
+
+* Programmers have lots of options
+* Need to know what distinguishes programming languages
+* Need to understand what makes Haskell different from other languages
+
+----
+
+## Is Haskell functional?
+
+* What even is a functional language?
+* Lax definition
+    * First class functions
+	* Higher order functions
+* Wait... is C functional?
+
+&lt;aside class=&quot;notes&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;Haskell is functional&lt;&#x2F;li&gt;
+&lt;li&gt;So are lots of others&lt;&#x2F;li&gt;
+&lt;li&gt;Even if you include closures, still many choices&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;aside&gt;
+
+----
+
+__Haskell may be functional, but that doesn&#x27;t make it unique__
+
+&lt;aside class=&quot;notes&quot;&gt;
+Lots of things could describe Haskell
+&lt;&#x2F;aside&gt;
+
+----
+
+## Let&#x27;s Describe Haskell
+
+* Functional
+* Statically typed
+* Pure
+* Lazy
+* Strongly typed
+* Green threads
+* Native executables
+* Garbage collected
+* Immutability
+
+&lt;aside class=&quot;notes&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;Some features are rare: pure and lazy&lt;&#x2F;li&gt;
+&lt;li&gt;Some are common&lt;&#x2F;li&gt;
+&lt;li&gt;No one feature is enough to motivate using Haskell&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;aside&gt;
+
+----
+
+__It&#x27;s the combination of these features that makes Haskell unique__
+
+* Example: purity + strong typing + functional style leads to:
+    * Easy to write
+	* Easy to read
+	* Easy to modify
+	* Efficient
+* We&#x27;ll get to this later
+* Now: lots of examples!
+* Different here is usually better, but some downsides
+
+---
+
+## Async I&#x2F;O and Concurrency
+
+What&#x27;s wrong with this?
+
+```
+json1 := httpGet(url1)
+json2 := httpGet(url2)
+useJsonBodies(json1, json2)
+```
+
+* Hint: it&#x27;s in the title of this slide
+* Ties up an entire system thread on blocking I&#x2F;O calls
+* We want to be more efficient with resources, so...
+
+----
+
+## Callbacks
+
+```
+httpGetA(url1, |json1| =&gt;
+  httpGetA(url2, |json2| =&gt;
+    useJsonBodies(json1, json2)
+  )
+)
+```
+
+* Aka &quot;callback hell&quot;
+* Lots of techniques to work around it, e.g. promises&#x2F;futures
+* &quot;Oh, promises form a monad!&quot; Not even going there today :)
+
+----
+
+## Asynchronous Haskell version
+
+```haskell
+json1 &lt;- httpGet url1
+json2 &lt;- httpGet url2
+useJsonBodies json1 json2
+```
+
+* But that looks just like the blocking code! Exactly
+* Runtime converts to async system calls
+* Runtime schedules threads
+    * Sleeps when waiting for data
+	* Wake them up when data is available
+* Not only Haskell: Erlang and Go do this too
+    * Therefore....
+
+----
+
+&lt;img src=&quot;&#x2F;static&#x2F;unique&#x2F;deeper.jpg&quot; style=&quot;width:100%&quot;&gt;
+
+----
+
+## Concurrency
+
+* Why wait for `url1` before starting `url2`?
+* Need to fork threads, write to mutable variables, do some locking
+* Or be awesome
+
+&lt;div class=&quot;fragment&quot;&gt;
+
+&lt;pre&gt;&lt;code class=&quot;haskell&quot;&gt;(json1, json2) &lt;- concurrently
+  (httpGet url1)
+  (httpGet url2)
+useJsonBodies json1 json2&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Cheap green thread implementation&lt;&#x2F;li&gt;
+&lt;li&gt;Wonderful `async` library&lt;&#x2F;li&gt;
+&lt;li&gt;Builds on the async I&#x2F;O system&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;div&gt;
+
+&lt;aside class=&quot;notes&quot;&gt;
+So far: elegant in Haskell, but not terribly difficult in other languages.
+&lt;&#x2F;aside&gt;
+
+----
+
+## Canceling
+
+* We only want one of the responses
+* Take whichever comes first
+
+```
+promise1 := httpGet(url1)
+promise2 := httpGet(url2)
+result := newMutex()
+promise1.andThen(|json1| =&gt;
+  result.set(json1)
+  promise2.cancel())
+promise2.andThen(|json2| =&gt;
+  result.set(json2)
+  promise1.cancel())
+useJsonBody(result.get())
+```
+
+----
+
+## Canceling in Haskell
+
+```haskell
+eitherJson &lt;- race
+  (httpGet url1)
+  (httpGet url2)
+case eitherJson of
+  Left  json1 -&gt; useJsonBody1 json1
+  Right json2 -&gt; useJsonBody2 json2
+```
+
+* More than just a well designed API
+* Depends on asynchronous exceptions
+* Cancel any other running thread
+
+----
+
+## Not just about I&#x2F;O
+
+* Thread scheduling, sleeping, killing works for CPU bound tasks too!
+* Don&#x27;t need to worry about a heavy computation starving other threads
+* No need to offload your heavy tasks to a different microservice, do
+  it all in Haskell
+
+```haskell
+let tenSeconds = 10 * 1000 * 1000
+timeout tenSeconds expensiveComputation
+```
+
+----
+
+## Summary: concurrency and async I&#x2F;O
+
+&lt;div style=&quot;text-align:left&quot;&gt;
+
+&lt;h3&gt;Advantages&lt;&#x2F;h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Cheap threads&lt;&#x2F;li&gt;
+&lt;li&gt;Simple API&lt;&#x2F;li&gt;
+&lt;li&gt;Highly responsive&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;h3&gt;Disadvantages&lt;&#x2F;h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Complicated runtime system&lt;&#x2F;li&gt;
+&lt;li&gt;Need to be aware of async exceptions when writing code&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;div&gt;
+
+---
+
+## Immutability and purity
+
+* Most languages default to mutable values
+* Haskell differs in two ways:
+    * Immutable by default, explicit kind of mutability
+	* Mutating is an effect, tracked by the type system
+
+----
+
+## Mutable Haskell
+
+Impossible
+
+```haskell
+let mut total = 0
+    loop i =
+      if i &gt; 1000000
+        then total
+        else total += i; loop (i + 1)
+ in loop 1
+```
+
+Real and tedious
+
+```haskell
+total &lt;- newIORef 0
+let loop i =
+      if i &gt; 1000000
+        then readIORef total
+        else do
+          modifyIORef total (+ i)
+          loop (i + 1)
+loop 1
+```
+
+&lt;aside class=&quot;notes&quot;&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In pure code, we cannot create, read, or modify a mutable variable&lt;&#x2F;li&gt;
+&lt;li&gt;Have to use non-pure code&lt;&#x2F;li&gt;
+&lt;li&gt;Lots of ceremony for something simple, so don&#x27;t do that&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;aside&gt;
+
+----
+
+## Better Haskell
+
+Recursive and immutable, much better!
+
+```haskell
+let loop i total =
+      if i &gt; 1000000
+        then total
+        else loop (i + 1) (total + i)
+ in loop 1 0
+```
+
+But why does this matter?
+
+----
+
+## Reasoning about code
+
+Guess the output
+
+```
+&#x2F;&#x2F; scores.txt
+Alice,32
+Bob,55
+Charlie,22
+
+func main() {
+  results := readResultsFromFile(&quot;results.txt&quot;)
+  printScoreRange(results)
+  print(&quot;First result was by: &quot; + results[0].name)
+}
+
+func printScoreRange(results: Vector&lt;TestResult&gt;) {
+  ...
+}
+```
+
+&lt;aside class=&quot;notes&quot;&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Personally think the phrase &quot;reasoning about code&quot; is overused, but here&#x27;s a concrete example.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;i&gt;Describe slide&lt;&#x2F;i&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;What&#x27;s the expected output? Reasonable to guess...&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;aside&gt;
+
+----
+
+## Expected output
+
+```
+Lowest: 22
+Highest: 55
+First result was by: Alice
+```
+
+&lt;aside class=&quot;notes&quot;&gt;But let&#x27;s see the definition of &lt;code&gt;printScoreRange&lt;&#x2F;code&gt;&lt;&#x2F;aside&gt;
+
+----
+
+## What&#x27;s in printScoreRange?
+
+```
+func printScoreRange(results: Vector&lt;TestResult&gt;) {
+  results.sortBy(|result| =&gt; result.score)
+  print(&quot;Lowest: &quot; + results[0].score)
+  print(&quot;Highest: &quot; + results[results.len() - 1].score)
+}
+```
+
+&lt;div class=&quot;fragment&quot;&gt;
+
+Actual output:
+
+&lt;pre&gt;Lowest: 22
+Highest: 55
+First result was by: Charlie&lt;&#x2F;pre&gt;
+
+Non-local changes broke our guessed result
+&lt;&#x2F;div&gt;
+
+&lt;aside class=&quot;notes&quot;&gt;Our assumptions changed because of mutation&lt;&#x2F;aside&gt;
+
+----
+
+&lt;img src=&quot;&#x2F;static&#x2F;unique&#x2F;doh.gif&quot;&gt;
+
+&lt;aside class=&quot;notes&quot;&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;results&lt;&#x2F;code&gt; from &lt;code&gt;main&lt;&#x2F;code&gt; has been modified&lt;&#x2F;li&gt;
+&lt;li&gt;Can&#x27;t just look at &lt;code&gt;main&lt;&#x2F;code&gt; to understand what will happen&lt;&#x2F;li&gt;
+&lt;li&gt;Need to be aware of mutation happening in the rest of the program&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;aside&gt;
+
+
+----
+
+## Do it in Haskell
+
+```haskell
+main :: IO ()
+main = do
+  results &lt;- readResultsFromFile &quot;results.txt&quot;
+  printScoreRange results
+  putStrLn $ &quot;First result was by: &quot; ++ name (head results)
+
+printScoreRange :: [TestResult] -&gt; IO ()
+printScoreRange results = do
+  let results&#x27; = sortBy score results
+  putStrLn $ &quot;Lowest: &quot; ++ show (score (head results&#x27;))
+  putStrLn $ &quot;Highest: &quot; ++ show (score (last results&#x27;))
+```
+
+* Impossible for `printScoreRange` to modify results
+* `printScoreRange` sorts into a local copy
+* Have to think about less when writing `main`
+
+----
+
+## Data races
+
+```haskell
+main :: IO ()
+main = do
+  results &lt;- readResultsFromFile &quot;results.txt&quot;
+  concurrently_ printFirstResult printScoreRange
+
+printFirstResult results =
+  putStrLn $ &quot;First result was by: &quot; ++ name (head results)
+
+printScoreRange results = do
+  let results&#x27; = sortBy score results
+  putStrLn $ &quot;Lowest: &quot; ++ show (score (head results&#x27;))
+  putStrLn $ &quot;Highest: &quot; ++ show (score (last results&#x27;))
+```
+
+* Concurrent data accesses? No problem!
+* Concurrent data writes? Impossible!
+* We&#x27;ll come back to mutable, multithreaded data
+
+&lt;aside class=&quot;notes&quot;&gt;Multithreaded cases is more interesting. We can easily parallelize our previous code.&lt;&#x2F;aside&gt;
+
+----
+
+## Mutability when needed
+
+* In place, mutable algorithms can be much faster
+* Example: sorting a vector with only pure transformations is __slow__
+* Haskell&#x27;s answers:
+    1. You can still have mutable data structures if you want them,
+       but they&#x27;re __explicit__
+	2. Temporary mutable copy, then freeze it
+
+&lt;aside class=&quot;notes&quot;&gt;Option 1 breaks our guarantees. But still better than other languages: know exactly which data to look at&lt;&#x2F;aside&gt;
+
+----
+
+## Freeze!
+
+```haskell
+sortMutable :: MutableVector a -&gt; ST (MutableVector a)
+sortMutable = ... -- normal sorting algorithm
+
+sortImmutable :: Vector a -&gt; Vector a
+sortImmutable orig = runST $ do
+  mutable &lt;- newMutableVector (length orig)
+  copyValues orig mutable
+  sortMutable mutable
+  freeze mutable
+```
+
+* `ST` is for temporary, local mutability
+* Cannot be affected by the outside world, and cannot affect it
+* Keeps functional guarantee: same input ==&gt; same output
+
+----
+
+## Summary: immutability and purity
+
+&lt;div style=&quot;text-align:left&quot;&gt;
+
+&lt;b&gt;Advantages&lt;&#x2F;b&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Easier to reason about code&lt;&#x2F;li&gt;
+&lt;li&gt;Avoid many cases of data races&lt;&#x2F;li&gt;
+&lt;li&gt;Functions are more reliable, returning the same output for the same input&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;b&gt;Disadvantages&lt;&#x2F;b&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Lots of ceremony if you actually want mutation&lt;&#x2F;li&gt;
+&lt;li&gt;Some runtime performance hit for mutable algorithms&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;div&gt;
+
+----
+
+## Concurrent Mutation
+
+What&#x27;s wrong with this code?
+
+```
+runServer (|request| =&gt; {
+  from := accounts.lookup(request.from)
+  to := accounts.lookup(request.to)
+  accounts.set(request.from, from - request.amt)
+  accounts.set(request.to, to + request.amt)
+})
+```
+
+Looks reasonable, but...
+
+```
+Thread 1: receive request: Alice gives $10
+Thread 2: receive request: Alice receives $10
+Thread 1: lookup that Alice has $50
+Thread 2: lookup that Alice has $50
+Thread 1: set Alice&#x27;s account to $40
+Thread 2: set Alice&#x27;s account to $60
+```
+
+NOTE:
+
+* What if you actually need to mutate values, and from multiple threads?
+* *Describe slide*
+* Alice ends up with either $40 or $60 instead of $50
+
+----
+
+## Locking
+
+```
+runServer (|request| =&gt; {
+  accounts.lock(request.from)
+  accounts.lock(request.to)
+  &#x2F;&#x2F; same code as before
+  accounts.unlock(request.from)
+  accounts.unlock(request.to)
+})
+```
+
+```
+Thread 1: receive request: $50 from Alice to Bob
+Thread 2: receive request: $50 from Bob to Alice
+Thread 1: lock Alice
+Thread 2: lock Bob
+Thread 1: try to lock Bob, but can&#x27;t, so wait
+Thread 2: try to lock Alice, but can&#x27;t, so wait
+```
+
+__Deadlock!__
+
+NOTE: Typical solution to this is to use locking, but it leads to other problems
+
+----
+
+## Software Transactional Memory
+
+```haskell
+runServer $ \request -&gt; atomically $ do
+  let fromVar = lookup (from request) accounts
+      toVar = lookup (to request) accounts
+  origFrom &lt;- readTVar fromVar
+  writeTVar fromVar (origFrom - amt request)
+  origTo &lt;- readTVar toVar
+  writeTVar toVar (origTo + amt request)
+```
+
+* Looks like it has a race condition
+* But STM ensures transactions are atomic
+* No explicit locking required
+* `TVar` is an example of explicit mutation
+* Alternatives: `IORef`, `MVar`
+
+NOTE:
+
+* There are helper functions to make this shorter
+* Want to make a point with the longer code
+* STM will automatically retry when needed
+
+----
+
+## The role of purity
+
+STM retries if a transaction isn&#x27;t atomic. How many Bitcoins will I
+buy?
+
+```haskell
+atomically $ do
+  buyBitcoins 3 -- side effects on my bank account
+
+  modifyTVar myBitcoinCount (+ 3)
+```
+
+* Trick question! Code doesn&#x27;t compile
+* `atomically` only allows side effects on `TVar`s
+* Other side effects (like my bank account) are disallowed
+* Safe for runtime to retry thanks to purity
+
+NOTE:
+
+* `buyBitcoins` needs to go to an exchange and spend $100,000
+* Due to retry, this code could spend $10m
+* This is where purity steps in
+
+----
+
+## Summary of STM
+
+&lt;div style=&quot;text-align:left&quot;&gt;
+
+&lt;h3&gt;Advantages&lt;&#x2F;h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Makes concurrent data modification much easier&lt;&#x2F;li&gt;
+&lt;li&gt;Bypass many race conditions and deadlocks&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;h3&gt;Disadvantages&lt;&#x2F;h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Depends on purity to work at all&lt;&#x2F;li&gt;
+&lt;li&gt;Not really a disadvantage, you&#x27;re already stuck with purity in Haskell&lt;&#x2F;li&gt;
+&lt;li&gt;Not really any other disadvantages, so just use it!&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;div&gt;
+
+---
+
+## Laziness
+
+*A double edged sword*
+
+Let&#x27;s revisit our previous summing example
+
+```haskell
+let loop i total =
+      if i &gt; 1000000
+        then total
+        else loop (i + 1) (total + i)
+ in loop 1 0
+```
+
+There are two problems with this code:
+
+1. There&#x27;s a major performance bug in it
+2. It&#x27;s much more cumbersome than it should be
+
+NOTE: Kind of cheeky to hold off on laziness this long
+
+----
+
+## Space leaks
+
+Consider `let foo = 1 + 2`
+
+* `foo` isn&#x27;t `3`, it&#x27;s an instruction for how to create `3`
+* `foo` is a _thunk_ until it&#x27;s evaluated
+* Storing thunks is more expensive than simple types like `Int`s
+* Which values are evaluated in our `loop`?
+
+```haskell
+let loop i total =
+      if i &gt; 1000000
+        then total
+        else loop (i + 1) (total + i)
+ in loop 1 0
+```
+
+NOTE:
+
+* The bane of laziness is space leaks, which you may have hard
+  about. Need to understand how laziness is implemented.
+* Explain why `i` is forced and `total` is not
+* Builds a tree, lots of CPU and memory pressure
+
+----
+
+## Explicit strictness
+
+Need to tell Haskell compiler to evaluate `total`. Bang!
+
+```haskell
+let loop i !total =
+      if i &gt; 1000000
+        then total
+        else loop (i + 1) (total + i)
+ in loop 1 0
+```
+
+* Needing to do this is a downside of Haskell&#x27;s laziness
+* But do we get any benefits in return?
+
+NOTE:
+
+* Can be explicit about what needs to be evaluated
+* This is one approach, there are others
+* Just added a `!`
+
+----
+
+## Looping (1)
+
+Let&#x27;s write our `loop` in an imperative language:
+
+```
+total := 0
+for(i := 1; i &lt;= 1000000; i++) {
+  total += i
+}
+```
+
+Or just the evens
+
+```
+total := 0
+for(i := 1; i &lt;= 1000000; i++) {
+  if (isEven(i)) {
+    total += i
+  }
+}
+```
+
+----
+
+## Looping (2)
+
+Now add up the values modulus 13 (for some weird reason)
+
+```
+total := 0
+for(i := 1; i &lt;= 1000000; i++) {
+  if (isEven(i)) {
+    total += i % 13
+  }
+}
+```
+
+* Each modification is fine
+* Getting harder to see the forest for the trees
+* If our logic was more complicated, code reuse would be an issue
+
+NOTE: Example of more complicated use case, writing a lookahead parser
+
+----
+
+## Some better Haskell
+
+Our original recursive implementation sucked
+
+```haskell
+let loop i !total =
+      if i &gt; 1000000
+        then total
+        else loop (i + 1) (total + i)
+ in loop 1 0
+```
+
+&lt;div class=&quot;fragment&quot;&gt;
+
+&lt;p&gt;But this is great&lt;&#x2F;p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;haskell&quot;&gt;sum [1..1000000]&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Doesn&#x27;t it allocate 8mb of ints?&lt;&#x2F;li&gt;
+&lt;li&gt;Nope, laziness!&lt;&#x2F;li&gt;
+&lt;li&gt;Just a thunk telling us how to get the rest of the list&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;div&gt;
+
+----
+
+## Composable Haskell
+
+Just the evens?
+
+```haskell
+sum (filter even [1..1000000])
+```
+
+Modulus 13?
+
+```haskell
+sum (map (`mod` 13) (filter even [1..1000000]))
+```
+
+* Easy and natural to compose functions in a lazy context
+* Avoids doing unnecessary work or using too much memory
+
+NOTE:
+
+* Never using more than a few machine words
+* Other GHC optimizations avoid allocating any thunks
+* Not covering that today
+* Mixed bag, but functional+lazy=declarative, performant
+
+----
+
+## Short circuiting for free
+
+In most languages, `&amp;&amp;` and `||` short circuit
+
+```
+foo() &amp;&amp; bar()
+```
+
+* `bar` only called if `foo` returns `true`
+
+In Haskell: we get that for free from laziness:
+
+```haskell
+False &amp;&amp; _ = False
+True &amp;&amp; x = x
+
+True || _ = True
+False || x = x
+```
+
+See also: `and`, `or`, `all`, `any`
+
+----
+
+### Other downsides
+
+* Laziness means an exception can be hiding in any thunk
+* Aka partial functions: `head []`
+* Also, some inefficient functions still available, `foldl` vs
+  `foldl&#x27;`
+
+NOTE:
+
+* Generally partial functions are frowned upon
+* But they&#x27;re still in the language
+
+----
+
+## Summary of laziness
+
+&lt;div style=&quot;text-align:left&quot;&gt;
+
+&lt;h3&gt;Advantages&lt;&#x2F;h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;More composable code&lt;&#x2F;li&gt;
+&lt;li&gt;Get efficient results with high level code&lt;&#x2F;li&gt;
+&lt;li&gt;Short-circuiting no longer a special case&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;h3&gt;Disadvantages&lt;&#x2F;h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Need to worry about space leaks&lt;&#x2F;li&gt;
+&lt;li&gt;Exceptions can be hiding in many places&lt;&#x2F;li&gt;
+&lt;li&gt;Bad functions still linger&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+&lt;&#x2F;div&gt;
+
+----
+
+## Side note; other languages
+
+* Laziness is very similar to features in other languages
+* Python generators
+* Rust iterators
+* In Haskell, it&#x27;s far more prevalent since it affects how all code works
+* However, you can get a lot of the benefits of Haskell with these techniques
+
+---
+
+## Other examples
+
+* Too much to talk about in 40 minutes!
+* Two other topics I wanted to touch on
+* Feel free to ask me about these at breaks
+
+----
+
+## Parser (and other) DSLs
+
+* Operator overloading!
+* Abstractions like `Alternative` a natural fit
+    * `parseXMLElement &lt;|&gt; parseXMLText`.
+* Able to reuse huge number of existing library functions,
+    * `optional`, `many`, `foldMap`
+* General purpose `do`-notation is great
+
+----
+
+## Parser example
+
+```haskell
+data Time = Time Hour Minutes Seconds (Maybe AmPm)
+data AmPm = Am | Pm
+
+parseAmPm :: Parser Time
+parseAmPm = Time
+  &lt;$&gt; decimal
+  &lt;*&gt; (&quot;:&quot; *&gt; decimal)
+  &lt;*&gt; (&quot;:&quot; *&gt; decimal)
+  &lt;*&gt; optional ((&quot;AM&quot; $&gt; Am) &lt;|&gt; (&quot;PM&quot; $&gt; Pm))
+```
+
+c&#x2F;o [@queertypes](https:&#x2F;&#x2F;twitter.com&#x2F;queertypes&#x2F;status&#x2F;941064338848100352)
+
+----
+
+## Advanced techniques
+
+* Free monads
+* Monad transformer stacks
+* Lens, conduit, pipes, ...
+* Lots of ways to do things in Haskell!
+* It&#x27;s a plus and a minus
+* Recommendation: choose a useful subset of Haskell and its libraries,
+  and define some best practices
+
+---
+
+## Conclusion
+
+* Haskell combines a lot of uncommon features
+* Very few of those features are unique
+* Combining those features allows you to write code very differently
+  than in other languages
+* If you want readable, robust, easy to maintain code: I think it&#x27;s a
+  great choice
+* Be aware of the sharp edges: they do exist!
+
+----
+
+## Questions?
+
+Thanks everyone!
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>

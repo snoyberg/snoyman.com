@@ -1,0 +1,320 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Stackage for Rust?</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Stackage for Rust?">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="A discussion of what Stackage is, why it exists for Haskell, why it might make sense for Rust, and my reasons for mostly thinking it&#x27;s not worth it.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Stackage for Rust?</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published August 17, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Stackage%20for%20Rust%3F https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;stackage-for-rust&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;stackage-for-rust&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;stackage-for-rust&#x2F;&amp;title=Stackage%20for%20Rust%3F" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;stackage-for-rust&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;stackage-for-rust.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>Every once in a while, a friend will share a comment from social media discussing in broad terms <a href="https://github.com/commercialhaskell/stackage#readme">Stackage</a> and <a href="https://www.rust-lang.org/">Rust</a>. As the original founder of the Stackage project, it's of course fun to see other languages discussing Stackage. And as a Rustacean myself, it's great to see it in the context of Rust.</p>
+<p>This topic has popped up enough times now, and I've thought about it off-and-on for long enough now, that I thought a quick blog post on the topic would make sense.</p>
+<p>Before diving in, I want to make something very clear. I know exactly what drove me to create Stackage for Haskell (and I'll describe it below). And I've come to some conclusions about Stackage for Rust, which I'll also describe below. But I want to acknowledge that while I do write Rust, and I have Rust code running in production, it's nowhere near the level of Haskell code I have in production. I am well aware of the fact that my opinions on Rust may not match up with others in the Rust community.</p>
+<p>I would be more than happy to engage with any Rustaceans who are interested in discussing this topic more, especially if you think I'm wrong in what I say below. Not only do I love the Rust language, but I find these kinds of package coordination topics fascinating, and would love to interact with others on them.</p>
+<h2 id="what-is-stackage">What is Stackage?</h2>
+<p>Stackage's two word slogan is &quot;Stable Hackage.&quot; Hackage is the de facto standard repository for open source Haskell libraries and tools. It would easily be described as Haskell's version of Crates. Stackage is a project which produces versioned snapshots of packages, together with underlying compiler versions, which are guaranteed to meet a basic buildability standard. That essentially comes down to:</p>
+<ul>
+<li>On a Linux system, using a Docker container we've configured with a number of helper system libraries, the package compiles</li>
+<li>Unless told otherwise, the docs build successful, the tests build and run successfully, and the benchmarks build successfully</li>
+</ul>
+<p>There are plenty of holes in this. Packages may not build on Windows. There may be semantic bugs that aren't picked up by the test suite. It's far from saying &quot;we guarantee this package is perfect.&quot; It's saying &quot;we've defined an objective standard of quality and are testing for it.&quot; I'm a strong believer that having clearly defined specifications like that is a Very Good Thing.</p>
+<p>There are plenty of other details about how Stackage operates. We produce nightly snapshots that always try to grab the latest versions of packages, unless specifically overridden. We produce Long Term Support (LTS) versions that avoid new major versions of packages during a series. We manually add and remove packages from the &quot;skipped tests&quot; based on whether the tests will run correctly in our environment. But most of those kinds of details can be ignored for our discussion today. To summarize, if you want to understand this discussion, think of it this way:</p>
+<blockquote>
+<p>Stackage defines snapshots where open source libraries and tools are tested to build together and pass (most of) their test suites</p>
+</blockquote>
+<h2 id="why-i-created-stackage">Why I created Stackage</h2>
+<p>It's vital to understand this part to understand my position on a Stackage for Rust. Stackage has an interesting history going through a few previous projects, in particular Haskell Platform and Yesod Platform. Ignoring those for the moment, and pretending that Stackage emerged fully formed as it is today, let's look at the situation before Stackage.</p>
+<p>The Haskell community has always embraced breakage more than other communities. We rely heavily on strong types to flag major changes. The idea of a build time failure with a clear compiler error message is much less intimidating from a silent behavior change or a type error that only appears at runtime. In our pursuit of elegance, we will typically break APIs left, right, and center. I, more than most, have been historically guilty of that attitude. (I'm now of a very different opinion though.)</p>
+<p>This attitude goes up the tree to GHC (the de facto standard Haskell compiler), which regularly breaks large swaths of the open source code base with new versions. This kind of activity typically leads to a large cascade effect of releases of userland packages, which ultimately leads to a lot of churn in the ecosystem.</p>
+<p>At the time I created Stackage, my primary focus was the Yesod Web Framework. I had made a decision to design Yesod around a large collection of smaller libraries to allow for easier modularity. There are certainly arguments to be made for and against this decision, but for now, the important point is: Yesod relied on 100-150 packages. And I ran into many cases where end users simply could not build Yesod.</p>
+<p>At the time, the only real Haskell build tool was <code>cabal</code>. It featured a dependency solver, and respected version bounds for dependencies. In principle, this would mean that <code>cabal</code> should solve the problem for Yesod just fine. In practice, it didn't, for two important reasons:</p>
+<ol>
+<li>At the time, there were some fundamental flaws in <code>cabal</code>'s depedency solver. Even when a valid build plan was available, it would on a regular basis take more than an hour to run without finding it.</li>
+<li>Many packages did not include any information on dependency versions in their metadata files, instead simply depending on any version of a dependency.</li>
+</ol>
+<p>For those familiar with it: point (2) is definitely the infamous PVP debates, which I've been involved with a lot. Again, I'm not discussing the trade-offs of the PVP, simply stating historical facts that led to the creation of Stackage.</p>
+<p>So, as someone who believed (and still believes) Yesod is a good thing, Haskell is a good thing, and we should make it as easy as possible to get started with Haskell, solving these &quot;dependency hell&quot; issues was worthwhile. Stackage did this for me, and I believe a large percentage of the Haskell community.</p>
+<p>Later, we also created the Stack build tool as an alternative to <code>cabal</code>, which defaulted to this snapshot-based approach instead of dependency solving. But that topic is also outside the scope of this blog post, so I won't be addressing it further.</p>
+<h2 id="advantages-of-stackage">Advantages of Stackage</h2>
+<p>There are some great advantages of to Stackage, and it's worth getting them out there right now:</p>
+<ul>
+<li>Virtually no dependency hell problems. If you specify a Stackage snapshot and only use packages within that snapshot, you're all but guaranteed that your dependencies will all build correctly, no futzing required. Depending on how well maintained the libraries and their metadata is in your language of choice, this may either be a minor convenience, or a massive life changing impact.</li>
+<li>It's possible to create <a href="https://www.stackage.org/lts-15.3">documentation sites</a> providing a coherent set of docs for a single package, where links in between packages always end up with compatible versions of packages.</li>
+<li>For training purposes (which I do quite a bit of), it's an amazing thing to say &quot;we're using LTS version 15.3&quot; and know everyone is using the same compiler version and library versions.</li>
+<li>Similarly, for bug reports, it's great to say &quot;please provide a repo and specify your Stackage snapshot.&quot;</li>
+<li>It's possible to write <a href="https://www.fpcomplete.com/haskell/tutorial/stack-script/">Haskell scripts</a> that depend on extra library dependencies and have a good guarantee that they'll continue to work identically far into the future.</li>
+</ul>
+<p>That sounds great, but let's not forget the downsides.</p>
+<h2 id="disadvantages-of-stackage">Disadvantages of Stackage</h2>
+<p>Not everything is perfect in Stackage land. Here are some of the downsides:</p>
+<ul>
+<li>It's a maintenance burden, like anything else. I think we've done a decent job of automating it, and with the wonderful team of <a href="https://github.com/commercialhaskell/stackage/blob/master/CURATORS.md">Stackage Curators</a> the burden is spread across multiple people. But like any project, it does require time, investment, and upkeep.</li>
+<li>Stackage doesn't nicely handle the case of using a package outside of the snapshot.</li>
+<li>It introduces some level of &quot;community wide mutex&quot; where you need to either wait for dependent libraries to update to support newer dependencies, or drop those libraries. It's rarely a big fight these days, since we try to stick to some kind of defined timetables, but it can be frustrating for people, and it has sometimes led to arguments.
+<ul>
+<li>This brings up one of my guiding principles: avoid these kinds of shared resources whenever possible</li>
+</ul>
+</li>
+</ul>
+<p>OK, so now we understand the pluses and minuses of Stackage. And in the context of Haskell, I believe it was at the time absolutely the right thing to do. And today, I would not want to stop using Stackage in Haskell at all.</p>
+<p>But the story is different in Rust. Let me step through some of the motivators in Haskell and how they differ in Rust. Again, keep in mind that my experience in Haskell far outstrips my experience in Rust, and I very much welcome others to weigh in differently than me.</p>
+<h2 id="cargo-semver-vs-pvp">Cargo/SemVer vs PVP</h2>
+<p>What's wrong with this line from a Haskell Cabal file?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">build-depends: base, bytestring, text
+</span></code></pre>
+<p>Unless you're a hard core Haskeller, probably nothing obvious jumps out at you. Now look at this snippet of a perfectly valid <code>Cargo.toml</code> file and tell me what's wrong:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">[</span><span style="color:#b58900;">dependencies</span><span style="color:#657b83;">]
+</span><span style="color:#268bd2;">random </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;&quot;
+</span><span style="color:#268bd2;">tokio </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;&quot;
+</span></code></pre>
+<p>Even a non-Rustacean will probably come up with the question &quot;what's with the empty strings?&quot; Both of thse snippets mean &quot;take whatever version of these libraries you feel like.&quot; But the syntax for Haskell encourages this. The syntax for Rust discourages it. Instead, the following <code>Cargo.toml</code> snippet looks far more natural:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">[</span><span style="color:#b58900;">dependencies</span><span style="color:#657b83;">]
+</span><span style="color:#268bd2;">random </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">0.12.2</span><span style="color:#839496;">&quot;
+</span><span style="color:#268bd2;">tokio </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">0.2.22</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>When I first started writing Haskell, I had no idea about the &quot;correct&quot; way to write dependency bounds. Many other people didn't either. Ultimately, years into my Haskell experience, I found out that the recommended approach was the PVP, which is essentially Haskell's version of SemVer. (To be clear: the PVP predates SemVer, this was not a case of Not Invented Here syndrome.)</p>
+<p>Unfortunately, the PVP is quite a complicated beast to get right. I've heard from multiple Haskellers, with a wide range of experience, that they don't know how to properly version their packages. To this day, the most common response I'm likely to give on a Haskell pull request is &quot;please change the version number, this doesn't comply with the PVP.&quot; As a result, we have a situation where the easy, obvious thing to do is to include no version information at all, and the &quot;correct&quot; thing to do is really, really hard to get right.</p>
+<p>By contrast, in Rust, the simple thing to do is mostly correct: just stick the current version of the package in the double quotes. The format of the file basically begs you to do it. It feels weird <em>not</em> to do it. And even though it's not perfect, it's pretty darn good.</p>
+<p>So first point against a Stackage for Rust: <strong>Cargo's format encourages proper dependency information to be maintained</strong>.</p>
+<h2 id="dependency-solver-works">Dependency solver works</h2>
+<p>This is where my larger Haskell experience may be skewing my vision. As I mentioned, I've had huge problems historically with <code>cabal</code>'s dependency solver. It has improved massively since then. But between the dependency solver itself having historic bugs, and the lack of good dependency information across Hackage (yes, in large part because of people like me and the presence of Stackage), I don't like to rely on dependency solving at all anymore.</p>
+<p>By contrast, in Rust, I've rarely run into problems with the dependency solver. I have gotten build plans that have failed to build. I have had to manually modify <code>Cargo.toml</code> files to specify different versions. I have been bitten by libraries accidentally breaking compatibility within a major version. But relative to my pains with Haskell, it's small potatoes.</p>
+<p>So next point: <strong>Dependency solving emperically works pretty well in Rust</strong></p>
+<h2 id="culture-of-compatibility">Culture of compatibility</h2>
+<p>In contrast to Haskell, Rust has much more of a culture around keeping backwards and forwards compatibility. The compiler team tries very hard to avoid breaking existing code. And when they do, they try to make it possible to rewrite the broken code in a way that's compatible with both the old and new version of the compiler. I've seen a lot of the same attitude from Rust userland packages.</p>
+<p>This may sound surprising to Rustaceans, who probably view the Rust library ecosystem as a fast-changing landscape. I'm just speaking in relative terms to Haskell.</p>
+<p>As a result, the level of churn in Rust isn't nearly as high as in Haskell, and therefore even with imperfect dependency information a dependency solving approach is likely to work out pretty well.</p>
+<p><strong>Less library churn means code builds more reliably</strong></p>
+<h2 id="lock-files">Lock files</h2>
+<p>A minor point, but Cargo creates a <code>Cargo.lock</code> file that pins the exact versions of your dependencies. It's up to you whether you check that file into your code repo, but it's trivially easy to do so. Paired together with <code>rust-toolchain</code> files, you can get pretty close to reproducible build plans.</p>
+<p>I can't speak to the latest versions of <code>cabal</code>, but historically this has not been the default mode of operation for <code>cabal</code>. And I don't want to get into the details of Hackage revisions and timestamp-based development, but suffice it to say I have no real expectations that you can fully rely on <code>cabal</code> freeze files. Stack <em>does</em> support fully reproducible build plans and lock files, but that's essentially via the same snapshot mechanism as Stackage itself.</p>
+<p>In other words: <strong>In the presence of proper lock files, you regain reproducible builds without snapshots</strong></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I hope this post frames my thoughts around Stackage, Haskell, and Rust pretty well. My basic conclusion is:</p>
+<ul>
+<li>Snapshots are good thing in general</li>
+<li>Snapshots are less vital when you get other things right</li>
+<li>Rust has gotten a lot of things right that Haskell didn't</li>
+<li>As a result, the marginal benefit of snapshots in Rust are nowhere near the marginal benefits in Haskell</li>
+</ul>
+<p>To restate: my calculations here are biased by having much more experience with Haskell than Rust codebases. If I was running the same number of lines of Rust code as Haskell, or teaching the same number of courses, or maintaining as many open source projects, I may not come to this conclusion. But based on what I see right now, the benefits of a snapshot system in Rust do not outweigh the costs of setting up and maintaining one.</p>
+<p>All that said: I'm still very interested to hear others' takes on this, both if you agree with my conclusion, and even more if you don't. Please feel free to ping me on social media discussions, the Disqus comments below, or my personal email (michael at snoyman dot com).</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

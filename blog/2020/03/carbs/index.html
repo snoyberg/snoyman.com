@@ -1,0 +1,405 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Basics of Carbohydrates</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Basics of Carbohydrates">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="A basic overview of what carbohydrates are at a molecular level.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Basics of Carbohydrates</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published March 27, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Basics%20of%20Carbohydrates https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;03&#x2F;carbs&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;03&#x2F;carbs&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;03&#x2F;carbs&#x2F;&amp;title=Basics%20of%20Carbohydrates" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;03&#x2F;carbs&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;carbs.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Context</strong> I originally wrote this content years ago for teaching my children. I happened to stumble across it today when cleaning up some repos, and thought with the current &quot;everyone is home schooling&quot; situation around COVID-19, it would be a good time to publish it.</p>
+<p>Everything your body does needs to be powered. In your computer, the
+power is electricity. In your body, the power comes from food. In
+plants, the power (usually) comes from the sun. We have three main
+kinds of energy in food: carbohydrates (carbs), lipids (fats), and
+proteins. This is about carbs.</p>
+<p>Your body is made up of lots of different cells: brain cells, heart
+cells, muscle cells, skin cells. Every cell in your body can use
+<strong>glucose</strong> for energy. Let's start off by understanding what glucose
+is made up of.</p>
+<h2 id="structure-of-glucose">Structure of glucose</h2>
+<p>Glucose is a <em>molecule</em>, which is made up of other <em>atoms</em>. In fact,
+it's made up of 6 carbons <strong>C</strong>, 12 hydrogens <strong>H</strong>, and 6 oxygens
+<strong>O</strong>. Hydrogen and oxygen together make water (H2O), which in greek
+is <em>hydro</em>. That's where the word carbohydrate comes from: carbon +
+hydro = carbohydrate.</p>
+<p>Here are two different pictures of what the glucose molecule look
+like:</p>
+<p><img src="/static/images/3dglucose.png" alt="3D glucose" style="width: 250px"> <img src="/static/images/2dglucose.png" alt="2D glucose" style="width: 250px"></p>
+<h3 id="energy-in-glucose">Energy in glucose</h3>
+<p>Each time two atoms are connected to each other, it's called a
+<em>covalent bond</em>. Each bond has some energy in it. This is called
+<em>chemical energy</em>. Your body needs to convert that chemical energy to
+energy it can use to move your muscles, let your brain think, and
+everything else. It does this by something called <em>cellular
+respiration</em>.</p>
+<p>The next bit is like a math formula. Remember that glucose has 6
+carbons, 12 hydrogens, and 6 oxygens. From now on, we'll write that as
+C6H12O6. Cellular respiration combines the glucose with oxygen (O2) to
+make carbon dioxide (CO2) and water (H2O). We'll play with the exact
+math later in the first exercise. The cool thing is: when you do this
+conversion, there are less covalent bonds at the end, so you free up
+energy.</p>
+<p>Plants do the opposite: they take carbon dioxide and water, and
+combine it with energy from the sun using <em>photosynthesis</em> to make
+glucose and oxygen. That's why animals breathe in oxygen and breathe
+out carbon dioxide, and plants do the opposite.</p>
+<h2 id="sugars">Sugars</h2>
+<p>Glucose is one kind of a <em>sugar</em>. It's actually a <em>simple sugar</em>, or a
+<em>monosaccharide</em>. <em>Mono</em> is greek for &quot;one&quot;, and <em>saccharide</em> is Latin
+for sugar. There are three different kinds of <em>monosaccharides</em>:</p>
+<ul>
+<li>Glucose</li>
+<li>Fructose</li>
+<li>Galactose</li>
+</ul>
+<p>They all have the same number of carbons, hydrogens, and oxygens, but
+they have slightly different shapes. This is important, because it
+means that glucose can be used by <em>any</em> part of the body. However,
+fructose and galactose can only be used in the liver for producing
+energy.</p>
+<p>There are also <em>disaccharides</em>. <em>Di</em> is Greek for &quot;two,&quot; and these are
+combinations of two simple sugars. Some common examples:</p>
+<ul>
+<li>Sucrose is a glucose and a fructose together</li>
+<li>Lactose is a glucose and a galactose together</li>
+</ul>
+<p>When you hear of &quot;sugar,&quot; or see a package with sugar in it, it's
+usually sucrose. It's also called &quot;table sugar.&quot;</p>
+<p>Lactose is also known as milk sugar, and is made by mother animals
+(mammals) for their babies. Fructose is sometimes called &quot;fruit
+sugar,&quot; because fruit has a lot of it.</p>
+<h2 id="polysaccharides">Polysaccharides</h2>
+<p>We can have more than just two sugars together. <em>Poly</em> is the Greek
+word for &quot;many.&quot; One kind of polysaccharide is <em>starch</em>, which is a
+long chain of glucose molecules. There are lots of foods that we eat
+that have a lot of starch in them:</p>
+<ul>
+<li>Grains, like wheat, oats, and rice</li>
+<li>Potatoes</li>
+<li>Sweet potatoes</li>
+</ul>
+<p>When you eat starch (or, for that matter, disaccharides), your stomach
+and intenstines will break it down into the individual simple sugars,
+which then get absorbed into your blood. Because starch takes longer
+to break down to simple sugars, it gets absorbed more slowly into your
+blood stream.</p>
+<p>Another kind of polysaccharide is something animals make, called
+<em>glycogen</em>. Glycogen is something your muscles and liver store for
+energy. It's easy to turn into glucose, and can be used for quick
+energy. It's really useful, for example, if you need to run really
+fast for a short time, or lift heavy weights. That's why eating lots
+of carbs before lifting weights helps so much.</p>
+<p>Our bodies are very good at digesting (breaking down and absorbing)
+starch. But there are other kinds of polysaccharides that our body
+can't break down. These are known as cellulose, or fiber. Two
+different things can happen with these:</p>
+<ul>
+<li>We poop them out. This is why eating lots of fiber makes us go to
+the bathroom more.</li>
+<li>The bacteria in our intestines (gut microbiome) breaks it down and
+turns it into fatty acids that we can absorb. This gives us some
+energy from fat, and gives our microbiome some food so it can grow.</li>
+</ul>
+<p>This is why eating fiber is good for you: it helps you go to the
+bathroom regularly, and have a healthy gut biome.</p>
+<p>When we turn raw food, like wheat, into food we can eat, it's called
+<em>processing</em> it, or <em>refining</em> it. <em>Highly refined</em> foods are
+processed a lot, and look less like the original raw food. For
+example, wheat has lots of fiber in it, and whole wheat bread keeps
+that fiber. But white bread is more processed, and has had the fiber
+taken out. Highly processed carbs, like white bread, crackers, and
+pretzels, are not very good for you: they have most of the fiber
+stripped out!</p>
+<h2 id="good-and-bad-of-fructose">Good and bad of fructose</h2>
+<p>Fruit has lots of fiber, micronutrients (vitamins and minerals), and
+water. It also has fructose, but mixed in with all of these other
+things. Fruit is good for you, and you should eat it.</p>
+<p>There's another cool thing about fructose: our tongues think that it
+tastes sweeter than glucose. Lots of companies will use fructose to
+make food taste better. And this is the bad side. With a little bit of
+fructose in your fruit, your body is fine.</p>
+<p>However, when you eat <em>lots</em> of fructose, without the water and fiber
+that comes in the fruit, your liver has to do lots of extra work. The
+liver works very hard converting the fructose into other energy, like
+fat, that your body can use. This makes your liver tired, and takes
+away time from doing other things your body needs it to do.</p>
+<p>Also, when you have too much fat stuck in your liver, your body can
+develop something very dangerous, called <em>fatty liver disease</em>. This
+can lead to insulin resistance, which can leads to lots of bad
+diseases, like diabetes, cancer, and heart disease.</p>
+<p>Lesson: don't eat too much extra sugar in your food, the extra
+fructose can make you very sick over time!</p>
+<h2 id="exercises">Exercises</h2>
+<ol>
+<li>
+<p>When you have cellular respiration, your body takes one gluclose
+(C6H12O6) and 6 oxygen molecules (O2) and makes some number of
+carbon dioxide (CO2) and water (H2O) molecules.</p>
+<ol>
+<li>
+<p>Figure out how many total carbon, hydrogen, and oxygen atoms
+are in the glucose and 6 oxygen molecules.</p>
+</li>
+<li>
+<p>How many carbon dioxide molecules can you make out of that?</p>
+</li>
+<li>
+<p>How much stuff is left? How much water can you make out of that?</p>
+</li>
+<li>
+<p>Do you have any atoms left over?</p>
+</li>
+</ol>
+</li>
+<li>
+<p>What are the three monosaccharides?</p>
+</li>
+<li>
+<p>Which sugar can be used in your whole body?</p>
+</li>
+<li>
+<p>Where can the other two sugars be used in your body?</p>
+</li>
+<li>
+<p>Which sugar do you find a lot of in fruit?</p>
+</li>
+<li>
+<p>What is starch?</p>
+</li>
+<li>
+<p>Which gets absorbed faster into your blood, glucose or starch?</p>
+<ul>
+<li>BONUS QUESTION: What are some good and bad things you can think
+of from getting absorbed faster?</li>
+</ul>
+</li>
+<li>
+<p>What's the name for the way animals store glucose in your livers
+and muscles?</p>
+</li>
+<li>
+<p>What kind of carbohydrates are we bad at digesting? What kinds of
+good things do these do for us?</p>
+</li>
+<li>
+<p>Name one of the bad diseases you can get from having too much
+fructose.</p>
+</li>
+</ol>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

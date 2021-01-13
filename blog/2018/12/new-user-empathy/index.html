@@ -1,0 +1,386 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>New user empathy</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="New user empathy">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="We often talk about the abstract &quot;new user.&quot; I&#x27;d like to propose a more concrete, and hopefully more helpful, approach to helping new users, both with Haskell, and in general.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">New user empathy</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published December 11, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=New%20user%20empathy https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;new-user-empathy&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;new-user-empathy&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;new-user-empathy&#x2F;&amp;title=New%20user%20empathy" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;12&#x2F;new-user-empathy&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;new-user-empathy.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This blog post will focus on the situation for Haskell, though the
+ideas likely generalize well to other languages, or even to
+non-programming disciplines. I'm simply speaking to the topic I have
+the most experience with.</p>
+<p>Many people will make claims that a certain decision needs to be made
+&quot;for new users.&quot; These recommendations can range anywhere from
+sensible, to confusing, to insulting. New users are thought of
+anywhere from smart people who need decent information provided, to
+individuals hungry for knowledge, to idiots who don't know any better.</p>
+<p>I've discussed this situation over time with people, and have spent
+significant time personally and professionally looking for ways to
+improve the situation for &quot;new users.&quot; And I believe that, by far, the
+most important trait we need to do this is <em>empathy</em>. To quote
+Wikipedia:</p>
+<blockquote>
+<p>Empathy is the capacity to understand or feel what another person is
+experiencing from within their frame of reference</p>
+</blockquote>
+<p>Let me start off with the most extreme example of where we, as
+Haskellers, have failed historically: monad tutorials.</p>
+<h2 id="the-monad-tutorial-fallacy">The monad tutorial fallacy</h2>
+<p>Haskellers occassionally will glibly state &quot;a monad is just a monoid
+in the category of endofunctors, what's the problem.&quot; I strongly
+believe the vast majority, if not all cases, of this statement are
+meant to self-mock. But let's pretend for a moment that this
+information was stated in this tone to a new user, who has never seen
+monads, monoids, categories, or endofunctors before. This <em>massively</em>
+fails the empathy test:</p>
+<ul>
+<li>The new user is unaware of these terms, and cannot understand them
+without further information</li>
+<li>Their frame of reference is <em>probably</em> &quot;I heard that monads are
+necessary to do I/O in Haskell, why is that?&quot; The answer provides
+obfuscation in place of elucidation</li>
+<li>The tone, especially &quot;just&quot; and &quot;what's the problem,&quot; is dismissive
+and derisive. If I'd heard a statement like that, I'd probably want
+to walk away from Haskell</li>
+</ul>
+<p>Note that none of these statements require us to believe anything
+negative about a new user. I've not implied that they are
+unintelligent, lazy, weak-willed, or unsuitable to Haskell. My mental
+model of their frame of reference is fairly straightforward here: they
+have not been exposed to this material previously, they're trying to
+get an answer to a specific question, and they don't want to be made
+to feel inferior.</p>
+<p>The monad tutorial fallacy in general (aka &quot;monads are like burritos&quot;)
+is a more subtle form of this. The author of such a tutorial, in their
+mind, has decided that monads are somehow like burritos. This is
+ignoring the frame of reference of the reader, who likely has no
+reason to believe monads actually are like burritos, and cannot
+understand the analogy. Sharing the analogy as if it will help, when
+in reality it doesn't, can make a reader feel frustrated, confused,
+and inferior, and prevent them from wanting to go further. Again, this
+is <em>not</em> a failing in the new user!</p>
+<h2 id="my-mental-model-for-a-new-user">My mental model for a new user</h2>
+<p>I've built up a mental model for how I believe a new user to Haskell
+will <em>typically</em> be thinking. This is by no means universal; many
+people are exceptions. But I've found that the following traits
+generally apply to someone trying out Haskell for the first time. And
+making these assumptions about new users who <em>don't</em> fit this
+description perfectly doesn't usually cause any kind of major negative
+impact:</p>
+<ul>
+<li>Skeptical: they don't yet know if Haskell will live up to the hype
+and actually solve their problems</li>
+<li>Impatient: there are dozens of languages that they could be
+investigating, and they want to quickly figure out if Haskell is one
+of the select few worth spending more time on</li>
+<li>Curious: few people pick Haskell as a language to look into without
+some level of curiosity about what makes this language so cool</li>
+<li>Smart, but distracted: I assume that, despite this curiosity,
+impatience may win out, and new users will probably be juggling a
+few other things concurrently. Maybe they're testing out other
+languages, or have some deadline at work, or who knows what.</li>
+<li>Eager to succeed: most people don't want to fail. They want their
+efforts to pay off and be rewarded.</li>
+</ul>
+<p>There are others attributes too, most of which I probably haven't
+fully identified even to myself. But this is a decent starting point.</p>
+<h3 id="exceptions">Exceptions</h3>
+<p>Regarding exceptions to this rule: some people are <em>not</em>
+skeptical. Maybe they've been a Scala developer for years, have seen
+Haskell at conferences for a long time, and are totally bought into
+the language before they even start. Great! Treating them as skeptical
+initially may involve giving them some cool motivating cases for
+Haskell (my personal favorite being something like STM and the
+<code>Concurrently</code> type). Providing this extra information can, at worst,
+result in them telling me &quot;hey, I get it, can we just skip to the part
+where you teach me something?&quot;</p>
+<p>The same applies with impatient. I optimize my Haskell teaching to get
+something working quickly so that people know the investment has a
+good chance of paying off. But maybe someone has decided that, come
+hell or high water, they're going to spend the next 2 weeks learning
+all the ins and outs of Haskell. They want to learn the Lambda
+calculus from the ground up, understand some type theory, and then
+write Hello World. Great! In those cases, they can easily skip my
+&quot;concurrent HTTP downloads in 5 minutes&quot; tutorial. The other way
+around—skipping the &quot;the Lambda calculus for math
+majors&quot;—happens less frequently.</p>
+<p>As a side note, and just to prove the point: my wife has started
+learning Haskell (though our home renovations have recently gotten in
+the way of that). She fulfills <em>neither</em> of these criteria: she's
+watched me using Haskell for 10 years, and isn't at all skeptical of
+the language. And she's learning the language without any specific
+impatience to get things working. To my knowledge, my standard mental
+modeling and new user onboarding wouldn't have negatively impacted her
+acquisition of Haskell, despite this mismatch..</p>
+<h2 id="practical-outcomes">Practical outcomes</h2>
+<p>Alright, so given that I've built up this mental model, how does this
+affect how I try to onboard new users?</p>
+<ol>
+<li>Ensure there's a clear start location to point them to</li>
+<li>Reduce the number of choices they need to make to get started</li>
+<li>Include a compelling example from the beginning that will get them interested</li>
+<li>Include exercises they can work on to keep that curiosity high, but
+don't make them too complicated at first</li>
+<li>Provide links to go &quot;off the beaten track&quot; if someone has
+drastically different goals than provided</li>
+</ol>
+<h2 id="new-users-are-different">New users are different!</h2>
+<p>This is vital to keep in mind. When I started using Haskell, Hackage
+had barely started, <code>cabal-install</code> didn't really exist at all, there
+were barely any libraries worth using, and there was almost no
+educational material. I was absolutely a &quot;new user,&quot; but I didn't fit
+the mental model described above at all. Making any assumption about
+what other new users are willing to go through based on my own
+experience would be wrong.</p>
+<h2 id="what-are-our-goals">What are our goals?</h2>
+<p>As I've <a href="https://www.snoyman.com/blog/2018/11/stackage-history-philosophy-future">recently
+stated</a>,
+my goal is to &quot;increase the adoption of Haskell.&quot; For me, it's vital
+to improve the new user experience significantly, and this drives a
+lot of what I work on in Haskell. Not everyone shares that goal, and
+that's fine. But identifying these differences can help us within the
+Haskell community to have more constructive discussions about how to
+proceed.</p>
+<p>One example of such a discussion (that I was not really involved in)
+was the Foldable Traversable Proposal (FTP) debate. There was a lot of
+discussion about &quot;new users.&quot; I strongly believe that different
+parties had wildly different ideas of who these new users were, and
+what their frame of reference was. If we had the language and
+perspective to openly discuss these differences, I think we could have
+had a more meaningful discussion.</p>
+<p>The same applies to many discussions I <em>am</em> involved in, such as
+tooling. You can trace many of the more opinionated pieces of Stack to
+the mental model I've described above. For example, on the impatient
+side, Stack is optimized for a use case of impatience: you download a
+Stack executable, and it will automatically handle all of the other
+tooling installation you need. It may not do it in exactly the way
+every user wants (e.g. shared vs user-local GHC installations), but
+that's not the goal.</p>
+<p>Similarly, it's optimized for skeptical users. From personal
+experience, running into dependency hell out of the gate is a major
+turnoff for skeptical users. Ensuring that the default of the tool is
+to use pretested Stackage snapshots knocks down this major obstacle to
+skeptical users. This also plays into the &quot;smart, but distracted:&quot;
+from experience, new users won't spend time reading all of the
+detailed instructions you put on your site. They're impatient to get
+started quickly, distracted by 15 other tabs, and will become
+frustrated when line 27 of your instructions would have fixed the
+problem they run into, but they just happened to miss it.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

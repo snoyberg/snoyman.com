@@ -1,0 +1,340 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Better Exception Messages</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Better Exception Messages">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Better Exception Messages</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published February 16, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Better%20Exception%20Messages https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;better-exception-messages&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;better-exception-messages&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;better-exception-messages&#x2F;&amp;title=Better%20Exception%20Messages" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;02&#x2F;better-exception-messages&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;better-exception-messages.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <h1 id="better-exception-messages">Better exception messages</h1>
+<p>Let's write a really silly, highly inefficient (my favorite kind!) program that
+connects to multiple HTTP servers and sends a very simple request. Using the
+network package, this is really straightforward:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --install-ghc --resolver lts-8.0 runghc --package network -- -Wall -Werror
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Monad </span><span style="color:#657b83;">(</span><span style="color:#b58900;">forM</span><span style="color:#657b83;">, </span><span style="color:#b58900;">forM_</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Network       </span><span style="color:#657b83;">(</span><span style="color:#268bd2;">PortID </span><span style="color:#657b83;">(PortNumber), </span><span style="color:#268bd2;">PortNumber</span><span style="color:#657b83;">, </span><span style="color:#b58900;">connectTo</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">System.IO     </span><span style="color:#657b83;">(</span><span style="color:#b58900;">hClose</span><span style="color:#657b83;">, </span><span style="color:#b58900;">hPutStrLn</span><span style="color:#657b83;">)
+
+</span><span style="color:#b58900;">dests </span><span style="color:#859900;">::</span><span style="color:#657b83;"> [(</span><span style="color:#268bd2;">String</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">PortNumber</span><span style="color:#657b83;">)]
+dests </span><span style="color:#859900;">=</span><span style="color:#657b83;">
+    [ (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">localhost</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">80</span><span style="color:#657b83;">)
+    , (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">localhost</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">8080</span><span style="color:#657b83;">)
+    , (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">10.0.0.138</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">80</span><span style="color:#657b83;">)
+    ]
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    handles </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> forM dests </span><span style="color:#859900;">$ \</span><span style="color:#657b83;">(host, port) </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> connectTo host (</span><span style="color:#cb4b16;">PortNumber</span><span style="color:#657b83;"> port)
+    forM_ handles </span><span style="color:#859900;">$ \</span><span style="color:#657b83;">h </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> hPutStrLn h </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET / HTTP/1.1</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    forM_ handles hClose
+</span></code></pre>
+<p>We have our destinations. We open a connection to each of them, send our data,
+and then close the connection. You may have plenty of objections to how I've
+written this: we shouldn't be using <code>String</code>, shouldn't we flush the <code>Handle</code>,
+etc. Just ignore that for now. I'm going to run this on my local system, and
+get the following output:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ ./foo.hs 
+foo.hs: connect: does not exist (Connection refused)
+</span></code></pre>
+<p>Riddle me this: which of the destinations above did the connection fail for?
+Answer: without changing our program, we have no idea. And that's the point of
+this blog post: all too often in the Haskell world, we get error messages from
+a program without nearly enough information to debug it. <code>Prelude.undefined</code>,
+<code>Prelude.read: no parse</code>, and <code>Prelude.head: empty list</code> are all infamous
+examples where a nice stack trace would save lots of pain. I'm talking about
+something slightly different.</p>
+<p>When you throw an exception in your code, whether it be via <code>throwIO</code>,
+returning <code>Left</code>, using <code>fail</code>, or using <code>error</code>, please <em>give us some
+context</em>. During development, it's a pain to have to dive into the code, add
+some trace statements, figure out what the actual problem is, and then remove
+the trace statements. When running in production, that extra information can be
+the difference between a two-minutes operations level fix (like opening a port
+in the firewall) versus a multi-hour debugging excursion.</p>
+<p>Concretely, here's an example of how I'd recommend collecting more information
+from <code>connectTo</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --install-ghc --resolver lts-5.10 runghc --package network -- -Wall -Werror
+</span><span style="color:#b58900;">{-# </span><span style="color:#859900;">LANGUAGE</span><span style="color:#b58900;"> DeriveDataTypeable #-}
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Exception </span><span style="color:#657b83;">(</span><span style="color:#268bd2;">Exception</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">IOException</span><span style="color:#657b83;">, </span><span style="color:#b58900;">catch</span><span style="color:#657b83;">, </span><span style="color:#b58900;">throwIO</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Monad     </span><span style="color:#657b83;">(</span><span style="color:#b58900;">forM</span><span style="color:#657b83;">, </span><span style="color:#b58900;">forM_</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Data.Typeable     </span><span style="color:#657b83;">(</span><span style="color:#268bd2;">Typeable</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Network           </span><span style="color:#657b83;">(</span><span style="color:#268bd2;">HostName</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">PortID </span><span style="color:#657b83;">(PortNumber), </span><span style="color:#268bd2;">PortNumber</span><span style="color:#657b83;">, </span><span style="color:#b58900;">connectTo</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">System.IO         </span><span style="color:#657b83;">(</span><span style="color:#268bd2;">Handle</span><span style="color:#657b83;">, </span><span style="color:#b58900;">hClose</span><span style="color:#657b83;">, </span><span style="color:#b58900;">hPutStrLn</span><span style="color:#657b83;">)
+
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">ConnectException </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">ConnectException HostName PortID IOException
+    </span><span style="color:#859900;">deriving</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">Show</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">Typeable</span><span style="color:#657b83;">)
+</span><span style="color:#859900;">instance </span><span style="color:#268bd2;">Exception ConnectException
+
+</span><span style="color:#b58900;">connectTo&#39; </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">HostName </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">PortID </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO Handle
+</span><span style="color:#657b83;">connectTo&#39; host port </span><span style="color:#859900;">=</span><span style="color:#657b83;"> connectTo host port </span><span style="color:#859900;">`catch`
+    \</span><span style="color:#657b83;">e </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> throwIO (</span><span style="color:#cb4b16;">ConnectException</span><span style="color:#657b83;"> host port e)
+
+</span><span style="color:#b58900;">dests </span><span style="color:#859900;">::</span><span style="color:#657b83;"> [(</span><span style="color:#268bd2;">String</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">PortNumber</span><span style="color:#657b83;">)]
+dests </span><span style="color:#859900;">=</span><span style="color:#657b83;">
+    [ (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">localhost</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">80</span><span style="color:#657b83;">)
+    , (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">localhost</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">8080</span><span style="color:#657b83;">)
+    , (</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">10.0.0.138</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#6c71c4;">80</span><span style="color:#657b83;">)
+    ]
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+    handles </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> forM dests </span><span style="color:#859900;">$ \</span><span style="color:#657b83;">(host, port) </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> connectTo&#39; host (</span><span style="color:#cb4b16;">PortNumber</span><span style="color:#657b83;"> port)
+    forM_ handles </span><span style="color:#859900;">$ \</span><span style="color:#657b83;">h </span><span style="color:#859900;">-&gt;</span><span style="color:#657b83;"> hPutStrLn h </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">GET / HTTP/1.1</span><span style="color:#dc322f;">\r\n\r\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+    forM_ handles hClose
+</span></code></pre>
+<p>Notice how the <code>ConnectException</code> datatype provides plenty of information about
+the context that <code>connectTo'</code> was called from (in fact, <em>all</em> available
+information). If I run this program, the problem is immediately obvious:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ ./bar.hs 
+bar.hs: ConnectException &quot;localhost&quot; (PortNumber 80) connect: does not exist (Connection refused)
+</span></code></pre>
+<p>My web server isn't running locally on port 80. My ops team can now go kick the
+nginx/Warp process or do whatever other magic they need to do to get things
+running. All without bothering me at 2am :)</p>
+<p>You may be thinking that this extra data type declaration is a lot of
+boilerplate overhead. While it does add some tedium, the benefit of being able
+to not only catch the exact exception we care about, but also easily extract
+the relevant context information, can pay off in completely unexpected ways in
+the future. I highly recommend it.</p>
+<p>Since no Haskell blog post about exceptions is complete without it, let me
+cover some controversy:</p>
+<ul>
+<li>I know some people absolutely hate runtime exceptions. This point is
+orthogonal: however you decide to report exceptions to your users (<code>Left</code>,
+<code>ExceptT</code>, impure exceptions, etc), be kind to them and provide this extra
+context information.</li>
+<li>There are some problems with the approach I gave above regarding hierarchical
+exceptions. I'm specifically <em>not</em> diving into the details of hierarchical
+exceptions right now, since it's a complex topic that deserves its own
+dedicated post.</li>
+<li>Similar to the above point, it's a fair question whether you should group all
+exceptions together in one type with lots of data constructors for a
+package/module, or create lots of separate datatypes. Again, proper design of
+an exception type really deserves its own post. FWIW, in http-client, I
+elected to have an <code>HttpException</code> type with lots of data constructors.</li>
+</ul>
+<p>Also, I left it out for brevity, but including a <code>displayException</code> method in
+your <code>Exception</code> instance can allow programs to display much more user-friendly
+error messages to end users.</p>
+<p>While nothing I've said here is revolutionary, it's a small tweak to a library
+author's development style that can have a profound impact on users of the
+library, both at the dev level and those running the executable itself.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

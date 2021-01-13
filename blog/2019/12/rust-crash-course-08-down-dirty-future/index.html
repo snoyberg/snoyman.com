@@ -1,0 +1,786 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Down and dirty with Future - Rust Crash Course lesson 8</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Down and dirty with Future - Rust Crash Course lesson 8">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 8 in the Rust crash course: down and dirty with the Future trait
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Down and dirty with Future - Rust Crash Course lesson 8</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published December  2, 2019</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Down%20and%20dirty%20with%20Future%20-%20Rust%20Crash%20Course%20lesson%208 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2019&#x2F;12&#x2F;rust-crash-course-08-down-dirty-future&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2019&#x2F;12&#x2F;rust-crash-course-08-down-dirty-future&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2019&#x2F;12&#x2F;rust-crash-course-08-down-dirty-future&#x2F;&amp;title=Down%20and%20dirty%20with%20Future%20-%20Rust%20Crash%20Course%20lesson%208" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2019&#x2F;12&#x2F;rust-crash-course-08-down-dirty-future&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-08-down-dirty-future.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>It's about a year since I wrote the <a href="https://www.snoyman.com/blog/2018/12/rust-crash-course-07-async-futures-tokio">last installment</a> in the Rust Crash Course series. That last post was a doozy, diving into async, futures, and tokio. All in one post. That was a bit sadistic, and I'm a bit proud of myself on that front.</p>
+<p>Much has happened since then, however. Importantly: the <code>Future</code> trait has moved into the standard library itself and absorbed a few modifications. And then to tie that up in a nicer bow, there's a new <code>async/.await</code> syntax. It's hard for me to overstate just how big a quality of life difference this is when writing asynchronous code in Rust.</p>
+<p>I recently <a href="https://tech.fpcomplete.com/rust/pid1">wrote an article on the FP Complete tech site</a> that demonstrates the <code>Future</code> and <code>async/.await</code> stuff in practice. But here, I want to give a more thorough analysis of what's going on under the surface. Unlike lesson 7, I'm going to skip the motivation for why we want to write asynchronous code, and break this up into more digestible chunks. Like lesson 7, I'm going to include the exercise solutions inline, instead of a separate post.</p>
+<p><strong>NOTE</strong> I'm going to use the <code>async-std</code> library in this example instead of <code>tokio</code>. My only real reason for this is that I started using <code>async-std</code> before <code>tokio</code> released support for the new <code>async/.await</code> syntax. I'm not ready to weigh in on, in general, which of the libraries I prefer.</p>
+<p>You should start a Cargo project to play along. Try <code>cargo new --bin sleepus-interruptus</code>. If you want to ensure you're on the same compiler version, add a <code>rust-toolchain</code> file with the string <code>1.39.0</code> in it. Run <code>cargo run</code> to make sure you're all good to go.</p>
+<p>This post is part of a series based on <a href="https://tech.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<h2 id="sleepus-interruptus">Sleepus Interruptus</h2>
+<p>I want to write a program which will print the message <code>Sleepus</code> 10 times, with a delay of 0.5 seconds. And it should print the message <code>Interruptus</code> 5 times, with a delay of 1 second. This is some fairly easy Rust code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">));
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">interruptus</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">5 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Interruptus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">1000</span><span style="color:#657b83;">));
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">sleepus</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">interruptus</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>However, as my clever naming implies, this isn't my real goal. This program runs the two operations <em>synchronously</em>, first printing <code>Sleepus</code>, then <code>Interruptus</code>. Instead, we would want to have these two sets of statements printed in an interleaved way. That way, the interruptus actually does some interrupting.</p>
+<p><strong>EXERCISE</strong> Use the <code>std::thread::spawn</code> function to spawn an operating system thread to make these printed statements interleave.</p>
+<p>There are two basic approaches to this. One—maybe the more obvious—is to spawn a separate thread for each function, and then wait for each of them to complete:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::thread::{sleep, spawn};
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleepus = </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(sleepus);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> interruptus = </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(interruptus);
+
+    sleepus.</span><span style="color:#859900;">join</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+    interruptus.</span><span style="color:#859900;">join</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>Two things to notice:</p>
+<ul>
+<li>We call <code>spawn</code> with <code>spawn(sleepus)</code>, <em>not</em> <code>spawn(sleepus())</code>. The former passes in the function <code>sleepus</code> to <code>spawn</code> to be run. The latter would immediately run <code>sleepus()</code> and pass its result to <code>spawn</code>, which is not what we want.</li>
+<li>I use <code>join()</code> in the main function/thread to wait for the child thread to end. And I use <code>unwrap</code> to deal with any errors that may occur, because I'm being lazy.</li>
+</ul>
+<p>Another approach would be to spawn one helper thread instead, and call one of the functions in the main thread:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleepus = </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(sleepus);
+    </span><span style="color:#859900;">interruptus</span><span style="color:#657b83;">();
+
+    sleepus.</span><span style="color:#859900;">join</span><span style="color:#657b83;">().</span><span style="color:#859900;">unwrap</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>This is more efficient (less time spawning threads and less memory used for holding them), and doesn't really have a downside. I'd recommend going this way.</p>
+<p><strong>QUESTION</strong> What would be the behavior of this program if we didn't call <code>join</code> in the two-spawn version? What if we didn't call <code>join</code> in the one-spawn version?</p>
+<p>But this isn't an asynchronous approach to the problem at all! We have two threads being handled by the operating system which are both acting synchronously and making blocking calls to <code>sleep</code>. Let's build up a bit of intuition towards how we could have our two tasks (printing <code>Sleepus</code> and printing <code>Interruptus</code>) behave more cooperatively in a single thread.</p>
+<h2 id="introducing-async">Introducing <code>async</code></h2>
+<p>We're going to start at the highest level of abstraction, and work our way down to understand the details. Let's rewrite our application in an <code>async</code> style. Add the following to your <code>Cargo.toml</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">async-std </span><span style="color:#657b83;">= { </span><span style="color:#268bd2;">version </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">1.2.0</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">features </span><span style="color:#657b83;">= [</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">attributes</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">] }
+</span></code></pre>
+<p>And now we can rewrite our application as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">async_std::task::{sleep, spawn};
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::time::Duration;
+
+async </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).await;
+    }
+}
+
+async </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">interruptus</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">5 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Interruptus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">1000</span><span style="color:#657b83;">)).await;
+    }
+}
+
+#[</span><span style="color:#268bd2;">async_std</span><span style="color:#657b83;">::</span><span style="color:#268bd2;">main</span><span style="color:#657b83;">]
+async </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleepus = </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(</span><span style="color:#859900;">sleepus</span><span style="color:#657b83;">());
+    </span><span style="color:#859900;">interruptus</span><span style="color:#657b83;">().await;
+
+    sleepus.await;
+}
+</span></code></pre>
+<p>Let's hit the changes from top to bottom:</p>
+<ul>
+<li>Instead of getting <code>sleep</code> and <code>spawn</code> from <code>std::thread</code>, we're getting them from <code>async_std::task</code>. That probably makes sense.</li>
+<li>Both <code>sleepus</code> and <code>interruptus</code> now say <code>async</code> in front of <code>fn</code>.</li>
+<li>After the calls to <code>sleep</code>, we have a <code>.await</code>. Note that this is <em>not</em> a <code>.await()</code> method call, but instead a new syntax.</li>
+<li>We have a new attribute <code>#[async_std::main]</code> on the <code>main</code> function.</li>
+<li>The <code>main</code> function also has <code>async</code> before <code>fn</code>.</li>
+<li>Instead of <code>spawn(sleepus)</code>, passing in the function itself, we're now calling <code>spawn(sleepus())</code>, immediately running the function and passing its result to <code>spawn</code>.</li>
+<li>The call to <code>interruptus()</code> is now followed by <code>.await</code>.</li>
+<li>Instead of <code>join()</code>ing on the <code>sleepus</code> <code>JoinHandle</code>, we use the <code>.await</code> syntax.</li>
+</ul>
+<p><strong>EXERCISE</strong> Run this code on your own machine and make sure everything compiles and runs as expected. Then try undoing some of the changes listed above and see what generates a compiler error, and what generates incorrect runtime behavior.</p>
+<p>That may look like a large list of changes. But in reality, our code is almost identical structural to the previous version, which is a real testament to the <code>async/.await</code> syntax. And now everything works under the surface the way we want: a single operating system thread making non-blocking calls.</p>
+<p>Let's analyze what each of these changes actually means.</p>
+<h2 id="async-functions"><code>async</code> functions</h2>
+<p>Adding <code>async</code> to the beginning of a function definition does three things:</p>
+<ol>
+<li>It allows you to use <code>.await</code> syntax inside. We'll get to the meaning of that in a bit.</li>
+<li>It modified the return type of the function. <code>async fn foo() -&gt; Bar</code> actually returns <code>impl std::future::Future&lt;Output=Bar&gt;</code>.</li>
+<li>Automatically wraps up the result value in a new <code>Future</code>. We'll demonstrate that better later.</li>
+</ol>
+<p>Let's unpack that second point a bit. There's a trait called <code>Future</code> defined in the standard library. It has an associated type <code>Output</code>. What this trait means is: I promise that, when I complete, I will give you a value of type <code>Output</code>. You could imagine, for instance, an asynchronous HTTP client that looks something like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#b58900;">HttpRequest </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">perform</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; impl Future&lt;Output=HttpResponse&gt; { </span><span style="color:#859900;">... </span><span style="color:#657b83;">}
+}
+</span></code></pre>
+<p>There will be some non-blocking I/O that needs to occur to make that request. We don't want to block the calling thread while those things happen. But we do want to somehow eventually get the resulting response.</p>
+<p>We'll play around with <code>Future</code> values more directly later. For now, we'll continue sticking with the high-level <code>async/.await</code> syntax.</p>
+<p><strong>EXERCISE</strong> Rewrite the signature of <code>sleepus</code> to not use the <code>async</code> keyword by modifying its result type. Note that the code will not compile when you get the type right. Pay attention to the error message you get.</p>
+<p>The result type of <code>async fn sleepus()</code> is the implied unit value <code>()</code>. Therefore, the <code>Output</code> of our <code>Future</code> should be unit. This means we need to write our signature as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl std::future::Future&lt;Output=()&gt;
+</span></code></pre>
+<p>However, with only that change in place, we get the following error messages:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0728]: `await` is only allowed inside `async` functions and blocks
+ --&gt; src/main.rs:7:9
+  |
+4 | fn sleepus() -&gt; impl std::future::Future&lt;Output=()&gt; {
+  |    ------- this is not `async`
+...
+7 |         sleep(Duration::from_millis(500)).await;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ only allowed inside `async` functions and blocks
+
+error[E0277]: the trait bound `(): std::future::Future` is not satisfied
+ --&gt; src/main.rs:4:17
+  |
+4 | fn sleepus() -&gt; impl std::future::Future&lt;Output=()&gt; {
+  |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::future::Future` is not implemented for `()`
+  |
+  = note: the return type of a function must have a statically known size
+</span></code></pre>
+<p>The first message is pretty direct: you can only use the <code>.await</code> syntax inside an <code>async</code> function or block. We haven't seen an <code>async</code> block yet, but it's exactly what it sounds like:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">async {
+    </span><span style="color:#93a1a1;">// async noises intensify
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>The second error message is a result of the first: the <code>async</code> keyword causes the return type to be an <code>impl Future</code>. Without that keyword, our <code>for</code> loop evaluates to <code>()</code>, which isn't an <code>impl Future</code>.</p>
+<p><strong>EXERCISE</strong> Fix the compiler errors by introducing an <code>async</code> block inside the <code>sleepus</code> function. Do <em>not</em> add <code>async</code> to the function signature, keep using <code>impl Future</code>.</p>
+<p>Wrapping the entire function body with an <code>async</code> block solves the problem:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl std::future::Future&lt;Output=()&gt; {
+    async {
+        </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+            </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).await;
+        }
+    }
+}
+</span></code></pre><h2 id="await-a-minute"><code>.await</code> a minute</h2>
+<p>Maybe we don't need all this <code>async/.await</code> garbage though. What if we remove the calls to <code>.await</code> usage in <code>sleepus</code>? Perhaps surprisingly, it compiles, though it does give us an ominous warning:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: unused implementer of `std::future::Future` that must be used
+ --&gt; src/main.rs:8:13
+  |
+8 |             sleep(Duration::from_millis(500));
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_must_use)]` on by default
+  = note: futures do nothing unless you `.await` or poll them
+</span></code></pre>
+<p>We're generating a <code>Future</code> value but not using it. And sure enough, if you look at the output of our program, you can see what the compiler means:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Interruptus 1
+Sleepus 1
+Sleepus 2
+Sleepus 3
+Sleepus 4
+Sleepus 5
+Sleepus 6
+Sleepus 7
+Sleepus 8
+Sleepus 9
+Sleepus 10
+Interruptus 2
+Interruptus 3
+Interruptus 4
+Interruptus 5
+</span></code></pre>
+<p>All of our <code>Sleepus</code> messages print without delay. Intriguing! The issue is that the call to <code>sleep</code> no longer actually puts our current thread to sleep. Instead, it generates a value which implements <code>Future</code>. And when that promise is eventually fulfilled, we know that the delay has occurred. But in our case, we're simply ignoring the <code>Future</code>, and therefore never actually delaying.</p>
+<p>To understand what the <code>.await</code> syntax is doing, we're going to implement our function with much more direct usage of the <code>Future</code> values. Let's start by getting rid of the <code>async</code> block.</p>
+<h2 id="dropping-async-block">Dropping <code>async</code> block</h2>
+<p>If we drop the <code>async</code> block, we end up with this code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl std::future::Future&lt;Output=()&gt; {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">));
+    }
+}
+</span></code></pre>
+<p>This gives us an error message we saw before:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: the trait bound `(): std::future::Future` is not satisfied
+ --&gt; src/main.rs:4:17
+  |
+4 | fn sleepus() -&gt; impl std::future::Future&lt;Output=()&gt; {
+  |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::future::Future` is not implemented for `()`
+  |
+</span></code></pre>
+<p>This makes sense: the <code>for</code> loop evaluates to <code>()</code>, and unit does not implement <code>Future</code>. One way to fix this is to add an expression after the <code>for</code> loop that evaluates to something that implements <code>Future</code>. And we already know one such thing: <code>sleep</code>.</p>
+<p><strong>EXERCISE</strong> Tweak the <code>sleepus</code> function so that it compiles.</p>
+<p>One implementation is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl std::future::Future&lt;Output=()&gt; {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">));
+    }
+    </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">))
+}
+</span></code></pre>
+<p>We still get a warning about the unused <code>Future</code> value inside the <code>for</code> loop, but not the one afterwards: that one is getting returned from the function. But of course, sleeping for 0 milliseconds is just a wordy way to do nothing. It would be nice if there was a &quot;dummy&quot; <code>Future</code> that more explicitly did nothing. And fortunately, <a href="https://docs.rs/async-std/1.2.0/async_std/future/fn.ready.html">there is</a>.</p>
+<p><strong>EXERCISE</strong> Replace the <code>sleep</code> call after the <code>for</code> loop with a call to <code>ready</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl std::future::Future&lt;Output=()&gt; {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">));
+    }
+    async_std::future::ready(())
+}
+</span></code></pre><h2 id="implement-our-own-future">Implement our own <code>Future</code></h2>
+<p>To unpeel this onion a bit more, let's make our life harder, and <em>not</em> use the <code>ready</code> function. Instead, we're going to define our own <code>struct</code> which implements <code>Future</code>. I'm going to call it <code>DoNothing</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::future::Future;
+
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">DoNothing</span><span style="color:#657b83;">;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl Future&lt;Output=()&gt; {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#657b83;">=</span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">));
+    }
+    DoNothing
+}
+</span></code></pre>
+<p><strong>EXERCISE</strong> This code won't compile. Without looking below or asking the compiler, what do you think it's going to complain about?</p>
+<p>The problem here is that <code>DoNothing</code> does not provide a <code>Future</code> implementation. We're going to do some Compiler Driven Development and let <code>rustc</code> tell us how to fix our program. Our first error message is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">the trait bound `DoNothing: std::future::Future` is not satisfied
+</span></code></pre>
+<p>So let's add in a trait implementation:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">DoNothing </span><span style="color:#657b83;">{
+}
+</span></code></pre>
+<p>Which fails with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0046]: not all trait items implemented, missing: `Output`, `poll`
+ --&gt; src/main.rs:7:1
+  |
+7 | impl Future for DoNothing {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ missing `Output`, `poll` in implementation
+  |
+  = note: `Output` from trait: `type Output;`
+  = note: `poll` from trait: `fn(std::pin::Pin&lt;&amp;mut Self&gt;, &amp;mut std::task::Context&lt;&#39;_&gt;) -&gt; std::task::Poll&lt;&lt;Self as std::future::Future&gt;::Output&gt;`
+</span></code></pre>
+<p>We don't really know about the <code>Pin&lt;&amp;mut Self&gt;</code> or <code>Context</code> thing yet, but we do know about <code>Output</code>. And since we were previously returning a <code>()</code> from our <code>ready</code> call, let's do the same thing here.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::pin::Pin;
+</span><span style="color:#859900;">use </span><span style="color:#657b83;">std::task::{Context, Poll};
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">DoNothing </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Output </span><span style="color:#657b83;">= ();
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">: Pin&lt;</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">Self</span><span style="color:#657b83;">&gt;, </span><span style="color:#268bd2;">ctx</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Context) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Output&gt; {
+        </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()
+    }
+}
+</span></code></pre>
+<p>Woohoo, that compiles! Of course, it fails at runtime due to the <code>unimplemented!()</code> call:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">thread &#39;async-std/executor&#39; panicked at &#39;not yet implemented&#39;, src/main.rs:13:9
+</span></code></pre>
+<p>Now let's try to implement <code>poll</code>. We need to return a value of type <code>Poll&lt;Self::Output&gt;</code>, or <code>Poll&lt;()&gt;</code>. Let's look at the <a href="https://doc.rust-lang.org/std/task/enum.Poll.html">definition of <code>Poll</code></a>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#586e75;">pub </span><span style="color:#268bd2;">enum </span><span style="color:#b58900;">Poll</span><span style="color:#657b83;">&lt;T&gt; {
+    Ready(T),
+    Pending,
+}
+</span></code></pre>
+<p>Using some basic deduction, we can see that <code>Ready</code> means &quot;our <code>Future</code> is complete, and here's the output&quot; while <code>Pending</code> means &quot;it's not done yet.&quot; Given that our <code>DoNothing</code> wants to return the output of <code>()</code> immediately, we can just use the <code>Ready</code> variant here.</p>
+<p><strong>EXERCISE</strong> Implement a working version of <code>poll</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">: Pin&lt;</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">Self</span><span style="color:#657b83;">&gt;, </span><span style="color:#268bd2;">_ctx</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Context) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Output&gt; {
+    Poll::Ready(())
+}
+</span></code></pre>
+<p>Congratulations, you've just implemented your first <code>Future</code> struct!</p>
+<h2 id="the-third-async-difference">The third <code>async</code> difference</h2>
+<p>Remember above we said that making a function <code>async</code> does a third thing:</p>
+<blockquote>
+<p>Automatically wraps up the result value in a new <code>Future</code>. We'll demonstrate that better later.</p>
+</blockquote>
+<p>Now is later. Let's demonstrate that better.</p>
+<p>Let's simplify the definition of <code>sleepus</code> to:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl Future&lt;Output=()&gt; {
+    DoNothing
+}
+</span></code></pre>
+<p>The compiles and runs just fine. Let's try switching back to the <code>async</code> way of writing the signature:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">async </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() {
+    DoNothing
+}
+</span></code></pre>
+<p>This now gives us an error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0271]: type mismatch resolving `&lt;impl std::future::Future as std::future::Future&gt;::Output == ()`
+  --&gt; src/main.rs:17:20
+   |
+17 | async fn sleepus() {
+   |                    ^ expected struct `DoNothing`, found ()
+   |
+   = note: expected type `DoNothing`
+              found type `()`
+</span></code></pre>
+<p>You see, when you have an <code>async</code> function or block, the result is automatically wrapped up in a <code>Future</code>. So instead of returning a <code>DoNothing</code>, we're returning a <code>impl Future&lt;Output=DoNothing&gt;</code>. And our type wants <code>Output=()</code>.</p>
+<p><strong>EXERCISE</strong> Try to guess what you need to add to this function to make it compile.</p>
+<p>Working around this is pretty easy: you simply append <code>.await</code> to <code>DoNothing</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">async </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() {
+    DoNothing.await
+}
+</span></code></pre>
+<p>This gives us a little more intuition for what <code>.await</code> is doing: it's extracting the <code>()</code> <code>Output</code> from the <code>DoNothing</code> <code>Future</code>... somehow. However, we still don't really know how it's achieving that. Let's build up a more complicated <code>Future</code> to get closer.</p>
+<h2 id="sleepprint">SleepPrint</h2>
+<p>We're going to build a new <code>Future</code> implementation which:</p>
+<ul>
+<li>Sleeps for a certain amount of time</li>
+<li>Then prints a message</li>
+</ul>
+<p>This is going to involve using <a href="https://doc.rust-lang.org/std/pin/index.html">pinned pointers</a>. I'm not going to describe those here. The specifics of what's happening with the pinning isn't terribly enlightening to the topic of <code>Future</code>s. If you want to let your eyes glaze over at that part of the code, you won't be missing much.</p>
+<p>Our implementation strategy for <code>SleepPrint</code> will be to wrap an existing <code>sleep</code> <code>Future</code> with our own implementation of <code>Future</code>. Since we don't know the exact type of the result of a <code>sleep</code> call (it's just an <code>impl Future</code>), we'll use a parameter:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">SleepPrint</span><span style="color:#657b83;">&lt;Fut&gt; {
+    </span><span style="color:#268bd2;">sleep</span><span style="color:#657b83;">: Fut,
+}
+</span></code></pre>
+<p>And we can call this in our <code>sleepus</code> function with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl Future&lt;Output=()&gt; {
+    SleepPrint {
+        sleep: </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">3000</span><span style="color:#657b83;">)),
+    }
+}
+</span></code></pre>
+<p>Of course, we now get a compiler error about a missing <code>Future</code> implementation. So let's work on that. Our <code>impl</code> starts with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;Fut: Future&lt;Output=()&gt;&gt; Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">SleepPrint</span><span style="color:#657b83;">&lt;Fut&gt; {
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>This says that <code>SleepPrint</code> is a <code>Future</code> if the <code>sleep</code> value it contains is a <code>Future</code> with an <code>Output</code> of type <code>()</code>. Which, of course, is true in the case of the <code>sleep</code> function, so we're good. We need to define <code>Output</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">type </span><span style="color:#b58900;">Output </span><span style="color:#657b83;">= ();
+</span></code></pre>
+<p>And then we need a <code>poll</code> function:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">: Pin&lt;</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">Self</span><span style="color:#657b83;">&gt;, </span><span style="color:#268bd2;">ctx</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Context) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Output&gt; {
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>The next bit is the eyes-glazing part around pinned pointers. We need to <em>project</em> the <code>Pin&lt;&amp;mut Self&gt;</code> into a <code>Pin&lt;&amp;mut Fut&gt;</code> so that we can work on the underlying sleep <code>Future</code>. We could use a <a href="https://crates.io/crates/pin-project-lite">helper crate</a> to make this a bit prettier, but we'll just do some <code>unsafe</code> mapping:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleep: Pin&lt;</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Fut&gt; = </span><span style="color:#586e75;">unsafe </span><span style="color:#657b83;">{ </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#859900;">map_unchecked_mut</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">s</span><span style="color:#657b83;">| </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> s.sleep) };
+</span></code></pre>
+<p>Alright, now the important bit. We've got our underlying <code>Future</code>, and we need to do something with it. The only thing we <em>can</em> do with it is call <code>poll</code>. <code>poll</code> requires a <code>&amp;mut Context</code>, which fortunately we've been provided. That <code>Context</code> contains information about the currently running task, so it can be woken up (via a <code>Waker</code>) when the task is ready.</p>
+<p><strong>NOTE</strong> We're not going to get deeper into how <code>Waker</code> works in this post. If you want a real life example of how to call <code>Waker</code> yourself, I recommend reading my <a href="https://tech.fpcomplete.com/rust/pid1">pid1 in Rust</a> post.</p>
+<p>For now, let's do the only thing we can reasonably do:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match</span><span style="color:#657b83;"> sleep.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">(ctx) {
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>We've got two possibilities. If <code>poll</code> returns a <code>Pending</code>, it means that the <code>sleep</code> hasn't completed yet. In that case, we want our <code>Future</code> to also indicate that it's not done. To make that work, we just propagate the <code>Pending</code> value:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Poll::Pending </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">Poll::Pending,
+</span></code></pre>
+<p>However, if the <code>sleep</code> is already complete, we'll receive a <code>Ready(())</code> variant. In that case, it's finally time to print our message and then propagate the <code>Ready</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Poll::Ready(()) </span><span style="color:#859900;">=&gt; </span><span style="color:#657b83;">{
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Inside SleepPrint</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    Poll::Ready(())
+},
+</span></code></pre>
+<p>And just like that, we've built a more complex <code>Future</code> from a simpler one. But that was pretty ad-hoc.</p>
+<h2 id="twofutures">TwoFutures</h2>
+<p><code>SleepPrint</code> is pretty ad-hoc: it hard codes a specific action to run after the <code>sleep</code> <code>Future</code> completes. Let's up our game, and sequence the actions of two different <code>Future</code>s. We're going to define a new <code>struct</code> that has three fields:</p>
+<ul>
+<li>The first <code>Future</code> to run</li>
+<li>The second <code>Future</code> to run</li>
+<li>A <code>bool</code> to tell us if we've finished running the first <code>Future</code></li>
+</ul>
+<p>Since the <code>Pin</code> stuff is going to get a bit more complicated, it's time to reach for that helper crate to ease our implementation and avoid <code>unsafe</code> blocks ourself. So add the following to your <code>Cargo.toml</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">pin-project-lite </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">0.1.1</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>And now we can define a <code>TwoFutures</code> struct that allows us to project the first and second <code>Future</code>s into pinned pointers:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">pin_project_lite::pin_project;
+
+</span><span style="color:#859900;">pin_project! </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">TwoFutures</span><span style="color:#657b83;">&lt;Fut1, Fut2&gt; {
+        </span><span style="color:#268bd2;">first_done</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">bool</span><span style="color:#657b83;">,
+        #[</span><span style="color:#268bd2;">pin</span><span style="color:#657b83;">]
+        </span><span style="color:#268bd2;">first</span><span style="color:#657b83;">: Fut1,
+        #[</span><span style="color:#268bd2;">pin</span><span style="color:#657b83;">]
+        </span><span style="color:#268bd2;">second</span><span style="color:#657b83;">: Fut2,
+    }
+}
+</span></code></pre>
+<p>Using this in <code>sleepus</code> is easy enough:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl Future&lt;Output=()&gt; {
+    TwoFutures {
+        first_done: </span><span style="color:#b58900;">false</span><span style="color:#657b83;">,
+        first: </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">3000</span><span style="color:#657b83;">)),
+        second: async { </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello TwoFutures</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">); },
+    }
+}
+</span></code></pre>
+<p>Now we just need to define our <code>Future</code> implementation. Easy, right? We want to make sure both <code>Fut1</code> and <code>Fut2</code> are <code>Future</code>s. And our <code>Output</code> will be the output from the <code>Fut2</code>. (You could also return both the first and second output if you wanted.) To make all that work:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;Fut1: Future, Fut2: Future&gt; Future </span><span style="color:#859900;">for </span><span style="color:#b58900;">TwoFutures</span><span style="color:#657b83;">&lt;Fut1, Fut2&gt; {
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Output </span><span style="color:#657b83;">= Fut2::Output;
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">poll</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">: Pin&lt;</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">Self</span><span style="color:#657b83;">&gt;, </span><span style="color:#268bd2;">ctx</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Context) -&gt; Poll&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Output&gt; {
+        </span><span style="color:#859900;">...
+    </span><span style="color:#657b83;">}
+}
+</span></code></pre>
+<p>In order to work with the pinned pointer, we're going to get a new value, <code>this</code>, which projects all of the pointers:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> this = </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#859900;">project</span><span style="color:#657b83;">();
+</span></code></pre>
+<p>With that out of the way, we can interact with our three fields directly in <code>this</code>. The first thing we do is check if the first <code>Future</code> has already completed. If not, we're going to poll it. If the poll is <code>Ready</code>, then we'll ignore the output and indicate that the first <code>Future</code> is done:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">if !</span><span style="color:#657b83;">*this.first_done {
+    </span><span style="color:#859900;">if </span><span style="color:#268bd2;">let </span><span style="color:#657b83;">Poll::Ready(</span><span style="color:#859900;">_</span><span style="color:#657b83;">) = this.first.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">(ctx) {
+        *this.first_done = </span><span style="color:#b58900;">true</span><span style="color:#657b83;">;
+    }
+}
+</span></code></pre>
+<p>Next, if the first <code>Future</code> is done, we want to poll the second. And if the first <code>Future</code> is <em>not</em> done, then we say that we're pending:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">if </span><span style="color:#657b83;">*this.first_done {
+    this.second.</span><span style="color:#859900;">poll</span><span style="color:#657b83;">(ctx)
+} </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+    Poll::Pending
+}
+</span></code></pre>
+<p>And just like that, we've composed two <code>Future</code>s together into a bigger, grander, brighter <code>Future</code>.</p>
+<p><strong>EXERCISE</strong> Get rid of the usage of an <code>async</code> block in <code>second</code>. Let the compiler errors guide you.</p>
+<p>The error message you get says that <code>()</code> is not a <code>Future</code>. Instead, you need to return a <code>Future</code> value after the call to <code>println!</code>. We can use our handy <code>async_std::future::ready</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">second: {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello TwoFutures</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    async_std::future::ready(())
+},
+</span></code></pre><h2 id="andthen">AndThen</h2>
+<p>Sticking together two arbitrary <code>Future</code>s like this is nice. But it's even nicer to have the second <code>Future</code>s depend on the result of the first <code>Future</code>. To do this, we'd want a function like <code>and_then</code>. (Monads FTW to my Haskell buddies.) I'm not going to bore you with the gory details of an implementation here, but feel free to <a href="https://gist.github.com/snoyberg/7eeb5e330d9b5db9806d82c83c9d3e56">read the Gist if you're interested</a>. Assuming you have this method available, we can begin to write the <code>sleepus</code> function ourselves as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">sleepus</span><span style="color:#657b83;">() -&gt; impl Future&lt;Output = ()&gt; {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 1</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|()| {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 2</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|()| {
+            </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 3</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+            </span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).</span><span style="color:#859900;">and_then</span><span style="color:#657b83;">(|()| {
+                </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 4</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+                async_std::future::ready(())
+            })
+        })
+    })
+}
+</span></code></pre>
+<p>And before Rust 1.39 and the <code>async/.await</code> syntax, this is basically how async code worked. This is far from perfect. Besides the obvious right-stepping of the code, it's not actually a loop. You <em>could</em> recursively call <code>sleepus</code>, except that creates an infinite type which the compiler isn't too fond of.</p>
+<p>But fortunately, we've now finally established enough background to easily explain what the <code>.await</code> syntax is doing: exactly what <code>and_then</code> is doing, but without the fuss!</p>
+<p><strong>EXERCISE</strong> Rewrite the <code>sleepus</code> function above to use <code>.await</code> instead of <code>and_then</code>.</p>
+<p>The rewrite is really easy. The body of the function becomes the non-right-stepping, super flat:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 1</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).await;
+</span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 2</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).await;
+</span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 3</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span><span style="color:#859900;">sleep</span><span style="color:#657b83;">(Duration::from_millis(</span><span style="color:#6c71c4;">500</span><span style="color:#657b83;">)).await;
+</span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sleepus 4</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>And then we also need to change the signature of our function to use <code>async</code>, or wrap everything in an <code>async</code> block. Your call.</p>
+<p>Besides the obvious readability improvements here, there are some massive usability improvements with <code>.await</code> as well. One that sticks out here is how easily it ties in with loops. This was a real pain with the older <code>futures</code> stuff. Also, chaining together multiple <code>await</code> calls is really easy, e.g.:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> body = </span><span style="color:#859900;">make_http_request</span><span style="color:#657b83;">().await.</span><span style="color:#859900;">get_body</span><span style="color:#657b83;">().await;
+</span></code></pre>
+<p>And not only that, but it plays in with the <code>?</code> operator for error handling perfectly. The above example would more likely be:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> body = </span><span style="color:#859900;">make_http_request</span><span style="color:#657b83;">().await</span><span style="color:#859900;">?</span><span style="color:#657b83;">.</span><span style="color:#859900;">get_body</span><span style="color:#657b83;">().await</span><span style="color:#859900;">?</span><span style="color:#657b83;">;
+</span></code></pre><h2 id="main-attribute"><code>main</code> attribute</h2>
+<p>One final mystery remains. What exactly is going on with that weird attribute on <code>main</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">async_std</span><span style="color:#657b83;">::</span><span style="color:#268bd2;">main</span><span style="color:#657b83;">]
+async </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>Our <code>sleepus</code> and <code>interruptus</code> functions do not actually do anything. They return <code>Future</code>s which provide instructions on how to do work. Something has to actually perform those actions. The thing that runs those actions is an <strong>executor</strong>. The <code>async-std</code> library provides an executor, as does <code>tokio</code>. In order to run any <code>Future</code>, you need an executor.</p>
+<p>The attribute above automatically wraps the <code>main</code> function with <code>async-std</code>'s executor. The attribute approach, however, is totally optional. Instead, you can use <code>async_std::task::block_on</code>.</p>
+<p><strong>EXERCISE</strong> Rewrite <code>main</code> to not use the attribute. You'll need to rewrite it from <code>async fn main</code> to <code>fn main</code>.</p>
+<p>Since we use <code>.await</code> inside the body of <code>main</code>, we get an error when we simply remove the <code>async</code> qualifier. Therefore, we need to use an <code>async</code> block inside <code>main</code> (or define a separate helper <code>async</code> function). Putting it all together:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    async_std::task::block_on(async {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleepus = </span><span style="color:#859900;">spawn</span><span style="color:#657b83;">(</span><span style="color:#859900;">sleepus</span><span style="color:#657b83;">());
+        </span><span style="color:#859900;">interruptus</span><span style="color:#657b83;">().await;
+
+        sleepus.await;
+    })
+}
+</span></code></pre>
+<p>Each executor is capable of managing multiple tasks. Each task is working on producing the output of a single <code>Future</code>. And just like with threads, you can <code>spawn</code> additional tasks to get concurrent running. Which is exactly how we achieve the interleaving we wanted!</p>
+<h2 id="cooperative-concurrency">Cooperative concurrency</h2>
+<p>One word of warning. <code>Future</code>s and <code>async</code>/<code>.await</code> implement a form of cooperative concurrency. By contrast, operating system threads provide preemptive concurrency. The important different is that in cooperative concurrency, you have to cooperate. If one of your tasks causes a delay, such as by using <code>std::thread::sleep</code> or by performing significant CPU computation, it will not be interrupted.</p>
+<p>The upshot of this is that you should ensure you do not perform blocking calls inside your tasks. And if you have a CPU-intensive task to perform, it's probably worth spawning an OS thread for it, or at least ensuring your executor will not starve your other tasks.</p>
+<h2 id="summary">Summary</h2>
+<p>I don't think the behavior under the surface of <code>.await</code> is too big a reveal, but I think it's useful to understand exactly what's happening here. In particular, understanding the difference between a value of <code>Future</code> and actually chaining together the outputs of <code>Future</code> values is core to using <code>async/.await</code> correctly. Fortunately, the compiler errors and warnings do a great job of guiding you in the right direction.</p>
+<p>In the next lesson, we can start using our newfound knowledge of <code>Future</code> and the <code>async/.await</code> syntax to build some asynchronous applications. We'll be diving into writing some async I/O, including networking code, using Tokio 0.2.</p>
+<h2 id="exercises">Exercises</h2>
+<p>Here are some take-home exercises to play with. You can base them on <a href="https://gist.github.com/snoyberg/f5fea804f2b6fb69ae6d1f75c8004fc5">the code in this Gist</a>.</p>
+<ol>
+<li>Modify the <code>main</code> function to call <code>spawn</code> twice instead of just once.</li>
+<li>Modify the <code>main</code> function to not call <code>spawn</code> at all. Instead, use <a href="https://docs.rs/async-std/1.2.0/async_std/future/trait.Future.html#method.join"><code>join</code></a>. You'll need to add a <code>use async_std::prelude::*;</code> and add the <code>&quot;unstable&quot;</code> feature to the <code>async-std</code> dependency in <code>Cargo.toml</code>.</li>
+<li>Modify the <code>main</code> function to get the non-interleaved behavior, where the program prints <code>Sleepus</code> multiple times before <code>Interruptus</code>.</li>
+<li>We're still performing blocking I/O with <code>println!</code>. Turn on the <code>&quot;unstable&quot;</code> feature again, and try using <code>async_std::println</code>. You'll get an ugly error message until you get rid of <code>spawn</code>. Try to understand why that happens.</li>
+<li>Write a function <code>foo</code> such that the following assertion passes: <code>assert_eq!(42, async_std::task::block_on(async { foo().await.await }));</code></li>
+</ol>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

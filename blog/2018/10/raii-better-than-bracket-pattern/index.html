@@ -1,0 +1,388 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>RAII is better than the bracket pattern</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="RAII is better than the bracket pattern">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Last week, I wrote a blog post about ResourceT, and mentioned Rust&#x27;s RAII being better than Haskell&#x27;s bracket pattern. In this blog post, I demonstrate what this advantage is.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">RAII is better than the bracket pattern</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October  8, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=RAII%20is%20better%20than%20the%20bracket%20pattern https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;raii-better-than-bracket-pattern&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;raii-better-than-bracket-pattern&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;raii-better-than-bracket-pattern&#x2F;&amp;title=RAII%20is%20better%20than%20the%20bracket%20pattern" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;raii-better-than-bracket-pattern&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;raii-better-than-bracket-pattern.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>I recently wrote an <a href="https://www.fpcomplete.com/">FP Complete</a> blog post entitled <a href="https://www.fpcomplete.com/blog/2018/10/resourcet-necessary-evil">ResourceT: A necessary evil</a>. I had a line in that post I wanted to expand upon:</p>
+<blockquote>
+<p>I believe this is an area where the RAII (Resource Acquisition Is Initialization) approach in both C++ and Rust leads to a nicer solution than even our bracket pattern in Haskell, by (mostly) avoiding the possibility of a premature close.</p>
+</blockquote>
+<p><a href="/static/io-thief.jpg" target="_blank"><img alt="IO Thief" src="/static/io-thief.jpg" style="max-width:100%;width:300px;margin:0 auto;display:block;"></a></p>
+<p>To demonstrate what I'm talking about, let's first see an example of the problem in Haskell. First, the good code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Exception </span><span style="color:#657b83;">(</span><span style="color:#b58900;">bracket</span><span style="color:#657b83;">)
+
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">MyResource </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">MyResource
+
+</span><span style="color:#b58900;">newMyResource </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO MyResource
+</span><span style="color:#657b83;">newMyResource </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Creating a new MyResource</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  pure </span><span style="color:#cb4b16;">MyResource
+
+</span><span style="color:#b58900;">closeMyResource </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MyResource </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">closeMyResource </span><span style="color:#cb4b16;">MyResource </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Closing MyResource</span><span style="color:#839496;">&quot;
+
+</span><span style="color:#b58900;">withMyResource </span><span style="color:#859900;">::</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">MyResource </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO a</span><span style="color:#657b83;">) </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO a
+</span><span style="color:#657b83;">withMyResource </span><span style="color:#859900;">=</span><span style="color:#657b83;"> bracket newMyResource closeMyResource
+
+</span><span style="color:#b58900;">useMyResource </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MyResource </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">useMyResource </span><span style="color:#cb4b16;">MyResource </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Using MyResource</span><span style="color:#839496;">&quot;
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> withMyResource useMyResource
+</span></code></pre>
+<p>This is correct usage of the bracket pattern, and results in the output:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Creating a new MyResource
+Using MyResource
+Closing MyResource
+</span></code></pre>
+<p>We're guaranteed that <code>MyResource</code> will be closed even in the presence of exceptions, and <code>MyResource</code> is closed after we're done using it. However, it's not too difficult to misuse this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  myResource </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> withMyResource pure
+  useMyResource myResource
+</span></code></pre>
+<p>This results in the output:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Creating a new MyResource
+Closing MyResource
+Using MyResource
+</span></code></pre>
+<p>We're still guaranteed that <code>MyResource</code> will be closed, but now we're using it <em>after</em> it was closed! This may look like a contrived example, and easy to spot in code. However:</p>
+<ol>
+<li>Many of us choose Haskell because it forces programming errors to be caught at compile time. This is an error which is definitely <em>not</em> caught at compile time.</li>
+<li>In larger code examples, it's easier for this kind of misuse of the bracket pattern to slip in and evade notice.</li>
+</ol>
+<h2 id="rust">Rust</h2>
+<p>By contrast, with the RAII approach in Rust, this kind of thing can't happen under normal circumstances. (Sure, you can use unsafe code, and there might be other cases I'm unaware of.) Check this out:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">MyResource</span><span style="color:#657b83;">();
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#b58900;">MyResource </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">() -&gt; MyResource {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Creating a new MyResource</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        MyResource()
+    }
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">use_it</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Using MyResource</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    }
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Drop </span><span style="color:#859900;">for </span><span style="color:#b58900;">MyResource </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">drop</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Closing MyResource</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> my_resource = MyResource::new();
+    my_resource.</span><span style="color:#859900;">use_it</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>Despite looking closer to the bad Haskell code, it still generates the right output:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Creating a new MyResource
+Using MyResource
+Closing MyResource
+</span></code></pre>
+<p>In fact, try as I might, I cannot figure out a way to get this to close the resource before using it. For example, this is a compile error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> my_resource = MyResource::new();
+    std::mem::drop(my_resource);
+    my_resource.</span><span style="color:#859900;">use_it</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>And this works just fine:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">create_it</span><span style="color:#657b83;">() -&gt; MyResource {
+    MyResource::new()
+}
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> my_resource = </span><span style="color:#859900;">create_it</span><span style="color:#657b83;">();
+    my_resource.</span><span style="color:#859900;">use_it</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>The life time of the value is determined correctly and only dropped at the end of <code>main</code>, not the end of <code>create_it</code>.</p>
+<h2 id="fixing-it-in-haskell">Fixing it in Haskell</h2>
+<p><strong>UPDATE</strong> In my efforts to make this as simple as possible, I included a &quot;solution&quot; that's got a massive hole in it. It still demonstrates the basic idea correctly, but if you want <em>actual</em> guarantees, you'll need to include the phantom type variable on the monad as well. See <a href="http://disq.us/p/1we3o1q">Dominique's comment</a> for more information.</p>
+<p>We can use a similar approach as the <code>ST</code> strict state transformer via a phantom variable to apply a &quot;lifetime&quot; to the <code>MyResource</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">{-# </span><span style="color:#859900;">LANGUAGE</span><span style="color:#b58900;"> RankNTypes #-}
+</span><span style="color:#cb4b16;">import </span><span style="color:#859900;">Control.Exception </span><span style="color:#657b83;">(</span><span style="color:#b58900;">bracket</span><span style="color:#657b83;">)
+
+</span><span style="color:#859900;">data </span><span style="color:#cb4b16;">MyResource</span><span style="color:#657b83;"> s </span><span style="color:#859900;">= </span><span style="color:#cb4b16;">MyResource
+
+</span><span style="color:#b58900;">newMyResource </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">MyResource s</span><span style="color:#657b83;">)
+newMyResource </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Creating a new MyResource</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">
+  pure </span><span style="color:#cb4b16;">MyResource
+
+</span><span style="color:#b58900;">closeMyResource </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MyResource s </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">closeMyResource </span><span style="color:#cb4b16;">MyResource </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Closing MyResource</span><span style="color:#839496;">&quot;
+
+</span><span style="color:#b58900;">withMyResource </span><span style="color:#859900;">::</span><span style="color:#657b83;"> (</span><span style="color:#268bd2;">forall s</span><span style="color:#657b83;">. </span><span style="color:#268bd2;">MyResource s </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO a</span><span style="color:#657b83;">) </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO a
+</span><span style="color:#657b83;">withMyResource </span><span style="color:#859900;">=</span><span style="color:#657b83;"> bracket newMyResource closeMyResource
+
+</span><span style="color:#b58900;">useMyResource </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MyResource s </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">useMyResource </span><span style="color:#cb4b16;">MyResource </span><span style="color:#859900;">=</span><span style="color:#657b83;"> putStrLn </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Using MyResource</span><span style="color:#839496;">&quot;
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> withMyResource useMyResource
+</span></code></pre>
+<p>Now the bad version of the code won't compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">= do</span><span style="color:#657b83;">
+  myResource </span><span style="color:#859900;">&lt;-</span><span style="color:#657b83;"> withMyResource pure
+  useMyResource myResource
+</span></code></pre>
+<p>Results in:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Main.hs:22:32: error:
+    • Couldn&#39;t match type ‘s0’ with ‘s’
+        because type variable ‘s’ would escape its scope
+      This (rigid, skolem) type variable is bound by
+        a type expected by the context:
+          forall s. MyResource s -&gt; IO (MyResource s0)
+        at Main.hs:22:17-35
+      Expected type: MyResource s -&gt; IO (MyResource s0)
+        Actual type: MyResource s0 -&gt; IO (MyResource s0)
+    • In the first argument of ‘withMyResource’, namely ‘pure’
+      In a stmt of a &#39;do&#39; block: myResource &lt;- withMyResource pure
+      In the expression:
+        do myResource &lt;- withMyResource pure
+           useMyResource myResource
+   |
+22 |   myResource &lt;- withMyResource pure
+   |                                ^^^^
+</span></code></pre>
+<p>This approach isn't used much in the Haskell world, and definitely has overhead versus Rust:</p>
+<ul>
+<li>You need to add a type variable to all resource types, which gives more things to juggle</li>
+<li>It's non-trivial to deal with promoting values beyond their original scope (like we did in Rust with passing outside of the <code>create_it</code> function)</li>
+</ul>
+<p>As I mentioned in the original blog post, <a href="https://github.com/basvandijk/regions#readme">regions</a> based on <a href="http://okmij.org/ftp/Haskell/regions.html#light-weight">a paper by Oleg</a> explores this kind of idea in more detail.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

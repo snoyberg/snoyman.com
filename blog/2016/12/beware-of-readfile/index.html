@@ -1,0 +1,433 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Beware of readFile</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Beware of readFile">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Beware of readFile</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published December 22, 2016</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Beware%20of%20readFile https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;12&#x2F;beware-of-readfile&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;12&#x2F;beware-of-readfile&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;12&#x2F;beware-of-readfile&#x2F;&amp;title=Beware%20of%20readFile" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;12&#x2F;beware-of-readfile&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;beware-of-readfile.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>Right off the bat, the title of this blog post is ambiguous. In normal
+Haskell usage, there are in fact 5 different, commonly used <code>readFile</code>
+functions: for <code>String</code>, for strict and lazy <code>Text</code>, and for strict
+and lazy <code>ByteString</code>. <code>String</code> and lazy <code>Text</code>/<code>ByteString</code> suffer
+from problems of lazy I/O, which I'm not going to be talking about at
+all today. I'm instead focused on the problems of character encoding
+that exist in the <code>String</code> and strict/lazy <code>Text</code> variants. For the
+record, these problems apply equally to <code>writeFile</code> and a number of
+other functions.</p>
+<p><strong>EDIT</strong> See the <a href="https://www.snoyman.com/blog/2016/12/beware-of-readfile/#real-world-failures">end of this blog post</a>, where
+I've begun collecting real-life examples where this I/O behavior is
+problematic.</p>
+<p>Let's start off with a simple example. Try running the following
+program:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 --install-ghc runghc --package text
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> writeFile </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">test.html</span><span style="color:#839496;">&quot;
+    &quot;</span><span style="color:#2aa198;">&lt;html&gt;&lt;head&gt;&lt;meta charset=&#39;utf-8&#39;&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;\
+    </span><span style="color:#859900;">\&lt;</span><span style="color:#657b83;">body</span><span style="color:#859900;">&gt;&lt;</span><span style="color:#657b83;">h1</span><span style="color:#859900;">&gt;</span><span style="color:#cb4b16;">Hello</span><span style="color:#859900;">!&lt;/</span><span style="color:#657b83;">h1</span><span style="color:#859900;">&gt;&lt;</span><span style="color:#657b83;">h1</span><span style="color:#859900;">&gt;</span><span style="color:#657b83;">שלום</span><span style="color:#859900;">!&lt;/</span><span style="color:#657b83;">h1</span><span style="color:#859900;">&gt;&lt;</span><span style="color:#657b83;">h1</span><span style="color:#859900;">&gt;</span><span style="color:#657b83;">¡</span><span style="color:#cb4b16;">Hola</span><span style="color:#859900;">!&lt;/</span><span style="color:#657b83;">h1</span><span style="color:#859900;">&gt;&lt;/</span><span style="color:#657b83;">body</span><span style="color:#859900;">&gt;&lt;/</span><span style="color:#657b83;">html</span><span style="color:#859900;">&gt;</span><span style="color:#839496;">&quot;
+</span></code></pre>
+<p>For most people out there, this will generate a <code>test.html</code> file
+which, when opened in your browser, displays the phrase Hello in
+English, Hebrew, and Spanish. Now watch what happens when I run the
+same program with a modified environment variable on Linux:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ ./Main.hs
+# Everything&#39;s fine
+$ env LC_CTYPE=en_US.iso88591 ./Main.hs
+Main.hs: test.html: commitBuffer: invalid argument (invalid character)
+</span></code></pre>
+<p>This behavior is
+<a href="https://www.stackage.org/haddock/lts-7.14/base-4.9.0.0/System-IO.html#g:23">very clearly documented in <code>System.IO</code></a>,
+namely that GHC will follow system-specific rules to determine the
+appropriate character encoding rules, and open up <code>Handle</code>s with that
+character encoding set.</p>
+<p>This behavior makes a lot of sense for the special standard handles of
+<code>stdin</code>, <code>stdout</code>, and <code>stderr</code>, where we need to interact with the
+user and make sure the console receives bytes that it can display
+correctly. However, I'm also going to claim the following:</p>
+<p><strong>In exactly 0 cases in my Haskell career have I desired the character
+encoding guessing functionality of the textual <code>readFile</code> functions</strong></p>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Have you ever needed the behavior of Prelude.readFile, which chooses its character encoding based on environment variables?</p>&mdash; Michael Snoyman (@snoyberg) <a href="https://twitter.com/snoyberg/status/811624134174183424">December 21, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>The reason is fairly simple: when reading and writing files, I'm
+almost always dealing with some file format. The first code example
+above demonstrates one example of this: writing an HTML file. JSON and
+XML work similarly. Config files are another example where the
+system's locale settings should be irrelevant. In fact, I'm hard
+pressed to come up with a case where I <em>want</em> the current behavior of
+respecting the system's locale settings.</p>
+<p>In my ideal world, we end up with the following functions for working
+with files:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#b58900;">readFile </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MonadIO m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">FilePath </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">m ByteString </span><span style="color:#93a1a1;">-- strict byte string, no lazy I/O!
+</span><span style="color:#b58900;">readFileUtf8 </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MonadIO m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">FilePath </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">m Text
+</span><span style="color:#657b83;">readFileUtf8 </span><span style="color:#859900;">=</span><span style="color:#657b83;"> fmap (decodeUtf8With lenientDecode) </span><span style="color:#859900;">.</span><span style="color:#657b83;"> readFile
+</span><span style="color:#93a1a1;">-- maybe include a non-lenient variant that throws exceptions or
+-- returns an Either value on bad character encoding
+</span><span style="color:#b58900;">writeFile </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MonadIO m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">FilePath </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">ByteString </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">m </span><span style="color:#859900;">()
+</span><span style="color:#b58900;">writeFileUtf8 </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">MonadIO m </span><span style="color:#859900;">=&gt; </span><span style="color:#268bd2;">FilePath </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">Text </span><span style="color:#859900;">-&gt; </span><span style="color:#268bd2;">m </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">writeFileUtf8 fp </span><span style="color:#859900;">=</span><span style="color:#657b83;"> writeFile fp </span><span style="color:#859900;">.</span><span style="color:#657b83;"> encodeUtf8
+</span><span style="color:#93a1a1;">-- conduit, pipes, streaming, etc, can handle the too-large-for-memory
+-- case
+</span></code></pre>
+<p>For those unaware: lenient here means that if there is a character
+encoding error, it will be replaced with the Unicode replacement
+character. The default behavior of <code>decodeUtf8</code> is to throw an
+exception. I can save my (very large) concerns about that behavior for
+another time.</p>
+<p>Files are inherently binary data, we shouldn't hide that. We should
+also make it convenient for people to do the very common task of
+reading and writing textual data with UTF-8 character encoding.</p>
+<p>Since a blog post is always better if it includes a meaningless benchmark, let me oblige. I put together an overly simple benchmark comparing different ways to read a file. The code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#</span><span style="color:#859900;">!/</span><span style="color:#657b83;">usr</span><span style="color:#859900;">/</span><span style="color:#657b83;">bin</span><span style="color:#859900;">/</span><span style="color:#657b83;">env stack
+</span><span style="color:#93a1a1;">-- stack --resolver lts-7.14 exec --package criterion -- ghc -O2
+</span><span style="color:#cb4b16;">import           </span><span style="color:#859900;">Criterion.Main
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Data.ByteString          </span><span style="color:#cb4b16;">as </span><span style="color:#859900;">S
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Data.ByteString.Lazy     </span><span style="color:#cb4b16;">as </span><span style="color:#859900;">L
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Data.Text.Encoding       </span><span style="color:#cb4b16;">as </span><span style="color:#859900;">T
+</span><span style="color:#cb4b16;">import           </span><span style="color:#859900;">Data.Text.Encoding.Error </span><span style="color:#657b83;">(</span><span style="color:#b58900;">lenientDecode</span><span style="color:#657b83;">)
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Data.Text.IO             </span><span style="color:#cb4b16;">as </span><span style="color:#859900;">TIO
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Data.Text.Lazy.Encoding  </span><span style="color:#cb4b16;">as </span><span style="color:#859900;">TL
+</span><span style="color:#cb4b16;">import qualified </span><span style="color:#859900;">Data.Text.Lazy.IO        </span><span style="color:#cb4b16;">as </span><span style="color:#859900;">TLIO
+
+</span><span style="color:#93a1a1;">-- Downloaded from: http://www.gutenberg.org/cache/epub/345/pg345.txt
+</span><span style="color:#b58900;">fp </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">FilePath
+</span><span style="color:#657b83;">fp </span><span style="color:#859900;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">pg345.txt</span><span style="color:#839496;">&quot;
+
+</span><span style="color:#b58900;">main </span><span style="color:#859900;">:: </span><span style="color:#268bd2;">IO </span><span style="color:#859900;">()
+</span><span style="color:#657b83;">main </span><span style="color:#859900;">=</span><span style="color:#657b83;"> defaultMain
+    [ bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">String</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$</span><span style="color:#657b83;"> readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Data.Text.IO</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">TIO</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Data.Text.Lazy.IO</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">TLIO</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Data.ByteString.readFile</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">S</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Data.ByteString.Lazy.readFile</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">L</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">strict decodeUtf8</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$</span><span style="color:#657b83;"> fmap </span><span style="color:#cb4b16;">T</span><span style="color:#859900;">.</span><span style="color:#657b83;">decodeUtf8 </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">S</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">strict decodeUtf8With lenientDecode</span><span style="color:#839496;">&quot;
+        </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$</span><span style="color:#657b83;"> fmap (</span><span style="color:#cb4b16;">T</span><span style="color:#859900;">.</span><span style="color:#657b83;">decodeUtf8With lenientDecode) </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">S</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">lazy decodeUtf8</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$</span><span style="color:#657b83;"> fmap </span><span style="color:#cb4b16;">TL</span><span style="color:#859900;">.</span><span style="color:#657b83;">decodeUtf8 </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">L</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    , bench </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">lazy decodeUtf8With lenientDecode</span><span style="color:#839496;">&quot;
+        </span><span style="color:#859900;">$</span><span style="color:#657b83;"> nfIO </span><span style="color:#859900;">$</span><span style="color:#657b83;"> fmap (</span><span style="color:#cb4b16;">TL</span><span style="color:#859900;">.</span><span style="color:#657b83;">decodeUtf8With lenientDecode) </span><span style="color:#859900;">$ </span><span style="color:#cb4b16;">L</span><span style="color:#859900;">.</span><span style="color:#657b83;">readFile fp
+    ]
+</span></code></pre>
+<p>To run this, I used:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ ./bench.hs &amp;&amp; ./bench --output bench.html
+</span></code></pre>
+<p>(Yes, you can run a Stack script to compile that script. I only
+discovered this trick recently.)</p>
+<p>Here are the graphical results, full textual results are available
+below:</p>
+<img src="/img/beware-of-readfile-bench.png" alt="Benchmark Results" style="max-width:100%">
+<p>Unsurprisingly, <code>String</code> I/O is the slowest, and <code>ByteString</code> I/O is
+the fastest (since no character encoding overhead is involved). I
+found three interesting takeaways here:</p>
+<ul>
+<li>Lazy I/O variants were slightly faster, likely because there was no
+memory buffer copying involved</li>
+<li>Lenient and non-lenient decoding were just about identical in
+performance, which is nice to know</li>
+<li>As I predicted, the I/O functions from the <code>text</code> package are
+significantly slower than using <code>bytestring</code>-based I/O and then
+decoding. I found similar results in the
+<a href="https://github.com/fpco/say#readme">say package</a>, and believe it is
+inherent in <code>Handle</code>-based character I/O, which involves copying all
+data through a buffer of <code>Word32</code> values.</li>
+</ul>
+<p><strong>My recommendation to all</strong>: never use <code>Prelude.readFile</code>,
+<code>Data.Text.IO.readFile</code>, <code>Data.Text.Lazy.IO.readFile</code>, or
+<code>Data.ByteString.Lazy.readFile</code>. Stick with <code>Data.ByteString.readFile</code>
+for known-small data, use a streaming package (e.g, <a href="https://haskell-lang.org/library/conduit">conduit</a>) if your choice for large
+data, and handle the character encoding yourself. And apply this to
+<code>writeFile</code> and other file-related functions as well.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">benchmarking String
+time                 8.605 ms   (8.513 ms .. 8.720 ms)
+                     0.998 R²   (0.996 R² .. 0.999 R²)
+mean                 8.719 ms   (8.616 ms .. 8.889 ms)
+std dev              354.9 μs   (236.1 μs .. 535.2 μs)
+variance introduced by outliers: 18% (moderately inflated)
+
+benchmarking Data.Text.IO
+time                 3.735 ms   (3.701 ms .. 3.763 ms)
+                     0.999 R²   (0.999 R² .. 1.000 R²)
+mean                 3.703 ms   (3.680 ms .. 3.726 ms)
+std dev              76.23 μs   (62.41 μs .. 97.13 μs)
+
+benchmarking Data.Text.Lazy.IO
+time                 2.995 ms   (2.949 ms .. 3.050 ms)
+                     0.997 R²   (0.994 R² .. 0.999 R²)
+mean                 3.026 ms   (2.998 ms .. 3.071 ms)
+std dev              109.3 μs   (81.86 μs .. 158.8 μs)
+variance introduced by outliers: 19% (moderately inflated)
+
+benchmarking Data.ByteString.readFile
+time                 218.1 μs   (215.1 μs .. 221.6 μs)
+                     0.992 R²   (0.987 R² .. 0.996 R²)
+mean                 229.2 μs   (221.0 μs .. 242.5 μs)
+std dev              34.36 μs   (24.13 μs .. 48.99 μs)
+variance introduced by outliers: 90% (severely inflated)
+
+benchmarking Data.ByteString.Lazy.readFile
+time                 162.8 μs   (160.7 μs .. 164.7 μs)
+                     0.999 R²   (0.998 R² .. 0.999 R²)
+mean                 164.3 μs   (162.7 μs .. 165.9 μs)
+std dev              5.481 μs   (4.489 μs .. 6.557 μs)
+variance introduced by outliers: 30% (moderately inflated)
+
+benchmarking strict decodeUtf8
+time                 1.283 ms   (1.265 ms .. 1.307 ms)
+                     0.997 R²   (0.995 R² .. 0.999 R²)
+mean                 1.285 ms   (1.274 ms .. 1.303 ms)
+std dev              46.84 μs   (35.27 μs .. 67.71 μs)
+variance introduced by outliers: 25% (moderately inflated)
+
+benchmarking strict decodeUtf8With lenientDecode
+time                 1.298 ms   (1.287 ms .. 1.309 ms)
+                     0.999 R²   (0.999 R² .. 1.000 R²)
+mean                 1.290 ms   (1.280 ms .. 1.298 ms)
+std dev              29.77 μs   (24.26 μs .. 36.97 μs)
+variance introduced by outliers: 11% (moderately inflated)
+
+benchmarking lazy decodeUtf8
+time                 589.2 μs   (581.3 μs .. 599.8 μs)
+                     0.998 R²   (0.996 R² .. 0.999 R²)
+mean                 596.7 μs   (590.9 μs .. 605.2 μs)
+std dev              22.43 μs   (16.87 μs .. 28.83 μs)
+variance introduced by outliers: 30% (moderately inflated)
+
+benchmarking lazy decodeUtf8With lenientDecode
+time                 598.1 μs   (591.0 μs .. 607.4 μs)
+                     0.998 R²   (0.994 R² .. 0.999 R²)
+mean                 594.7 μs   (588.3 μs .. 602.4 μs)
+std dev              24.20 μs   (17.06 μs .. 39.94 μs)
+variance introduced by outliers: 33% (moderately inflated)
+</span></code></pre><h2 id="real-world-failures">Real world failures</h2>
+<p>This is a list of examples of real-world problems caused by
+the behavior described in this blog post. It's by far not an
+exhaustive list, just examples that I've noticed. If you'd like to
+include others here, please
+<a href="https://github.com/snoyberg/snoyman.com-content/edit/master/posts/beware-of-readfile.md">send me a pull request</a>.</p>
+<ul>
+<li><a href="https://github.com/sol/hpack/pull/142">hpack failures on AppVeyor/Windows</a></li>
+<li><a href="https://www.reddit.com/r/haskell/comments/5nmmgv/how_to_pipe_unicode_to_a_process_using_conduit/">Unexpected failure with conduit+sinkHandle+Docker</a></li>
+<li><a href="https://github.com/commercialhaskell/stack/pull/2867">stack new can fail when character encoding isn't
+UTF-8</a> (and <a href="https://groups.google.com/d/msg/yesodweb/ZyWLsJOtY0c/aejf9E7rCAAJ">mailing list discussion</a>)</li>
+</ul>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

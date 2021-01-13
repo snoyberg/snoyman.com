@@ -1,0 +1,914 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Crates and more iterators - Rust Crash Course lesson 4</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Crates and more iterators - Rust Crash Course lesson 4">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 4 in the Rust crash course: crates and more iterators.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Crates and more iterators - Rust Crash Course lesson 4</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published November 12, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Crates%20and%20more%20iterators%20-%20Rust%20Crash%20Course%20lesson%204 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-04-crates-more-iterators&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-04-crates-more-iterators&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-04-crates-more-iterators&#x2F;&amp;title=Crates%20and%20more%20iterators%20-%20Rust%20Crash%20Course%20lesson%204" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;11&#x2F;rust-crash-course-04-crates-more-iterators&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-04-crates-more-iterators.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>I'm getting bored with bouncy, this is our third week talking about this program. It's time to finish this off! How do we do double buffering? It's time to learn about external libraries in Rust, or <em>crates</em>.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<p>We still haven't fixed our double buffering problem, let's finally do that.
+We're also going to introduce some more error handling from
+the standard library. And then we'll get to play a bit more with
+iterators as well.</p>
+<h2 id="finding-a-crate">Finding a crate</h2>
+<p>To do double buffering in the terminal, we're going to want some kind
+of a curses library. We're going to look for a crate on
+<a href="https://crates.io/">crates.io</a>. On that page, <a href="https://crates.io/search?q=curses">search for
+&quot;curses&quot;</a>. Looking through the
+download counts and the descriptions,
+<a href="https://crates.io/crates/pancurses">pancurses</a> looks nice, especially
+since it supports Unix and Windows. Let's use it!</p>
+<p><strong>Side note</strong> If you're wondering, this is <em>exactly</em> the process I
+went through when writing up bouncy. I had no prior knowledge to tell
+me pancurses was going to be the right choice. Also, this program
+happens to be the first time I've ever used a curses library.</p>
+<h2 id="starting-a-project">Starting a project</h2>
+<p>We're going to create a new project for this using <code>cargo new</code>. We're
+going to pull in the bouncy code from the end of week 2 (before the
+introduction of command line parsing), since as we'll see later, we
+won't need that parsing anymore.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo new bouncy4
+$ cd bouncy4
+$ curl https://gist.githubusercontent.com/snoyberg/5307d493750d7b48c1c5281961bc31d0/raw/8f467e87f69a197095bda096cbbb71d8d813b1d7/main.rs &gt; src/main.rs
+$ cargo run
+</span></code></pre>
+<p>The ball should be bouncing around your terminal, right? Great!</p>
+<h2 id="adding-the-crate">Adding the crate</h2>
+<p>The configuration for your project lives in the file <code>Cargo.toml</code>,
+known as the <em>manifest</em>. On my system, it looks like this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">[</span><span style="color:#b58900;">package</span><span style="color:#657b83;">]
+</span><span style="color:#268bd2;">name </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">bouncy4</span><span style="color:#839496;">&quot;
+</span><span style="color:#268bd2;">version </span><span style="color:#657b83;">= </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">0.1.0</span><span style="color:#839496;">&quot;
+</span><span style="color:#268bd2;">authors </span><span style="color:#657b83;">= [</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Michael Snoyman &lt;michael@snoyman.com&gt;</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">]
+
+[</span><span style="color:#b58900;">dependencies</span><span style="color:#657b83;">]
+</span></code></pre>
+<p>It will look a bit different on your machine (unless your name is also
+Michael Snoyman). Notice that <code>[dependencies]</code> section at the end?
+That's where we add information on external crates. If you go back to
+<a href="https://crates.io/crates/pancurses">the pancurses page on
+crates.io</a>, you'll see:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Cargo.toml  pancurses = &quot;0.16.0&quot;
+</span></code></pre>
+<p>It may be different when you're reading this. That's telling us what
+we can add to the dependencies section to depend on the library. There
+are lots of details about how to specify dependencies, which we won't
+get into here (and probably never will in the crash course, I've spent
+enough of my life discussing dependency management already :) ). You
+can read more in <a href="https://doc.rust-lang.org/cargo/reference/manifest.html">the Cargo book
+reference</a>.</p>
+<p>Anyway, go ahead and add <code>pancurses = &quot;0.16.0&quot;</code> to the end of your
+<code>Cargo.toml</code> and run <code>cargo build</code>. <code>cargo</code> should run off and do some
+updating, downloading, compiling, and end up with an executable that
+does exactly the same thing as it did before. Perfect, time to use it!</p>
+<p><strong>NOTE</strong> It seems like, at the time of writing, <code>pancurses</code> does not build
+against the latest version of the <code>ncurses</code> package. If you get a build
+failure, you may need to also add <code>ncurses = &quot;= 5.94.0&quot;</code> to your <code>dependencies</code>
+to force Cargo to use an older, compatible version.</p>
+<p>With the current version of the Rust, you'll also need to add the following to
+the top of <code>src/main.rs</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">extern crate</span><span style="color:#657b83;"> pancurses;
+</span></code></pre>
+<p>This requirement is disappearing with Rust 2018. If you'd like play around with
+that, you'll need to switch to a nightly compiler and add <code>edition = &quot;2018&quot;</code> to
+your <code>Cargo.toml</code>. But we're going to stick to the stable compiler and Rust
+2015.</p>
+<h2 id="library-docs">Library docs</h2>
+<p>On the crates.io page, there's a <a href="https://docs.rs/pancurses/0.16.0/pancurses/">link to the
+documentation</a> for
+pancurses. Open that in a new tab. Also, reading down the crates page,
+we get a nice usage example. In <code>main()</code>, the first call is to
+<code>initscr</code>. Jump over to the API documentation and search for
+<code>initscr</code>, and you'll end up at <a href="https://docs.rs/pancurses/0.16.0/pancurses/fn.initscr.html">the <code>initscr</code>
+function</a>.</p>
+<p>Let's try this out. Add the following line to the top of your <code>main</code>
+function and compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> window = pancurses::initscr();
+</span></code></pre>
+<p>Great! We're going to use that returned <code>Window</code> struct to interact
+with pancurses. Go ahead and <a href="https://docs.rs/pancurses/0.16.0/pancurses/struct.Window.html">open its
+documentation</a>
+and start browsing through.</p>
+<h2 id="getting-the-frame-size">Getting the frame size</h2>
+<p>We're currently just assigning an arbitrary frame size. Ideally, we'd
+like to base it off of the actual terminal size. <code>Window</code> provides a
+method for this,
+<a href="https://docs.rs/pancurses/0.16.0/pancurses/struct.Window.html#method.get_max_yx"><code>get_max_yx</code></a>.</p>
+<p>First, a step for you dear reader: modify the <code>new</code> method of <code>Game</code>
+to take a <code>Frame</code> as input. Then, let's jump back to our <code>main</code>. We
+can capture the maximum <code>y</code> and <code>x</code> values with:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#657b83;">(max_y, max_x) = window.</span><span style="color:#859900;">get_max_yx</span><span style="color:#657b83;">();
+</span></code></pre>
+<p>And now let's create a <code>Frame</code> value out of those.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> frame = Frame {
+    width: max_x,
+    height: max_y,
+};
+</span></code></pre>
+<p>Then pass that value into <code>Game::new()</code>. This will only work if you already
+modified <code>new</code> to take an extra <code>Frame</code> argument, go back a few paragraphs if
+you missed that.</p>
+<p><strong>Challenge</strong> Before you hit compile, can you figure out what error
+message we're about to encounter?</p>
+<p>When I run <code>cargo build</code>, I get the following error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+   --&gt; src/main.rs:109:16
+    |
+109 |         width: max_x,
+    |                ^^^^^ expected u32, found i32
+
+error[E0308]: mismatched types
+   --&gt; src/main.rs:110:17
+    |
+110 |         height: max_y,
+    |                 ^^^^^ expected u32, found i32
+</span></code></pre>
+<p>If you remember, <code>width</code> and <code>height</code> are <code>u32</code>s, but pancurses gives
+us <code>i32</code>s for the maximum x and y values. How do we convert? One easy
+way to handle this is with <code>as u32</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">width: max_x </span><span style="color:#859900;">as </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+height: max_y </span><span style="color:#859900;">as </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+</span></code></pre>
+<p>This is a totally unchecked cast. To demonstrate, try running this
+program:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#657b83;">-</span><span style="color:#6c71c4;">5</span><span style="color:#268bd2;">i32</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">6</span><span style="color:#268bd2;">i32 </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> -&gt; </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, i </span><span style="color:#859900;">as </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">)
+    }
+}
+</span></code></pre>
+<p>(Yes, there's syntax in Rust for following a number with its type like
+that, it's really nice.)</p>
+<p>Which results in:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">-5 -&gt; 4294967291
+-4 -&gt; 4294967292
+-3 -&gt; 4294967293
+-2 -&gt; 4294967294
+-1 -&gt; 4294967295
+0 -&gt; 0
+1 -&gt; 1
+2 -&gt; 2
+3 -&gt; 3
+4 -&gt; 4
+5 -&gt; 5
+</span></code></pre>
+<p>We're going to just accept this bad behavior for now. Don't worry,
+it'll get worse.</p>
+<h2 id="carriage-return-and-the-border">Carriage return and the border</h2>
+<p>If you run this program, you'll get some really weird looking
+output. If you don't believe me, go run it yourself now. I'll wait.</p>
+<p>The first problem is that our newlines aren't working as expected. We
+previously used <code>\n</code> to create a newline. However, with curses
+enabled, this create a <em>line feed</em>, moving the cursor down one row,
+without a <em>carriage return</em>, moving the cursor to the beginning of the
+line. Go ahead and replace the <code>\n</code> usages with <code>\r\n</code>.</p>
+<p>That's better, but there's still a problem: the grid doesn't fit in
+the terminal! That's because we didn't take the size of the border
+into account. Try subtracing 4 from the maximum x and y values and see
+if that fixes things. (Note: there's a bit of a trick to where you put
+the <code>- 4</code>. Think about what value you're trying to cast.)</p>
+<h2 id="double-buffering">Double buffering</h2>
+<p>We still haven't done double buffering, but we're in a much better
+position to do so now! The trick is to replace our <code>println!</code> call in
+the <code>main</code> function's <code>loop</code> with calls to <code>window</code> methods. If you
+want the challenge, go read through the docs and try to figure out how
+to make it work. One hint: you'll need to revert the addition of the
+<code>\r</code> carriage returns we added above.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+    window.</span><span style="color:#859900;">clear</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// get rid of old content
+</span><span style="color:#657b83;">    window.</span><span style="color:#859900;">printw</span><span style="color:#657b83;">(game.</span><span style="color:#859900;">to_string</span><span style="color:#657b83;">()); </span><span style="color:#93a1a1;">// write to the buffer
+</span><span style="color:#657b83;">    window.</span><span style="color:#859900;">refresh</span><span style="color:#657b83;">(); </span><span style="color:#93a1a1;">// update the screen
+</span><span style="color:#657b83;">    game.</span><span style="color:#859900;">step</span><span style="color:#657b83;">();
+    std::thread::sleep(sleep_duration);
+}
+</span></code></pre>
+<p>Hurrah, we have double buffering in place! We can finally be done with
+these bouncing balls.</p>
+<p>Or can we?</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>It's time to get more comfortable with exploring API docs, and writing
+some Rust code with less training wheels. There are a few problems
+with our implementation:</p>
+<ul>
+<li>We don't need to generate an entire string for the whole
+grid. Instead, we can use some <code>Window</code> methods for moving the
+cursor around and adding characters. Use that instead.</li>
+<li>Drawing the border as we have is harder than it should be. There's a
+method on <code>Window</code> that will help significantly.</li>
+<li>We have a number of assumptions about numbers, in particular that
+the maximum x and y are positive, and large enough to hold the
+ball's starting position. Put in some sane limits: both values must
+be at least 10.</li>
+<li>More advanced, but: pancurses has some built in support for input
+handling with timeouts. Instead of using <code>std::thread::sleep</code>, we
+can set a timeout on input handling and add that to our main
+loop. You can then also respond to two specific kinds of input:
+<ul>
+<li>Exit the program on a <code>q</code> press</li>
+<li>Reset the game when the size of the window changes</li>
+</ul>
+</li>
+</ul>
+<h2 id="more-iterators">More iterators!</h2>
+<p>Alright, I'm sufficiently bored with bouncing balls. Let's talk about
+something far more interesting: streaming data. Personally I found it
+easiest to understand iterators by writing a few of them myself, so
+that's where we're going to start.</p>
+<p>Let's do some compiler-guided programming. We discussed previously
+that there's an <code>Iterator</code> trait. So a fair bet is that we need to
+create a new data type and provide an implementation of the <code>Iterator</code>
+trait. Let's start off with something simple: an iterator that
+produces no values at all.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Empty</span><span style="color:#657b83;">;
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> Empty {
+        </span><span style="color:#859900;">panic!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Wait, this shouldn&#39;t happen!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    }
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">All done!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p><code>panic!</code>ing is a way to cause the current thread to exit due to an
+impossible situation. It's <em>kind of</em> like runtime exceptions in other
+languages, except you can't recover from them. They are only
+intended to be used for impossible situations.</p>
+<p>OK, compile that and you'll get a helpful error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0277]: the trait bound `Empty: std::iter::Iterator` is not satisfied
+</span></code></pre>
+<p>Cool, let's add an empty implementation (no pun intended):</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Empty </span><span style="color:#657b83;">{
+}
+</span></code></pre>
+<p>More help from the compiler!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0046]: not all trait items implemented, missing: `Item`, `next`
+ --&gt; foo.rs:3:1
+  |
+3 | impl Iterator for Empty {
+  | ^^^^^^^^^^^^^^^^^^^^^^^ missing `Item`, `next` in implementation
+  |
+  = note: `Item` from trait: `type Item;`
+  = note: `next` from trait: `fn(&amp;mut Self) -&gt; std::option::Option&lt;&lt;Self as std::iter::Iterator&gt;::Item&gt;`
+</span></code></pre>
+<p>So we need to provide two things: <code>Item</code> and <code>next</code>. <code>next</code> is a
+function, so we'll get to that in a second. What about that <code>type Item;</code>? It's what we call an <em>associated type</em>. It tells us what type
+of values will be produced by this iterator. Since we're not producing
+anything, we can use any type here. I'll use a <code>u32</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">;
+</span></code></pre>
+<p>Now we need to add in a <code>next</code>. Above, it gives the type of that
+function as:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">fn(&amp;mut Self) -&gt; std::option::Option&lt;&lt;Self as std::iter::Iterator&gt;::Item&gt;
+</span></code></pre>
+<p>Let's simplify this bit by bit. The <em>type</em> of the input is <code>&amp;mut Self</code>. However, the correct syntax will be <code>&amp;mut self</code>. Find that
+confusing? Remember that <code>&amp;mut self</code> is a shortcut for <code>self: &amp;mut Self</code>.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">fn(&amp;mut self) -&gt; std::option::Option&lt;&lt;Self as std::iter::Iterator&gt;::Item&gt;
+</span></code></pre>
+<p>Next, we can remove the module qualifiers for <code>Option</code> and <code>Iterator</code>,
+since they're already in our namespace:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">fn(&amp;mut self) -&gt; Option&lt;&lt;Self as Iterator&gt;::Item&gt;
+</span></code></pre>
+<p>This <code>Self as Iterator</code> is interesting. It's saying &quot;take the current
+type, and look at its <code>Iterator</code> implementation. The reason we care
+about specifying the implementation is because of what comes next:
+<code>::Item</code>. What we're <em>really</em> saying is &quot;we want the <code>Item</code> associated
+type related to the <code>Iterator</code> implementation.&quot; It's possible that
+other traits will <em>also</em> have an associated type with the same name,
+so this is an unambiguous way to refer to it.</p>
+<p>Anyway, let's see if this type signature works. Include the name of
+the function and give it a dummy function body:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;&lt;</span><span style="color:#268bd2;">Self </span><span style="color:#859900;">as Iterator</span><span style="color:#657b83;">&gt;::Item&gt; {
+    </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()
+}
+</span></code></pre>
+<p><code>unimplemented!()</code> is a macro that uses <code>panic!</code> under the surface,
+and is a convenient way to stub out implementations while under active
+development. If you compile this, it will succeed. Yay! Then it
+crashes at runtime due to the <code>unimplemented!</code>. Cool.</p>
+<p>We can simplify the signature a bit by removing the <code>as Iterator</code>,
+which isn't necessary:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item&gt;
+</span></code></pre>
+<p>You can <em>also</em> replace the <code>Self::Item</code> directly with <code>u32</code> if you
+want. The upside is, in this case, it's shorter. The downside is that
+if you change the <code>Item</code> in the future, you'll have to change it in
+two places. This is really a subjective point, your call.</p>
+<p>Alright, let's provide an implementation. We return an <code>Option</code>, which
+is an <code>enum</code> with two variants: <code>None</code> or <code>Some</code>. The former means &quot;we
+don't have anything,&quot; the latter means &quot;we have something.&quot; Given that
+we're implementing the empty iterator, returning <code>None</code> seems like the
+right move:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; {
+    </span><span style="color:#859900;">None
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>And just like that, we have our first <code>Iterator</code> implementation!</p>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>Create an iterator that infinitely produces the number 42. Here's a
+<code>main</code> function to test it out:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#93a1a1;">// only take 10 to avoid looping forever
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> TheAnswer.</span><span style="color:#859900;">take</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">The answer to life, the universe, and everything is </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">All done!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre><h2 id="mutable-state">Mutable state</h2>
+<p>The signature for <code>next</code> involves taking a mutable reference to
+<code>self</code>. Let's use it! We're going to create an iterator that counts
+from 1 to 10. (If you're feeling brave, try to implement it yourself
+before reading my solution.)</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">OneToTen</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">one_to_ten</span><span style="color:#657b83;">() -&gt; OneToTen {
+    OneToTen(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">)
+}
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">OneToTen </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">;
+
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; {
+        </span><span style="color:#859900;">if </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0 </span><span style="color:#657b83;">&gt; </span><span style="color:#6c71c4;">10 </span><span style="color:#657b83;">{
+            </span><span style="color:#859900;">None
+        </span><span style="color:#657b83;">} </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+            </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> res = </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">);
+            </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.</span><span style="color:#6c71c4;">0 </span><span style="color:#657b83;">+= </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+            res
+        }
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in one_to_ten</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p><strong>Exercise 3</strong> Create an iterator that produces the Fibonacci
+sequence. (Anyone who's heard me bemoaning this exercise in the
+functional programming world should have a hearty chuckle right now.)</p>
+<h2 id="iterator-adapters">Iterator adapters</h2>
+<p>We can also write an iterator that will modify an existing
+iterator. Let's write <code>Doubler</code>, which will double the values produced
+by a previous iterator. In order to make this work, we're going to
+capture the underlying iterator inside our new data type, which will
+also necessitate parameterizing our <code>Doubler</code> data type on the
+contained iterator:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt; {
+    </span><span style="color:#268bd2;">iter</span><span style="color:#657b83;">: I,
+}
+</span></code></pre>
+<p>Let's throw in a <code>main</code> function to show how this is used:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> orig_iter = </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// array indices start at 1
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> doubled_iter = Doubler {
+        iter: orig_iter,
+    };
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in</span><span style="color:#657b83;"> doubled_iter {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>Great. If we compile this, we get an error about the missing
+<code>Iterator</code> implementation. Let's try to write something for this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler </span><span style="color:#657b83;">{
+}
+</span></code></pre>
+<p>When we compile this, we get the error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0107]: wrong number of type arguments: expected 1, found 0
+ --&gt; foo.rs:5:19
+  |
+5 | impl Iterator for Doubler {
+  |                   ^^^^^^^ expected 1 type argument
+</span></code></pre>
+<p>OK, that makes sense. <code>Doubler</code> itself isn't a type until we give it
+its parameters. Let's do that:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt; {
+}
+</span></code></pre>
+<p>We get two error messages. Feel free to look at the second if you
+like, but it's not terribly helpful. (Recommendation: always look at
+the first error message first and try to solve that before moving on.)
+The first error message is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0412]: cannot find type `I` in this scope
+ --&gt; foo.rs:5:27
+  |
+5 | impl Iterator for Doubler&lt;I&gt; {
+  |                           ^ not found in this scope
+</span></code></pre>
+<p>OK, what's happening? When we provide an implementation, we need to
+state all of the type variables we want upfront. So let's do this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt; {
+}
+</span></code></pre>
+<p>That may look a bit redundant (it did to me at first), but eventually
+you'll get to cases where things are more complicated and the two sets
+of angle brackets don't look identical. (For Haskellers or PureScript
+users, this is kind of like requiring an explicit <code>forall</code>.)</p>
+<p>Alright, now we've got something closer, and the compiler is upset
+that we haven't given <code>type Item</code> and <code>next</code>. Let's go ahead and
+return a <code>u32</code> again:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">;
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; {
+    </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()
+}
+</span></code></pre>
+<p>The compiles and runs, and then crashes because of the
+<code>unimplemented!</code>. Great, progress! The trick here is we want to ask
+the underlying <code>Iterator</code> for its next value. We'll do this with some
+explicit pattern matching (functional programmers: yes, there's a
+<code>map</code> method on <code>Option</code> we could use here).</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; {
+    </span><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+        </span><span style="color:#859900;">None =&gt; None</span><span style="color:#657b83;">,
+        </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(x) </span><span style="color:#859900;">=&gt; Some</span><span style="color:#657b83;">(x * </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">),
+    }
+}
+</span></code></pre>
+<p>Nice enough, but when we compile it, we get told:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0599]: no method named `next` found for type `I` in the current scope
+ --&gt; foo.rs:8:25
+  |
+8 |         match self.iter.next() {
+  |                         ^^^^
+  |
+  = help: items from traits can only be used if the trait is implemented and in scope
+  = note: the following traits define an item `next`, perhaps you need to implement one of them:
+          candidate #1: `std::iter::Iterator`
+          candidate #2: `std::str::pattern::Searcher`
+</span></code></pre>
+<p>The compiler knows that we <em>might</em> mean the <code>next</code> method from
+<code>Iterator</code>. But it doesn't use it. Why, you might ask? Because <em>we
+never told the compiler that the implementation exists</em>! We need to
+indicate that the <code>I</code> parameter must have an <code>Iterator</code>
+implementation.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I: </span><span style="color:#859900;">Iterator</span><span style="color:#657b83;">&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt;
+</span></code></pre>
+<p>That's some new syntax, but pretty straightforward: <code>I</code> must have an
+implementation of <code>Iterator</code>. Unfortunately, we're not out of the
+woods quite yet:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0369]: binary operation `*` cannot be applied to type `&lt;I as std::iter::Iterator&gt;::Item`
+  --&gt; foo.rs:10:29
+   |
+10 |             Some(x) =&gt; Some(x * 2),
+   |                             ^^^^^
+   |
+   = note: an implementation of `std::ops::Mul` might be missing for `&lt;I as std::iter::Iterator&gt;::Item`
+</span></code></pre>
+<p>Let's talk this through. <code>I</code> is some <code>Iterator</code>, we've already
+established that. And we know that the <code>x</code> value we use in <code>x * 2</code>
+will be of whatever type the <code>Item</code> associated type for that <code>I</code>
+is. The problem is: we have no idea what it is, or whether or not it
+can be multiplied!</p>
+<p>We've already said we're going to produce <code>u32</code>s here, so can we just
+enforce that the <code>Item</code> is a <code>u32</code>? Yes!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I: </span><span style="color:#859900;">Iterator</span><span style="color:#657b83;">&lt;Item=</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt;&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt;
+</span></code></pre>
+<p>Whew, our code works!</p>
+<h2 id="alternative-syntax-where">Alternative syntax: where</h2>
+<p>As our constraints get more complex, shoving them all into the
+parameters at the beginning of <code>impl</code> starts to feel crowded. You can
+alternatively use <code>where</code> for this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt;
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    I: </span><span style="color:#859900;">Iterator</span><span style="color:#657b83;">&lt;Item=</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt;
+</span></code></pre>
+<p>There's a subjective point at which people decide to make that
+transition. Personally, I prefer consistency over brevity, and almost
+always use <code>where</code>. Your mileage may vary. You should be aware of both
+syntaxes for reading other people's code.</p>
+<h2 id="not-just-u32">Not just u32</h2>
+<p>It's a bit weird that we're tied down to <code>u32</code>s. What if we change our
+<code>main</code> funciton to have:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> orig_iter = </span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#268bd2;">u64</span><span style="color:#657b83;">;
+</span></code></pre>
+<p>We'll get a compiler error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0271]: type mismatch resolving `&lt;std::ops::Range&lt;u64&gt; as std::iter::Iterator&gt;::Item == u32`
+  --&gt; foo.rs:23:14
+   |
+23 |     for i in doubled_iter {
+   |              ^^^^^^^^^^^^ expected u64, found u32
+   |
+   = note: expected type `u64`
+              found type `u32`
+</span></code></pre>
+<p>It's possible to relax this, but it starts to get more
+complicated. But let's do it! We'll need to remove all of the
+references to <code>u32</code> in our implementation. Here's a first stab at
+this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt;
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    I: Iterator
+{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= </span><span style="color:#859900;">???</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item&gt; {
+        </span><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">None =&gt; None</span><span style="color:#657b83;">,
+            </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(x) </span><span style="color:#859900;">=&gt; Some</span><span style="color:#657b83;">(x * </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">),
+        }
+    }
+}
+</span></code></pre>
+<p>I've replaced <code>Option&lt;u32&gt;</code> with <code>Option&lt;Self::Item&gt;</code>, and removed the
+<code>&lt;Item = u32&gt;</code> on the <code>I: Iterator</code>. But what should we use for <code>type Item =</code>? We want it to be the same type as the underlying iterator's
+<code>Item</code>... so let's just say that!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= I::Item;
+</span></code></pre>
+<p>That works! We're still not compiling though, because Rust doesn't
+know that it can perform multiplication on <code>I::Item</code>. Fortunately,
+there's a trait for things that can be multiplied called <code>Mul</code>. We can
+add in:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">where</span><span style="color:#657b83;">
+I: </span><span style="color:#859900;">Iterator</span><span style="color:#657b83;">,
+I::Item: std::ops::Mul,
+</span></code></pre>
+<p>New error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+  --&gt; foo.rs:14:29
+   |
+14 |             Some(x) =&gt; Some(x * From::from(2u8)),
+   |                             ^^^^^^^^^^^^^^^^^^^ expected std::iter::Iterator::Item, found std::ops::Mul::Output
+   |
+   = note: expected type `&lt;I as std::iter::Iterator&gt;::Item`
+              found type `&lt;&lt;I as std::iter::Iterator&gt;::Item as std::ops::Mul&gt;::Output`
+</span></code></pre>
+<p>It turns out that <code>Mul</code> has an associated type for its output. This is
+useful for expressing more complicated relationships at the type
+level. For example, we can define types for <code>Force</code>, <code>Mass</code>, and
+<code>Acceleration</code>, and then define a <code>Mul</code> implementation that says
+<code>Mass</code> times <code>Acceleration</code> produces a <code>Force</code>.</p>
+<p>That's a wonderful feature, but it's getting in our way here. We want
+to say &quot;the output should be the same as the item itself.&quot; Fair
+enough:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt;
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    I: Iterator,
+    </span><span style="color:#268bd2;">I::</span><span style="color:#657b83;">Item: std::ops::Mul&lt;Output=</span><span style="color:#268bd2;">I::</span><span style="color:#657b83;">Item&gt;,
+</span></code></pre>
+<p>And now:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+  --&gt; foo.rs:14:33
+   |
+14 |             Some(x) =&gt; Some(x * 2),
+   |                                 ^ expected associated type, found integral variable
+   |
+   = note: expected type `&lt;I as std::iter::Iterator&gt;::Item`
+              found type `{integer}`
+</span></code></pre>
+<p>Ugh. We have <code>2</code>, which can be <em>some</em> integral type. But we don't know
+that <code>Item</code> is an integral type! I'm not aware of a way to give a
+constraint that allows this code to work (if someone knows better,
+please let me know and I'll update this text). One trick that <em>does</em>
+work is to upcast from a <code>u8</code> using the <code>From</code> trait, which performs
+safe numeric conversions (which cannot over or underflow):</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl</span><span style="color:#657b83;">&lt;I&gt; Iterator </span><span style="color:#859900;">for </span><span style="color:#b58900;">Doubler</span><span style="color:#657b83;">&lt;I&gt;
+    </span><span style="color:#859900;">where</span><span style="color:#657b83;">
+    I: Iterator,
+    </span><span style="color:#268bd2;">I::</span><span style="color:#657b83;">Item: std::ops::Mul&lt;Output=</span><span style="color:#268bd2;">I::</span><span style="color:#657b83;">Item&gt; + </span><span style="color:#859900;">From</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u8</span><span style="color:#657b83;">&gt;,
+{
+    </span><span style="color:#268bd2;">type </span><span style="color:#b58900;">Item </span><span style="color:#657b83;">= I::Item;
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">next</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) -&gt; </span><span style="color:#859900;">Option</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">Self::</span><span style="color:#657b83;">Item&gt; {
+        </span><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.iter.</span><span style="color:#859900;">next</span><span style="color:#657b83;">() {
+            </span><span style="color:#859900;">None =&gt; None</span><span style="color:#657b83;">,
+            </span><span style="color:#859900;">Some</span><span style="color:#657b83;">(x) </span><span style="color:#859900;">=&gt; Some</span><span style="color:#657b83;">(x * </span><span style="color:#859900;">From</span><span style="color:#657b83;">::from(</span><span style="color:#6c71c4;">2</span><span style="color:#268bd2;">u8</span><span style="color:#657b83;">)),
+        }
+    }
+}
+</span></code></pre>
+<p>Whew, that's finally over!</p>
+<p><strong>Exercise 4</strong> An easier approach to the above is to use <code>x + x</code>
+instead of <code>x * 2</code>. Rewrite the iterator to do that. One hint: the
+compiler won't know that it's allowed to make copies of that type
+unless you tell it via the appropriately-named trait.</p>
+<h2 id="recap">Recap</h2>
+<p>That was a lot! But hopefully it gets the idea across of how iterators
+work. We can write highly generic adapters that work with many kinds
+of input. You could apply <code>Doubler</code> to the range iterator as we
+did. You could apply it to the <code>Empty</code> we defined earlier. Or to
+dozens of other things.</p>
+<p>You may notice that the types of these iterators seem to grow as you
+add more things to them. That's absolutely true, and it's also by
+design. By representing the full type statically, the compiler is able
+to see all of the actions that are being performed in a pipeline of
+iterator operations, and optimize things very well.</p>
+<h2 id="more-idiomatic">More idiomatic</h2>
+<p>The <code>Doubler</code> we wrote was not idiomatic at all. Let's do it the
+<em>real</em> way:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#657b83;">).</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">| x * </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>The <code>Iterator</code> trait includes many helper methods, so you can chain up
+large sets of actions like that:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> i </span><span style="color:#859900;">in </span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#657b83;">).</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">3</span><span style="color:#657b83;">).</span><span style="color:#859900;">map</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">| x + </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">).</span><span style="color:#859900;">filter</span><span style="color:#657b83;">(|</span><span style="color:#268bd2;">x</span><span style="color:#657b83;">| x % </span><span style="color:#6c71c4;">2 </span><span style="color:#657b83;">== </span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+    }
+}
+</span></code></pre>
+<p>You could of course write something like this as a for loop in C/C++,
+but:</p>
+<ul>
+<li>It would be harder to see the logic</li>
+<li>It would be harder to extend in the future</li>
+<li>It wouldn't be faster: the Rust compiler will optimize case like
+this down to the same hand-rolled loop you may write</li>
+</ul>
+<h2 id="collecting-results">Collecting results</h2>
+<p>You can collect the results from an iterator in a vector:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> my_vec: </span><span style="color:#859900;">Vec</span><span style="color:#657b83;">&lt;</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">&gt; = (</span><span style="color:#6c71c4;">1</span><span style="color:#859900;">..</span><span style="color:#6c71c4;">11</span><span style="color:#657b83;">).</span><span style="color:#859900;">collect</span><span style="color:#657b83;">();
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, my_vec);
+}
+</span></code></pre>
+<p>The type annotation is necessary here, since <code>collect</code> can work on
+many different datatypes.</p>
+<p><strong>Exercise 5</strong> Use the <code>fold</code> method to get the sum of the numbers
+from 1 to 10. Extra credit: write a helper <code>sum</code> function.</p>
+<h2 id="next-time">Next time</h2>
+<p>We've been dancing around closures for quite a while now, including in
+that last exercise. We now know enough to attack them head on. We'll
+do so next time.</p>
+<p>You're now at a point where you can write some real Rust applications
+and start cutting your teeth. I'd recommend finding a few play tasks
+you want to experiment with. <a href="https://exercism.io">Exercism</a> may be a
+good choice if you're looking for some challenges.</p>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

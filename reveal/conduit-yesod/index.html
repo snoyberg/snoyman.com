@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Web Programming and Streaming Data in Haskell</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+# Web Programming and Streaming Data in Haskell
+
+* Michael Snoyman
+* LambdaConf 2017
+
+---
+
+## Overview
+
+* How to get things done
+* First hit Conduit, then hit Yesod
+* Identify why you&#x27;d use these libraries
+* Get you comfortable enough to use them
+* More information after this talk:
+    * https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;conduit
+    * http:&#x2F;&#x2F;www.yesodweb.com&#x2F;book
+* Please ask questions!
+
+---
+
+## Prepare your machine
+
+```
+$ stack --resolver lts-8.12 --install-ghc
+  build classy-prelude-yesod
+```
+
+* Your hands should be warm pretty soon
+* Make sure you&#x27;re plugged in or have a great battery
+
+---
+
+## What is streaming data?
+
+* Process a sequence of values of the same type
+* Produce a sequence of values of the same type
+* Don&#x27;t keep all the data in memory at once
+* Perform some actions in-between
+* Probably more common than you&#x27;d think
+
+---
+
+## Alternatives
+
+* Lazy lists: don&#x27;t allow interleaved effects
+* Lazy I&#x2F;O: effects, exceptions pop up in unexpected places (evil!)
+* Pipes: relies on higher layers (like pipes-parse) for things built-in with Conduit
+* Streaming: makes some cases (like substreams) easier, other cases (multi-consumption) more difficult
+
+----
+
+## Goal in this talk:
+
+* Talk you out of using lazy I&#x2F;O
+* Explain when lazy lists aren&#x27;t enough
+* Feel free to explore other streaming libraries, but today is about Conduit
+
+---
+
+## Common Examples
+
+* Read data from&#x2F;write data to a file
+* Communicate over a socket
+* Read data from a database
+* Traverse a deep directory structure
+* Implement a job queue
+* Generate large HTTP response bodies
+* Parsing
+
+----
+
+## Common Non-Examples
+
+* Highly optimized CPU pipeline
+* Operations requiring no interleaved effects
+* World peace
+
+---
+
+## Hello World: Fold
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+main =
+  print $ runConduitPure
+        $ yieldMany [1..10]
+       .| sumC
+```
+
+* Pure operation
+* Correct: this is a bad use case for Conduit :)
+
+----
+
+## File Copy
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+main = do
+    -- Create a source file
+    writeFile &quot;input.txt&quot; &quot;This is a test.&quot;
+
+    runConduitRes $ sourceFile &quot;input.txt&quot;
+                 .| sinkFile &quot;output.txt&quot;
+```
+
+* Copies a file
+* Exception safety built in (magic of `Res`)
+* Common Conduit terms: source and sink
+
+----
+
+## Data Transform
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+main =
+  print $ runConduitPure
+        $ yieldMany [1..10]
+       .| mapC (+ 1)
+       .| sinkList
+```
+
+* Again: you don&#x27;t need Conduit for this
+* Conduit most useful for pipelines
+
+---
+
+## Terminology
+
+```haskell
+runConduit $ foo .| bar .| baz
+```
+
+* `foo .| bar .| baz` is a *pipeline*
+* `foo`, `bar`, and `baz` are *components* of the pipeline
+* `foo` is *upstream* from `bar`, `baz` is *downstream* from `bar`
+* `foo` can *yield* downstream to `bar`
+* `baz` can *await* from `bar`&#x2F;upstream
+* You *run the pipeline* to perform effects&#x2F;get a result
+
+----
+
+## Fusing
+
+```haskell
+runConduit $ foo .| bar .| baz
+```
+
+* Connect two components
+* Output from upstream is the input to downstream
+* Creates a new component of the two pieces fused together
+* `.|` operator, or `fuse` function
+
+----
+
+## Streams
+
+```haskell
+runConduit $ foo .| bar .| baz
+```
+
+* `foo` sends a *stream* of values to `bar`
+* The output from `foo` must match the input to `bar`
+* Same thing with `bar` and `baz`
+* `yield` to downstream
+* `await` from upstream
+
+----
+
+## Results
+
+```haskell
+runConduit $ foo .| bar .| baz
+```
+
+* Single result value from a component
+* When we fuse, throw away upstream result value
+    * Or use `fuseUpstream` or `fuseBoth`
+* Example: `sumC`
+* When we run the pipeline, this is the value that comes out
+
+----
+
+## Pipeline
+
+```haskell
+runConduit $ foo .| bar .| baz
+```
+
+* A complete pipeline does not have any meaningful input or output
+* Input: unit value `()`
+* Output: `Void`
+* Why the difference? Let&#x27;s talk over beers...
+* Quiz:
+    * What&#x27;s the input of `foo`?
+    * What&#x27;s the output of `baz`?
+
+----
+
+## Conduit Execution
+
+* Start at downstream
+* Keep processing until it `await`s
+* Pass control to next upstream component
+* If upstream `await`s, keep going up the chain
+* When we `yield`, pass control back downstream
+* Downstream will always get control back
+* Upstream: not so much
+
+----
+
+## Types
+
+```haskell
+runConduit $ foo .| bar .| baz
+
+newtype ConduitM (i :: *) (o :: *) (m :: * -&gt; *) (r :: *)
+
+foo :: ConduitM () a    m ()
+bar :: ConduitM a  b    m ()
+baz :: ConduitM b  Void m r
+
+foo .| bar :: ConduitM () b    m ()
+bar .| baz :: ConduitM a  Void m r
+
+foo .| bar .| baz :: ConduitM () Void m r
+runConduit $ foo .| bar .| baz :: m r
+```
+
+----
+
+## Example types
+
+__NOTE__: In all cases, requires `Monad m`
+
+```haskell
+mapC        :: (i -&gt; o)           -&gt; ConduitM i o m ()
+foldlC      :: (r -&gt; i -&gt; r) -&gt; r -&gt; ConduitM i o m r
+mapM_C      :: (i -&gt; m ())        -&gt; ConduitM i o m ()
+repeatC     :: o                  -&gt; ConduitM i o m ()
+takeWhileC  :: (i -&gt; Bool)        -&gt; ConduitM i i m ()
+decodeUtf8C :: MonadThrow m       =&gt; Conduit ByteString m Text
+```
+
+---
+
+## Congratulations!
+
+* You now know all core concepts of Conduit
+* Have a good day
+
+----
+
+## Just Kidding
+
+![Deeper](http:&#x2F;&#x2F;i1.kym-cdn.com&#x2F;photos&#x2F;images&#x2F;newsfeed&#x2F;000&#x2F;531&#x2F;557&#x2F;a88.jpg)
+
+---
+
+## Understanding Effects
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+loudYield :: forall i. Int -&gt; ConduitM i Int IO ()
+loudYield x = do
+  liftIO $ putStrLn $ &quot;yielding: &quot; ++ show x
+  yield x
+loudSinkNull :: forall o. ConduitM Int o IO ()
+loudSinkNull =
+  mapM_C $ \x -&gt; putStrLn $ &quot;awaited: &quot; ++ show x
+main =
+  runConduit $ mapM_ loudYield [1..3]
+            .| loudSinkNull
+```
+
+----
+
+## Output
+
+```
+yielding: 1
+received: 1
+yielding: 2
+received: 2
+yielding: 3
+received: 3
+```
+
+Notice how control bounces back and forth between components.
+
+----
+
+## Explicit await
+
+```haskell
+loudSinkNull =
+  loop
+  where
+    loop = do
+      liftIO $ putStrLn &quot;calling await&quot;
+      mx &lt;- await
+      case mx of
+        Nothing -&gt; liftIO $ putStrLn &quot;all done!&quot;
+        Just x -&gt; do
+          liftIO $ putStrLn $ &quot;received: &quot; ++ show x
+          loop
+```
+
+```
+calling await
+yielding: 1
+received: 1
+calling await
+yielding: 2
+...
+calling await
+all done!
+```
+
+----
+
+## No await
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+source = liftIO $ putStrLn &quot;Entered the source&quot;
+sink = liftIO $ putStrLn &quot;Entered the sink&quot;
+
+main = runConduit $ source .| sink
+```
+
+```
+Entered the sink
+```
+
+Never entered the source!
+
+----
+
+## Guess the output
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+source = do
+  liftIO $ putStrLn &quot;Source 1&quot;
+  yield ()
+  liftIO $ putStrLn &quot;Source 2&quot;
+
+sink = do
+  liftIO $ putStrLn &quot;Sink 1&quot;
+  _ &lt;- await
+  liftIO $ putStrLn &quot;Sink 2&quot;
+
+main = runConduit $ source .| sink
+```
+
+----
+
+## Using undefined
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = runConduit $ undefined .| return ()
+```
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = runConduit $ return () .| undefined .| return ()
+```
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = runConduit $ return () .| undefined
+```
+
+---
+
+## Finalizers
+
+Upstream can&#x27;t regain control, so...
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+source = do
+  liftIO $ putStrLn &quot;acquire some resource&quot;
+  mapM_ (\x -&gt; yieldOr x
+    (putStrLn $ &quot;cleaning up after: &quot; ++ show x)
+    ) [1..10]
+
+main = runConduit $ source .| takeC 2 .| printC
+```
+
+```
+acquire some resource
+1
+2
+cleaning up after: 2
+```
+
+----
+
+## Exceptions
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+source = do
+  liftIO $ putStrLn &quot;acquire some resource&quot;
+  mapM_ (\x -&gt; yieldOr x
+    (putStrLn $ &quot;cleaning up after: &quot; ++ show x)
+    ) [1..10]
+
+main = runConduit $ source .| takeC 2 .| (printC &gt;&gt; undefined)
+```
+
+----
+
+## ResourceT
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+source = bracketP
+  (putStrLn &quot;acquire some resource&quot;)
+  (\() -&gt; putStrLn &quot;cleaning up&quot;)
+  (\() -&gt; mapM_ yield [1..10])
+
+main = runConduitRes
+     $ source .| takeC 2 .| (printC &gt;&gt; undefined)
+```
+
+----
+
+## More on ResourceT
+
+* Allows us to register cleanup events
+* Occur even if exceptions are thrown
+* Works around limitations of coroutine&#x2F;CPS
+* Simple cases can be replaced with bracket-pattern
+* Some more complicated cases require something like `ResourceT`
+    * E.g., deep directory traversal
+
+---
+
+## Average (bad)
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = print
+     $ runConduitPure
+     $ yieldMany [1..10 :: Double]
+    .| ((&#x2F;)
+            &lt;$&gt; sumC
+            &lt;*&gt; (fromIntegral &lt;$&gt; lengthC))
+```
+
+----
+
+## Average (good)
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = print
+     $ runConduitPure
+     $ yieldMany [1..10 :: Double]
+    .| getZipSink ((&#x2F;)
+            &lt;$&gt; ZipSink sumC
+            &lt;*&gt; ZipSink (fromIntegral &lt;$&gt; lengthC))
+```
+
+Nice perk: Conduit forced us to avoid a common space leak in the list
+version!
+
+----
+
+## Takeaways
+
+* `Applicative` and `Monad` composition sequentially consumes upstream
+* They also sequentially produce downstream
+* `ZipSink` allows them to consume in parallel
+
+---
+
+## Folds
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = print
+     $ runConduitPure
+     $ yieldMany [1..10]
+    .| foldlC (flip (:)) []
+```
+
+----
+
+## Monadic folds
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = runConduit
+     $ yieldMany [1..10]
+    .| (foldMC f 0 &gt;&gt;= liftIO . print)
+  where
+    f total x = do
+      putStrLn $ &quot;Received: &quot; ++ show x
+      return $ total + x
+```
+
+---
+
+## Chunked data
+
+What&#x27;s wrong with this picture?
+
+```haskell
+sinkHistogram
+  :: Monad m
+  =&gt; ConduitM Word8 o m (HM.HashMap Word8 Int)
+sinkHistogram =
+    foldlC go HM.empty
+  where
+    go m w = HM.insertWith (+) w 1 m
+```
+
+* Conduit does introduce an overhead
+* An extra `await`&#x2F;`yield` per byte is _heavy_
+
+----
+
+## Much better
+
+```haskell
+sinkHistogram
+  :: Monad m
+  =&gt; ConduitM ByteString o m (HM.HashMap Word8 Int)
+sinkHistogram =
+    foldlCE go HM.empty
+  where
+    go m w = HM.insertWith (+) w 1 m
+```
+
+* All we did was replace `foldlC` with `foldlCE`
+* More generalized type signature:
+
+```haskell
+sinkHistogram
+  :: (Monad m, Element i ~ Word8, MonoFoldable i)
+  =&gt; ConduitM i o m (HM.HashMap Word8 Int)
+```
+
+---
+
+## Leftovers
+
+Guess the output
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+import Conduit
+
+main = print
+     $ runConduitPure
+     $ yieldMany [1 .. 10 :: Int]
+    .| ((,)
+            &lt;$&gt; (takeWhileC (&lt; 6) .| sinkList)
+            &lt;*&gt; sinkList)
+```
+
+(Not a trick question... yet)
+
+```
+([1,2,3,4,5],[6,7,8,9,10])
+```
+
+----
+
+## Let&#x27;s implement takeWhileC
+
+```haskell
+myTakeWhileC :: Monad m
+             =&gt; (i -&gt; Bool)
+             -&gt; ConduitM i i m ()
+myTakeWhileC f =
+    loop
+  where
+    loop = do
+      mx &lt;- await
+      case mx of
+        Nothing -&gt; return ()
+        Just x
+          | f x -&gt; yield x &gt;&gt; loop
+          | otherwise -&gt; return ()
+```
+
+Hmm...
+
+```
+([1,2,3,4,5],[7,8,9,10])
+```
+
+----
+
+## Let&#x27;s fix that
+
+```haskell
+myTakeWhileC :: Monad m
+             =&gt; (i -&gt; Bool)
+             -&gt; ConduitM i i m ()
+myTakeWhileC f =
+    loop
+  where
+    loop = do
+      mx &lt;- await
+      case mx of
+        Nothing -&gt; return ()
+        Just x
+          | f x -&gt; yield x &gt;&gt; loop
+          | otherwise -&gt; leftover x
+```
+
+----
+
+## More leftovers examples
+
+Let&#x27;s step it up a notch
+
+```haskell
+main = runConduit
+     $ yieldMany [1 .. 10 :: Int]
+    .| do
+         mapC id .| (await &gt;&gt;= maybe (return ()) leftover)
+         printC
+    .| do
+         leftover &quot;Hello There!&quot;
+         printC
+```
+
+* (Output on next slide)
+* Don&#x27;t forget: start downstream when processing!
+* Yes, you can deeply nest Conduit components like this
+
+----
+
+## Output from previous slides
+
+```
+&quot;Hello There!&quot;
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+
+----
+
+## Leftover lessons
+
+* Whenever you use `leftover`, the next monadic bind picks up the
+  value with `await`
+* Fusion drops any leftovers (they can&#x27;t be passed upstream)
+    * If needed, use `fuseLeftovers`
+* This is the primary reason Conduit isn&#x27;t a category
+* Leftovers especially useful for chunked data, e.g.
+    * Read a `ByteString`
+    * Consume part of the `ByteString`
+    * Use `leftover` on the rest
+
+---
+
+## Library ecosystem
+
+* Lots of different packages
+* `conduit` provides core datatypes and basic functions
+* `conduit-extra` has commonly used helpers
+* `conduit-combinators`: batteries-included, chunked and unchunked
+
+----
+
+## My recommendation
+
+* Use `conduit-combinators` by default
+* Import `Conduit` which doesn&#x27;t require qualified import
+* Most names have `C` as a suffix (e.g., `foldlC`)
+* Chunked versions have a `CE` suffix (for *element*, e.g., `foldlCE`)
+
+---
+
+# Stretch
+
+Prepare yourselves for Yesod :)
+
+---
+
+## Yesod
+
+* Web framework
+* Supports traditional HTML sites and web services (usually JSON)
+* Goal: turn as many common bugs into compile-time errors
+* Philosophy: bring the benefits of Haskell to a standard MVC-ish framework
+
+----
+
+## How it works
+
+* Built on Web Application Interface (WAI)
+* Template Haskell + DSL for type-safe routing
+* `Handler` monad for coding routes
+* `Widget`s and templates for HTML&#x2F;CSS&#x2F;JS
+* Many add-on libraries for common tasks (auth, forms, XML sitemaps)
+* Ties in well with Persistent for type-safe database access
+
+----
+
+## Flexibility
+
+* Yesod is more flexible than we&#x27;ll discuss today
+* Template Haskell, DSLs aren&#x27;t required
+* Swap out database libraries
+* Host with FastCGI instead of Warp
+* For those interested: http:&#x2F;&#x2F;www.yesodweb.com&#x2F;book&#x2F;yesod-for-haskellers
+
+----
+
+## &quot;Standard&quot; workflow
+
+* Scaffolded site: `stack new mysite yesod-postgres`
+* Built in:
+    * Auth
+    * Config file + env vars
+    * HTML templating + Bootstrap.css
+    * Logging
+    * CSS minification
+* Development server (`yesod devel`)
+
+----
+
+## What we&#x27;ll cover today
+
+* Yesod is _big_
+* Focus today on mostly JSON services subset
+    * Thanks to Kris Nuttycombe for this suggestion :)
+* Want more? Talk to me after, or check out the book
+  http:&#x2F;&#x2F;www.yesodweb.com&#x2F;book
+
+---
+
+## Common Stuff
+
+```haskell
+#!&#x2F;usr&#x2F;bin&#x2F;env stack
+-- stack --resolver lts-8.12 script
+{-# LANGUAGE OverloadedStrings, QuasiQuotes TemplateHaskell,
+             TypeFamilies, NoImplicitPrelude, ViewPatterns #-}
+import ClassyPrelude.Yesod
+data App = App
+mkYesod &quot;App&quot; [parseRoutes|
+...
+|]
+instance Yesod App
+...
+main = warp 3000 App
+```
+
+----
+
+## Language extensions
+
+* Yesod uses a bunch
+* Use Persistent? That&#x27;s a paddlin&#x27;
+* `OverloadedStrings`? Duh
+* `QuasiQuotes` and `TemplateHaskell` for routing DSL
+* `TypeFamilies` are used for associated route types
+* `NoImplicitPrelude` because we&#x27;re using ClassyPrelude
+* `ViewPatterns` is part of the generated parsing code
+
+----
+
+## Imports
+
+```haskell
+import ClassyPrelude.Yesod
+```
+
+* Some men just like to watch the world burn
+* Also, convenient to avoid a bunch of imports in these slides
+
+----
+
+## Foundation data type
+
+```haskell
+data App = App
+```
+
+* Every app has a central data type
+* Put config values, globals, etc, in it in your `main` function
+* Access value from any `Handler` with `getYesod`
+* Also used for associated route types
+
+----
+
+## Route definition and `mkYesod`
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+...
+|]
+```
+
+* Define your routes with a DSL
+* Generates a data type for your routes
+* Also generates some convenience type synonyms
+
+----
+
+## Route example
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; HomeR GET
+|]
+```
+
+Generates
+
+```haskell
+instance RenderRoute App where
+  data Route App = HomeR
+  renderRoute :: Route App -&gt; ([Text], [(Text, Text)])
+instance ParseRoute App where
+  parseRoute :: ([Text], [(Text, Text)]) -&gt; Maybe (Route App)
+type Handler = HandlerT IO App
+instance YesodDispatch App
+```
+
+* And a few others
+* Goal: hide away tedious, error-prone boilerplate
+
+----
+
+## Yesod typeclass
+
+```haskell
+instance Yesod App
+```
+
+* Collection of overridable settings
+* Example: how to store user session data
+* Defaults are Good Enough™ in many cases
+* Scaffolded site helps a lot
+
+----
+
+## Defining your Handlers
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; HomeR GET
+&#x2F;fibs&#x2F;#Int FibsR GET
+|]
+
+getHomeR :: Handler Text
+getFibsR :: Int -&gt; Handler Value
+```
+
+* Handler names determined by convention
+* Often mime-type determined by return type
+* `YesodDispatch` instance uses these functions
+
+----
+
+## Run it!
+
+```haskell
+main :: IO ()
+main = warp 3000 App
+```
+
+* `warp` is a convenient helper
+    * Performs any initialization necessary (specified in `Yesod` instance)
+    * Converts to a WAI `Application`
+    * Runs on given port with Warp
+    * Installs some standard middlewares
+* `toWaiApp` or `toWaiAppPlain` == more control
+* Can perform initialization before `warp` call
+
+---
+
+## Hello World
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; HomeR GET
+|]
+
+getHomeR :: Handler Text
+getHomeR = return &quot;Hello World!&quot;
+```
+
+* Only responds to `&#x2F;`
+* Responds with a `text&#x2F;plain` mime type
+
+----
+
+## JSON output
+
+```haskell
+getHomeR :: Handler Value
+getHomeR = return &quot;Hello World!&quot;
+```
+
+* Notice the difference?
+* `Value` type determines `application&#x2F;json`
+
+----
+
+## Why not both?
+
+```haskell
+getHomeR :: Handler TypedContent
+getHomeR = selectRep $ do
+  provideRep $ return (&quot;Hello World!&quot; :: Text)
+  provideRep $ return (&quot;Hello World!&quot; :: Value)
+```
+
+* Types determine mime per representation
+* No accept header: use first
+* Otherwise, fiinds match
+* No match: returns a `406 Not Acceptable`
+
+----
+
+## Arbitrary mime types
+
+```haskell
+getHomeR :: Handler TypedContent
+getHomeR = selectRep $ do
+  provideRep $ return (&quot;Hello World!&quot; :: Text)
+  provideRep $ return (&quot;Hello World!&quot; :: Value)
+  provideRepType &quot;text&#x2F;csv&quot; $ return (&quot;hello,world\n&quot; :: Text)
+```
+
+---
+
+## Route parameters
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F;          HomeR GET
+&#x2F;fibs&#x2F;#Int FibsR GET
+|]
+
+getHomeR :: Handler ()
+getHomeR = redirect $ FibsR 1
+
+getFibsR :: Int -&gt; Handler Value
+getFibsR i = do
+  render &lt;- getUrlRender
+  return $ object
+    [ &quot;value&quot; .= (fibs !! i)
+    , &quot;next&quot;  .= render (FibsR (i + 1)) ]
+```
+
+* Values is parsed and passed into the handler
+* Route type makes data cons with arguments
+
+----
+
+## Query string parameters
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; FibsR GET
+|]
+
+getFibsR :: Handler Value
+getFibsR = do
+  mi &lt;- lookupGetParam &quot;index&quot;
+  let i = fromMaybe 1 $ mi &gt;&gt;= readMay . unpack
+  render &lt;- getUrlRenderParams
+  return $ object
+    [ &quot;value&quot; .= (fibs !! i)
+    , &quot;next&quot; .= render FibsR [(&quot;index&quot;, tshow (i + 1))]
+    ]
+```
+
+* We love fibs :)
+* Lookup parameters easily (also: forms support)
+* Render URLs with and without parameter lists
+
+----
+
+## POST parameters
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; FibsR PUT
+|]
+
+putFibsR :: Handler Value
+putFibsR = do
+  mi &lt;- lookupPostParam &quot;index&quot;
+  let i = fromMaybe 1 $ mi &gt;&gt;= readMay . unpack
+  return $ object
+    [ &quot;value&quot; .= (fibs !! i)
+    ]
+```
+
+    curl -i http:&#x2F;&#x2F;localhost:3000&#x2F; -X PUT -d index=4
+
+* `PUT` method, but still call them POST params :(
+* Again, form support is available
+
+----
+
+## POST files
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; HomeR PUT
+|]
+
+putHomeR :: Handler Value
+putHomeR = do
+  Just fileInfo &lt;- lookupFile &quot;some-file&quot;
+  size &lt;- runConduitRes $ fileSource fileInfo .| lengthCE
+  return $ object
+    [ &quot;name&quot; .= fileName fileInfo
+    , &quot;content-type&quot; .= fileContentType fileInfo
+    , &quot;size&quot; .= (size :: Int)
+    ]
+```
+
+    curl -i http:&#x2F;&#x2F;localhost:3000&#x2F; -X PUT -F some-file=@image.png
+
+* Yay conduit!
+* Want all POST info? `runRequestBody`
+
+----
+
+## JSON request body
+
+```haskell
+putHomeR :: Handler Value
+putHomeR = requireCheckJsonBody
+```
+
+    curl -i http:&#x2F;&#x2F;localhost:3000&#x2F; -X PUT \
+        -H &quot;Content-Type:application&#x2F;json&quot; \
+        -d &#x27;{&quot;foo&quot;:&quot;bar&quot;}&#x27;
+
+* Dumb echo server
+* Uses any `FromJSON` instance
+* `Check` says &quot;check mime-type before parsing&quot;
+    * Backwards compat can be annoying :)
+
+---
+
+## Header echo
+
+```haskell
+getHomeR :: Handler ()
+getHomeR = do
+  mvalue &lt;- lookupHeader &quot;marco&quot;
+  forM_ mvalue $ addHeader &quot;polo&quot; . decodeUtf8
+```
+
+    curl -i http:&#x2F;&#x2F;localhost:3000&#x2F; -H &quot;Marco:Hello&quot;
+
+* Case-insensitive lookup
+* Text vs ByteString: yes, it&#x27;s annoying
+* Oh, yes, you can just return unit
+
+---
+
+## Permissions
+
+```haskell
+getHomeR :: Handler Text
+getHomeR = do
+  mpassword &lt;- lookupGetParam &quot;password&quot;
+  case mpassword of
+    Just &quot;12345&quot; -&gt; return &quot;Hello President Skroob&quot;
+    _ -&gt; permissionDenied &quot;Self Destruct Initiated&quot;
+```
+
+* Don&#x27;t actually use GET params for passwords
+
+----
+
+## Route Attributes and `isAuthorized`
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; HomeR GET !admin
+|]
+instance Yesod App where
+  isAuthorized route _isWrite
+    | &quot;admin&quot; `member` routeAttrs route = do
+        mpassword &lt;- lookupGetParam &quot;password&quot;
+        case mpassword of
+          Just &quot;12345&quot; -&gt; return Authorized
+          _ -&gt; return $ Unauthorized &quot;Self Destruct Initiated&quot;
+    | otherwise = return Authorized
+getHomeR :: Handler Text
+getHomeR = return &quot;Hello President Skroob&quot;
+```
+
+Separate those concerns!
+
+----
+
+## Session values
+
+```haskell
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F;     HomeR GET  !admin
+&#x2F;auth AuthR POST
+|]
+
+getHomeR :: Handler Text
+getHomeR = return &quot;Hello President Skroob&quot;
+
+postAuthR :: Handler ()
+postAuthR = do
+  mpassword &lt;- lookupPostParam &quot;password&quot;
+  case mpassword of
+    Just &quot;12345&quot; -&gt; setSession &quot;AUTH&quot; &quot;Yes&quot;
+    _ -&gt; permissionDenied &quot;Self Destruct Initiated&quot;
+```
+
+* Sets a key to a value in the user session
+* Default: HMAC-secured client session key in a cookie
+* Code continues...
+
+----
+
+## Session based auth functions
+
+```haskell
+instance Yesod App where
+  authRoute _ = Just AuthR
+  isAuthorized route _isWrite
+    | &quot;admin&quot; `member` routeAttrs route = do
+        mauth &lt;- lookupSession &quot;AUTH&quot;
+        case mauth of
+          Just &quot;Yes&quot; -&gt; return Authorized
+          _ -&gt; return AuthenticationRequired
+    | otherwise = return Authorized
+```
+
+* `authRoute` is where users are redirected
+* In a full app: `GET AuthR` would give a user-friendly page
+
+----
+
+## Real world auth
+
+* yesod-auth provides lots of backends
+* OpenID, Google Email, local email...
+* I personally really like third party auth
+* Still sad that Mozilla Persona shut down
+
+---
+
+## Streaming request body
+
+```haskell
+import Text.XML.Stream.Parse
+
+mkYesod &quot;App&quot; [parseRoutes|
+&#x2F; HomeR PUT
+|]
+
+putHomeR :: Handler Value
+putHomeR = do
+  events &lt;- runConduit $ rawRequestBody .| parseBytes def .| lengthC
+  return $ object [&quot;event-count&quot; .= (events :: Int)]
+```
+
+* Conduit to the rescue
+* Request body = stream of `ByteString`
+* Request body can be consumed once!
+
+----
+
+## Streaming response body
+
+```haskell
+import Data.ByteString.Builder (intDec)
+
+getHomeR :: Handler TypedContent
+getHomeR = respondSource &quot;text&#x2F;csv&quot; $ do
+  yield $ Chunk &quot;number,plus1\n&quot;
+  forM_ [1..100 :: Int] $ \i -&gt; yield
+    $ Chunk $ intDec i &lt;&gt; &quot;,&quot; &lt;&gt; intDec (i + 1) &lt;&gt; &quot;\n&quot;
+```
+
+* Again with the conduits
+* Use the `data Flush a = Flush | Chunk a` type
+* ByteString Builders under the surface
+* A little tedious, so...
+
+----
+
+## Convenient streaming functions
+
+```haskell
+getHomeR :: Handler TypedContent
+getHomeR = respondSource &quot;text&#x2F;csv&quot; $ do
+  sendChunkText &quot;number,plus1\n&quot;
+  forM_ [1..100 :: Int] $ \i -&gt; sendChunkText $ mconcat
+      [ tshow i
+      , &quot;,&quot;
+      , tshow (i + 1)
+      , &quot;\n&quot;
+      ]
+```
+
+* Avoid need to use explicit `Chunk` constructor
+* Use `Text` or `ByteString` instead of `Builder`
+
+---
+
+## Config files (1)
+
+```yaml
+aws-secret: _env:AWS_SECRET
+home-response: _env:HOME_RESPONSE:Hello World
+```
+
+```haskell
+data Config = Config
+  { awsSecret :: !Text
+  , homeResponse :: !Text
+  }
+instance FromJSON Config where
+  parseJSON = withObject &quot;Config&quot; $ \o -&gt; Config
+    &lt;$&gt; o .: &quot;aws-secret&quot;
+    &lt;*&gt; o .: &quot;home-response&quot;
+```
+
+* Special syntax in YAML to allow env overriding
+* aws-secret: must have an env var
+* home-response: optional
+* `FromJSON`: normal aeson code
+
+----
+
+## Config files (2)
+
+```haskell
+data App = App !Config
+
+getHomeR :: Handler Text
+getHomeR = do
+  App config &lt;- getYesod
+  return $ homeResponse config
+
+main :: IO ()
+main = do
+  config &lt;- loadYamlSettingsArgs [] useEnv
+  warp 3000 $ App config
+```
+
+* Stick `Config` inside `App`
+* Get `Config` with `getYesod`
+* Initialize `Config` with `loadYamlSettingsArgs`
+
+----
+
+## Config files (3)
+
+```
+$ .&#x2F;Main.hs
+Main.hs: loadYamlSettings: No configuration provided
+$ .&#x2F;Main.hs config.yaml
+Main.hs: Could not convert to AppSettings: expected Text,
+         encountered Null
+$ AWS_SECRET=foobar .&#x2F;Main.hs config.yaml
+Application launched ^C
+$ AWS_SECRET=foobar HOME_RESPONSE=Goodbye \
+  .&#x2F;Main.hs config.yaml
+Application launched ^C
+```
+
+* Must provide config file(s) on command line
+* Must provide `AWS_SECRET`
+* If provided, `HOME_RESPONSE` changes that response payload
+
+---
+
+## Learn More
+
+* http:&#x2F;&#x2F;www.yesodweb.com&#x2F;
+* https:&#x2F;&#x2F;github.com&#x2F;yesodweb&#x2F;yesod-cookbook
+* Example code bases
+    * https:&#x2F;&#x2F;github.com&#x2F;snoyberg&#x2F;haskellers
+    * https:&#x2F;&#x2F;github.com&#x2F;yesodweb&#x2F;yesodweb.com
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>

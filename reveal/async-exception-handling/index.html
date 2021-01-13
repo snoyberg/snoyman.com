@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Async exception handling in Haskell</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+## Async exception handling in Haskell
+
+* Michael Snoyman
+* VP of Engineering
+* FP Complete webinar
+* April 11, 2018
+
+&lt;div style=&quot;text-align:center&quot;&gt;
+&lt;div&gt;&lt;img src=&quot;&#x2F;static&#x2F;fpcomplete-logo.png&quot; style=&quot;border:0;margin:0&quot;&gt;&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+
+---
+
+## From the beginning
+
+* Many languages have synchronous exceptions
+* Double-edged sword
+    * Arguably easier to write correct code
+    * Can lead to lack of resource cleanup
+* GHC Haskell has asynchronous exceptions too
+    * Let&#x27;s just say &quot;Haskell,&quot; you know what I mean now
+* Gotta cover exceptions to get to async exceptions
+
+----
+
+## What we&#x27;ll cover today
+
+* Defining different types of exceptions
+* Correct synchronous exception handling
+* How bottom values play in
+* Basics of async exceptions
+* Masking and uninterruptible masking
+* Helper libraries
+* Some more complex examples
+
+Lots of ground to cover before we talk about async stuff!
+
+----
+
+## Fear is the mind-killer
+
+* Async exceptions _are_ tricky
+* They aren&#x27;t nearly as terrifying as lore makes them out as
+* Usually: use the right helper library, everything&#x27;s good
+
+----
+
+## Are exceptions good or bad?
+
+* Not our topic today!
+* Lots of healthy debate inside and outside the Haskell community
+* However: runtime exceptions are the reality of GHC Haskell today
+* Whether you like it or not: need to deal with it
+
+----
+
+## Teaser
+
+Goal for this talk: you should see multiple reasons I call this
+function `badRace`:
+
+```haskell
+badRace :: IO a -&gt; IO b -&gt; IO (Either a b)
+badRace ioa iob = do
+  mvar &lt;- newEmptyMVar
+  tida &lt;- forkIO $ ioa &gt;&gt;= putMVar mvar . Left
+  tidb &lt;- forkIO $ iob &gt;&gt;= putMVar mvar . Right
+  res &lt;- takeMVar mvar
+  killThread tida
+  killThread tidb
+  return res
+```
+
+---
+
+## Motivating example
+
+* Most complexity around scarce resource handling
+* File handling great example, we&#x27;ll use it
+    * Open the file, may fail
+    * Interact with the file handle, may fail
+    * Close the file handle regardless
+    * File descriptors are scarce!
+* Start without any exceptions, build up from there
+* Slight detour though...
+
+----
+
+## Pure code
+
+* Cannot catch exceptions in pure code
+* Makes sense: no resource allocation in pure code
+* Except...
+* Can throw from pure code &amp;#x1f641;
+* Can use `unsafePerformIO` for allocations
+* Memory can be allocated implicitly
+    * Not a contradiction! Memory ain&#x27;t scarce
+* Technically can use `unsafePerformIO` to catch
+
+Overall: our focus is on non-pure, `IO` code. Slight reference to
+transformers later.
+
+----
+
+## The land of no exceptions
+
+Haskell without any runtime exceptions (great rejoicing in the land)
+
+```haskell
+openFile :: FilePath -&gt; IOMode
+         -&gt; IO (Either IOException Handle)
+hClose :: Handle -&gt; IO () -- assume it can never fail
+usesFileHandle :: Handle -&gt; IO (Either IOException MyResult)
+
+myFunc :: FilePath -&gt; IO (Either IOException MyResult)
+myFunc fp = do
+  ehandle &lt;- openFile fp ReadMode
+  case ehandle of
+    Left e -&gt; return (Left e)
+    Right handle -&gt; do
+      eres &lt;- usesFileHandle handle
+      hClose handle
+      return eres
+```
+
+----
+
+## Land of synchronous exceptions
+
+Add two new primitives for synchronous exceptions
+
+```haskell
+throwIO :: IOException -&gt; IO a
+try :: IO a -&gt; IO (Either IOException a)
+```
+
+__Synchronous exceptions are exceptions which are generated directly
+from the `IO` actions you are calling.__
+
+----
+
+## Rewrite our function
+
+```haskell
+openFile :: FilePath -&gt; IOMode -&gt; IO Handle
+hClose :: Handle -&gt; IO ()
+usesFileHandle :: Handle -&gt; IO MyResult
+
+myFunc :: FilePath -&gt; IO MyResult
+myFunc fp = do
+  handle &lt;- openFile fp ReadMode
+  res &lt;- usesFileHandle handle
+  hClose handle
+  return res
+```
+
+* Code is shorter
+* Can&#x27;t tell whether `openFile` and `hClose` can fail
+* No need to pattern match on `openFile` result
+* But wait! What if `usesFileHandle` throws an exception?
+
+----
+
+## Try and throw
+
+Fix it!
+
+```haskell
+myFunc :: FilePath -&gt; IO MyResult
+myFunc fp = do
+  handle &lt;- openFile fp ReadMode
+  eres &lt;- try (usesFileHandle handle)
+  hClose handle
+  case eres of
+    Left e -&gt; throwIO e
+    Right res -&gt; return res
+```
+
+(Synchronous) exception safe!
+
+----
+
+## Capture the pattern
+
+```haskell
+withFile :: FilePath -&gt; IOMode -&gt; (Handle -&gt; IO a) -&gt; IO a
+withFile fp mode inner = do
+  handle &lt;- openFile fp mode
+  eres &lt;- try (inner handle)
+  hClose handle
+  case eres of
+    Left e -&gt; throwIO e
+    Right res -&gt; return res
+
+myFunc :: FilePath -&gt; IO MyResult
+myFunc fp = withFile fp ReadMode usesFileHandle
+```
+
+__General principle__: Avoid using functions which only allocate or
+only clean up whenever possible.
+
+__Question__: What if `cleanup` throws an exception?
+
+---
+
+## Extensible exceptions
+
+* We assumed `IOException` above
+* GHC has OO-style extensibility, like Java
+    * Please don&#x27;t vomit
+
+```haskell
+data SomeException = forall e . Exception e =&gt; SomeException e
+
+class (Typeable e, Show e) =&gt; Exception e where
+  toException   :: e -&gt; SomeException
+  fromException :: SomeException -&gt; Maybe e
+
+throwIO :: Exception e =&gt; e -&gt; IO a
+try :: Exception e =&gt; IO a -&gt; IO (Either e a)
+```
+
+----
+
+## Example exception, no hierarchy
+
+```haskell
+data InvalidInput = InvalidInput String
+  deriving (Show, Typeable)
+instance Exception InvalidInput where
+  toException ii = SomeException ii
+  fromException (SomeException e) = cast e -- part of Typeable
+```
+
+`toException` and `fromException` have defaults, so...
+
+```haskell
+instance Exception InvalidInput
+```
+
+----
+
+## Example of hierarchy
+
+```haskell
+data MyAppException
+  = InvalidInput String
+  | SomethingElse SomeException
+  deriving (Show, Typeable)
+instance Exception MyAppException
+```
+
+```haskell
+data SubException = NetworkFailure String
+  deriving (Show, Typeable)
+instance Exception SubException where
+  toException = toException . SomethingElse . SomeException
+  fromException se = do
+    SomethingElse (SomeException e) &lt;- fromException se
+    cast e
+```
+
+```haskell
+main :: IO ()
+main = do
+  e &lt;- try $ throwIO $ NetworkFailure &quot;Hello there&quot;
+  print (e :: Either SomeException ())
+```
+
+---
+
+## Exception in pure code
+
+* Why call it `throwIO` and not `throw`?
+
+```haskell
+throw :: Exception e =&gt; e -&gt; a
+```
+
+* Not an async exception!
+* I call them __impure exceptions__
+* Create bottom values
+
+----
+
+## Creating impure exceptions
+
+* Using the `throw` function directly
+* Using a function which calls `throw`, like `error`
+* Using partial functions like `head`
+* Incomplete pattern matches (GHC automatically inserts the equivalent
+  of a call to `throw`)
+* Creating infinite loops in pure code, where GHC&#x27;s runtime _may_
+  detect the infinite loop and throw a runtime exception
+
+----
+
+## Preaching to the choir
+
+* Partiality is bad, m&#x27;kay?
+* Avoid creating these impure exceptions
+
+----
+
+## Challenge: what&#x27;s the output?
+
+```haskell
+import Control.Exception
+import Data.Typeable
+
+data Dummy = Dummy
+  deriving (Show, Typeable)
+instance Exception Dummy
+
+printer :: IO (Either Dummy ()) -&gt; IO ()
+printer x = x &gt;&gt;= print
+```
+
+```haskell
+main :: IO ()
+main = do
+  printer $ try $ throwIO Dummy
+  printer $ try $ throw Dummy
+  printer $ try $ evaluate $ throw Dummy
+  printer $ try $ return $! throw Dummy
+  printer $ try $ return $ throw Dummy
+```
+
+----
+
+## Case 1
+
+```
+printer $ try $ throwIO Dummy
+Left Dummy
+```
+
+We&#x27;re using proper runtime exceptions via `throwIO`, and therefore
+`Dummy` is thrown immediately as a runtime exception. Then `try` is
+able to catch it, and all works out well.
+
+----
+
+## Case 2
+
+```
+printer $ try $ throw Dummy
+Left Dummy
+```
+
+We generate a value of type `IO ()` which, when evaluated, will throw
+a `Dummy` value. Passing this value to `try` forces it immediately,
+causing the runtime exception to be thrown. The result ends up being
+identical to using `throwIO`.
+
+----
+
+## Case 3
+
+```
+printer $ try $ evaluate $ throw Dummy
+Left Dummy
+```
+
+`throw Dummy` has type `()`. The `evaluate` function then forces
+evaluation of that value, which causes the `Dummy` exception to be
+thrown.
+
+----
+
+## Case 4
+
+```
+printer $ try $ return $! throw Dummy
+Left Dummy
+```
+
+This is almost identical; it uses `$!`, which under the surface uses
+`seq`, to force evaluation. We&#x27;re not going to dive into the
+difference between `evaluate` and `seq` today.
+
+----
+
+## Case 5
+
+```
+printer $ try $ return $ throw Dummy
+Right Main.hs: Dummy
+```
+
+* Odd man out
+* Create thunk with `throw Dummy` of type `()`
+* `return` wraps it into `IO ()`
+* `try` forces evaluation of `IO ()`, which doesn&#x27;t force evaluation of the `()`
+* End up with value of type `Either Dummy ()`
+* Equivalent to `Right (throw Dummy)`
+* `printer` tries to print it, forces `throw Dummy`, causes crash
+
+----
+
+## What&#x27;s the upshot?
+
+* Not passing judgement, but: don&#x27;t use `throw` and `error`
+    * If you use exceptions, use `throwIO`
+* Pure exceptions seem to appear at &quot;random&quot;
+* But the trigger for it getting thrown is always local
+    * Forcing evaluation inside `IO`
+* Therefore, by our definition, impure exceptions _are_ synchronous
+  exceptions
+* We&#x27;ll treat them as such, but mostly just ignore them, because...
+
+----
+
+## Impure exceptions are irrelevant
+
+Who cares if `inner` returns a partial&#x2F;bottom value?
+
+```haskell
+withFile :: FilePath -&gt; IOMode -&gt; (Handle -&gt; IO a) -&gt; IO a
+withFile fp mode inner = do
+  handle &lt;- openFile fp mode
+  eres &lt;- try (inner handle)
+  hClose handle
+  case eres of
+    Left e -&gt; throwIO e
+    Right res -&gt; return res
+```
+
+We never evaluate it in `withFile`, so it doesn&#x27;t break anything
+
+---
+
+## Motivating async exceptions
+
+We want a `timeout` function
+
+```haskell
+timeout :: Int -- microseconds
+        -&gt; IO a -&gt; IO (Maybe a)
+```
+
+Can we get something like this without async exceptions?
+
+----
+
+## Bad approach: built in primitive
+
+Imagine: part of the runtime system, kills thread immediately
+
+```haskell
+timeout 1000000 $ bracket
+  (openFile &quot;foo.txt&quot; ReadMode)
+  hClose
+  somethingReallySlow
+```
+
+* `hClose` will never get called
+* Defeats exception safety
+
+----
+
+## Outside the runtime (1)
+
+```haskell
+import Control.Concurrent (threadDelay, forkIO)
+import Control.Concurrent.MVar
+import Control.Exception
+import Control.Monad (when, forever)
+import Data.IORef
+import Data.Typeable
+
+data Timeout = Timeout
+  deriving (Show, Typeable)
+instance Exception Timeout
+
+type CheckTimeout = IO ()
+```
+
+----
+
+## Outside the runtime (2)
+
+```haskell
+timeout :: Int -&gt; (CheckTimeout -&gt; IO a) -&gt; IO (Maybe a)
+timeout micros inner = do
+  retval &lt;- newEmptyMVar
+  expired &lt;- newIORef False
+  let checkTimeout = do
+        expired&#x27; &lt;- readIORef expired
+        when expired&#x27; $ throwIO Timeout
+  _ &lt;- forkIO $ do
+    threadDelay micros
+    writeIORef expired True
+```
+
+```haskell
+  _ &lt;- forkIO $ do
+    eres &lt;- try $ inner checkTimeout
+    putMVar retval $
+      case eres of
+        Left Timeout -&gt; Nothing
+        Right a -&gt; Just a
+  takeMVar retval
+```
+
+----
+
+## Outside the runtime (3)
+
+```haskell
+myInner :: CheckTimeout -&gt; IO ()
+myInner checkTimeout = bracket_
+  (putStrLn &quot;allocate&quot;)
+  (putStrLn &quot;cleanup&quot;)
+  (forever $ do
+    putStrLn &quot;In myInner&quot;
+    checkTimeout
+    threadDelay 100000)
+
+main :: IO ()
+main = timeout 1000000 myInner &gt;&gt;= print
+```
+
+----
+
+## Outside the runtime (4)
+
+Positive: reuses existing exception machinery, so it&#x27;s
+safe. Negatives:
+
+* Cannot interrupt pure code (`checkTimeout` is in `IO`)
+* Have to remember to call `checkTimeout`, or `timeout` will break
+
+__BONUS__ The code above has a potential deadlock in it due to mishandling of
+synchronous exceptions. Try and find it!
+
+---
+
+## Real asynchronous exceptions
+
+__Async exceptions are exceptions thrown from another thread.__
+
+* Local thread does not cause the exception
+* Bubble up just like synchronous exceptions
+* Caught with `try` (and friends like `catch`)
+* Difference is how they&#x27;re thrown
+
+```haskell
+forkIO :: IO () -&gt; IO ThreadId
+throwTo :: Exception e =&gt; ThreadId -&gt; e -&gt; IO ()
+```
+
+----
+
+## Compare to hand-written `timeout`
+
+* `throwTo` like setting `expired` to `True`
+* Runtime automatically calls `checkTimeout` equivalent
+* Runtime __can detect async exception at any point__
+* Can happen at unexpected times, leading to new problems
+
+----
+
+## The need for masking
+
+Let&#x27;s revisit our `withFile`, with explicit async-exception checking
+calls
+
+```haskell
+withFile :: FilePath -&gt; IOMode -&gt; (Handle -&gt; IO a) -&gt; IO a
+withFile fp mode inner = do
+  checkAsync -- 1
+  handle &lt;- openFile fp mode
+  checkAsync -- 2
+  eres &lt;- try (inner handle)
+  checkAsync -- 3
+  hClose handle
+  checkAsync -- 4
+  case eres of
+    Left e -&gt; throwIO e
+    Right res -&gt; return res
+```
+
+1 or 4: fine, 2 or 3: bad news bears
+
+----
+
+## The `mask_` function
+
+Let&#x27;s temporarily block async exceptions
+
+```haskell
+mask_ :: IO a -&gt; IO a
+
+withFile fp mode inner = mask_ $ ...
+```
+
+* Fixes the resource leak
+* But now `timeout` can&#x27;t kill `inner`!
+* Need to restore the previous masking state
+
+----
+
+## The `mask` function
+
+Mask, but get a function to restore
+
+```haskell
+mask :: ((forall a. IO a -&gt; IO a) -&gt; IO b) -&gt; IO b
+```
+
+__ADVANCED__ This restores instead of unmasking to deal with nested
+maskings. This deals with the &quot;wormhole&quot; problem, which we won&#x27;t
+cover.
+
+----
+
+## Restore
+
+
+```haskell
+withFile :: FilePath -&gt; IOMode -&gt; (Handle -&gt; IO a) -&gt; IO a
+withFile fp mode inner = mask $ \restore -&gt; do
+  handle &lt;- openFile fp mode
+  eres &lt;- try (restore (inner handle))
+  hClose handle
+  case eres of
+    Left e -&gt; throwIO e
+    Right res -&gt; return res
+```
+
+* Safe to `restore`, because it&#x27;s wrapped in a `try`
+* No way for any exceptions to prevent `hClose`
+
+---
+
+## Catch &#x27;em all!
+
+* Code doesn&#x27;t type check
+* Which instance of `Exception`?
+* Catch all exceptions with one weird trick
+
+Replace
+
+```haskell
+eres &lt;- try (restore (inner handle))
+case eres of
+  Left e -&gt; throwIO e
+```
+
+with
+
+```haskell
+eres &lt;- try (restore (inner handle))
+case eres of
+  Left e -&gt; throwIO (e :: SomeException)
+```
+
+----
+
+## Catch &#x27;em all again
+
+Code above is good, but what about this?
+
+```haskell
+main :: IO ()
+main = do
+  start &lt;- getCurrentTime
+  res &lt;- timeout 1000000 $ do
+    x &lt;- try $ threadDelay 2000000
+    threadDelay 2000000
+    return x
+  end &lt;- getCurrentTime
+  putStrLn $ &quot;Duration: &quot; ++ show (diffUTCTime end start)
+  putStrLn $ &quot;Res: &quot; ++
+             show (res :: Maybe (Either SomeException ()))
+```
+
+----
+
+## The problem
+
+Output
+
+```
+Duration: 3.004385s
+Res: Just (Left &lt;&lt;timeout&gt;&gt;)
+```
+
+* Duration is 3 seconds, not 1 second
+* We get a `Just` instead of a `Nothing`
+* Inside the `Just` is an exception from the timeout
+
+We caught an async exception. Why is this bad here?
+
+----
+
+## Recover versus cleanup
+
+__You cannot recover from an asynchronous exception__
+
+Two reasons to catch an exception
+
+* __Cleanup__: you catch, perform the cleanup action, and
+  rethrow. OK for async exception.
+* __Recover__: catch the exception and continue with something else
+  without rethrowing. Not OK for async exception.
+
+Recovering from async exception will break functions like `timeout`
+
+---
+
+## GHC&#x27;s async exception flaw
+
+* Difference between sync and async: `throwIO` vs `throwTo`
+* When catching: no way to see which function threw it!
+* Two different techniques to approximate
+    * Older technique: fork a thread
+    * Newer technique: rely on types
+* We&#x27;ll use the latter
+* __WARNING__ It&#x27;s possible to spoof this!
+
+----
+
+## SomeAsyncException
+
+&quot;Superclass&quot; of all asynchronous exceptions
+
+```haskell
+isSyncException :: Exception e =&gt; e -&gt; Bool
+isSyncException e =
+    case fromException (toException e) of
+        Just (SomeAsyncException _) -&gt; False
+        Nothing -&gt; True
+
+isAsyncException :: Exception e =&gt; e -&gt; Bool
+isAsyncException = not . isSyncException
+```
+
+Now to fix `throwIO` and `throwTo`. But first...
+
+----
+
+## Wrapper types
+
+```haskell
+data SyncExceptionWrapper =
+  forall e. Exception e =&gt; SyncExceptionWrapper e
+instance Exception SyncExceptionWrapper
+
+data AsyncExceptionWrapper =
+  forall e. Exception e =&gt; AsyncExceptionWrapper e
+instance Exception AsyncExceptionWrapper where
+    toException = toException . SomeAsyncException
+    fromException se = do
+        SomeAsyncException e &lt;- fromException se
+        cast e
+```
+
+----
+
+## Converters
+
+```haskell
+toSyncException :: Exception e =&gt; e -&gt; SomeException
+toSyncException e =
+    case fromException se of
+        Just (SomeAsyncException _) -&gt;
+          toException (SyncExceptionWrapper e)
+        Nothing -&gt; se
+  where
+    se = toException e
+```
+
+```haskell
+toAsyncException :: Exception e =&gt; e -&gt; SomeException
+toAsyncException e =
+    case fromException se of
+        Just (SomeAsyncException _) -&gt; se
+        Nothing -&gt; toException (AsyncExceptionWrapper e)
+  where
+    se = toException e
+```
+
+----
+
+## Replacement throwers
+
+```haskell
+import qualified Control.Exception as EUnsafe
+
+throwIO :: (MonadIO m, Exception e) =&gt; e -&gt; m a
+throwIO = liftIO . EUnsafe.throwIO . toSyncException
+
+throwTo :: (Exception e, MonadIO m) =&gt; ThreadId -&gt; e -&gt; m ()
+throwTo tid = liftIO . EUnsafe.throwTo tid . toAsyncException
+
+impureThrow :: Exception e =&gt; e -&gt; a
+impureThrow = EUnsafe.throw . toSyncException
+```
+
+----
+
+## Replacement catchers
+
+Break up all &quot;catching&quot; functions into recovery and cleanup, e.g.:
+
+* Recovery (rethrows immediately on async)
+  * `catch`
+  * `try`
+  * `handle`
+* Cleanup (always rethrows after running cleanup)
+  * `bracket`
+  * `onException`
+  * `finally`
+
+----
+
+## Simplified catch
+
+```haskell
+import qualified Control.Exception as EUnsafe
+
+catch :: Exception e =&gt; IO a -&gt; (e -&gt; IO a) -&gt; IO a
+catch f g = f `EUnsafe.catch` \e -&gt;
+  if isSyncException e
+    then g e
+    -- intentionally rethrowing an async exception
+    -- synchronously, since we want to preserve
+    -- async behavior
+    else EUnsafe.throwIO e
+```
+
+Real version has some monad transformer nonsense involved
+
+----
+
+## Easy, safe async handling
+
+* Stick to these modified helper functions
+* You won&#x27;t accidentally recover from an async exception
+* Can even safely do Pokemon exception handling
+
+```haskell
+tryAny :: MonadUnliftIO m =&gt; m a -&gt; m (Either SomeException a)
+tryAny = try
+
+main :: IO ()
+main = tryAny (readFile &quot;foo.txt&quot;) &gt;&gt;= print
+```
+
+We&#x27;ll talk about libraries a bit later
+
+---
+
+## Avoid low level masking
+
+* Low level masking is complicated
+* Avoid it whenever possible
+* Use higher level helper functions from helper modules
+* But, sometimes, you&#x27;ll need to know about this
+* So we need to cover one more complication
+
+----
+
+## Uninterruptible masking
+
+* `mask` prevents async exception polling happening _everywhere_
+* However, it still allows &quot;interruptible&quot; actions to receive async exceptions
+* Useful for avoiding deadlocks
+
+```haskell
+mask $ \restore -&gt; do
+  a &lt;- takeMVar m
+  restore (...) `catch` \e -&gt; ...
+```
+
+* But sometimes this can _also_ prevent cleanup from running
+
+----
+
+## This is complicated
+
+* Tradeoff between deadlock and guaranteed cleanup is tricky
+* Github issue: https:&#x2F;&#x2F;github.com&#x2F;fpco&#x2F;safe-exceptions&#x2F;issues&#x2F;3
+* Nifty trick: you can always &quot;upgrade&quot; `mask` to `uninterruptibleMask`
+    * Doesn&#x27;t work from unmasked to masked
+* If you have to use a masking function, think hard about which one you want
+    * Better yet: use an existing helper function
+
+----
+
+## Deadlock detection
+
+What&#x27;s the result of running this program?
+
+```haskell
+import Control.Concurrent
+
+main :: IO ()
+main = do
+  mvar &lt;- newEmptyMVar
+  takeMVar mvar
+```
+
+Usually, it will be:
+
+```
+foo.hs: thread blocked indefinitely in an MVar operation
+```
+
+GHC runtime tries to detect `MVar` and `STM`-based deadlocks, but
+won&#x27;t always succeed (don&#x27;t rely on it!)
+
+----
+
+## Uninterruptible deadlock
+
+How about this?
+
+```haskell
+import Control.Concurrent
+import Control.Exception
+
+main :: IO ()
+main = do
+  mvar &lt;- newEmptyMVar
+  uninterruptibleMask_ $ takeMVar mvar
+```
+
+Actual deadlock occurs: async exception is blocked
+
+----
+
+## Interruptible deadlock
+
+And normal mask?
+
+```haskell
+import Control.Concurrent
+import Control.Exception
+
+main :: IO ()
+main = do
+  mvar &lt;- newEmptyMVar
+  mask_ $ takeMVar mvar
+```
+
+* Async exception is received, since `takeMVar` is interruptible
+* Good example of (un)interruptible
+* And deadlock detection is handled via async exceptions... Right?
+
+----
+
+## Is it async?
+
+How about this one?
+
+```haskell
+import Control.Concurrent
+import UnliftIO.Exception
+
+main :: IO ()
+main = do
+  mvar &lt;- newEmptyMVar :: IO (MVar ())
+  tryAny (takeMVar mvar) &gt;&gt;= print
+  putStrLn &quot;Looks like I recovered!&quot;
+```
+
+* `tryAny` catches all synchronous exceptions (based on type)
+* Guess: will &quot;Looks like I recovered!&quot; be printed?
+
+----
+
+## Recovery allowed!
+
+* `BlockedIndefinitely` exceptions are considered synchronous
+* They&#x27;re technically thrown from another thread
+* However, they&#x27;re generated by a local action
+* Totally safe to recover from
+* Confusing? Yes! Logical? Arguably yes!
+
+---
+
+## Helper library breakdown
+
+Three libraries provide async exception safe APIs
+
+* `enclosed-exceptions`: based on the older forking-based approach
+  (not covered here). I no longer recommend it
+* `safe-exceptions`: types + the `exceptions` package
+* `unliftio`: types + the `MonadUnliftIO` typeclass (my recommendation)
+
+See also: https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=KZIN9f9rI34
+
+---
+
+## Rules for async safe handling
+
+* If something _must_ happen, you must use a masking function
+* If you catch an async exception, you must rethrow it ASAP
+    * No long cleanup code!
+* You should minimize the amount of time spent in masked state
+
+Using the right libraries will make this much simpler!
+
+__ONTO THE EXAMPLES__
+
+---
+
+## Control flow
+
+Who likes this code?
+
+```haskell
+import Control.Concurrent
+import Control.Concurrent.Async
+import Control.Monad
+
+main :: IO ()
+main = do
+  messages &lt;- newChan
+  race_
+    (mapM_ (writeChan messages) [1..10 :: Int])
+    (forever $ do
+      readChan messages &gt;&gt;= print
+      -- simulate some I&#x2F;O latency
+      threadDelay 100000)
+```
+
+Drops messages on the floor!
+
+----
+
+## Avoid async exceptions if you can
+
+```haskell
+import UnliftIO (concurrently_, atomically, finally)
+import Control.Concurrent (threadDelay)
+import Control.Concurrent.STM.TBMQueue
+import Data.Function (fix)
+```
+
+```haskell
+main = do
+  messages &lt;- newTBMQueueIO 5
+  concurrently_
+    (mapM_ (atomically . writeTBMQueue messages)
+           [1..10 :: Int]
+     `finally` atomically (closeTBMQueue messages))
+    (fix $ \loop -&gt; do
+      mmsg &lt;- atomically $ readTBMQueue messages
+      case mmsg of
+        Nothing -&gt; return ()
+        Just msg -&gt; do
+          print msg
+          -- simulate some I&#x2F;O latency
+          threadDelay 100000 &gt;&gt; loop)
+```
+
+---
+
+## Email challenge 1
+
+Good or bad?
+
+```haskell
+bracket
+  openConnection closeConnection $ \conn -&gt;
+    bracket
+      (sendHello conn)
+      (sendGoodbye conn)
+      (startConversation conn)
+```
+
+----
+
+## Solution: bad!
+
+* `bracket` for open and close: good
+* `bracket` for sending goodbye: takes too long
+* Network protocol demands it? Network protocol is broken!
+    * SIGKILL
+    * Machine dies
+    * Network disconnects
+
+----
+
+## Better code
+
+```haskell
+bracket
+  openConnection closeConnection $ \conn -&gt; do
+    sendHello conn
+    res &lt;- startConversation conn
+    sendGoodbye conn
+    return res
+```
+
+There are likely exceptions to this rule (no pun intended), but you
+should justify each such exception very strongly.
+
+---
+
+## Email challenge 2
+
+Good or bad `bracket`?
+
+```haskell
+bracket before after inner = mask $ \restore -&gt; do
+  resource &lt;- before
+  eresult &lt;- try $ restore $ inner resource
+  after resource
+  case eresult of
+    Left e -&gt; throwIO (e :: SomeException)
+    Right result -&gt; return result
+```
+
+(Obviously, __don&#x27;t write your own bracket__!)
+
+----
+
+## Solution: mostly good
+
+* Masks exceptions around entire block: good!
+* `before` is run with exceptions still masked: good!. `restore` would
+  break it
+* `restore` inside of `try` around `inner`: good!
+* Call `after` immediately after `inner`: good!
+* Possible problem: should `after` have an `uninterruptibleMask`? [Arguably](https:&#x2F;&#x2F;github.com&#x2F;fpco&#x2F;safe-exceptions&#x2F;issues&#x2F;3)
+* Rethrow the exception: good!
+
+---
+
+## Racing reads
+
+What is the output of this program?
+
+```haskell
+import Control.Concurrent
+import Control.Concurrent.Async
+
+main :: IO ()
+main = do
+  chan &lt;- newChan
+  mapM_ (writeChan chan) [1..10 :: Int]
+  race (readChan chan) (readChan chan) &gt;&gt;= print
+  race (readChan chan) (readChan chan) &gt;&gt;= print
+  race (readChan chan) (readChan chan) &gt;&gt;= print
+  race (readChan chan) (readChan chan) &gt;&gt;= print
+  race (readChan chan) (readChan chan) &gt;&gt;= print
+```
+
+----
+
+## Solution (on my machine)
+
+```
+Left 1
+Left 3
+Left 5
+Left 7
+Left 9
+```
+
+* Non-deterministic
+* Left or Right could finish first
+* Maybe the second read never started
+* Could even get the even numbers
+
+Maybe that seemd far-fetched...
+
+----
+
+## Timed read
+
+This is logical. Is it valid?
+
+```haskell
+timeout 1000000 $ readChan chan
+```
+
+What if we simulate weird thread scheduling?
+
+```haskell
+mapM_ (writeChan chan) [1..10 :: Int]
+mx &lt;- timeout 1000000 $ do
+  x &lt;- readChan chan
+  threadDelay 2000000
+  return x
+print mx
+readChan chan &gt;&gt;= print
+```
+
+----
+
+## How to timeout?
+
+Get inventive!
+
+```haskell
+tchan &lt;- newTChanIO
+atomically $ mapM_ (writeTChan tchan) [1..10 :: Int]
+delayDone &lt;- registerDelay 1000000
+let stm1 = do
+      isDone &lt;- readTVar delayDone
+      check isDone
+      return Nothing
+    stm2 = do
+      x &lt;- readTChan tchan
+      unsafeIOToSTM $ threadDelay 2000000
+      return $ Just x
+mx &lt;- atomically $ stm1 &lt;|&gt; stm2
+print mx
+atomically (readTChan tchan) &gt;&gt;= print
+```
+
+---
+
+## Forked threads
+
+__Caveat__
+
+* Use the `async` library wherever possible
+* Prefer `concurrently`, `race`, etc
+* Then use `Async`
+* Only then use `forkIO` as a last resort
+
+OK, that&#x27;s out of the way...
+
+----
+
+## Cleanup in child
+
+```haskell
+main = do
+  putStrLn &quot;Acquire in main thread&quot;
+  tid &lt;- forkIO $
+    (putStrLn &quot;use in child thread&quot; &gt;&gt; threadDelay maxBound)
+      `finally` putStrLn &quot;cleanup in child thread&quot;
+  killThread tid -- built on top of throwTo
+  putStrLn &quot;Exiting the program&quot;
+```
+
+Timing-dependent output:
+
+```
+Acquire in main thread
+Exiting the program
+```
+
+Child doesn&#x27;t call `finally` before it&#x27;s killed!
+
+----
+
+## Unhelpful masking
+
+```haskell
+main = do
+  putStrLn &quot;Acquire in main thread&quot;
+  tid &lt;- forkIO $ uninterruptibleMask_ $
+    (putStrLn &quot;use in child thread&quot; &gt;&gt; threadDelay maxBound)
+      `finally` putStrLn &quot;cleanup in child thread&quot;
+  killThread tid -- built on top of throwTo
+  putStrLn &quot;Exiting the program&quot;
+```
+
+Still didn&#x27;t call `uninterruptibleMask_` before thread is killed!
+
+----
+
+## Mask before forking
+
+Masking state is inherited, so:
+
+```haskell
+main = do
+  putStrLn &quot;Acquire in main thread&quot;
+  tid &lt;- uninterruptibleMask_ $ forkIO $
+    (putStrLn &quot;use in child thread&quot; &gt;&gt; threadDelay maxBound)
+      `finally` putStrLn &quot;cleanup in child thread&quot;
+  killThread tid -- built on top of throwTo
+  putStrLn &quot;Exiting the program&quot;
+```
+
+What&#x27;s the problem?
+
+&lt;div class=&quot;fragment&quot;&gt;Deadlock! Cannot kill the child&lt;&#x2F;div&gt;
+
+----
+
+## Almost correct
+
+Mask and restore
+
+```haskell
+main = do
+  hSetBuffering stdout LineBuffering
+  putStrLn &quot;Acquire in main thread&quot;
+  tid &lt;- uninterruptibleMask $ \restore -&gt; forkIO $
+    restore (putStrLn &quot;use in child thread&quot;
+             &gt;&gt; threadDelay maxBound)
+      `finally` putStrLn &quot;cleanup in child thread&quot;
+  killThread tid -- built on top of throwTo
+  putStrLn &quot;Exiting the program&quot;
+```
+
+The problem is &quot;nuanced&quot;
+
+----
+
+## The best solution
+
+Use `forkIOWithUnmask`
+
+```haskell
+main = do
+  hSetBuffering stdout LineBuffering
+  putStrLn &quot;Acquire in main thread&quot;
+  tid &lt;- uninterruptibleMask_ $ forkIOUnmask $ \unmask -&gt;
+    unmask (putStrLn &quot;use in child thread&quot;
+            &gt;&gt; threadDelay maxBound)
+      `finally` putStrLn &quot;cleanup in child thread&quot;
+  killThread tid -- built on top of throwTo
+  putStrLn &quot;Exiting the program&quot;
+```
+
+Let&#x27;s see why
+
+----
+
+## Inherited masking state (1)
+
+```haskell
+foo = mask $ \restore -&gt; restore getMaskingState &gt;&gt;= print
+
+bar = mask $ \restore -&gt; do
+  forkIO $ restore getMaskingState &gt;&gt;= print
+  threadDelay 10000
+
+baz = mask_ $ do
+  forkIOWithUnmask $ \unmask -&gt;
+    unmask getMaskingState &gt;&gt;= print
+  threadDelay 10000
+```
+
+----
+
+## Inherited masking state (2)
+
+```haskell
+main = do
+  putStrLn &quot;foo&quot;
+  foo
+  mask_ foo
+  uninterruptibleMask_ foo
+  putStrLn &quot;\nbar&quot;
+  bar
+  mask_ bar
+  uninterruptibleMask_ bar
+  putStrLn &quot;\nbaz&quot;
+  baz
+  mask_ baz
+  uninterruptibleMask_ baz
+```
+
+----
+
+## Inherited masking state (3)
+
+```
+foo
+Unmasked
+MaskedInterruptible
+MaskedUninterruptible
+
+bar
+Unmasked
+MaskedInterruptible
+MaskedUninterruptible
+
+baz
+Unmasked
+Unmasked
+Unmasked
+```
+
+In forked thread: want to be unmasked, _not_ the previous masking
+state!
+
+---
+
+## forkIO and race
+
+Remember me?
+
+```haskell
+badRace :: IO a -&gt; IO b -&gt; IO (Either a b)
+badRace ioa iob = do
+  mvar &lt;- newEmptyMVar
+  tida &lt;- forkIO $ ioa &gt;&gt;= putMVar mvar . Left
+  tidb &lt;- forkIO $ iob &gt;&gt;= putMVar mvar . Right
+  res &lt;- takeMVar mvar
+  killThread tida
+  killThread tidb
+  return res
+```
+
+```haskell
+main :: IO ()
+main = badRace (return ()) (threadDelay maxBound) &gt;&gt;= print
+```
+
+```
+Left ()
+```
+
+Good
+
+----
+
+## Masked?
+
+```haskell
+main :: IO ()
+main = mask_
+     $ badRace (return ()) (threadDelay maxBound)
+   &gt;&gt;= print
+```
+
+Same thing: `Left ()`. But what about:
+
+```haskell
+main :: IO ()
+main = uninterruptibleMask_
+     $ badRace (return ()) (threadDelay maxBound)
+   &gt;&gt;= print
+```
+
+Deadlock! `forkIO` inside `badRace` inherits masked state
+
+----
+
+## Fixing this bug
+
+(There are other bugs, exercise for the reader)
+
+```haskell
+badRace :: IO a -&gt; IO b -&gt; IO (Either a b)
+badRace ioa iob = do
+  mvar &lt;- newEmptyMVar
+  tida &lt;- forkIOWithUnmask $ \u -&gt; u ioa
+    &gt;&gt;= putMVar mvar . Left
+  tidb &lt;- forkIOWithUnmask $ \u -&gt; u iob
+    &gt;&gt;= putMVar mvar . Right
+  res &lt;- takeMVar mvar
+  killThread tida
+  killThread tidb
+  return res
+```
+
+---
+
+## unsafePerformIO vs unsafeDupablePerformIO
+
+* Couldn&#x27;t get a good demonstration
+* Great example of what goes wrong without async exceptions
+* If you&#x27;re curious, Trac ticket: https:&#x2F;&#x2F;ghc.haskell.org&#x2F;trac&#x2F;ghc&#x2F;ticket&#x2F;8502
+    * c&#x2F;o Chris Allen, thanks!
+
+---
+
+## Links (1)
+
+* General Haskell syllabus: https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;haskell-syllabus
+* The `unliftio` library: https:&#x2F;&#x2F;www.stackage.org&#x2F;package&#x2F;unliftio
+    * Exception handling module: https:&#x2F;&#x2F;www.stackage.org&#x2F;haddock&#x2F;lts-11.1&#x2F;unliftio-0.2.5.0&#x2F;UnliftIO-Exception.html
+* safe-exceptions documentation: https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;safe-exceptions
+
+----
+
+## Links (2)
+
+* Exceptions best practices: https:&#x2F;&#x2F;www.fpcomplete.com&#x2F;blog&#x2F;2016&#x2F;11&#x2F;exceptions-best-practices-haskell
+* Monad transformers talk
+    * Slides: https:&#x2F;&#x2F;www.snoyman.com&#x2F;reveal&#x2F;monad-transformer-state
+    * Video: https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=KZIN9f9rI34
+
+---
+
+## Questions? Comments?
+
+* Thanks all!
+* Let us know on Twitter what topics you&#x27;re interested in next
+    * [@snoyberg](https:&#x2F;&#x2F;twitter.com&#x2F;snoyberg&#x2F;)
+    * [@FPComplete](https:&#x2F;&#x2F;twitter.com&#x2F;fpcomplete)
+* For Partnering opportunities please email: [Robert@fpcomplete.com](mailto:Robert@fpcomplete.com)
+* Slides: https:&#x2F;&#x2F;www.snoyman.com&#x2F;reveal&#x2F;async-exception-handling
+* Blog post on its way!
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>

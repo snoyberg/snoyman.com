@@ -1,0 +1,1052 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>A Very Naive Overview of Exercise (Part 3)</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="A Very Naive Overview of Exercise (Part 3)">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">A Very Naive Overview of Exercise (Part 3)</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published June 15, 2017</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=A%20Very%20Naive%20Overview%20of%20Exercise%20%28Part%203%29 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;06&#x2F;naive-overview-exercise&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;06&#x2F;naive-overview-exercise&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;06&#x2F;naive-overview-exercise&#x2F;&amp;title=A%20Very%20Naive%20Overview%20of%20Exercise%20%28Part%203%29" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2017&#x2F;06&#x2F;naive-overview-exercise&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;naive-overview-exercise.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>This blog post is part 3 of a series on nutrition and exercise. If you
+haven't seen them already, I recommend
+<a href="/blog/2017/06/naive-overview-nutrition-exercise">reading part 1 now</a>,
+which provides a general overview, and
+<a href="/blog/2017/06/naive-overview-nutrition">part 2 detailing nutrition</a>. This
+blog post will go into more details on exercise.</p>
+<p>I'm going to break down exercise into three broad categories:</p>
+<ul>
+<li>Resistance training</li>
+<li>Cardio</li>
+<li>Mobility/flexibility</li>
+</ul>
+<p>These categories can overlap. For example, a weighted squat could be
+seen as both resistance training and mobility work. Circuit training
+could be seen as cardio and resistance. But typically there are
+distinct benefits for each categories, and fairly distinct activities
+that achieve those goals.</p>
+<p><strong>For the completely impatient</strong>, here are my recommendations on where
+you should get started. I strongly encourage reading the rest of the
+post so that these recommendations make sense and you can tweak them
+for your own personal needs:</p>
+<ol>
+<li><strong>Perform bodyweight exercises three days a week.</strong> A simple
+routine will include exercises from the
+<a href="http://www.startbodyweight.com/p/squat-progression.html">squat</a>,
+<a href="http://www.startbodyweight.com/p/push-up-progression.html">pushup</a>,
+<a href="http://www.startbodyweight.com/p/pull-up-progression.html">pullup</a>,
+and
+<a href="http://www.startbodyweight.com/p/leg-raises-progression.html">leg raise</a>
+progressions.</li>
+<li><strong>Run at least twice a week.</strong> I would focus on high-intensity
+sprinting, such as running as fast as you can for 20 seconds,
+resting for 40 seconds, and repeating for 5 sprints.</li>
+<li><strong>Stay active regularly.</strong> Try to find excuses to get out and walk,
+take a bike ride, go for a swim, or just play with your kids.</li>
+</ol>
+<h2 id="health-vs-fitness">Health vs fitness</h2>
+<p>Before diving into the details, I want to talk about two related but
+distinct terms. Definitions on these two terms vary quite a bit, but
+I'd like to give my own simplified definitions based on the input of
+many other sources:</p>
+<ul>
+<li><strong>Health</strong> is a measure of your ability to live life without
+sickness, crippling weakness, premature death, or other debilitating
+conditions.</li>
+<li><strong>Fitness</strong> is a measure of your ability to perform tasks. In our
+context, we're talking about the ability to perform specific
+physical feats, such as running a mile in a certain amount of time,
+bench press a certain amount of weight, etc.</li>
+</ul>
+<p>What I'm trying to get across in these definitions is that health is about reaching a baseline where your body is not working against you. By contrast, fitness lets you push the boundaries of what you're capable of.</p>
+<p>Often times, these go hand in hand. Being able to run a mile in 15
+minutes, for instance, is a good indication that you are not suffering
+from any respiratory conditions, your bones are strong enough to
+withstand the impact of running, you have decent lower body muscle
+mass, and so on.</p>
+<p>However, these two concepts can and do diverge. The ability to
+deadlift 300kg (660lbs) is not by any reasonable standard a
+prerequisite for a healthy body, but certainly measures
+fitness. Running a 4 minute mile is an amazing feat of prowess in
+fitness, but doesn't really tell me you're healthier than the person
+running an 8 minute mile.</p>
+<p>I point this distinction out here because this series of posts is
+intended to cover <em>health</em>, and using nutrition and exercise to
+achieve it. It is very tempting to get caught up in numbers and goals
+that measure fitness, while throwing health to the wind. For the most
+trivial example of this: taking steroids to improve your powerlifting
+numbers will certainly improve your fitness. However, I'd argue pretty
+strongly against it, since it's bad for your health.</p>
+<p>All that said, there's nothing wrong with pursuing fitness goals, and
+as I mentioned in <a href="/blog/2017/06/why-i-lift">why I lift</a>, doing so can
+be a lot of fun. Having something to compete against—even
+yourself—is a huge motivator. Just make sure you're not
+sacrificing your health in the process.</p>
+<h2 id="resistance-training">Resistance training</h2>
+<p>This is also known as <em>strength training</em>. Let's rip off the
+definition
+<a href="https://en.wikipedia.org/wiki/Strength_training">straight from Wikipedia</a>:</p>
+<blockquote>
+<p>Strength training is a type of physical exercise specializing in the
+use of resistance to induce muscular contraction which builds the
+strength, anaerobic endurance, and size of skeletal muscles.</p>
+</blockquote>
+<p>The term strength training tells us the <em>why</em>, whereas resistance
+training hints more at how we achieve these goals. Resistance training
+involves exerting your muscles against some external
+resistance. Probably the most emblematic version of this is resisting
+against gravity in the form of lifting weights, but we'll see that
+there are many other approaches available.</p>
+<h3 id="why">Why?</h3>
+<p>This could be my own personal experience that others have not felt,
+but growing up I always had the impression that training for strength
+was somehow <em>bad</em>. Lifting weights was a vain pursuit of bigger
+muscles, and real health benefits only came from cardio like jogging.</p>
+<p>If you never had these misconceptions, congratulations. I certainly
+did. And in case others do as well, let me dispel them:</p>
+<ul>
+<li>Muscle mass has a <strong>protective effect on your body</strong>. For example,
+if you have more muscle, you can withstand a larger impact.</li>
+<li>If you're capable of moving larger weights, then <strong>day to day
+activities are easier</strong>. For example, if you can deadlift 100kg,
+then picking up your 30kg child is a much easier activity, and won't
+exhaust you as quickly.</li>
+<li>Strength training doesn't just increase muscle mass; it also
+<strong>increases your bone density and strengthens your tendons</strong>. This
+makes strength training a great way to <strong>fight off osteoporosis</strong>,
+making it a vital activity for older people, and especially older
+women. (Unfortunately, this is the group most likely to not bother
+strength training.)</li>
+<li>While strength training doesn't burn as many calories as cardio, it
+does encourage your body to use calories consumed to <strong>build and
+maintain muscle mass instead of fat mass</strong>. This means you can get
+away with eating some level of extra calories without gaining fat.</li>
+<li>Because strength training uses up muscle glycogen, it can be a great
+way to help <strong>control blood glucose levels</strong>. After a heavy training
+session, your muscles will be primed to absorb glucose to rebuild
+glycogen, instead of leaving the glucose in your blood to convert
+into fat or (in the case of diabetics) simply harm your body with
+toxic glucose levels.</li>
+<li>Increased strength can <strong>help avoid injuries</strong>. Prior to 2016,
+despite no longer being overweight and having a decent strength
+base, I was constantly throwing out my back from normal day-to-day
+activities (like sitting at a computer for too long). This was my
+biggest motivation for getting into weight lifting that year, and my
+back has been much happier since.</li>
+<li>Strength training helps improve many <strong>health markers</strong>, like blood
+lipid profiles (cholesterol) and hormone levels.</li>
+</ul>
+<p>That's a lot of benefits, and it's far from a complete list. You may
+not relate to all of the points above, but hopefully it makes the
+point that strength training is not just for young guys wanting to
+impress people with their biceps. Strength training is a vital
+component of good health for everyone, regardless of age or gender.</p>
+<h3 id="mechanism">Mechanism</h3>
+<p>All strength/resistance training fits into the same basic idea. You
+want to move some part of your body by contracting a muscle. You want
+to use some technique to make that contraction difficult so that your
+muscle has to struggle. By challenging the muscle, you
+trigger—through various pathways—your body to:</p>
+<ul>
+<li>Make the muscle stronger</li>
+<li>Increase toughness of the tendons</li>
+<li>Increase bone density</li>
+</ul>
+<p>These benefits occur during <em>recovery</em>, or the time after you stop
+exercising. This is important: if you keep exercising non-stop for
+days on end, you will get <em>weaker</em>, not stronger. The formula then is:</p>
+<ul>
+<li>Perform exercise against resistance</li>
+<li>Rest/recover</li>
+<li>Repeat</li>
+</ul>
+<p>This kind of exercise is <em>anaerobic</em>, meaning &quot;without air.&quot; Because
+resistance training is short bursts of heavy intensity, it mostly
+relies upon glycogen for energy, which can be burned without
+oxygen. This may seem to imply that resistance training has no
+benefits on the cardiovascular (heart and lung) system, and doesn't
+help burn fat (which requires oxygen to break down). Neither of these
+is true, however. During the recovery phase, your body will need to
+rely on your fat stores to provide energy to rebuild muscles, which
+will put demands on the cardiovascular system to provide additional
+oxygen.</p>
+<h3 id="stress">Stress</h3>
+<p>Last bit of theory here before we dive into how to do all of
+this. Another way of looking at exercise is a <em>stress</em> we are applying
+to our body. Stress has a bad rap, and for good reason: chronic
+stress, such as we experience in our daily life from work and
+continual electronic stimulation, is damaging. However, in small
+doses, stress is wonderful for our body.</p>
+<p>When we temporarily stress our body, it provides a stimulus for our
+body to get better, so it is able to more easily handle the stress in
+the future. Stressing our muscles causes them to get
+stronger. Stressing our bones makes them more dense. And stressing our
+cardiovascular system with extra oxygen demands makes our heart and
+lungs more efficient.</p>
+<p>Temporary stress with proper recovery is the very heart of exercise,
+and will carry through to everything in this post.</p>
+<h3 id="bodyweights">Bodyweights</h3>
+<p>OK, let's actually talk about some exercises! The most easily
+accessible form of resistance training is <em>body weight exercises</em>, or
+<em>bodyweights</em>. The concept here is simple: use your own body and
+gravity to provide a resistance for your muscles to exert against.</p>
+<p>Probably the most famous example of this is the pushup. You are
+pushing against the ground with your arm, shoulder, and chest muscles
+to create enough force to move your body against gravity. Your own
+body weight is working against your muscles.</p>
+<p>If you read the word &quot;pushup&quot; and thought &quot;I can't do that,&quot; no need
+to worry. Bodyweight exercises usually follow some form of
+<em>progression</em>, where you can start with easier forms of the exercise
+and gradually move to more difficult versions. Taking a pushup as an
+example, a progression may look something like:</p>
+<ol>
+<li>Stand in front of a wall and push your body away from it</li>
+<li>Put your hands on a table and push up from that position</li>
+<li>Do pushups with your knees on the ground</li>
+<li>A standard pushup, with only your feet and hands touching the
+ground</li>
+<li>Put your feet on a stool and push up</li>
+<li>Put your feet high on a wall and perform a vertical pushup</li>
+</ol>
+<p>There are other variations you can perform: changing the width of your
+grip by putting your hands closer or farther apart to focus on
+different muscles. You can also follow a one-arm pushup progression
+instead of a vertical pushup progression. Vertical pushups put more
+stress on your shoulder muscles, while one-arm pushups put more focus
+on your chest muscles.</p>
+<p>If all of this sounds confusing and a bit daunting, don't worry. Some
+very helpful people online have already created programs around
+bodyweights. Some references:</p>
+<ul>
+<li><a href="http://www.startbodyweight.com/p/start-bodyweight-basic-routine.html">StartBodyWeight.com</a>. I
+did this program for about a year, and highly recommend it as a
+starting point.</li>
+<li>The
+<a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine">r/bodyweightfitness recommended routine</a></li>
+<li><a href="https://www.marklauren.com/">Mark Lauren's You Are Your Own Gym</a>,
+which I also followed for a while</li>
+<li><a href="https://athleticmuscle.net/calisthenics-for-beginners/">Calisthenics for Beginners</a></li>
+</ul>
+<p>All of these routines follow the same basic principles: use compound
+movements to target all of your major muscle groups, progressively
+overload those muscles, and provide ample time for recovery. If those
+terms are confusing, don't worry, there are sections below dedicated
+to explaining them.</p>
+<p>If you're feeling overwhelmed or confused, let me remind of something
+from the first post in this series: don't let confusion get in your
+way! These are all great routines, and doing something is better than
+doing nothing. Pick something and do it for a few weeks, and after you
+get comfortable, you'll be ready to make a more informed decision
+about how you want to proceed.</p>
+<p>Let's see how bodyweight exercises stack up against alternatives:</p>
+<p><strong>Advantages</strong></p>
+<ul>
+<li>Requires little to no equipment, making it an easy method to start
+with or use on the road</li>
+<li>Less risk of injury vs free weights, since there's no barbell trying
+to crush you. (Notice I said <em>less</em>, not <em>none</em>. Be careful.)</li>
+<li>Because you are working against your own body weight, reducing your
+body fat makes your bodyweight exercises more successful. Typically,
+practicioners of bodyweight routines will be leaner than weight
+lifters.</li>
+</ul>
+<p><strong>Disadvantages</strong></p>
+<ul>
+<li>Increasing intensity is more complicated than simply adding more
+weight to a bar</li>
+<li>Some muscles groups are difficult to properly stress. While you can
+get a pretty good shoulder workout with vertical pushups, it's
+difficult to develop your posterior chain (hamstrings, glutes, and
+lower back) with bodyweights. This was the reason I started weight
+lifting in the first place.</li>
+</ul>
+<h3 id="weight-lifting">Weight lifting</h3>
+<p>Weight lifting is the act of moving some external weight against
+gravity (or sometimes against friction and inertia). The category
+breaks down broadly into machines and free weights. Free weights are
+things like barbells, dumbells, and kettlebells. For those unfamiliar
+with these terms:</p>
+<ul>
+<li>A barbell is a long metal bar (about 2 meters or 6 feet) that you
+usually hold with both
+hands.<br><img src="/static/exercise/barbell.jpg" width="300"></li>
+<li>A dumbbell is a shorter metal bar usually held in one hand<br><img src="/static/exercise/dumbbell.png" width="300"></li>
+<li>A kettlebell is a weight with a handle on the top<br><img src="/static/exercise/kettlebell.png" width="300"></li>
+<li>A machine is some kind of, well, machine<br><img src="/static/exercise/machine.jpg" width="300"></li>
+</ul>
+<p>Free weights have an advantage over machines in that they are
+<em>unstable</em>. This means you need to use more muscle groups to keep
+control of the weight. By contrast, a machine keeps the weight in more
+a less a straight line, which takes some of the stress off of your
+body. Additionally, machines are usually easier to learn to use and
+less dangerous.</p>
+<p>If you're too intimidated by free weights, by all means start right
+away with machines. But if you avoid free weights indefinitely, you're
+limiting yourself significantly. I strongly recommend you get
+comfortable with using a barbell. Start with low weights and build up
+slowly. Focus on getting the movements correct (aka good form), and
+slowly build up to heavy weights (where <em>heavy</em> is a personal
+assessment of what is difficult for you).</p>
+<p>If you're going to pursue a machine-based routine, I'd recommend
+speaking with one of the trainers at the gym you're attending. I'm not
+familiar with good machine-based routines available online, and it
+will depend a lot on what equipment you have available.</p>
+<p>If you want to get started with free weights, there are two very
+popular routines to consider:</p>
+<ul>
+<li><a href="https://stronglifts.com/">StrongLifts 5x5</a></li>
+<li><a href="http://startingstrength.com/">Starting Strength</a></li>
+</ul>
+<p>If you go to popular weight lifting forums, you'll see a lot of
+flamewars between these two routines. To cut through some of this:
+Starting Strength was the original program, is designed by a coach
+(Mark Rippetoe) with a huge amount of experience training individuals,
+and was groundbreaking when first released. StrongLifts is basically a
+variation of Starting Strength and doesn't have as much experience to
+back it up.</p>
+<p>Based on that, it would seem that Starting Strength is the way to
+go. I personally decided to go with StrongLifts, and my reasons were:</p>
+<ul>
+<li>It has a really nice smartphone app. Yes, I'm that shallow, but it
+makes it dead simple to get started</li>
+<li>StrongLifts uses a barbell row in place of a power clean. I agree
+with the StrongLifts creator (Mehdi) that the latter is more
+complicated to learn, and that the former is a great upper back
+exercise missing from Starting Strength.</li>
+</ul>
+<p>I'm sure these reasons sound shallow, and some people will be upset
+with this. But the reality is: do whichever routine you want (or a
+completely different one). As long as you're lifting, you're better
+off.</p>
+<p>And one word of warning from my own experience: don't become so
+obsessed with progressing through the program that you ignore your
+body's complaints. I trained to injury a few times because I ignored
+pain and put on extra weight when I shouldn't have. Don't be stupid!</p>
+<h3 id="resistance-bands">Resistance bands</h3>
+<p>I'm not going to say much about these, since I haven't really used
+them. But I wanted to make it clear that there are drastically
+different approaches to resistance training. Resistance bands are
+pieces of rubber which you can stretch, and which become harder to
+stretch the further you've pulled them. You can use them in place of
+weights for many kinds of workouts. Your body doesn't care what's
+causing the resistance. It just wants something to be resisting it.</p>
+<p>There's a YouTube channel which I find very beginner-friendly, called
+&quot;Picture Fit.&quot; Here are two videos I recommend watching that summarize
+the three categories mentioned:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=xJBqbv8GRZ4">Free Weights vs Body Weight</a></li>
+<li><a href="https://www.youtube.com/watch?v=msEl6RO7OT8">Can You Gain Muscle Mass with Resistance Bands?</a></li>
+</ul>
+<h3 id="combine-them">Combine them!</h3>
+<p>I've presented the information so far as a choice among
+competitors. This is far from the case. Many of these techniques can
+be combined to gain the advantages of each. For example, consider a
+workout routine consisting of:</p>
+<ul>
+<li>Bench press (free weight)</li>
+<li>Pushups (body weight)</li>
+<li>Seated press machine (machine, duh)</li>
+<li>Overhead band (resistance bands)</li>
+</ul>
+<p>There's no reason to avoid mixing and matching. However, building your
+own routine is a more advanced activity. When you're getting started,
+I recommend choosing one of the routines I linked to above and
+sticking to it until you get comfortable with the exercises.</p>
+<h3 id="sets-and-reps">Sets and reps</h3>
+<p>Let's talk nomenclature. A rep is short for a repetition, and it
+describes performing one complete exercise. For example, with a
+pushup, a repetition consists of lowering your body to the ground and
+raising yourself back up to the starting position.</p>
+<p>A set is a collection repetitions performed without rest. For example,
+a set may consist of 8 reps.</p>
+<p>Often times, workout programs will be given in terms of sets and reps like so:</p>
+<ul>
+<li>Pushups 3x8</li>
+<li>Bench press 3x5</li>
+<li>Overhead press 1xF</li>
+</ul>
+<p>This means:</p>
+<ul>
+<li>Perform three sets of eight repetitions of pushups</li>
+<li>Perform three sets of five repetitions of bench press</li>
+<li>Perform one set of overhead press to failure (as many reps as you
+can do)</li>
+</ul>
+<p>You'll also need to consider how long to rest between sets. Usually
+your program will tell you this. Valid answers here can be as little
+as 30 seconds and as much as 5 minutes. Typically different rest
+periods will work your body in different ways: shorter rest gives more
+endurance training, whereas longer rest gives more strength gains.</p>
+<h3 id="compound-vs-isolation">Compound vs isolation</h3>
+<p>Think of a bench press: you're lying on your back with a barbell over
+you. You bend your elbows, your wrist bends, and your shoulder joint
+activates. You push back up using your chest muscles, your shoulder
+muscles, and your arm muscles (tricpes in particular).</p>
+<p>Now think of a bicep curl: you hold a dumbbell in your hand and you
+bend your elbow.</p>
+<p>The former is called a <em>compound movement</em>: it involves multiple
+muscle groups moving mutiple joints in your body. The latter is an
+<em>isolation exercise</em>: it targets just one muscle group via one joint.</p>
+<p>Generally speaking, you'll get better results by focusing on compound
+movements. They stress the body more, and in more natural ways. They
+lead to more balanced development of muscles. And they are more time
+efficient: you work more muslces in less time.</p>
+<p>That's not to say you should never use isolation exercises, but in my
+opinion they should be considered <em>accessories</em> to main, compound
+movement. Use them to help develop weak spots in your strength.</p>
+<p>You'll notice that the routines I listed above all focus on compound
+movements. That's not by chance.</p>
+<h3 id="progressive-overload">Progressive overload</h3>
+<p>If you do 10 pushups a day for the rest of your life, after a certain
+point you aren't going to get stronger. In order to reap the full
+benefits of strength training, you need to progressively overload your
+muscles by increasing the stress/stimulus. You can do this in multiple
+ways:</p>
+<ul>
+<li>Adding more weight to the bar/machine</li>
+<li>Doing more reps</li>
+<li>Doing more sets</li>
+<li>Changing the tempo (slower exercises are harder)</li>
+<li>Changing the exercise you're doing (full pushups vs knee pushups)</li>
+</ul>
+<p>A good program will build in this kind of progressive overload, as do
+the programs I linked to above. The basic idea is to avoid stagnating
+by constantly challenging yourself to improve.</p>
+<h3 id="plate-math">Plate math</h3>
+<p>In order to modify the weight of a barbell, we can add extra weight to
+it. These weights come in the form of <em>plates</em>, circular pieces of
+metal—sometimes rubberized—that are put on the sides of
+the bar.</p>
+<p>If you're going to be doing barbell exercises, it's important to get
+comfortable with adding up weights, also known as <em>plate math</em>. I'll
+start with the metric system, since it's easier to handle, and what I
+use.</p>
+<p>A standard barbell weighs 20kg. The plates you'll put on the barbell must be balanced: you put the same amount on the left and right side. If you put a 10kg and 5kg weight on each side, you'll end up with:</p>
+<ul>
+<li>20kg bar</li>
+<li>10kg times 2 (one per side) = 20kg</li>
+<li>5kg times 2 (one per side) = 10kg</li>
+<li><strong>Total</strong> 20+20+10=50kg</li>
+</ul>
+<p>I find it easiest in most cases to add up the weight per side of the
+bar, double it, and add 20. So in the above example, I'd do &quot;10 + 5 =
+15, 15 * 2 = 30, 30 + 20 = 50.&quot; This is just arithmetic, so don't get
+too hung up on it, and do what's comfortable.</p>
+<p>Now let's do this in reverse. Suppose you're planning on benching
+70kg. In order to figure out what to put on the bar, you would do
+this:</p>
+<ul>
+<li>70kg - 20kg for the bar = 50kg in plates</li>
+<li>50kg total plates / 2 = 25kg in plates per side</li>
+<li>Start finding the largest plates that will add up to your number. In
+this case, you're probably looking at a 20kg and 5kg.</li>
+</ul>
+<p>Try not to just match the total weight, but also the plate
+distribution. In other words, don't put a 20kg on one side of the bar
+and 4 5kg plates on the other. That will feel unbalanced. Most gyms
+will have plates of size 20kg, 10kg, 5kg, 2.5kg, and 1.25kg. Some may
+also have 25kg and 15kg.</p>
+<p>You may also hear people say things like &quot;squatting 2 plate,&quot; or on
+stranger parts of the internet, &quot;2pl8.&quot; This means you have 2 20kg
+plates per side of the barbell. Why 20kg? Convention. Do the math,
+I'll give you the total weight for this at the end of this section.</p>
+<p><strong>For you Americans</strong>, the numbers are slightly different. Instead of
+a barbell weighing 20kg, it weights 45lbs, which is just slightly more
+than 20kg (20.4kg). And the plates come in sizes of 45lbs, 35lbs,
+25lbs, 10lbs, 5lbs, and 2.5lbs. As a developer, I love the power-of-2
+system employed by the metric plates, but if you have to use imperial
+measurements, just get used to doing the math.</p>
+<p>This has the funny side-effect that if you say &quot;I squatted 2 plate,&quot;
+it means something different between America and the rest of the
+world. (Go ahead and figure out what that total pound value is.) The
+numbers are close, but not exactly the same.</p>
+<p><em>Answer: 2 plate is 100kg, or 225lbs.</em></p>
+<h3 id="importance-of-proper-form">Importance of proper form</h3>
+<p>You'll read this just about everywhere that discusses weight lifting,
+but I'll say it here too: using proper form on your lifts is
+<em>absolutely crucial</em>. Using proper form will:</p>
+<ul>
+<li>Ensure you are getting the full value from your workout</li>
+<li>Help you avoid injuries</li>
+<li>Make sure you don't end up in an embarassing video on YouTube</li>
+</ul>
+<p>There are two particular points of proper form that I want to point
+out:</p>
+<ul>
+<li>The act of lowering the weight is known as the <em>eccentric portion</em>
+of the exercise. It is common to see people lose control of the
+weight during this portion. If you do this, you are hindering your
+progress dramatically! Most of the muscle tearing that leads to
+muscle regrowth occurs during the eccentric portion. Lowering the
+weight in a controlled, steady pace is difficult, but well worth it.</li>
+<li>Be sure to follow full range of motion. You'll often hear people say
+they don't want to squat to parallel because it will injure their
+knees. This is in fact a myth: squatting with insufficient depth
+leads to muscular imbalances and injuries.
+<ul>
+<li>I'm well aware of the fact that I haven't actually described how
+to do a squat in this post; please see the linked routines above
+that describe how to do a squat properly.</li>
+</ul>
+</li>
+</ul>
+<h3 id="full-body-vs-splits">Full body vs splits</h3>
+<p>A full body workout is a routine that exercises all (or most) muscle
+groups each day you train. A split routine somehow splits up days of
+the week to specific muscle groups. There are many tradeoffs between
+these two approaches, and I won't be able to cover them all here. But
+here's a basic idea: you should always have a day of rest between
+training a specific muscle group. But having too many rest days in
+between is limiting your growth potential.</p>
+<p>If you're going to work out three days a week, you can do a full body
+routine each of those days and have 1 or 2 days of rest in between. By
+contrast, if you're going to work out 6 days a week, doing a full body
+routine each day won't give you any time to rest and recover.</p>
+<p>The routines above are all full body routines. That's probably the
+right place to start; I would highly advise <em>against</em> strength
+training for more than three days a week as a beginner. If you later
+want to progress to more days of working out a week, you can consider
+some kind of split. There are many preexisting routines based on
+splits, and you can of course make your own.</p>
+<p>Personally, I've found the PPL (Push/Pull/Leg) split approach to be
+pretty good. The idea is to first separate out all lower-body/leg
+exercises to their own day. Then, of upper body exercises, break them
+up by whether they push the weight away from your body (like a bench
+press) or are pulling the weight toward your body (like a curl or
+barbell row). This ends up pretty cleanly dividing up the upper body
+muscle groups.</p>
+<h3 id="how-to-eat">How to eat</h3>
+<p>If you're just getting started with strength training, you don't need
+to worry too much about eating. Follow nutrition advice from the
+previous post. If you're trying to lose fat, eat at a caloric
+deficit. When you're initially going from untrained to trained, you
+get to experience what are known as &quot;noob gains,&quot; which lifters treat
+as the magical ability for your body to get stronger and leaner at the
+same time.</p>
+<p>Once you're past that initial beginner phase, it gets harder to pull
+this off. You'll hear people talk about bulking and cutting, on the
+premise that you need to eat extra food to fuel muscle growth (bulk),
+and then go for a period of caloric deficit to burn off the extra fat
+you gained (cut). Other approaches believe in trying for a recomp, or
+body recomposition, consisting of careful balancing of calories to get
+<em>just enough</em> to gain muscle and burn fat. Other approaches like Lean
+Gains believe in <em>carb and calorie cycling</em>: eating more carbs and
+calories on training days, and less carbs and calories on rest days.</p>
+<p>This is all rocket science versus what we're discussing here. I'm
+mentioning it all so that you know you don't need to freak out about
+it. Remember, your goal is to get used to training, enjoy it, nail
+down form, and get basic strength gains. If you decide to pursue
+strength training more aggressively (like I have), there will be
+plenty of time in the gym to read hundreds of articles on the right
+way to eat. For now: eat healthy and lift heavy things.</p>
+<p>Final note: be sure to get <strong>plenty of protein</strong> while strength
+training. You'll be using protein to rebuild your muscles after
+working them in the gym. If you don't have enough protein in your
+diet, your body will be unable to recover.</p>
+<h3 id="muscle-groups">Muscle groups</h3>
+<p>There are many different muscles in your body. However, when talking
+about weight lifting, we usually break the body down into major muscle
+groups. The basic breakdown often discussed is:</p>
+<ul>
+<li><strong>Trapezius</strong>, or <strong>traps</strong>: muscles between shoulders and neck</li>
+<li><strong>Deltoids</strong>, or <strong>delts</strong>: shoulder muscles</li>
+<li><strong>Triceps</strong>: back of the arm muscles (used to extend your elbow)</li>
+<li><strong>Biceps</strong>: front of the arm muscles (used to bend/flex your elbow)</li>
+<li><strong>Pectoralis</strong>, or <strong>pecs</strong>: chest muscles</li>
+<li><strong>Latissimus</strong>, or <strong>lats</strong>: upper back</li>
+<li><strong>Core</strong>: stomach and lower back stabilizing muscles. This includes
+your <strong>abs</strong></li>
+<li><strong>Gluteus</strong>, or <strong>glutes</strong>: your butt muscles</li>
+<li><strong>Quadriceps</strong>, or <strong>quads</strong>: front of the leg muscles (used to
+extend your knee)</li>
+<li><strong>Hamstrings</strong>: back of the leg muscles (used to bend/flex your
+knee)</li>
+</ul>
+<p>You should get comfortable with identifying these muscle groups, and
+at flexing the different muscle groups. Some exercises will say things
+like &quot;activate your glutes&quot; or &quot;stabilize with your lats.&quot; Don't worry
+if you're having trouble feeling your pecs or lats, working them out
+will help.</p>
+<p>Make sure that, with whatever exercise routine you're following,
+you're hitting all of this muscle groups at least once per week (and
+ideally 2-3 times).</p>
+<h3 id="summary-of-resistance-training">Summary of resistance training</h3>
+<p>Wow, that was a lot! I honestly didn't realize I had that much to say
+on the subject of resistance training, and there's still a lot more
+worth saying. But hopefully this gives you a good place to start. In
+sum:</p>
+<ul>
+<li>Strength training is for everyone</li>
+<li>Don't forget to focus on health, not just pushing some numbers</li>
+<li>Body weights are an easy way to get started and require little
+equipment
+<ul>
+<li><a href="http://www.startbodyweight.com/p/start-bodyweight-basic-routine.html">StartBodyweight.com</a></li>
+</ul>
+</li>
+<li>If you have access to a gym and/or weights, a weight lifting routine
+can be a great approach
+<ul>
+<li><a href="https://stronglifts.com/">StrongLifts</a></li>
+</ul>
+</li>
+<li>Start light, get your form down, and progressively increase the load</li>
+<li>Focus on compound movements, adding in isolation movements as
+desired</li>
+<li>Eat healthy, and be sure to get plenty of protein</li>
+</ul>
+<h2 id="cardio">Cardio</h2>
+<p>I'll say right now that I know more about resistance training than
+cardio and mobility, so these two sections will not be as detailed as
+resistance training. (And after everything you just read through, you
+may be relieved to hear that).</p>
+<p>Cardio is also known as aerobic exercise. Aerobic means &quot;with oxygen,&quot;
+and describes the energy system used during typical cardio
+workouts. When you go for a 30 minutes jog, you'll end up using fat as
+a major energy source, which requires oxygen to break down. This
+energy production is not as fast as glycogen, but we don't need to
+have the same level of explosive energy as we do with weight lifting.</p>
+<p>Advantages of cardio:</p>
+<ul>
+<li>
+<p>It increases the efficiency of your respiratory system in order to
+provide sufficient oxygen to your body</p>
+</li>
+<li>
+<p>It increases the efficiency of your circulatory system, also in
+order to provide sufficient oxygen to your body</p>
+</li>
+<li>
+<p>It's good for burning fat</p>
+<ul>
+<li>Because you can sustain cardio exercise for a longing period of
+time than intense weight lifting, you can cumulatively burn more
+calories</li>
+<li>Since the primary energy source for cardio is fat, you'll burn
+fat directly, which you won't do with weight lifting</li>
+<li>Both of these points are more nuanced than I've implied, keep
+reading for more</li>
+</ul>
+</li>
+<li>
+<p>Improvements to blood lipids (cholesterol)</p>
+</li>
+<li>
+<p>Numerous other, less tangible benefits, like decreased chronic
+stress</p>
+</li>
+</ul>
+<p>There are also some downsides:</p>
+<ul>
+<li>Many forms of cardio (like jogging) put strains on our bones and
+joints, which can lead to injury over time</li>
+<li>You may have heard the meme &quot;cardio kills your gains,&quot; implying that
+cardio destroys muscle mass. While the meme is certainly overplayed,
+there's no question that 30 minutes of cardio will not result in as
+much muscle synthesis stimulation as 30 minutes of weight lifting.</li>
+<li>Subjectively: it's boring. Some people really love running or
+biking. Others (like me) find it difficult to stay motivated for
+longer cardio sessions. If you love cardio: great, keep doing it. If
+this describes you, I'll present an alternative below.</li>
+</ul>
+<p>There are many different ways you can perform cardio. Some of the most popular are:</p>
+<ul>
+<li>Running/jogging</li>
+<li>Cycling</li>
+<li>Swimming</li>
+<li>Eliptical (my personal favorite, due to signficantly lowered joint
+impact)</li>
+<li>Jumping rope</li>
+<li>Stair climbing</li>
+</ul>
+<p>Cardio can be performed on a daily basis. There is far less concern of
+overtraining like with weight training, since the exercise will not
+break down your muscles to the same extent. Common durations for a
+session range from 15 minutes to an hour. My recommendation: start off
+with something you can manage easily, get used to the activity, and
+then ramp it up over time.</p>
+<p>I haven't personally done this program, but I've heard good reviews of
+the <a href="http://www.c25k.com/">Couch to 5k</a> program, which trains you to
+be able to run 5 kilometers (or just over 3 miles) in 9 weeks.</p>
+<h3 id="high-intensity-interval-training">High Intensity Interval Training</h3>
+<p>It may be slightly incorrect to include High Intensity Interval
+Training, or HIIT, as a subheading within cardio, but I'll explain my
+motivation shortly. Cardio as described above is also known as Low
+Intensity Steady State (LISS), where you keep to a mostly-fixed level
+of exertion which can be maintained for a significant period of
+time. By contrast, HIIT uses short bursts of high intensity exertion
+for a shorter period of time.</p>
+<p>A typical HIIT protocol may look like: perform a cycle of 8
+sprints. For each sprint, run as fast as you possibly can for 20
+seconds, and then rest for 10 seconds. (This specific protocol is
+known as tabatas.) This full workout will take only 4 minutes, but as
+I saw someone once describe it, &quot;it's 4 minutes of suck.&quot; Also, since
+HIIT is more physically taxing than LISS, you should take at least one
+rest day between sessions.</p>
+<p>Before getting into the physical comparison, I want to point out that
+both HIIT and LISS are appealing. HIIT is anything but boring, and
+it's incredibly time efficient (imagine replacing a daily 30 minute
+run with a 4 minute sprint 3 days a week). But it's a hard workout. In
+fact, it's hard enough that I'd encourage people to <em>not</em> try to start
+exercising with regular HIIT sessions, as it may encourage you to give
+up. Instead, try a HIIT session interspersed with other workouts, and
+only consider making it part of your routine when you're confident
+that you won't give up. Remember, <em>any</em> exercise is better than <em>no</em>
+exercise.</p>
+<p>So, if HIIT is so very different than normal cardio, why did I include
+it here? Because research is indicating that it can deliver on the
+same benefits people try to get from LISS cardio:</p>
+<ul>
+<li>While you burn less energy <em>during workout</em> than with LISS, HIIT
+triggers something known as Excess Post-exercise Oxygen Consumption
+(EPOC), also known as the afterburn effect thanks to some spammy
+infomercials. What this means is that you continue to burn energy at
+a higher rate for about 48 hours after a HIIT session to recover.</li>
+<li>Since this EPOC involves increased oxygen usage, it puts a stress on
+the respiratory and cardiovascular system, providing similar health
+benefits to those systems as LISS. (I encourage you to do the
+research yourself on which form actually causes better adaptations.)</li>
+<li>While you will use glycogen more than fat during a HIIT session, the
+recover period will use more fat burning, resulting in plenty of fat
+loss. (Again, please check out the research yourself.)</li>
+</ul>
+<p>In addition, HIIT claims some advantages over LISS, like more
+favorable hormonal responses and possibly better blood glucose
+control.</p>
+<p><strong>Short story</strong>: there is a lot of positive to be said about HIIT, but
+the science is not conclusive yet. If you want to try HIIT, and you
+don't believe you'll be discouraged by the intensity, go for it.</p>
+<p>To make my biases clear in this: I almost never do dedicated LISS
+cardio sessions, but instead rely on HIIT for cardiovascular
+health. It's worked well for me, with improvements in my blood
+pressure, pulse, and respiratory system (far less symptoms of
+asthma). But given that HIIT is still considered somewhat less
+established than LISS, I want it to be clear that I am <em>not</em>
+advocating for anyone to stop standard cardio workouts.</p>
+<p>You can do HIIT with lots of different exercises:</p>
+<ul>
+<li>Running (sprinting)</li>
+<li>Cycling</li>
+<li>Eliptical (again, my favorite)</li>
+<li>Swimming</li>
+</ul>
+<p>There are also similar programs, like circuit training, which involve
+high intensity as well as weight lifting.</p>
+<h3 id="weight-lifting-for-cardio-health">Weight lifting for cardio health?</h3>
+<p>One other very interesting approach for overall strength and
+cardiovascular health is presented in the book &quot;Body by Science.&quot; I'm
+throwing this in here just to give a taste of how varied theories of
+good exercise are, and to encourage you to continue research beyond
+this naive overview.</p>
+<p>Body by Science makes the bold claim that you can get &quot;strength
+training, body building, and complete fitness in 12 minutes a week.&quot;
+I'll present a massively simplified version of what they claim, and
+encourage you to read the book itself if you're interested in more.</p>
+<ul>
+<li>We can use just 5 big, compound weight lifting movements to target
+all of the major muscles groups in the body.</li>
+<li>It's possible to perform each of these 5 movements for 90 seconds
+continuously to fully exhaust the muscles and deplete their glycogen
+stores. (5 * 90 seconds plus rest time is where the 12 minute claim
+comes from.)</li>
+<li>It takes approximately a week for your body to fully recover from
+such an ordeal.</li>
+<li>By fully exhausting the muscles, you send a trigger to your body to
+increase your muscle mass so you're more well prepared for the next
+time this happens. This is because your body reads this event as a
+fight-or-flight, life-or-death situation.</li>
+<li>In order to provide energy to replenish glycogen and rebuild the
+muscles, your body will have significant respiratory and
+cardiovascular demands, which will cause improvements in those
+systems (like HIIT).</li>
+</ul>
+<p>I've never done this program myself, but that's mostly because I
+actually enjoy my time in the gym, and don't want to reduce it to just
+15 minutes a week. At the very least, the book is a great read with
+lots of valuable information.</p>
+<h3 id="undoing-your-workout-with-food">Undoing your workout with food</h3>
+<p>This is a very common problem with people doing cardio: get on the
+treadmill for 45 minutes, walk at a decent (but not particular
+strenuous pace), and then get some kind of recovery smoothie (or
+insert other food item here). Take a guess: how many calories did the
+treadmill burn, and how many are in the smoothie?</p>
+<p>Unfortunately, for many people, the smoothie completely outweighs the
+workout itself. Don't fall into this trap! Figure out your nutrition,
+and stick to it. Don't convince yourself that you're free to eat
+whatever you want because you went for a run today. You'll be undoing
+all of your hard work.</p>
+<h3 id="move-slowly-often">Move slowly, often</h3>
+<p>Another idea to throw in is, outside of &quot;exercise,&quot; it's a good idea
+to simply be more active. Taking a nightly walk, taking the stairs
+instead of the elevator, playing some easy sports, taking a break at
+the office to step outside, or a dozen other tweaks you can make
+throughout your day, all make you less sedentary. Sure, these
+activities help you burn a few more calories. But I would
+argue—as would many better authorities—that simply being
+more active is a reward in and of itself.</p>
+<h2 id="mobility-flexibility">Mobility/flexibility</h2>
+<p>Flexibility measures the range of movement of a joint. Flexibility can
+be improved with stretching. Given the sedentary lifestyles most of us
+live today, we end up having reduced flexibility. While flexibility
+and stretching typically have to do with the static range of motion of
+our joints, mobility refers to our ability to effectively move our
+joints.</p>
+<p>An important distinction to make in these kinds of routines is
+<em>dynamic</em> vs <em>static</em>. Dynamic movements will involve moving a joint
+constantly. These are good to warm up before another exercise
+session. By contrast, static stretches will hold your joints in a
+fixed position. These can increase overall flexibility, but are
+generally best saved for after a workout.</p>
+<p>This is the area in this post I am least familiar with, so I'm not
+going to go into much detail. Probably the most popular technique out
+there right now for improving your flexibility and mobility is
+Yoga. Many other people can give better advice than I can for getting
+started with it.</p>
+<p>One pair of programs I followed (for less time than I should have) for
+mobility and flexibility are
+<a href="http://www.phraktured.net/molding-mobility.html">Molding Mobility</a>
+and
+<a href="http://phraktured.net/starting-stretching.html">Starting Stretching</a>. I
+found it much easier to grasp when I watched a set of Youtube videos
+demonstrating them:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=I3yTrhuwUJo">Molding Mobility - Warmup Exercises</a></li>
+<li><a href="https://www.youtube.com/watch?v=Aoyy3bKtD84">Molding Mobility - Joint Mobility</a></li>
+<li><a href="https://www.youtube.com/watch?v=w1iXMvTMvBo">Starting Stretching</a></li>
+</ul>
+<p>The idea with this order is to perform the dynamic mobility routine
+first, perform any resistance training next, and then finally perform
+static stretches at the end.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Thank you for making it through these three posts, I know I didn't
+make it easy. Hopefully they have provided you with lots of
+information, a good idea of the terms at play, and encouragement to go
+read more from better sources. And, of course, I hope you don't just
+make this an intellectual endeavor, but start taking control of your
+health!</p>
+<p>My recommendation for getting started with this: get your nutrition
+improved, and to a place where you're comfortable with your daily
+eating routine. Try not to focus on a scale goal; focus on eating
+better. Experiment, and find what works. Introduce some exercise. Make
+sure you're ultimately getting in exercise that both improves your
+strength level, and improves your cardiovascular system.</p>
+<p>I hope this was useful. If you have questions, please send them to
+me. I still haven't decided if I'll be making more health-related
+posts. If this <em>is</em> something you'd like to see from me, please say
+so, it's more likely to happen with such feedback.</p>
+<ul>
+<li><a href="/blog/2017/06/naive-overview-nutrition-exercise">Read part 1 now</a></li>
+<li><a href="/blog/2017/06/naive-overview-nutrition">Read part 2 now</a></li>
+</ul>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

@@ -1,0 +1,1152 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Basics of Ownership - Rust Crash Course lesson 2</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Basics of Ownership - Rust Crash Course lesson 2">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Lesson 2 in the Rust crash course: learning the basics of ownership.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Basics of Ownership - Rust Crash Course lesson 2</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October 29, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Basics%20of%20Ownership%20-%20Rust%20Crash%20Course%20lesson%202 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-02-basics-of-ownership&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-02-basics-of-ownership&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-02-basics-of-ownership&#x2F;&amp;title=Basics%20of%20Ownership%20-%20Rust%20Crash%20Course%20lesson%202" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;rust-crash-course-02-basics-of-ownership&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;rust-crash-course-02-basics-of-ownership.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p><strong>Heads up</strong> This blog post series has been updated and published as an eBook by FP Complete. I'd recommend reading that version instead of these posts. If you're interested, please check out the <a href="https://www.fpcomplete.com/rust/crash-course/">Rust Crash Course eBook</a>.</p>
+<p>Arguably the biggest distinguishing aspect of Rust versus other
+popular programming languages is its ownership model. In this lesson,
+we're going to hit the basics of ownership in Rust. You can read much
+more in the <a href="https://doc.rust-lang.org/book/second-edition/ch04-01-what-is-ownership.html">Rust book chapter on
+ownership</a>.</p>
+<p>This post is part of a series based on <a href="https://www.fpcomplete.com/rust">teaching Rust at FP
+Complete</a>. If you're reading this post outside
+of the blog, you can find links to all posts in the series <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">at the top of the
+introduction
+post</a>. You
+can also <a href="https://www.snoyman.com/feed/rust-crash-course">subscribe to the RSS
+feed</a>.</p>
+<h2 id="format">Format</h2>
+<p>I'm going to be experimenting a bit with lesson format. I want to
+cover both:</p>
+<ul>
+<li>More theoretical discussions of ownership</li>
+<li>Trying to implement an actual program</li>
+</ul>
+<p>As time goes on in this series, I intend to spend more time on the
+latter and less on the former, though we still need significant time
+on the former right now. I'm going to try approaching this by having
+the beginning of this post discuss ownership, and then we'll implement
+a first version of bouncy afterwards.</p>
+<p>This format may feel a bit stilted, feedback appreciated if this
+approach works for people.</p>
+<h2 id="comparison-with-haskell">Comparison with Haskell</h2>
+<p>I'm going to start by comparing Rust with Haskell, since both
+languages have a strong concept of immutability. However, Haskell is a
+garbage collected language. Let's see how these two languages
+compare. In Haskell:</p>
+<ul>
+<li>Everything is immutable by default</li>
+<li>You use explicit mutability wrappers (like <code>IORef</code> or <code>MVar</code>) to
+mark mutability</li>
+<li>References to data can be shared however much you like</li>
+<li>Garbage collection frees up memory non-deterministically</li>
+<li>When you need deterministic resource handling (like file handles),
+you need to use <a href="https://www.snoyman.com/blog/2018/10/raii-better-than-bracket-pattern">the bracket
+pattern</a>
+or similar</li>
+</ul>
+<p>In Rust, data ownership is far more important: it's a primary aspect
+of the language, and allows the language to bypass garbage
+collection. It also allows data to often live on the stack instead of
+the heap, leading to better performance. Also, it runs
+deterministically, making it a good approach for handling other
+resources like file handles.</p>
+<p>Ownership starts off with the following rules:</p>
+<ul>
+<li>Each value in Rust has a variable that’s called its owner.</li>
+<li>There can only be one owner at a time.</li>
+<li>When the owner goes out of scope, the value will be dropped.</li>
+</ul>
+<h2 id="simple-example">Simple example</h2>
+<p>Consider this code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">foobar</span><span style="color:#657b83;">: Foobar) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, foobar);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+}
+</span></code></pre>
+<p><strong>Syntax note</strong> <code>#[...]</code> is a compiler pragma. <code>#[derive(...)]</code> is one
+example, and is similar to using <code>deriving</code> for typeclasses in
+Haskell. For some traits, the compiler can automatically provide an
+implementation if you ask it.</p>
+<p><strong>Syntax note</strong> <code>{:?}</code> in a format string means &quot;use the <code>Debug</code> trait
+for displaying this&quot;</p>
+<p><code>Foobar</code> is what's known as a newtype wrapper: it's a new data type
+wrapping around, and with the same runtime representation of, a signed
+32-bit integer (<code>i32</code>).</p>
+<p>In the <code>main</code> function, <code>x</code> contains a <code>Foobar</code>. When it calls
+<code>uses_foobar</code>, ownership of that <code>Foobar</code> passes to
+<code>uses_foobar</code>. Using that <code>x</code> again in <code>main</code> would be an error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">foobar</span><span style="color:#657b83;">: Foobar) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, foobar);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+}
+</span></code></pre>
+<p>Results in:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0382]: use of moved value: `x`
+  --&gt; foo.rs:11:17
+   |
+10 |     uses_foobar(x);
+   |                 - value moved here
+11 |     uses_foobar(x);
+   |                 ^ value used here after move
+   |
+   = note: move occurs because `x` has type `Foobar`, which does not implement the `Copy` trait
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0382`.
+</span></code></pre>
+<p>Side note on copy trait way below...</p>
+<h2 id="dropping">Dropping</h2>
+<p>When a value goes out of scope, its <code>Drop</code> trait (like a typeclass) is
+used, and then the memory is freed. We can demonstrate this by writing
+a <code>Drop</code> implementation for <code>Foobar</code>:</p>
+<p><strong>Challenge</strong> Guess what the output of the program below is before
+seeing the output.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Drop </span><span style="color:#859900;">for </span><span style="color:#b58900;">Foobar </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">drop</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Dropping a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">);
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">foobar</span><span style="color:#657b83;">: Foobar) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, foobar);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p><strong>Output</strong></p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Before uses_foobar
+I consumed a Foobar: Foobar(1)
+Dropping a Foobar: Foobar(1)
+After uses_foobar
+</span></code></pre>
+<p>Notice that the value is dropped before <code>After uses_foobar</code>. This is
+because the value was moved into <code>uses_foobar</code>, and when that function
+exits, the <code>drop</code> is called.</p>
+<p><strong>Exercise 1</strong> There's a function in the standard library,
+<code>std::mem::drop</code>, which drops a value immediately. Implement it.</p>
+<h2 id="lexical-scoping">Lexical scoping</h2>
+<p>Scoping in Rust is currently lexical, though there's a Non Lexical
+Lifetimes (NLL) proposal being merged in. (There's a <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">nice explanation
+on Stack
+Overflow</a>
+of what NLL does.) We can demonstrate the currently-lexical nature of
+scoping:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Drop </span><span style="color:#859900;">for </span><span style="color:#b58900;">Foobar </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">drop</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Dropping a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">);
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before x</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> _x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After x</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before y</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> _y = Foobar(</span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">);
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After y</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    }
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">End of main</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p><strong>Syntax note</strong> Use a leading underscore <code>_</code> for variables that are
+not used.</p>
+<p>The output from this program is:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">Before x
+After x
+Before y
+After y
+Dropping a Foobar: Foobar(2)
+End of main
+Dropping a Foobar: Foobar(1)
+</span></code></pre>
+<p><strong>CHALLENGE</strong> Remove the seemingly-superfluous braces and run the
+program. Extra points: guess what the output will be before looking at
+the actual output.</p>
+<h2 id="borrows-references-immutable">Borrows/references (immutable)</h2>
+<p>Sometimes you want to be able to share a reference to a value without
+moving ownership. Easy enough:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Drop </span><span style="color:#859900;">for </span><span style="color:#b58900;">Foobar </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">drop</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Dropping a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">);
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">foobar</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Foobar) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, foobar);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>Things to notice:</p>
+<ul>
+<li><code>uses_foobar</code> now takes a value of type <code>&amp;Foobar</code>, which is
+&quot;immutable reference to a <code>Foobar</code>.&quot;</li>
+<li>Inside <code>uses_foobar</code>, we don't need to explicitly dereference the
+<code>foobar</code> value, this is done automatically by Rust.</li>
+<li>In <code>main</code>, we can now use <code>x</code> in two calls to <code>uses_foobar</code></li>
+<li>In order to create a reference from a value, we use <code>&amp;</code> in front of
+the variable.</li>
+</ul>
+<p><strong>Challenge</strong> When do you think the <code>Dropping a Foobar:</code> message gets
+printed?</p>
+<p>Remember from the last lesson that there is special syntax for a
+parameter called <code>self</code>. The signature of <code>drop</code> above looks quite
+different from <code>uses_foobar</code>. When you see <code>&amp;mut self</code>, you can think
+of it as <code>self: &amp;mut Self</code>. Now it looks more similar to
+<code>uses_foobar</code>.</p>
+<p><strong>Exercise 2</strong> We'd like to be able to use object syntax for
+<code>uses_foobar</code> as well. Create a method <code>use_it</code> on the <code>Foobar</code> type
+that prints the <code>I consumed</code> message. Hint: you'll need to do this
+inside <code>impl Foobar { ... }</code>.</p>
+<h2 id="multiple-live-references">Multiple live references</h2>
+<p>We can change our <code>main</code> function to allow two references to <code>x</code> to
+live at the same time. This version also adds explicit types on the
+local variables, instead of relying on type inference:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x: Foobar = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Foobar = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(y);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>This is allowed in Rust, because:</p>
+<ol>
+<li>Multiple read-only references to a variable cannot result in any
+data races</li>
+<li>The lifetime of the value outlives the references to it. In other
+words, in this case, <code>x</code> lives at least as long as <code>y</code>.</li>
+</ol>
+<p>Let's see two ways to break this.</p>
+<h3 id="reference-outlives-value">Reference outlives value</h3>
+<p>Remember that <code>std::mem::drop</code> from before? Check this out:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x: Foobar = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Foobar = </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x);
+    std::mem::drop(x);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(y);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>This results in the error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0505]: cannot move out of `x` because it is borrowed
+  --&gt; foo.rs:19:20
+   |
+16 |     let y: &amp;Foobar = &amp;x;
+   |                       - borrow of `x` occurs here
+...
+19 |     std::mem::drop(x);
+   |                    ^ move out of `x` occurs here
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0505`.
+</span></code></pre><h3 id="mutable-reference-with-other-references">Mutable reference with other references</h3>
+<p>You can also take <em>mutable</em> references to a value. In order to avoid
+data races, Rust does not allow value to be referenced mutably and
+accessed in any other way at the same time.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x: Foobar = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Foobar = </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x); </span><span style="color:#93a1a1;">// will fail!
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(y);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>Notice how the type of <code>y</code> is now <code>&amp;mut Foobar</code>. Like Haskell, Rust
+tracks mutability at the type level. Yay!</p>
+<h2 id="challenge">Challenge</h2>
+<p>Try to guess which lines in the code below will trigger a compilation
+error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+
+    </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(x);
+
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> y = Foobar(</span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">);
+
+    </span><span style="color:#859900;">bar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">y);
+    </span><span style="color:#859900;">bar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">y);
+
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> z = </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> y;
+    </span><span style="color:#859900;">bar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">y);
+    </span><span style="color:#859900;">baz</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> y);
+    </span><span style="color:#859900;">baz</span><span style="color:#657b83;">(z);
+}
+
+</span><span style="color:#93a1a1;">// move
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">_foobar</span><span style="color:#657b83;">: Foobar) {
+}
+
+</span><span style="color:#93a1a1;">// read only reference
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">bar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">_foobar</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Foobar) {
+}
+
+</span><span style="color:#93a1a1;">// mutable reference
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">baz</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">_foobar</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Foobar) {
+}
+</span></code></pre><h2 id="mutable-reference-vs-mutable-variable">Mutable reference vs mutable variable</h2>
+<p>Something I didn't explain above was the <code>mut</code> before <code>x</code> in:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x: Foobar = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Foobar = </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Before uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">x);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(y);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">After uses_foobar</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>By default, variables are immutable, and therefore do not allow any
+kind of mutation. You cannot take a mutable reference to an immutable
+variable, and therefore <code>x</code> must be marked as mutable. Here's an
+easier way to see this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+
+    x.</span><span style="color:#6c71c4;">0 </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// changes the 0th value inside the product
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>If you remove the <code>mut</code>, this will fail.</p>
+<h3 id="moving-into-mutable">Moving into mutable</h3>
+<p>This bothered me, and I assume it will bother other Haskellers. As
+just mentioned, the following code will not compile:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+
+    x.</span><span style="color:#6c71c4;">0 </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// changes the 0th value inside the product
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>Obviously you can't mutate <code>x</code>. But let's change this ever so
+slightly:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(x);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: Foobar) {
+
+    x.</span><span style="color:#6c71c4;">0 </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// changes the 0th value inside the product
+
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, x);
+}
+</span></code></pre>
+<p>Before learning Rust, I would have objected to this: <code>x</code> is immutable,
+and therefore we shouldn't be allowed to pass it to a function that
+needs a mutable <code>x</code>. However, this isn't how Rust views the world. The
+mutability here is a feature of the variable, not the value
+itself. When you move the <code>x</code> into <code>foo</code>, <code>main</code> no longer has access
+to <code>x</code>, and doesn't care if it's mutated. Inside <code>foo</code>, we've
+explicitly stated that <code>x</code> can be mutated, so we're cool.</p>
+<p>This is fairly different from how Haskell looks at things.</p>
+<h2 id="copy-trait">Copy trait</h2>
+<p>We touched on this topic last time with numeric types vs
+<code>String</code>. Let's hit it a little harder. Will the following code
+compile or not?</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_i32</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed an i32: </span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">uses_i32</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">uses_i32</span><span style="color:#657b83;">(x);
+}
+</span></code></pre>
+<p>It <em>shouldn't</em> work, right? <code>x</code> is moved into <code>uses_i32</code>, and then
+used again. However, it compiles just fine! What gives?</p>
+<p>Rust has a special trait, <code>Copy</code>, which indicates that a type is so
+cheap that it can automatically be passed-by-value. That's exactly
+what happens with <code>i32</code>. You can explicitly do this with the <code>Clone</code>
+trait if desired:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug, Clone)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Drop </span><span style="color:#859900;">for </span><span style="color:#b58900;">Foobar </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">drop</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Dropping: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#d33682;">self</span><span style="color:#657b83;">);
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">foobar</span><span style="color:#657b83;">: Foobar) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, foobar);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x.</span><span style="color:#859900;">clone</span><span style="color:#657b83;">());
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+}
+</span></code></pre>
+<p><strong>Challenge</strong> Why don't we need to use <code>x.clone()</code> on the second
+<code>uses_foobar</code>? What happens if we put it in anyway?</p>
+<p><strong>Exercise 3</strong> Change the code below, without modifying the <code>main</code>
+function at all, so that it compiles and runs successfully. Some
+hints: <code>Debug</code> is a special trait that can be automatically derived,
+and in order to have a <code>Copy</code> implementation you also need a <code>Clone</code>
+implementation.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">uses_foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">foobar</span><span style="color:#657b83;">: Foobar) {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">I consumed a Foobar: </span><span style="color:#cb4b16;">{:?}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, foobar);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">uses_foobar</span><span style="color:#657b83;">(x);
+}
+</span></code></pre><h2 id="lifetimes">Lifetimes</h2>
+<p>The term that goes along most with ownership is <em>lifetimes</em>. Every
+value needs to be owned, and its owned for a certainly lifetime until
+it's dropped. So far, everything we've looked at has involved implicit
+lifetimes. However, as code gets more sophisticated, we need to be
+more explicit about these lifetimes. We'll cover that another time.</p>
+<h2 id="exercise-4">Exercise 4</h2>
+<p>Add an implementation of the <code>double</code> function to get this code to
+compile, run, and output the number 2:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">#[</span><span style="color:#268bd2;">derive</span><span style="color:#657b83;">(Debug)]
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Foobar</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> x: Foobar = Foobar(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> y: Foobar = </span><span style="color:#859900;">double</span><span style="color:#657b83;">(x);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, y.</span><span style="color:#6c71c4;">0</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>Remember: to provide a return value from a function, put <code>-&gt; ReturnType</code> after the parameter list.</p>
+<h2 id="notes-on-structs-and-enums">Notes on structs and enums</h2>
+<p>I mentioned above that <code>struct Foobar(i32)</code> is a newtype around an
+<code>i32</code>. That's actually a special case of a more general <em>positional</em>
+struct, where you can have 0 or more fields, named by their numeric
+position. And positions start numbering at 0, as god and Linus
+Torvalds intended.</p>
+<p>There are some more examples:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">NoFields</span><span style="color:#657b83;">; </span><span style="color:#93a1a1;">// may seem strange, we might cover examples of this later
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">OneField</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">);
+</span><span style="color:#268bd2;">struct </span><span style="color:#b58900;">TwoFields</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">i32</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">char</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>You can also use record syntax:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Person </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">name</span><span style="color:#657b83;">: String,
+    </span><span style="color:#268bd2;">age</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+}
+</span></code></pre>
+<p><code>struct</code>s are known as <em>product types</em>, which means they contain
+multiple values. Rust also provides <code>enum</code>s, which are sum types, or
+tagged unions. These are <em>alternatives</em>, where you select one of the
+options. A simple enum would be:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">enum </span><span style="color:#b58900;">Color </span><span style="color:#657b83;">{
+    Red,
+    Blue,
+    Green,
+}
+</span></code></pre>
+<p>But enums variants can also take values:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">enum </span><span style="color:#b58900;">Shape </span><span style="color:#657b83;">{
+    Square(</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">), </span><span style="color:#93a1a1;">// size of one side
+</span><span style="color:#657b83;">    Rectangle(</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">), </span><span style="color:#93a1a1;">// width and height
+</span><span style="color:#657b83;">    Circle(</span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">), </span><span style="color:#93a1a1;">// radius
+</span><span style="color:#657b83;">}
+</span></code></pre><h2 id="bouncy">Bouncy</h2>
+<p>Enough talk, let's fight! I want to create a simulation of a bouncing
+ball. It's easier to demonstrate than explain:</p>
+<script id="asciicast-dB8y60T2G2Pp5GWNmxF8lF6tc" src="https://asciinema.org/a/dB8y60T2G2Pp5GWNmxF8lF6tc.js" async></script>
+<p>Let's step through the process of creating such a game together. I'll
+provide the complete <code>src/main.rs</code> at the end of the lesson, but
+strongly recommend you implement this together with me throughout the
+sections below. Try to <strong>avoid copy pasting</strong>, but instead type in the
+code yourself to get more comfortable with Rust syntax.</p>
+<h3 id="initialize-the-project">Initialize the project</h3>
+<p>This part's easy:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo new bouncy
+</span></code></pre>
+<p>If you <code>cd</code> into that directory and run <code>cargo run</code>, you'll get output
+like this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">$ cargo run
+   Compiling bouncy v0.1.0 (/Users/michael/Desktop/bouncy)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.37s
+     Running `target/debug/bouncy`
+Hello, world!
+</span></code></pre>
+<p>The only file we're going to touch today is <code>src/main.rs</code>, which will
+have the source code for our program.</p>
+<h3 id="define-data-structures">Define data structures</h3>
+<p>To track the ball bouncing around our screen, we need to know the
+following information:</p>
+<ul>
+<li>The width of the box containing the ball</li>
+<li>The height of the box containing the ball</li>
+<li>The x and y coordinates of the ball</li>
+<li>The vertical direction of the ball (up or down)</li>
+<li>The horizontal direction of the ball (left or right)</li>
+</ul>
+<p>We're going to define new datatypes for tracking the vertical and
+horizontal direction, and use <code>u32</code>s for tracking the
+position.</p>
+<p>We can define <code>VertDir</code> as an <code>enum</code>. This is a simplified version of
+what enums can handle, since we aren't given it any payload. We'll do
+more sophisticated stuff later.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">enum </span><span style="color:#b58900;">VertDir </span><span style="color:#657b83;">{
+    Up,
+    Down,
+}
+</span></code></pre>
+<p>Go ahead and define a <code>HorizDir</code> as well that tracks whether we're
+moving left or right. Now, to track a ball, we need to know its <code>x</code>
+and <code>y</code> positions and its vertical and horizontal directions. This
+will be a struct, since we're tracking multiple values instead of
+(like an enum) choosing between different options.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Ball </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">x</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">y</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">u32</span><span style="color:#657b83;">,
+    </span><span style="color:#268bd2;">vert_dir</span><span style="color:#657b83;">: VertDir,
+    </span><span style="color:#268bd2;">horiz_dir</span><span style="color:#657b83;">: HorizDir,
+}
+</span></code></pre>
+<p>Define a <code>Frame</code> struct that tracks the width and height of the play
+area. Then tie it all together with a <code>Game</code> struct:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">struct </span><span style="color:#b58900;">Game </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">frame</span><span style="color:#657b83;">: Frame,
+    </span><span style="color:#268bd2;">ball</span><span style="color:#657b83;">: Ball,
+}
+</span></code></pre><h3 id="create-a-new-game">Create a new game</h3>
+<p>We can define a method on the <code>Game</code> type itself to create a new
+game. We'll assign some default width and height and initial ball
+position.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#b58900;">Game </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">new</span><span style="color:#657b83;">() -&gt; Game {
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> frame = Frame {
+            width: </span><span style="color:#6c71c4;">60</span><span style="color:#657b83;">,
+            height: </span><span style="color:#6c71c4;">30</span><span style="color:#657b83;">,
+        };
+        </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> ball = Ball {
+            x: </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">,
+            y: </span><span style="color:#6c71c4;">4</span><span style="color:#657b83;">,
+            vert_dir: VertDir::Up,
+            horiz_dir: HorizDir::Left,
+        };
+        Game {frame, ball}
+    }
+}
+</span></code></pre>
+<p><strong>Challenge</strong> Rewrite this implementation to not use any <code>let</code>
+statements.</p>
+<p>Notice how we use <code>VertDir::Up</code>; the <code>Up</code> constructor is not imported
+into the current namespace by default. Also, we can define <code>Game</code> with
+<code>frame, ball</code> instead of <code>frame: frame, ball: ball</code> since the local
+variable names are the same as the field names.</p>
+<h3 id="bounce">Bounce</h3>
+<p>Let's implement the logic of a ball to bounce off of a wall. Let's
+write out the logic:</p>
+<ul>
+<li>If the <code>x</code> value is 0, we're at the left of the frame, and therefore
+we should move right.</li>
+<li>If <code>y</code> is 0, move down.</li>
+<li>If <code>x</code> is one less than the width of the frame, we should move left.</li>
+<li>If <code>y</code> is one less than the height of the frame, we should move up.</li>
+<li>Otherwise, we should keep moving in the same direction.</li>
+</ul>
+<p>We'll want to <em>modify</em> the ball, and take the frame as a parameter. We'll implement this as a method on the <code>Ball</code> type.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#b58900;">Ball </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">bounce</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">frame</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">Frame) {
+        </span><span style="color:#859900;">if </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.x == </span><span style="color:#6c71c4;">0 </span><span style="color:#657b83;">{
+            </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.horiz_dir = HorizDir::Right;
+        } </span><span style="color:#859900;">else if </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.x == frame.width - </span><span style="color:#6c71c4;">1 </span><span style="color:#657b83;">{
+            </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.horiz_dir = HorizDir::Left;
+        }
+
+        </span><span style="color:#859900;">...
+</span></code></pre>
+<p>Go ahead and implement the rest of this function.</p>
+<h3 id="move">Move</h3>
+<p>Once we know which direction to move in by calling <code>bounce</code>, we can
+move the ball one position. We'll add this as another method within
+<code>impl Ball</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">mv</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+    </span><span style="color:#859900;">match </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.horiz_dir {
+        HorizDir::Left </span><span style="color:#859900;">=&gt; </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.x -= </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">,
+        HorizDir::Right </span><span style="color:#859900;">=&gt; </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.x += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">,
+    }
+    </span><span style="color:#859900;">...
+</span><span style="color:#657b83;">}
+</span></code></pre>
+<p>Implement the vertical half of this as well.</p>
+<h3 id="step">Step</h3>
+<p>We need to add a method to <code>Game</code> to perform a step of the game. This
+will involve both bouncing and moving. This goes inside <code>impl Game</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">step</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">) {
+    </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.ball.</span><span style="color:#859900;">bounce</span><span style="color:#657b83;">(</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.frame);
+    </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.ball.</span><span style="color:#859900;">mv</span><span style="color:#657b83;">();
+}
+</span></code></pre>
+<p>There are a few bugs in that implementation which you'll need to fix.</p>
+<h3 id="render">Render</h3>
+<p>We need to be able to display the full state of the game. We'll see
+that this initial implementation has its flaws, but we're going to do
+this by printing the entire grid. We'll add a border, use the letter
+<code>o</code> to represent the ball, and put spaces for all of the other areas
+inside the frame. We'll use the <code>Display</code> trait for this.</p>
+<p>Let's pull some of the types into our namespace. At the top of our
+source file, add:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">use </span><span style="color:#657b83;">std::fmt::{Display, Formatter};
+</span></code></pre>
+<p>Now, let's make sure we got the type signature correct:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">impl </span><span style="color:#657b83;">Display </span><span style="color:#859900;">for </span><span style="color:#b58900;">Game </span><span style="color:#657b83;">{
+    </span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">fmt</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">self</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">fmt</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Formatter) -&gt; std::fmt::Result {
+        </span><span style="color:#859900;">unimplemented!</span><span style="color:#657b83;">()
+    }
+}
+</span></code></pre>
+<p>We can use the <code>unimplemented!()</code> macro to stub out our function
+before we implement it. Finally, let's fill in a dummy <code>main</code> function
+that will print the initial game:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main </span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, Game::new());
+}
+</span></code></pre>
+<p>If everything is set up correctly, running <code>cargo run</code> will result in
+a &quot;not yet implemented&quot; panic. If you get a compilation error, go fix
+it now.</p>
+<h3 id="top-border">Top border</h3>
+<p>Alright, now we can implement <code>fmt</code>. First, let's just draw the top
+border. This will be a plus sign, a series of dashes (based on the
+width of the frame), another plus sign, and a newline. We'll
+use the <code>write!</code> macro, range syntax (<code>low..high</code>), and a <code>for</code> loop:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">+</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">0</span><span style="color:#859900;">..</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.frame.width {
+    </span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">-</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+}
+</span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">+</span><span style="color:#dc322f;">\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>Looks nice, but we get a compilation error:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0308]: mismatched types
+  --&gt; src/main.rs:79:60
+   |
+79 |       fn fmt(&amp;self, fmt: &amp;mut Formatter) -&gt; std::fmt::Result {
+   |  ____________________________________________________________^
+80 | |         write!(fmt, &quot;+&quot;);
+81 | |         for _ in 0..self.frame.width {
+82 | |             write!(fmt, &quot;-&quot;);
+83 | |         }
+84 | |         write!(fmt, &quot;+\n&quot;);
+   | |                           - help: consider removing this semicolon
+85 | |     }
+   | |_____^ expected enum `std::result::Result`, found ()
+   |
+   = note: expected type `std::result::Result&lt;(), std::fmt::Error&gt;`
+              found type `()`
+</span></code></pre>
+<p>It says &quot;considering removing this semicolon.&quot; Remember that putting
+the semicolon forces our statement to evaluate to the unit value <code>()</code>,
+but we want a <code>Result</code> value. And it seems like the <code>write!</code> macro is
+giving us a <code>Result</code> value. Sure enough, if we drop the trailing
+semicolon, we get something that works:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">    Finished dev [unoptimized + debuginfo] target(s) in 0.55s
+     Running `target/debug/bouncy`
++------------------------------------------------------------+
+</span></code></pre>
+<p>You may ask: what about all of the other <code>Result</code> values from the
+other calls to <code>write!</code>? Good question! We'll get to that a bit later.</p>
+<h3 id="bottom-border">Bottom border</h3>
+<p>The top and bottom border are exactly the same. Instead of duplicating
+the code, let's define a closure that we can call twice. We introduce
+a closure in Rust with the syntax <code>|args| { body }</code>. This closure will
+take no arguments, and so will look like this:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#b58900;">top_bottom </span><span style="color:#859900;">= </span><span style="color:#657b83;">|| {
+    </span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">+</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">for _ in </span><span style="color:#6c71c4;">0</span><span style="color:#859900;">..</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.frame.width {
+        </span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">-</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    }
+    </span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">+</span><span style="color:#dc322f;">\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+};
+
+</span><span style="color:#859900;">top_bottom</span><span style="color:#657b83;">();
+</span><span style="color:#859900;">top_bottom</span><span style="color:#657b83;">();
+</span></code></pre>
+<p>First we're going to get an error about <code>Result</code> and <code>()</code>
+again. You'll need to remove two semicolons to fix this. Do that
+now. Once you're done with that, you'll get a brand new error
+message. Yay!</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0596]: cannot borrow `top_bottom` as mutable, as it is not declared as mutable
+  --&gt; src/main.rs:88:9
+   |
+80 |         let top_bottom = || {
+   |             ---------- help: consider changing this to be mutable: `mut top_bottom`
+...
+88 |         top_bottom();
+   |         ^^^^^^^^^^ cannot borrow as mutable
+</span></code></pre>
+<p>The error message tells us exactly what to do: stick a <code>mut</code> in the
+middle of <code>let top_bottom</code>. Do that, and make sure it fixes
+things. Now the question: why? The <code>top_bottom</code> closure has captured
+the <code>fmt</code> variable from the environment. In order to use that, we need
+to call the <code>write!</code> macro, which mutates that <code>fmt</code>
+variable. Therefore, each call to <code>top_bottom</code> is itself a
+mutation. Therefore, we need to mark <code>top_bottom</code> as mutable.</p>
+<p>There are three different types of closure traits: <code>Fn</code>, <code>FnOnce</code>, and
+<code>FnMut</code>. We'll get into the differences among these in a later
+tutorial.</p>
+<p>Anyway, we should now have both a top and bottom border in our output.</p>
+<h3 id="rows">Rows</h3>
+<p>Let's print each of the rows. In between the two <code>top_bottom()</code> calls,
+we'll stick a <code>for</code> loop:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">for</span><span style="color:#657b83;"> row </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">0</span><span style="color:#859900;">..</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.frame.height {
+}
+</span></code></pre>
+<p>Inside that loop, we'll want to add the left border and the right
+border:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">|</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span><span style="color:#93a1a1;">// more code will go here
+</span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">|</span><span style="color:#dc322f;">\n</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+</span></code></pre>
+<p>Go ahead and call <code>cargo run</code>, you're in for an unpleasant surprise:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">error[E0501]: cannot borrow `*fmt` as mutable because previous closure requires unique access
+  --&gt; src/main.rs:91:20
+   |
+80 |         let mut top_bottom = || {
+   |                              -- closure construction occurs here
+81 |             write!(fmt, &quot;+&quot;);
+   |                    --- first borrow occurs due to use of `fmt` in closure
+...
+91 |             write!(fmt, &quot;|&quot;);
+   |                    ^^^ borrow occurs here
+...
+96 |         top_bottom()
+   |         ---------- first borrow used here, in later iteration of loop
+</span></code></pre>
+<p>Oh no, we're going to have to deal with the borrow checker!</p>
+<h3 id="fighting-the-borrow-checker">Fighting the borrow checker</h3>
+<p>Alright, remember before that the <code>top_bottom</code> closure capture a
+mutable reference to <code>fmt</code>? Well that's causing us some trouble
+now. There can only be one mutable reference in play at a time, and
+<code>top_bottom</code> is holding it for the entire body of our method. Here's a
+simple workaround in this case: take <code>fmt</code> as a parameter to the
+closure, instead of capturing it:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let </span><span style="color:#b58900;">top_bottom </span><span style="color:#859900;">= </span><span style="color:#657b83;">|</span><span style="color:#268bd2;">fmt</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> Formatter| {
+</span></code></pre>
+<p>Go ahead and fix the calls to <code>top_bottom</code>, and you should get output
+that looks like this (some extra rows removed).</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">+------------------------------------------------------------+
+||
+||
+||
+||
+...
++------------------------------------------------------------+
+</span></code></pre>
+<p>Alright, now we can get back to...</p>
+<h3 id="columns">Columns</h3>
+<p>Remember that <code>// more code will go here</code> comment? Time to replace it!
+We're going to use another <code>for</code> loop for each column:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">for</span><span style="color:#657b83;"> column </span><span style="color:#859900;">in </span><span style="color:#6c71c4;">0</span><span style="color:#859900;">..</span><span style="color:#d33682;">self</span><span style="color:#657b83;">.frame.width {
+    </span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot; &quot;</span><span style="color:#657b83;">);
+}
+</span></code></pre>
+<p>Running <code>cargo run</code> will give you a complete frame, nice!
+Unfortunately, it doesn't include our ball. We want to write a <code>o</code>
+character instead of space when <code>column</code> is the same as the ball's
+<code>x</code>, and the same thing for <code>y</code>. Here's a partial implementation:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">let</span><span style="color:#657b83;"> c = </span><span style="color:#859900;">if</span><span style="color:#657b83;"> row == </span><span style="color:#d33682;">self</span><span style="color:#657b83;">.ball.y {
+    </span><span style="color:#839496;">&#39;</span><span style="color:#2aa198;">o</span><span style="color:#839496;">&#39;
+</span><span style="color:#657b83;">} </span><span style="color:#859900;">else </span><span style="color:#657b83;">{
+    </span><span style="color:#839496;">&#39; &#39;
+</span><span style="color:#657b83;">};
+</span><span style="color:#859900;">write!</span><span style="color:#657b83;">(fmt, </span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, c);
+</span></code></pre>
+<p>There's something wrong with the output (test with <code>cargo run</code>). Fix
+it and your render function will be complete!</p>
+<h3 id="the-infinite-loop">The infinite loop</h3>
+<p>We're almost done! We need to add an infinite loop in our <code>main</code>
+function that:</p>
+<ul>
+<li>Prints the game</li>
+<li>Steps the game</li>
+<li>Sleeps for a bit of time</li>
+</ul>
+<p>We'll target 30 FPS, so we want to sleep for 33ms. But how do we sleep
+in Rust? To figure that out, let's go to <a href="https://doc.rust-lang.org/std/index.html">the Rust standard library
+docs</a> and <a href="https://doc.rust-lang.org/std/index.html?search=sleep">search for
+<code>sleep</code></a>. The
+first result is
+<a href="https://doc.rust-lang.org/std/thread/fn.sleep.html"><code>std::thread::sleep</code></a>,
+which seems like a good bet. Check out the docs there, especially the
+wonderful example, to understand this code.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main </span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> game = Game::new();
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> sleep_duration = std::time::Duration::from_millis(</span><span style="color:#6c71c4;">33</span><span style="color:#657b83;">);
+    </span><span style="color:#859900;">loop </span><span style="color:#657b83;">{
+        </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, game);
+        game.</span><span style="color:#859900;">step</span><span style="color:#657b83;">();
+        std::thread::sleep(sleep_duration);
+    }
+}
+</span></code></pre>
+<p>There's one compile error in this code. Try to anticipate what it
+is. If you can't figure it out, ask the compiler, then fix it. You
+should get a successful <code>cargo run</code> that shows you a bouncing ball.</p>
+<h3 id="problems">Problems</h3>
+<p>There are two problems I care about in this implementation:</p>
+<ul>
+<li>The output can be a bit jittery, especially on a slow terminal. We
+should really be using something like the <code>curses</code> library to handle
+double buffering of the output.</li>
+<li>If you ran <code>cargo run</code> before, you probably didn't see it. Run
+<code>cargo clean</code> and <code>cargo build</code> to force a rebuild, and you should
+see the following warning:</li>
+</ul>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">warning: unused `std::result::Result` which must be used
+  --&gt; src/main.rs:88:9
+   |
+88 |         top_bottom(fmt);
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+</span></code></pre>
+<p>I mentioned this problem above: we're ignoring failures coming from
+the calls to the <code>write!</code> macro in most cases but throwing away the
+<code>Result</code> using a semicolon. There's a nice, single character solution
+to this problem. This forms the basis of proper error handling in
+Rust. However, we'll save that for another time. For now, we'll just
+ignore the warning.</p>
+<h3 id="complete-source">Complete source</h3>
+<p>You can find the complete source code for this implementation <a href="https://gist.github.com/snoyberg/5307d493750d7b48c1c5281961bc31d0">as a
+Github
+gist</a>. Reminder:
+it's much better if you step through the code above and implement it
+yourself.</p>
+<p>I've added one piece of syntax we haven't covered yet in that tutorial, at the
+end of the call to <code>top_bottom</code>. We'll cover that in much more detail next
+week.</p>
+<p><a href="https://www.fpcomplete.com/rust">Rust at FP Complete</a> | <a href="https://www.snoyman.com/blog/2018/10/introducing-rust-crash-course">Introduction</a></p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

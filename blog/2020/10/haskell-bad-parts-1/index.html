@@ -1,0 +1,280 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Haskell: The Bad Parts, part 1</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Haskell: The Bad Parts, part 1">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="The first part of a blog post series on the parts of Haskell we should avoid using.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Haskell: The Bad Parts, part 1</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October 28, 2020</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Haskell%3A%20The%20Bad%20Parts%2C%20part%201 https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;haskell-bad-parts-1&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;haskell-bad-parts-1&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;haskell-bad-parts-1&#x2F;&amp;title=Haskell%3A%20The%20Bad%20Parts%2C%20part%201" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2020&#x2F;10&#x2F;haskell-bad-parts-1&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;haskell-bad-parts-1.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>There's a popular book called <em>JavaScript: The Good Parts</em>. And there's a common meme around the relative size of that book versus <em>JavaScript: The Definitive Guide</em>.</p>
+<img src="https://i.imgur.com/wIf3EJh.jpg" style="max-width:80%"> 
+<p>Haskell is, in my opinion, a far more well designed and coherent language than JavaScript. However, it's also an old language with some historical baggage. In many ways, it's a bleeding edge research language that sometimes includes...half-baked features. Due to an inconsistent set of rules around backwards compatibility, it will sometimes break code every six months, and sometimes keep strange decisions around for decades.</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">True mastery of Haskell comes down to knowing which things in core libraries should be avoided like the plague.<br><br>* foldl<br>* sum/product<br>* Data.Text.IO<br>* Control.Exception.bracket (use unliftio instead, handles interruptible correctly)<br><br>Just as some examples</p>&mdash; Michael Snoyman (@snoyberg) <a href="https://twitter.com/snoyberg/status/1321049221697544193?ref_src=twsrc%5Etfw">October 27, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>After a request and some tongue-in-cheek comments under that tweet, I decided a long-form blog post was in order. I'm going to start off by expanding on the four examples I gave in that tweet. But there are many, many more examples out there. If there's more interest in seeing a continuation of this series, please let me know. And if you have pet peeves you'd like me to address, your input will be very welcome.</p>
+<h2 id="what-is-a-bad-part">What is a &quot;bad part&quot;?</h2>
+<p>Very rarely is there such a thing: a language feature, function, type, or library—that is so egregiously bad that it should never, ever be used. Null is of course the billion dollar mistake, but it's still incredibly useful in some cases. So when I say that something is a &quot;bad part&quot; of Haskell, I mean something along these lines:</p>
+<ul>
+<li>A rarely useful feature has been promoted to a position of prominence</li>
+<li>A function has major downsides that are not documented</li>
+<li>There's an unexpected performance implication</li>
+</ul>
+<p>There's a large tendency in the Haskell community to be overly literal in responding to blog posts. Feel free to do that to your heart's content. But this caveat serves as a word of warning: I'm not going to caveat each one of these with an explanation of &quot;Yes, but there's this one corner case where it's actually useful.&quot;</p>
+<h2 id="why-attack-haskell">Why attack Haskell?</h2>
+<p>Since I'm a Haskeller and an advocate of the language, you may be wondering: &quot;Why are you attacking Haskell?&quot; I don't see this as an attack. I <em>do</em> wish we could fix these issues. I think it's a fair thing to say that the problems I'm listing are warts on the language. And every language has warts. I'm writing this because I've seen these kinds of things break real world projects. I've seen these failures manifest at runtime, defeating yet again the false claim: &quot;If it compiles, it works.&quot; I've seen these become nefarious time bombs that disincentivize people from ever working with Haskell in the future.</p>
+<p>I hope by calling these out publicly, I can help raise awareness of these problems. Then either we fix the problems at their source or, more likely, get more widespread awareness of the issue.</p>
+<p>Also, because it feels appropriate, I'm going to take a more jovial tone below. I find it easier to beat up on a language I love like that.</p>
+<h2 id="foldl">foldl</h2>
+<p>Duncan Coutts <a href="https://www.well-typed.com/blog/2014/04/fixing-foldl/">already did this one</a>. <code>foldl</code> is broken. It's a bad function. Left folds are supposed to be strict, not lazy. End of story. Goodbye. This function have caused too many space leaks. We should gut it out entirely.</p>
+<p>But wait! A lazy left fold makes perfect sense for a <code>Vector</code>! Yeah, no one ever meant that. And the problem isn't the fact that this function exists. It's the <strong>name</strong>. It has taken the hallowed spot of the One True Left Fold. I'm sorry, the One True Left Fold is strict.</p>
+<p>Also, side note: we can't raise linked lists to a position of supreme power within our ecosystem and then pretend like we actually care about vectors. We don't; we just pay lip service to them. Until we fix the wart that is overuse of lists, <code>foldl</code> is only ever used on lists.</p>
+<p>OK, back to this bad left fold. This is all made worse by the fact that the true left fold, <code>foldl'</code>, is not even exported by the <code>Prelude</code>. We Haskellers are a lazy bunch. And if you make me type in <code>import Data.List (foldl')</code>, I just won't. I'd rather have a space leak than waste precious time typing in those characters.</p>
+<p>Alright, so what should you do? Use an alternative prelude that doesn't export a bad function, but does export a good function. If you really, really want a lazy left fold: add a comment, or use a function named <code>foldlButLazyIReallyMeanIt</code>. Otherwise I'm going to fix your code during my code review.</p>
+<h2 id="sum-product">sum/product</h2>
+<p>The <code>sum</code> and <code>product</code> functions are implemented in terms of <code>foldr</code>. Well, actually <code>foldMap</code>, but list's <code>foldMap</code> is implemented in terms of <code>foldr</code>, and lists are the only data structure that exist in Haskell. &quot;Oh, but <code>foldr</code> is the good function, right?&quot; Only if you're folding a function which is lazy in its second argument. <code>+</code> and <code>*</code> are both strict in both of their arguments.</p>
+<p>If you're not aware of that terminology: &quot;strict in both arguments&quot; means &quot;in order to evaluate the result of this function/operator, I need to evaluate both of its arguments.&quot; I can't evaluate <code>x + y</code> without knowing what <code>x</code> and <code>y</code> are. On the other hand, <code>:</code> (list cons) is lazy in its second argument. Evaluating <code>x : y</code> doesn't require evaluating <code>y</code> (or, for that matter, <code>x</code>). (For more information, see <a href="https://www.fpcomplete.com/haskell/tutorial/all-about-strictness/">all about strictness</a>.)</p>
+<p>&quot;But wait!&quot; you say. &quot;What if I have a custom data type with a custom typeclass instance of <code>Num</code> that has a custom <code>+</code> and/or <code>*</code> that is in fact lazy in the second argument! Then <code>sum</code> and <code>product</code> are perfect as they are!&quot;</p>
+<p>That's true. Now go off and write your own <code>lazySum</code> and <code>lazyProduct</code>. 99 times out of 100, or more likely 999,999 times out of 1,000,000, we want the fully strict version.</p>
+<p>&quot;But it doesn't matter, GHC will optimize this away.&quot; Maybe. Maybe not. Stop relying on GHC's optimizer to convert horribly inefficient code into not efficient code. (But I digress, we'll talk about why the <code>vector</code> package is bad another time.)</p>
+<h2 id="data-text-io">Data.Text.IO</h2>
+<p>I've already covered this one once before when I told everyone to <a href="https://www.snoyman.com/blog/2016/12/beware-of-readfile">beware of <code>readFile</code></a>. In that blog post, I talked about a bunch of <code>String</code> based I/O functions, especially the titular <code>readFile</code>, which is obnoxiously exported by <code>Prelude</code>. Those are bad. But <code>Data.Text.IO</code> is arguably far worse, and I'll reiterate why in a second. The reason is that there's pretty good awareness in the community that <code>String</code>-based I/O is bad. Even though the <code>String</code> part is the least of our worries, it does a good job of scaring away the uninitiated.</p>
+<p>But <code>Data.Text.IO</code> is a wolf in sheep's clothing. We're all told by people who think they can tell people how to write their Haskell code (<em>cough</em> me <em>cough</em>) that we should exorcise <code>String</code> from our codebases and replace it in all cases with <code>Text</code>. Attacking the <code>Text</code> type is a topic for another time. But the problem is that by cloaking itself in the warm embrace of <code>Text</code>, this module claims more legitimacy than it deserves.</p>
+<p>The only module worse in this regard is <code>Data.Text.Lazy.IO</code>, which should be buried even deeper.</p>
+<p>OK, what exactly am I on about? Locale sensitive file decoding. It's possible that this has been the number one example of a Haskell bug in the wild I've encountered in my entire career. Not the spooky memory leak. Partial functions like <code>head</code> randomly throwing exceptions are up there, but don't quite rise to prominence.</p>
+<p>You see, when you are dealing with file formats, there is typically an actual, defined format. YAML, XML, JSON, and many others give a lot of information about how to serialize data, including character data, into raw bytes. We want to be consistent. We want to write a file in one run of the program, and have it read in a separate run. We want to write the file on a Windows machine and read it on a Linux machine. Or we want to interact with programs in other languages that read or write data in a consistent format.</p>
+<p>Locale sensitive file encoding and decoding laughs in our face. When you use <code>Data.Text.IO.readFile</code>, it plays a mind reading game of trying to deduce from clues you don't care about which character encoding to use. These days, on the vast majority of systems used by native English speakers, this turns out to be UTF-8. So using <code>readFile</code> and <code>writeFile</code> typically &quot;just works.&quot; Using functions from <code>Data.Text.IO</code> looks safe, and can easily get hidden in a large PR or a library dependency.</p>
+<p>That's when all hell breaks loose. You ship this code. You run it in a Docker container. &quot;Oops, you forgot to set the <code>LANG</code> env var, Imma crash.&quot; But it's worse than that. Typically things will work well for weeks or months, because it can often be a long time before someone tries to encode a non-ASCII character.</p>
+<p>The same kind of thing happens regularly to Stack. Someone adds a new feature that writes and reads a file. The code passes all integration tests. And then someone in Russia with a weird Windows code page set and a Cyrillic character in their name files a bug report 2 years later about how they can't build anything, and we sheepishly tell them to run <code>chcp 65001</code> or build in <code>c:\</code>.</p>
+<p>Friends don't let friends use <code>Data.Text.IO</code>.</p>
+<p>&quot;Oh, but <code>putStrLn</code> is fine!&quot; Yeah, maybe. It's also potentially slow. And it will throw a runtime exception due to character encoding mismatches. Just use a good logging library. That's why we have one in <code>rio</code>.</p>
+<p><strong>EDIT</strong> Since so many people have asked: instead of <code>readFile</code>, I recommend using <a href="https://www.stackage.org/haddock/lts-16.20/rio-0.1.19.0/RIO.html#v:readFileUtf8"><code>readFileUtf8</code></a>, which is available from <a href="https://github.com/commercialhaskell/rio"><code>rio</code></a>.</p>
+<h2 id="control-exception-bracket">Control.Exception.bracket</h2>
+<p>This is by far the least objectionable of the bad things in this list. I included it because the entire original tweet was inspired by a coworker telling me about a bug he ran into because of this function.</p>
+<p>Async exceptions are subtle. Very, very subtle. Like, super duper subtle. I've devoted a large percentage to my Haskell teaching career towards them. Async exceptions are a concept that don't truly exist in most other languages. They require rewiring the way your brain works for proper handling. Helper functions help alleviate some of the pain. But the pain is there.</p>
+<p>Then someone said, &quot;You know what? Async exceptions aren't subtle enough. Let's invent two different ways of masking them!&quot;</p>
+<p>Wait, what does masking mean? Well, of course it means temporarily blocking the ability to receive an async exception. Totally, 100% blocks it. It's like async exceptions don't exist at all. So you're totally 100% safe, right?</p>
+<p>Wrong. Masking isn't really masking. Masking is kinda-sorta masking. No, if you really want protection, you have to use <code>uninterruptibleMask</code>. You knew that, right? Of course you did, because it's so incredibly obvious. And of course it's painfully obvious to every single Haskeller on the planet just how important it is to choose normal <code>mask</code> versus <code>uninterruptibleMask</code>. And there'd never be a disagreement about these cases.</p>
+<p>In case the tone isn't clear: this is sarcasm. Interruptible vs uninterruptible masking is confusing. Incredibly confusing. And nowhere is that more blatant than in the <code>Control.Exception.bracket</code> function. Interruptible masking means &quot;Hey, I don't want to receive any async exceptions, unless I'm doing a blocking call, then I totally don't want to be masked.&quot; And <code>Control.Exception.bracket</code> uses interruptible masking for it's cleanup handler. So if you need to perform some kind of blocking action in your cleanup, and you want to make sure that you don't get interrupted by an async exception, you have to remember to use <code>uninterruptibleMask</code> yourself. Otherwise, your cleanup action may not complete, which is Bad News Bears.</p>
+<p>This is all too confusing. I get the allure of interruptible masking. It means that you get super-cool-looking deadlock detection. It's nifty. It's also misleading because you can't rely on it. Really good Haskellers have released completely broken libraries based on the false idea that deadlock detection reliably works. It doesn't. This is a false sense of hope, much like rewrite rules for stream fusion.</p>
+<p>I'm not putting <code>mask</code> on the &quot;bad parts&quot; list right now, but I'm tempted to do so, and claim that <code>uninterruptibleMask</code> should have been the default, and perhaps the only way of masking. (Reminder for later: <code>throw</code> is a horribly named function too.) But I <em>am</em> saying that <code>bracket</code> defaulting to interruptible masking is a mistake. It's unexpected, and basically undocumented.</p>
+<p>In <code>unliftio</code> (and therefore in <code>rio</code>) we provide an alternative <code>bracket</code> that uses uninterruptible masking. I debated this internally quite a bit, since I don't generally like throwing new behavior into an old function name. I eventually agreed with the idea that the current <code>bracket</code> implementation is just buggy and should be fixed. I still feel a bit uneasy about the decision though. (Note that I made the opposite decision regarding <code>sum</code> and <code>product</code> and included the broken versions, which I <em>also</em> feel uneasy about.)</p>
+<p>Credits for this one go to <a href="https://github.com/Yuras">Yuras</a> and <a href="https://github.com/Peaker">Eyal</a>, check out <a href="https://github.com/fpco/safe-exceptions/issues/3">this Github issue for details</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I'll reiterate: Haskell is a great language with some warts. Ideally, we'd get rid of the warts. Second to that: let's be honest about the warts and warn people away from them.</p>
+<p>If you'd like to see more posts in this series, or have other ideas of bad parts I should cover, please let me know in the comments below or <a href="https://twitter.com/snoyberg">on Twitter</a>.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

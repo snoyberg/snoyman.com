@@ -1,0 +1,445 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Introducing the Rust crash course</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Introducing the Rust crash course">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="I&#x27;m happy to announce that I&#x27;ll be beginning a crash course on Rust. This post describes motivations and the style this will take.
+">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Introducing the Rust crash course</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published October 18, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Introducing%20the%20Rust%20crash%20course https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;introducing-rust-crash-course&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;introducing-rust-crash-course&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;introducing-rust-crash-course&#x2F;&amp;title=Introducing%20the%20Rust%20crash%20course" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;10&#x2F;introducing-rust-crash-course&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;introducing-rust-crash-course.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>I'm announcing an upcoming series of blog posts, which I'm calling the
+Rust crash course. In this blog post, I want to explain:</p>
+<ul>
+<li>Why I'm interested in Rust</li>
+<li>Why I'm writing up this series</li>
+<li>Who this series is for</li>
+<li>My intended flavor for the series</li>
+<li>Some examples of Rust gotchas I want to cover</li>
+</ul>
+<p>I'm getting to work on this series due to <a href="https://www.fpcomplete.com/rust">increased Rust usage at FP Complete</a>.</p>
+<h2 id="why-rust">Why Rust?</h2>
+<p>I'm a strong believer in using the compiler to help eliminate bugs. No
+programming language can eliminate all bugs and even the best
+designed language will typically need to leave developers plenty of
+wiggle room to shoot themselves in the foot. Still, there's
+significant value in safety and long term maintainability of projects
+that use languages with this focus.</p>
+<p>For about ten years now, my primary language has been (and continues
+to be) Haskell. It gets a lot of things right here, such as
+immutability, explicit effects, and strong typing. But I've got two
+problems with an intense focus on Haskell:</p>
+<ul>
+<li>There's always something to be learned from other languages. It's
+quite easy to fall into the trap of knowing one language well, and
+becoming blind to its shortcomings. Haskell is now the language I've
+used for the longest stretch of time as a primary language, finally
+displacing Java. I need to avoid this trap.</li>
+<li>There are some legitimate technical advantages of Rust:
+<ul>
+<li>Performance is better, and more reliable as well, relying less
+upon things like rewrite rules firing</li>
+<li>It's got a better story right now for mobile and frontend
+development</li>
+<li>Lack of garbage collection opens up new possibilities in real
+time development</li>
+<li>Rust improves on Haskell's safety guarantees in some places,
+such as defaulting to requiring complete pattern matches</li>
+</ul>
+</li>
+</ul>
+<p>Like many others, I've been hearing a buzz around Rust for years. Two
+or so years ago, I started playing around with it more, and have been
+steadily dedicating more personal time to it. But recently, we've had
+more <a href="https://www.fpcomplete.com/rust">Rust interest at work</a>, and therefore we've been
+expanding our internal Rust team.</p>
+<h2 id="why-this-series">Why this series?</h2>
+<p>We're a globally distributed team at FP Complete, and we make a heavy
+push towards using written communication tools wherever possible. This
+also overlaps heavily with training material. As I do more training
+(both internally, and for customers), I'm discovering places where:</p>
+<ul>
+<li>I'm finding my own knowledge of the language was lacking</li>
+<li>Newcomers are stumbling hard</li>
+</ul>
+<p>This series is intended to collect both initial pointers of how to get
+started with Rust, and hard-learned lessons of how to avoid getting
+stuck. Some of these stumbling blocks may favor the kind of audience
+I'm working with directly (lots of Haskell and DevOps engineers), but
+that will likely change over time.</p>
+<h2 id="target-audience">Target audience</h2>
+<p>I'm gearing this series towards the Rust curious. I'm assuming programming
+knowledge, and some basic idea of what Rust is about, but no real knowledge of
+the language itself. I'll try to call out when you should go read the Rust
+book.</p>
+<p>If you're a Java user, a Rubyist, or a Haskeller, and Rust intrigues you, I
+hope this will help you. And maybe even Rustaceans will enjoy seeing the pain
+points I find myself and others are hitting.</p>
+<h2 id="flavor-of-the-series">Flavor of the series</h2>
+<p>There is already <a href="https://www.rust-lang.org/en-US/documentation.html">really good
+material</a> on Rust
+available from rust-lang.org. I have no intention of trying to replace
+that. Instead, I'll assume that people are reading through <a href="https://doc.rust-lang.org/book/">the Rust
+book</a>, and point to sections where
+appropriate.</p>
+<p>One concrete example: I don't intend to spend a lot of time talking
+about Rust syntax, or explaining that it's an expression-oriented
+language. The book covers that.</p>
+<p>Instead, I want to give people:</p>
+<ul>
+<li>Real code to look at and play with</li>
+<li>Simple problems to build up experience with</li>
+<li>Explanations of tricky cases that catch people up</li>
+</ul>
+<p>And on that note...</p>
+<h2 id="rust-gotchas">Rust gotchas</h2>
+<p>A few people on Twitter asked me to share some Rust gotchas,
+especially coming from the perspective of a Haskell developer. I'll
+certainly be covering more gotchas going forward, but I wanted to give
+some examples in this first post so you can get a feel for the kinds
+of things we'll be addressing in the series. I'm <em>not</em> going to be
+explaining details of these problems here; that's what the series is
+for!</p>
+<p>Just so you know: there's no content following these examples, besides
+the Disqus comments below. If you're not interested in the gotchas,
+feel free to quit reading now and <a href="/feed/rust-crash-course">stay
+tuned</a> for more posts.</p>
+<h3 id="mutable-values-mutable-variables">Mutable values, mutable variables</h3>
+<p>I've got a simple mental model in Haskell. Values are all immutable,
+period. A few special reference types allow me to mutate their
+contents. And mutating like that is an effect tracked in the type
+system.</p>
+<p>From that perspective, Rust is a bit surprising. Here's one:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> i: </span><span style="color:#268bd2;">isize </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> j: </span><span style="color:#268bd2;">isize </span><span style="color:#657b83;">= </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(i);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, j);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">i</span><span style="color:#657b83;">: </span><span style="color:#268bd2;">isize</span><span style="color:#657b83;">) -&gt; </span><span style="color:#268bd2;">isize </span><span style="color:#657b83;">{
+    i += </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    i
+}
+</span></code></pre>
+<p>Wait a second... <code>i</code> is immutable. Then I pass it to <code>foo</code>, and it
+becomes mutable. Then I return this mutable value as an immutable
+value. <em>What?</em></p>
+<p>I assure you, this ultimately makes sense, but it's kind of
+surprising. Also, the fact that <code>x: &amp;mut isize</code> and <code>mut x: &amp;mut isize</code> are both real things that mean different things:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> i: </span><span style="color:#268bd2;">isize </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">;
+    </span><span style="color:#268bd2;">let </span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> j: </span><span style="color:#268bd2;">isize </span><span style="color:#657b83;">= </span><span style="color:#6c71c4;">2</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">foo</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> i, </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">mut</span><span style="color:#657b83;"> j);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{} {}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, i, j);
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">foo</span><span style="color:#657b83;">&lt;</span><span style="color:#586e75;">&#39;a</span><span style="color:#657b83;">&gt;(</span><span style="color:#586e75;">mut </span><span style="color:#268bd2;">i</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a mut </span><span style="color:#268bd2;">isize</span><span style="color:#657b83;">, </span><span style="color:#268bd2;">j</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#586e75;">&#39;a mut </span><span style="color:#268bd2;">isize</span><span style="color:#657b83;">) {
+    *i *= </span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">;
+    i = j;
+    *i *= </span><span style="color:#6c71c4;">10</span><span style="color:#657b83;">;
+}
+</span></code></pre><h3 id="so-many-strings">So many strings</h3>
+<p>I was warned about this one and blew it off. I thought to myself
+there's no way a Haskeller, trained in the arts of <code>String</code>, strict
+<code>Text</code>, lazy <code>Text</code>, <code>ByteString</code>s and more could be daunted. I was
+wrong.</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> hello1 = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> hello2 = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">, hello!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> name = </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, hello1 + name);
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, name + hello2);
+}
+</span></code></pre>
+<p>Nope, the code above doesn't compile.</p>
+<h3 id="magically-works-until-it-doesn-t">Magically works, until it doesn't</h3>
+<p>There are a number of &quot;magic&quot; things that happen in Rust in the name
+of ergonomics. Often, they work perfectly and save a lot of
+frustration. And sometimes, they fail. Look at this broken code:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in </span><span style="color:#657b83;">std::env::args().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">respond</span><span style="color:#657b83;">(arg);
+    }
+}
+
+</span><span style="color:#268bd2;">fn </span><span style="color:#b58900;">respond</span><span style="color:#657b83;">(</span><span style="color:#268bd2;">arg</span><span style="color:#657b83;">: </span><span style="color:#859900;">&amp;</span><span style="color:#268bd2;">str</span><span style="color:#657b83;">) {
+    </span><span style="color:#859900;">match</span><span style="color:#657b83;"> arg {
+        </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">hi</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello there!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">bye</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">OK, goodbye!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+        </span><span style="color:#859900;">_ =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sorry, I don&#39;t know what </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> means</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg),
+    }
+}
+</span></code></pre>
+<p>You'll get an error message:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">expected &amp;str, found struct `std::string::String`
+</span></code></pre>
+<p>Oh, well that makes sense! I need to get a reference to a <code>str</code> instead of the <code>String</code> I got from <code>args()</code>. Easy enough to fix:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">respond</span><span style="color:#657b83;">(</span><span style="color:#859900;">&amp;</span><span style="color:#657b83;">arg);
+</span></code></pre>
+<p>But then I realize that the respond function is silly and inline the
+<code>match</code>:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#859900;">for</span><span style="color:#657b83;"> arg </span><span style="color:#859900;">in </span><span style="color:#657b83;">std::env::args().</span><span style="color:#859900;">skip</span><span style="color:#657b83;">(</span><span style="color:#6c71c4;">1</span><span style="color:#657b83;">) {
+        </span><span style="color:#859900;">match &amp;</span><span style="color:#657b83;">arg {
+            </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">hi</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello there!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+            </span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">bye</span><span style="color:#839496;">&quot; </span><span style="color:#859900;">=&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">OK, goodbye!</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">),
+            </span><span style="color:#859900;">_ =&gt; println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Sorry, I don&#39;t know what </span><span style="color:#cb4b16;">{}</span><span style="color:#2aa198;"> means</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, arg),
+        }
+    }
+}
+</span></code></pre>
+<p>I remembered to match on <code>&amp;arg</code> instead of <code>arg</code>, so you'd think it
+would be fine. But it isn't:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#657b83;">  |             ^^^^ expected struct `std::string::String`, found str
+  |
+  = note: expected type `&amp;std::string::String`
+             found type `&amp;&#39;static str`
+</span></code></pre>
+<p>Huh, that's weird. In order to figure out what's going on here, you
+have to understand quite a few details of the deref magic going on
+behind the scenes. I dare say some of this magic is even a leaky
+abstraction. (Don't worry, it's still zero cost.) You can solve this
+with either:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match &amp;</span><span style="color:#657b83;">*arg {
+</span></code></pre>
+<p>or</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#859900;">match</span><span style="color:#657b83;"> arg.</span><span style="color:#859900;">as_ref</span><span style="color:#657b83;">() {
+</span></code></pre><h3 id="moving-data-into-closures">Moving data into closures</h3>
+<p>The biggest pain points I've encountered so far in my Rust odyssey are
+all around moving data into closures. I've been spoiled by Haskell: I
+like to use closures constantly, and am used to garbage collection
+just letting it all magically work.</p>
+<p>I've got some <em>real</em> head scratchers to demonstrate later, but have
+fun with this relatively simple example:</p>
+<pre style="background-color:#fdf6e3;">
+<code><span style="color:#268bd2;">fn </span><span style="color:#b58900;">main</span><span style="color:#657b83;">() {
+    </span><span style="color:#268bd2;">let</span><span style="color:#657b83;"> hello = </span><span style="color:#859900;">String</span><span style="color:#657b83;">::from(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Hello, </span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">);
+    </span><span style="color:#268bd2;">let </span><span style="color:#b58900;">greet </span><span style="color:#859900;">= </span><span style="color:#657b83;">|</span><span style="color:#268bd2;">name</span><span style="color:#657b83;">| hello + name;
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#859900;">greet</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Alice</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">));
+    </span><span style="color:#859900;">println!</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#cb4b16;">{}</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">, </span><span style="color:#859900;">greet</span><span style="color:#657b83;">(</span><span style="color:#839496;">&quot;</span><span style="color:#2aa198;">Bob</span><span style="color:#839496;">&quot;</span><span style="color:#657b83;">));
+}
+</span></code></pre>
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

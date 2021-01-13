@@ -1,0 +1,354 @@
+
+    
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Breaking changes, dependency trees</title>
+
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
+    <meta name="og:site_name" content="Michael Snoyman's homepage">
+    <meta name="og:title" content="Breaking changes, dependency trees">
+    <meta name="og:type content="website">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+
+    
+
+<meta name="og:description" value="Some thoughts on upcoming library breaking changes, and how to restructure dependency trees">
+
+
+
+
+
+
+    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
+    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="Michael Snoyman's blog">
+
+    <style>.wt-section { padding-top: 2rem }</style>
+  <body>
+    <header class="inner-page">
+      
+
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/img/snoylogo.png" height="50px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
+        </li>
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
+        <div class="container">
+          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
+            <div class="col-md-7">
+              <div class="text-center">
+                <h1 class="display-sm-4 display-lg-3">Breaking changes, dependency trees</h1>
+                
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published January  9, 2018</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main role="main">
+      <section class="wt-section">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-lg-12">
+              <p class="text-center">
+                <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
+              </p>
+
+              
+
+
+
+
+  
+
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=Breaking%20changes%2C%20dependency%20trees https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;01&#x2F;breaking-changes-dependency-trees&#x2F;" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;01&#x2F;breaking-changes-dependency-trees&#x2F;" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;01&#x2F;breaking-changes-dependency-trees&#x2F;&amp;title=Breaking%20changes%2C%20dependency%20trees" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url=https%3A&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2018&#x2F;01&#x2F;breaking-changes-dependency-trees&#x2F;" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+
+
+<!--
+<div class="container" id="blog-body">
+  <div class="row">
+    <div class="col-lg-9">
+-->
+      <p>
+        <i>
+          See a typo? Have a suggestion?
+          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/blog&#x2F;breaking-changes-dependency-trees.md">Edit this page on Github</a>
+        </i>
+      </p>
+
+      <p>My
+<a href="https://www.snoyman.com/blog/2018/01/drop-conduits-finalizers">previous blog post</a>
+discussed a possible upcoming breaking change to the conduit library:
+dropping finalizers. This is one of a number of other breaking changes
+I have planned. Another one is switching over from <code>MonadBaseControl</code>
+to <code>MonadUnliftIO</code>, for reasons I've
+<a href="https://www.fpcomplete.com/blog/2017/06/tale-of-two-brackets">discussed</a>
+<a href="https://www.fpcomplete.com/blog/2017/06/readert-design-pattern">at</a>
+<a href="https://www.fpcomplete.com/blog/2017/07/announcing-new-unliftio-library">length</a>
+<a href="https://www.fpcomplete.com/blog/2017/07/the-rio-monad">before</a> and
+<a href="https://www.snoyman.com/reveal/monad-transformer-state">spoken</a>
+<a href="https://www.youtube.com/watch?v=KZIN9f9rI34">about</a> too.</p>
+<p>Beyond this change, I have a number of others planned out as well,
+some more solidly than others. I've started a document
+<a href="https://github.com/snoyberg/codename-karka/#refactor-michaels-existing-libraries-to-match">describing some of these</a>,
+and I wanted to bring up one point in this design space for some user
+feedback: conduit dependency trees.</p>
+<h2 id="today">Today</h2>
+<p>The situation today is that we have a dependency graph that looks
+something like the following:</p>
+<ul>
+<li><code>resourcet</code> is at the base of the hierarchy, and defines some
+non-conduit-specific types and functions used throughout the conduit
+ecosystem. It currently depends on a number of packages, like
+<code>monad-control</code>, but that number will naturally drop as we move over
+to <code>MonadUnliftIO</code> exclusively.</li>
+<li><code>conduit</code> is designed to provide basic conduit functionality with
+fewer dependencies. It <em>does</em> depend on <code>resourcet</code>, and packages
+like <code>monad-control</code>. But it does not depend on <code>bytestring</code>,
+<code>text</code>, or <code>vector</code>, even though these are almost always wanted with
+conduit. It provides the <code>Data.Conduit.List</code> set of combinators,
+which are not the best ones out there.</li>
+<li><code>conduit-extra</code> adds <em>lots</em> of dependencies, including things like
+<code>attoparsec</code>, and provides a nicer set of helpers around
+<code>bytestring</code> and <code>text</code>.</li>
+<li>And finally, at the top of the tree (or our tree for today), we've
+got <code>conduit-combinators</code>, which provides the combinators I actually
+recommend people use in the <code>Data.Conduit.Combinator</code> module. This
+has lots of dependencies, since it inherits from <code>conduit-extra</code> and
+also adds in some extra things like <code>mwc-random</code>.</li>
+</ul>
+<p>Benefits:</p>
+<ul>
+<li>You can use <code>resourcet</code> without touching the conduit ecosystem at all</li>
+<li>You can use <code>conduit</code> without pulling in lots of resources</li>
+<li><code>Data.Conduit.Combinators</code> is fully loaded</li>
+</ul>
+<p>Downsides:</p>
+<ul>
+<li>The current dependency footprint even at the base is higher than I'd
+like, though that's getting fixed soon regardless.</li>
+<li>The <code>conduit</code> package is not super useful on its own due to lack of
+<code>bytestring</code>, <code>text</code>, and <code>vector</code> support.</li>
+<li>To get the functionality you want in either <code>conduit-extra</code> or
+<code>conduit-combinators</code>, you end up with a <em>much</em> larger dependency
+footprint.</li>
+</ul>
+<h2 id="plans-for-the-next-version">Plans for the next version</h2>
+<p>I have a number of different ideas in mind. I'll start off with the
+most conservative plan, and mention some variants below.</p>
+<ul>
+<li>As already mentioned, <code>resourcet</code> drops a bunch of
+dependencies. Nothing too interesting there.</li>
+<li><code>conduit</code> adds a dependency on <code>bytestring</code>, <code>text</code>, and <code>vector</code> as
+basic libraries everyone should be using anyway. We move over
+<code>Data.Conduit.Combinators</code> and provide most of its functionality in
+<code>conduit</code> itself, and start recommending against
+<code>Data.Conduit.List</code>, <code>Data.Conduit.Binary</code>, and <code>Data.Conduit.Text</code>.</li>
+<li><code>conduit-extra</code> basically remains as-is</li>
+<li><code>conduit-combinators</code> retains the extra functionality not present in
+the new <code>conduit</code></li>
+</ul>
+<p>Benefits:</p>
+<ul>
+<li>The <code>conduit</code> package now provides most of the functionality you'll
+want on a day-to-day basis</li>
+<li>The dependency footprint for the <code>Data.Conduit.Combinators</code> module
+is much reduced</li>
+<li>We can finally get away from the not-well-named functions in
+<code>Data.Conduit.List</code></li>
+</ul>
+<p>There aren't necessarily <em>downsides</em> to this approach, as I think it's
+simply better than what we have today already. But I want to list out
+the alternatives, which will make clear some things that could be
+possibly better still.</p>
+<ul>
+<li>What do we do with the <code>mono-traversable</code> package? It's currently a
+dependency of <code>conduit-combinators</code>, and the simplest path forward
+for the above is to make <code>conduit</code> depend on
+<code>mono-traversable</code>. However, this is a slightly heavier dependency
+footprint, requiring adding in <code>unordered-containers</code> and
+<code>vector-algorithms</code>. Alternatives:
+<ul>
+<li>Strip down <code>mono-traversable</code> to have less deps</li>
+<li>Redefine parts of <code>mono-traversable</code> needed for <code>conduit</code> in
+<code>conduit</code> itself</li>
+<li>Going crazy: <em>really</em> move <code>mono-traversable</code> into <code>conduit</code> and
+swap the dependency tree around</li>
+<li>My inclination: minimize <code>mono-traversable</code>'s dependencies a bit
+more (like dropping the <code>split</code> package, and <em>maybe</em>
+<code>vector-algorithms</code>) and make it a dependency of <code>conduit</code>.</li>
+</ul>
+</li>
+<li>Do we really need <code>conduit-combinators</code> as well as <code>conduit-extra</code>?
+It's just adding a few extra pieces of functionality over
+<code>conduit-extra</code>, and perhaps those should be folded into
+<code>conduit-extra</code> itself.</li>
+<li>Some people may not like the heavier dep footprint of <code>conduit</code>
+now. Should we split off a <code>conduit-core</code> package providing the core
+data types, functions, and operators, and have <code>conduit</code> depend on
+that?</li>
+<li>It feels almost silly to have the <code>ResourceT</code> data type live in a
+separate package.
+<ul>
+<li>If we have <code>conduit-core</code>, that could be a logical place to put
+it, since it won't have any extra dependencies versus the
+<code>resourcet</code> package itself, and then we can turn <code>resourcet</code>
+into a backwards compatibility layer.</li>
+<li>Or it may be logical to place <code>ResourceT</code> in the <code>unliftio-core</code>
+package, since both concepts help with resource cleanup in monad
+transformers. The former is necessary for continuation-based
+monads, while the latter (<code>MonadUnliftIO</code>) works for simpler
+monads.</li>
+</ul>
+</li>
+</ul>
+<p>If people have feedback, I'm happy to hear about it. I've spent an
+unfortunate amount of time bouncing around between these different
+options, so hopefully writing it all down and hearing some outside
+opinions can help move this forward.</p>
+
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--
+    </div>
+
+    <div class="col-lg-3" id="archive">
+      <h3>Blog archive</h3>
+      <ul class="blog-archive">
+            $forall ((year, month, slug), post) <- posts
+                <li>
+                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
+                    \ #
+                    <i>#{prettyDay now (postTime post)}
+-->
+
+<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    
+<footer class="bg-dark py-5">
+  <ul class="list-inline text-center text-md-right mb-0">
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://github.com/snoyberg">Github</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://tech.fpcomplete.com/">FP Complete</a>
+    </li>
+    <li class="list-inline-item mx-2">
+      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1434510-21', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- JS Script Files -->
+<!-- Global Vendor -->
+<script src="/maxi/vendors/jquery.min.js"></script>
+<script src="/maxi/vendors/jquery.migrate.min.js"></script>
+<script src="/maxi/vendors/popper.min.js"></script>
+<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Components Vendor  --> 
+<script src="/maxi/contact/jqBootstrapValidation.js"></script>
+<!--Plugin Initialize-->
+<script src="/maxi/js/global.js"></script>
+<!-- END JAVASCRIPTS -->
+
+
+  </body>
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Whirlwind Tour of Core Haskell Libraries</title>
+        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
+        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
+        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  
+
+# Whirlwind Tour of Core Haskell Libraries
+
+* Michael Snoyman
+* LambdaConf Winter Retreat 2018
+
+---
+
+## Today&#x27;s format
+
+* Very informal
+    * Interrupt!
+    * Ask questions!
+* References to lots of external learning material
+* Can go into depth on any of that if desired
+* Happy to discuss the topics here at length
+* Mini hackathon as well? &lt;https:&#x2F;&#x2F;github.com&#x2F;snoyberg&#x2F;codename-karka&gt;
+
+---
+
+## Haskell&#x27;s standard library
+
+* Standard library is `base`
+* Includes standard prelude, `Prelude`
+* They both suck :(
+    * Missing lots of functionality
+    * Dangerous functions
+* Need to call out to other libraries for almost any program
+
+----
+
+## Downsides to weak base
+
+* Which library to use for this functionality?
+* Dependency fear! I want my package to be lightweight
+* Mismatches in core types across ecosystem
+
+----
+
+## Bonus problem: patterns
+
+* Other languages have &quot;design patterns&quot;
+* We don&#x27;t need that in Haskell because types
+* Except: how do you handle effects like possible failure, or HTTP
+  calls?
+    * Throw it all in `IO`!
+    * Concrete monad transformers
+    * `mtl`-style typeclasses
+    * Effect libraries...
+* Weak standard library =&gt; non-standard types =&gt; many different patterns
+
+----
+
+## End result
+
+* Difficult for people new to the language to get started
+* Lack of standardization across team makes code bases difficult to
+  maintain
+* Fear of dependencies ultimately leads to lots of reinvented
+  functionality
+    * Code bloat
+    * More bugs
+
+----
+
+## Today&#x27;s topic
+
+* Cover a number of recommended libraries
+    * Recommended by whom? Me :)
+* Discuss some best practices for putting projects together
+* Describe a new initiative to help bring this all together
+* Finally: how to help Haskell take over the world!
+
+---
+
+## Features to cover
+
+* Data structures
+* I&#x2F;O
+* Concurrency
+* Mutable data
+* Exception handling
+* External processes
+
+Doesn&#x27;t cover all needs, but most real programs will need almost all
+of these.
+
+----
+
+## Libraries
+
+- base
+- bytestring
+- containers
+- deepseq
+- directory
+- filepath
+- hashable
+- microlens
+- mtl
+- text
+- time
+- typed-process
+- unliftio
+- unordered-containers
+- vector
+
+---
+
+## Data structures
+
+Three categories
+
+* Sequential data
+* Map&#x2F;Dictionary
+* Set
+
+Sequential data the most complicated, let&#x27;s knock out the other two
+
+---
+
+## Maps
+
+* Three core datatypes
+    * `data Map key value`
+    * `data IntMap value`
+    * `data HashMap key value`
+* `IntMap` is a specialized, optimized `Map Int`
+* `Map` is a binary tree, `HashMap` is (surprise) hash map
+* `Map` requires `Ord` on keys, `HashMap` requires `Hashable` and `Eq`
+* Generally: `HashMap` performs better
+
+----
+
+## Strict or lazy values
+
+* Maps are always strict in their keys
+    * Forcing a `Map` requires forcing all of its keys
+* You _can_ be lazy in the values if you want...
+* Usually: don&#x27;t do that, use `Data.Map.Strict` et al
+
+----
+
+## Mutability
+
+* Unlike other languages, `Map`s are immutable
+* Less used hashtables library provides in place mutation
+* Immutable is nice: don&#x27;t worry about data races
+* Stick it inside a `TVar`, `IORef`, etc
+* Downside: performance is not as good
+
+----
+
+## Map API Overview
+
+```haskell
+import qualified Data.Map.Strict as Map
+import qualified Data.IntMap.Strict as IntMap
+import qualified Data.HashMap.Strict as HashMap
+
+singleton :: k -&gt; v -&gt; Map k v
+fromList :: [(k, v)] -&gt; Map k v
+toList :: Map k v -&gt; [(k, v)]
+lookup :: k -&gt; Map k v -&gt; Maybe v
+insert :: k -&gt; v -&gt; Map k v -&gt; Map k v
+insertWith :: (v -&gt; v -&gt; v) -&gt; k -&gt; v -&gt; Map k v -&gt; Map k v
+union :: Map k v -&gt; Map k v -&gt; Map k v
+unionWith :: (v -&gt; v -&gt; v) -&gt; Map k v -&gt; Map k v -&gt; Map k v
+```
+
+What about duplicates?
+
+----
+
+## Sets
+
+* Just like `Map`s, but no values (or `()` is the value...)
+* No strict vs lazy difference... no values!
+* No worry about duplicate keys... no values!
+
+----
+
+## Set API Overview
+
+```haskell
+import qualified Data.Set as Set
+import qualified Data.IntSet as IntSet
+import qualified Data.HashSet as HashSet
+
+singleton :: k -&gt; Set k
+fromList :: [k] -&gt; Set k
+toList :: Set k -&gt; [k]
+member :: k -&gt; Set k -&gt; Bool
+insert :: k -&gt; Set k -&gt; Set k
+union :: Set k -&gt; Set k -&gt; Set k
+```
+
+----
+
+## Calculating frequency
+
+```haskell
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.Map.Strict as Map
+
+main :: IO ()
+main = do
+  lbs &lt;- BL.getContents
+  let add m w = Map.insertWith (+) w 1 m
+  mapM_ print $ Map.toList $ BL.foldl&#x27; add Map.empty lbs
+```
+
+----
+
+## More information
+
+* https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;containers
+
+---
+
+## Sequential data
+
+Everyone knows lists, right?
+
+```haskell
+(++) :: [a] -&gt; [a] -&gt; [a]
+concat :: [[a]] -&gt; [a]
+map :: (a -&gt; b) -&gt; [a] -&gt; [b]
+break :: (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
+splitAt :: Int -&gt; [a] -&gt; ([a], [a])
+null :: [a] -&gt; Bool
+length :: [a] -&gt; Int
+reverse :: [a] -&gt; [a]
+intercalate :: [a] -&gt; [[a]] -&gt; [a]
+foldl&#x27; :: (b -&gt; a -&gt; b) -&gt; b -&gt; [a] -&gt; b
+and :: [Bool] -&gt; Bool
+sum :: Num a =&gt; [a] -&gt; a
+replicate :: Int -&gt; a -&gt; [a]
+```
+
+----
+
+## Lists: the good
+
+* Polymorphic on any contained value
+* Lazy&#x2F;infinite
+* Cheap prepend (singly linked list)
+* Pure data structure
+* Built in syntactic sugar
+* Easy to pattern match
+
+----
+
+## Lists: the bad
+
+* Lots of memory overhead
+    * Data constructor per cons
+    * Pointer to value (1 word)
+    * Pointer to rest of list (1 word)
+* O(n) indexing
+* Can hide bottom values (`1:2:undefined`)
+* Consider overhead of `[Word8]` and `[Char]`
+
+What do?
+
+----
+
+## Other languages
+
+Most languages have a few sequential data types
+
+* Linked list&#x2F;doubly linked lists
+* Queue&#x2F;double-ended queue
+* Array&#x2F;vector
+
+----
+
+## Haskell&#x27;s plethora
+
+* Lists&#x2F;difference lists
+* Seq
+* Arrays (don&#x27;t bother, use vector)
+* Vector: boxed, storable, unboxed
+* ByteString: strict, lazy
+* Text: strict, lazy
+* ShortByteString (seriously?)
+
+Why so many?
+
+----
+
+## Haskell&#x27;s memory model
+
+We have four ways of storing sequential data
+
+* Entirely as normal heap objects (list, Seq, diff lists)
+* Primitive boxed arrays (boxed vector)
+* Unpinned memory (Text, ShortByteString, unboxed vector)
+* Pinned memory (ByteString, storable vector)
+
+----
+
+## Heap objects
+
+* Pointers, pointers everywhere
+* Memory overhead for the allocations&#x2F;GC
+* CPU overhead for following pointers
+
+----
+
+## Primitive boxed arrays
+
+* Packed representation of pointers
+* Still follow pointers to the values
+* Pointers can point to thunks, which is why they&#x27;re value lazy
+* Less pointer overhead, but still some
+* Allows _any heap object_ to be stored
+
+----
+
+## Unpinned memory
+
+* Byte array managed by garbage collector
+* GC can move it around
+    * Reducing fragmentation
+    * Can&#x27;t pass it over FFI
+* Values stored as bytes
+    * Must be representable as bytes
+    * Must represent in fixed size
+    * Cannot be lazy
+
+----
+
+## Pinned memory
+
+* Standard `malloc`-style buffers
+* GC __can&#x27;t__ move it around
+    * Can fragment memory (don&#x27;t hold for too long)
+    * Can pass it over FFI
+* Values stored as bytes, same as unpinned
+
+----
+
+## Haskell&#x27;s laziness
+
+Three levels of laziness in these data structures
+
+* Fully lazy, both the values and the structure itself are lazy (e.g.,
+  list `oo:bar:undefined`)
+* Spine strict: values can be lazy, but not the structure (e.g., boxed
+  vector, `fromList [undefined]`)
+* Fully strict: nothing lazy (e.g., `ByteString`, this fails `fromList
+  [undefined]`)
+* Semi-strict: lazy list of strict chunks (lazy `ByteString` and `Text`)
+
+----
+
+## Overlaps
+
+That still leaves us with some overlaps
+
+* List vs diff list vs `Seq`: different time complexity for some
+  operations
+* `ShortByteString` vs unboxed `Vector Word8`: same thing
+* `ByteString` vs storable `Vector Word8`: also same thing
+* `Text` does not overlap: it&#x27;s a `ShortByteString` containing UTF-16
+  codepoints with a `Char`-based API
+
+----
+
+## What to use?
+
+* `ShortByteString`: smaller and long lived
+* `ByteString` interacting with FFI (I&#x2F;O)
+* `Text` for storing textual values
+* If it works and not FFI: unpinned vector
+* If it works _and_ you need FFI: storable vector
+* Need spine laziness (e.g., infinite), use lists
+* Unusual optimizations
+    * Cheap append _and_ inspection: `Seq`
+    * Cheap append: difference lists
+* Otherwise: boxed vector
+
+----
+
+## The string problem
+
+* Lots of theoretical ways to represent string-like stuff
+* `[Char]`, strict&#x2F;lazy `ByteString`&#x2F;`Text`, `ShortByteString`,
+  `Vector` of `Word8` or `Char`...
+* `Vector` of `Char` is always a bad idea: too much memory
+* Good that we have bytes vs text difference
+* Need to use `Text` instead of `String` everywhere... not there yet
+* Conclusion: use strict `ByteString` or `Text` almost everywhere,
+  convert when necessary
+
+----
+
+## Why not use...
+
+* Lazy `ByteString` or `Text`
+    * Useful sometimes, like lazily generating large data
+    * Mostly used for lazy I&#x2F;O, which I advise against (use conduit
+      instead)
+* Unboxed&#x2F;storable vectors instead of `ByteString`&#x2F;`ShortByteString`
+    * Hysterical raisins, probably the right thing
+    * Lots of Rust envy here :(
+* Lists everywhere
+    * Performance
+
+----
+
+## The good news
+
+* You know lists, right?
+* You basically know all of these data structures
+* Don&#x27;t get overwhelmed with the choices, just follow the advice above
+
+----
+
+## Qualified imports (the bad news?)
+
+* Since these all have similar APIs, names conflict
+* Use qualified imports
+* Recommended naming
+
+```haskell
+import qualified Data.ByteString as B
+import qualified Data.Text as T
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.Text.Lazy as TL
+import qualified Data.Vector as V -- boxed
+import qualified Data.Vector.Unboxed as VU
+import qualified Data.Vector.Storable as VS
+import Data.ByteString.Short
+  (ShortByteString, toShort, fromShort)
+```
+
+----
+
+## Further reading
+
+* https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;vector
+* https:&#x2F;&#x2F;haskell-lang.org&#x2F;tutorial&#x2F;string-types
+
+----
+
+## I&#x2F;O
+
+* Not the monad, actual input and output
+* Console
+* Files
+* Network
+* Streaming and in memory
+
+----
+
+## The bad: character I&#x2F;O
+
+* Implicit character decoding
+* Newline handling
+* Environment variables affect things
+* For console: probably right
+* File I&#x2F;O: probably wrong
+* Network I&#x2F;O: lol nope
+
+https:&#x2F;&#x2F;www.snoyman.com&#x2F;blog&#x2F;2016&#x2F;12&#x2F;beware-of-readfile
+
+----
+
+## The bad: lazy I&#x2F;O
+
+* Lazy `readFile` (et al)
+    * Hides exceptions till later
+    * Keeps file descriptors open longer than expected
+* Answer: use strict I&#x2F;O operations
+* Dealing with large data? Use conduit
+* Exception to the rule: lazy `writeFile` is fine (not actually lazy
+  I&#x2F;O)
+
+----
+
+## Reading a file
+
+* Wants bytes? `Data.ByteString.readFile`
+* Want text? Choose an encoding!
+    * `decodeUtf8With lenientDecode &lt;$&gt; B.readFile fp`
+* Let&#x27;s get crazy
+
+```haskell
+readFileUtf8 :: MonadIO m =&gt; FilePath -&gt; m Text
+readFileUtf8 fp = do
+  bs &lt;- readFileBinary fp
+  case decodeUtf8&#x27; bs of
+    Left e -&gt; throwIO $ ReadFileUtf8Exception fp e
+    Right text -&gt; return text
+```
+
+----
+
+## Writing a file
+
+* No need to worry about char enc problems
+* `Data.ByteString.writeFile`
+* Have text? Choose an encoding!
+    * `B.writeFile fp $ encodeUtf8 text`
+
+----
+
+## Copy a file
+
+What&#x27;s wrong with this code?
+
+```haskell
+bs &lt;- B.readFile inputFile
+B.writeFile outputFile bs
+```
+
+----
+
+## Streaming
+
+Here&#x27;s a conduit solution
+
+```haskell
+runConduitRes $ sourceFile inputFile
+             .| sinkFile outputFile
+```
+
+Or without `ResourceT`:
+
+```haskell
+withSourceFile inputFile $ \src -&gt;
+withSinkFile outputFile $ \sink -&gt;
+  runConduit $ src .| sink
+```
+
+Why with pattern? We&#x27;ll talk exceptions later
+
+---
+
+## Generating large output
+
+What&#x27;s wrong with this code?
+
+```haskell
+odds :: [Int]
+odds = [1, 3..]
+
+toLine :: Int -&gt; String
+toLine i = show i ++ &quot;\n&quot;
+
+toLines :: [Int] -&gt; String
+toLines = foldr (\i rest -&gt; toLine i ++ rest) &quot;&quot;
+
+main :: IO ()
+main = putStr $ toLines $ take 1000 odds
+```
+
+__Strings!__
+
+----
+
+## Strict ByteString
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+import Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as B8
+import Data.Monoid ((&lt;&gt;))
+
+odds = [1, 3..]
+
+toLine :: Int -&gt; ByteString
+toLine i = B8.pack (show i) &lt;&gt; &quot;\n&quot;
+
+toLines :: [Int] -&gt; ByteString
+toLines = foldr (\i rest -&gt; toLine i &lt;&gt; rest) B8.empty
+
+main = B8.putStr $ toLines $ take 1000 odds
+```
+
+Problem? Quadratic complexity
+
+----
+
+## Lazy ByteString
+
+Avoid the buffer copies
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+import Data.ByteString.Lazy (ByteString)
+import qualified Data.ByteString.Lazy.Char8 as BL8
+import Data.Monoid ((&lt;&gt;))
+
+odds = [1, 3..]
+
+toLine :: Int -&gt; ByteString
+toLine i = BL8.pack (show i) &lt;&gt; &quot;\n&quot;
+
+toLines :: [Int] -&gt; ByteString
+toLines = foldr (\i rest -&gt; toLine i &lt;&gt; rest) BL8.empty
+
+main = BL8.putStr $ toLines $ take 1000 odds
+```
+
+Still quadratic :(
+
+----
+
+## Builders
+
+Single-copy data structure, efficient `Handle` interaction
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+import Data.ByteString.Builder (Builder, intDec, hPutBuilder)
+import System.IO (stdout)
+import Data.Monoid ((&lt;&gt;))
+
+odds = [1, 3..]
+
+toLine :: Int -&gt; Builder
+toLine i = intDec i &lt;&gt; &quot;\n&quot;
+
+toLines :: [Int] -&gt; Builder
+toLines = foldr (\i rest -&gt; toLine i &lt;&gt; rest) mempty
+
+main = hPutBuilder stdout $ toLines $ take 1000 odds
+```
+
+----
+
+## Text builders
+
+* Text also has a builder
+* Much less useful overall, no direct output capabilities
+* Downside to ByteString builders: have to assume a character encoding
+* For console, may be a problem, but great for network or file I&#x2F;O
+
+---
+
+## Networking
+
+* Low level libraries like network
+    * Use the `Network.Socket` API!
+* conduit-based helper functions on top of that
+* WAI and Warp for web servers
+* http-conduit for web clients
+* Many other libraries out there too
+
+----
+
+## Web server
+
+* Lots of details here: &lt;https:&#x2F;&#x2F;github.com&#x2F;fpco&#x2F;applied-haskell&#x2F;blob&#x2F;master&#x2F;web-services.md&gt;
+* Who wants to go down the rabbit hole?
+
+----
+
+## Web client
+
+* &lt;https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;http-client&gt;
+* Optional rabbit hole again
+
+----
+
+## Network server with conduit
+
+Simple echo server example
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+import Data.Conduit
+import Data.Conduit.Network
+
+main :: IO ()
+main = runTCPServer (serverSettings 3001 &quot;127.0.0.1&quot;) echo
+
+echo :: AppData -&gt; IO ()
+echo app = runConduit $ appSource app .| appSink app
+```
+
+---
+
+## Side adventure: unliftio
+
+* Many more details on the motivation tomorrow
+* Two packages
+    * unliftio-core provides a typeclass
+    * unliftio wraps a bunch of libraries with that type class
+* If it&#x27;s in unliftio: it&#x27;s good to use, do it!
+* Epic foreshadowment for tomorrow&#x27;s presentation :)
+
+---
+
+## Mutable data
+
+* https:&#x2F;&#x2F;github.com&#x2F;fpco&#x2F;applied-haskell&#x2F;blob&#x2F;master&#x2F;mutable-variables.md
+* Single cell references: https:&#x2F;&#x2F;www.stackage.org&#x2F;package&#x2F;mutable-containers
+
+---
+
+## Concurrency
+
+* tl;dr: use `UnliftIO.Async` and `UnliftIO.STM`
+* https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;stm
+* https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;async
+
+---
+
+## Exception handling
+
+* Documentation still out of date
+* We&#x27;ll cover the why of things tomorrow
+* Short answer: use `UnliftIO.Exception`
+
+---
+
+## External processes
+
+* https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;typed-process
+
+---
+
+## Structuring applications
+
+* Use `RIO`
+* Define `Has` typeclasses
+* Demonstration: `pantry`: https:&#x2F;&#x2F;github.com&#x2F;snoyberg&#x2F;codename-karka&#x2F;blob&#x2F;master&#x2F;pantry&#x2F;src&#x2F;Pantry.hs
+* &lt;https:&#x2F;&#x2F;github.com&#x2F;commercialhaskell&#x2F;stack&#x2F;tree&#x2F;rio&#x2F;subs&#x2F;rio&gt;
+
+---
+
+## Random grab bag
+
+* &lt;https:&#x2F;&#x2F;wiki.haskell.org&#x2F;Typeclassopedia&gt;
+* &lt;https:&#x2F;&#x2F;haskell-lang.org&#x2F;tutorial&#x2F;operators&gt;
+* &lt;https:&#x2F;&#x2F;haskell-lang.org&#x2F;tutorial&#x2F;synonyms&gt;
+* &lt;https:&#x2F;&#x2F;haskell-lang.org&#x2F;library&#x2F;optparse-applicative&gt;
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: '/static/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: '/static/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: '/static/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: '/static/reveal/plugin/zoom-js/zoom.js', async: true },
+              { src: '/static/reveal/plugin/notes/notes.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {"center":false,"controls":false};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>
