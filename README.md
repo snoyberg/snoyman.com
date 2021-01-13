@@ -7,6 +7,6 @@ This contains the code and content for the [snoyman.com](http://www.snoyman.com)
 
 FIXME: Need to autogenerate:
 
-* static/shekel/feed
+* static/shekel/feed.xml
 * content/base.md
 * content/shekel.md
