@@ -54,10 +54,11 @@
                   <p>I live in Maalot, Israel with <a href="https://twitter.com/lambdamom">my wife Miriam</a> and our four kids.</p>
                 </div>
 
+                {% set blogs = get_section(path="blog/_index.md") %}
+                {% set recent = blogs.pages.0 %}
                 <p class="alert alert-info">
                   <b>Most recent blog post:</b>
-                  <a href="FIXME">FIXME title</a>
-                  <i>DATE</i>
+                  <a href="{{ recent.path }}">{{ recent.title }}</a> <i>{{ recent.date | date(format="%B %e, %Y") }}</i>
                 </p>
 
                 <h2>Publications</h2>

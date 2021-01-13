@@ -7,7 +7,7 @@ date = 2021-01-09
 [taxonomies]
 
 [extra]
-ogimage = "https://i.imgur.com/7Hyo979.png"
+ogimage = "parents-guide-minecraft.png"
 +++
 With the COVID-19 lockdowns, our children started getting interested in Minecraft. It started with our eldest (12 years old), who wanted to play on a server with his friends. Later, our 10 and 8 year olds wanted to get involved too. This seems like it should have been a straightforward experience: buy the game, install it, walk away.
 

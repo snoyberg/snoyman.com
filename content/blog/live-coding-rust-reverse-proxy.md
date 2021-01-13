@@ -7,7 +7,7 @@ date = 2020-12-27
 [taxonomies]
 
 [extra]
-ogimage = "https://i.imgur.com/uwqNWwv.png"
+ogimage = "live-coding-rust-reverse-proxy.png"
 +++
 I've been doing quite a bit of experimenting recently with my video recording and streaming setup. As a combination of "let's test it out" and "let's see if anyone likes this kind of thing," I'm going to be doing a live coding session this Tuesday, December 29, at 10am Eastern. If everything goes according to plan (which it may not), you can [view the live stream and the recording on YouTube](https://youtu.be/ksKpx6MlMPw):
 

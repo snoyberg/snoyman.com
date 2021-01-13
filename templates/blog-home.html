@@ -7,7 +7,7 @@
 {% for page in paginator.pages %}   
   <div class="card mb-4">
     {% if page.extra.ogimage %}
-      {% set image = page.extra.ogimage %}
+      {% set image = "/thumbs/" ~ page.extra.ogimage %}
     {% else %}
       {% set image = "/img/slogo.png" %}
     {% endif %}

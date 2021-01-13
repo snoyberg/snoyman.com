@@ -7,7 +7,7 @@ date = 2021-01-10
 [taxonomies]
 
 [extra]
-ogimage = "https://i.imgur.com/qI8FFBO.png"
+ogimage = "securing-internet-communications-laymans-guide.png"
 +++
 There has been rising concern over the past number of years around security in personal communications. More recently, with censorship on social media platforms occurring on a grand scale, people are wondering about securing social media platforms. I wouldn't call myself an expert on either topic, but I have good knowledge of the underlying technologies and principles, and have done some investigative work into the specific platforms for work. With many friends and family suddenly interested in this topic, I figured I would write up a layman's guide.
 
