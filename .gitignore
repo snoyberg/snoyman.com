@@ -1,4 +1,3 @@
 *.swp
-.stack-work/
 *~
-/site/snoymancom.cabal
+/public/
