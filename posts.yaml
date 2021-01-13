@@ -9,7 +9,7 @@ posts:
   time: 2021-01-10T16:00:00Z
   description: |
     A hopefully helpful guide to understanding private communications and censorship-proof social media in 2021. Targeted at non tech people trying to understand this crazy world.
-  twitter-image: https://i.imgur.com/qI8FFBO.png"
+  twitter-image: "https://i.imgur.com/qI8FFBO.png"
 - file: posts/parents-guide-minecraft.md
   title: "A parents' guide to Minecraft"
   time: 2021-01-09T19:55:00Z

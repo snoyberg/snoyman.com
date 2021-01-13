@@ -1549,11 +1549,20 @@ li.nav-item.active > a {
   align-items: center;
 }
 
+.blog-image-title > a {
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+
 .blog-image-title > a > img {
   max-width: 100px;
   max-height: 100px;
 }
 
+.blog-image-title .description {
+  font-size: 80%;
+}
 
 #blog-body blockquote {
   margin-left: 0.5em;
@@ -1572,4 +1581,24 @@ li.nav-item.active > a {
 
 #blog-body #archive {
   border-left: 1px solid black;
+}
+
+/* Share bar */
+.share-bar-wrapper {
+	font-size: 120%;
+	text-align: center;
+	margin: 1em 0;
+}
+
+.share-bar-inner {
+	background-color: rgba(26, 169, 226, .25);
+	max-width: 400px;
+	padding: 0.5em;
+	border-radius: 1em;
+	display: inline-block;
+	line-height: 1em;
+}
+
+.share-bar-inner a:hover {
+	text-decoration: none !important;
 }

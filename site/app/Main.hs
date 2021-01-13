@@ -119,14 +119,6 @@ getPostR year month slug = do
             }
     let tagline = [hamlet|<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published #{prettyDay now $ postTime thisPost}|]
     defaultLayoutExtra tagline $ do
-        setTitle $ toHtml $ postTitle thisPost
-        forM_ (postDescription thisPost) $ \desc ->
-          toWidgetHead [shamlet|<meta name=og:description value=#{desc}>|]
-        forM_ (postTwitterImage thisPost) $ \url ->
-          toWidgetHead [shamlet|
-            <meta property=og:image content=#{url}>
-            <meta name=twitter:card content=summary_large_image>
-          |]
         toWidget
             [lucius|
                 .post-date {
@@ -167,13 +159,6 @@ getPostR year month slug = do
                   border-radius: 10px;
                 }
             |]
-        $(whamletFile "templates/blog.hamlet")
-        toWidget $(luciusFile "templates/blog.lucius")
-        toWidget $(juliusFile "templates/blog.julius")
-        addStylesheetRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css"
-        addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"
-        addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/haskell.min.js"
-        addScriptRemote "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/rust.min.js"
 
 getFeedR :: Handler TypedContent
 getFeedR = feedHelper (const True)
@@ -296,28 +281,6 @@ getRevealR pieces = do
         Just ('.', _) -> notFound
         _ | T.any (== '/') t -> notFound
         _ -> return ()
-
-data RawPosts = RawPosts ![PostRaw] !(Map SeriesName Text)
-
-instance FromJSON RawPosts where
-  parseJSON v = asObject v <|> asArray
-    where
-      asArray = RawPosts <$> parseJSON v <*> pure mempty
-      asObject = withObject "RawPosts" $ \o -> RawPosts
-        <$> o .: "posts"
-        <*> o .: "series"
-
-data PostRaw = PostRaw FilePath Text UTCTime Bool !(Maybe Text) !(Maybe Text) !(Set Text) !(Maybe SeriesName)
-instance FromJSON PostRaw where
-    parseJSON = withObject "PostRaw" $ \o -> PostRaw
-        <$> o .: "file"
-        <*> o .: "title"
-        <*> ((flip UTCTime 0 <$> (o .: "day")) <|> (o .: "time"))
-        <*> o .:? "listed" .!= True
-        <*> o .:? "description"
-        <*> o .:? "twitter-image"
-        <*> o .:? "old-slugs" .!= mempty
-        <*> o .:? "series"
 
 getShekelR :: Handler Html
 getShekelR = do

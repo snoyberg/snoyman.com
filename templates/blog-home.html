@@ -15,7 +15,12 @@
       <a href="{{ page.permalink | safe }}">
         <img src="{{ image | safe }}" alt="{{ page.title }}">
       </a>
-      <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
+      <div>
+        <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
+        {% if page.description %}
+          <p class="description">{{ page.description }}</p>
+        {% endif %}
+      </div>
     </div>
     <div class="card-footer text-muted">
       <span class="font-weight-light d-block"><i class="fa fa-calendar" aria-hidden="true"></i> Published {{ page.date | date(format="%B %e, %Y") }}</span>

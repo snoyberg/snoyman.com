@@ -1,12 +1,24 @@
 {% extends "index.html" %}
 
+{% block pagehead %}
+{% if page.description %}
+<meta name="og:description" value="{{ page.description }}">
+{% endif %}
+
+{% if page.extra.ogimage %}
+<meta property="og:image" content="{{ page.extra.ogimage }}">
+<meta name="twitter:card" content="summary_large_image">
+{% endif %}
+
+{% endblock pagehead %}
+
+{% block subtitle %}
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published {{ page.date | date(format="%B %e, %Y") }}</p>
+{% endblock subtitle %}
+
 {% block content %}
 
-<script>
-  hljs.configure({languages:[]});
-  hljs.initHighlightingOnLoad();
-</script>
-
+{{ macros::share() }}
 
 <!--
 <div class="container" id="blog-body">
@@ -43,4 +55,5 @@
 -->
 
 <div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
 {% endblock content %}

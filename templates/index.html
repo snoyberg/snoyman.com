@@ -21,7 +21,7 @@
     <meta name="og:type content="website">
 
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
-    <script src="https://kit.fontawesome.com/ed5ab29d5a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
 
     {% block pagehead %}
@@ -60,15 +60,6 @@
                 <a class="btn" style="background: #72472f; color: #fff; font-weight: bold" href="https://www.beginrust.com/">New: The "Begin Rust" book</a>
               </p>
 
-              <!-- FIXME
-              $maybe socialLinks <- msocialLinks
-                <p class="text-center bg-light">
-                  <b>Share this
-                  $forall sl <- socialLinks
-                    \ #
-                    <a target="_blank" href=#{makeUrl (slPath sl) (slQuery sl)} title="Share on #{slName sl}">
-                      <i class="fab fa-#{slIcon sl}">
-              -->
               {% block content %}
                 {{ content.content | safe }}
               {% endblock content %}

@@ -2,7 +2,8 @@ base_url = "https://www.snoyman.com"
 default_language = "en"
 compile_sass = false
 generate_feed = true
-highlight_code = false
+highlight_code = true
+highlight_theme = "solarized-light"
 
 taxonomies = [
   {name = "tags", paginate_by = 20},

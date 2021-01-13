@@ -120,3 +120,34 @@
                 </span>
 </div>
 {% endmacro paginator %}
+
+{% macro share() %}
+
+{% if page.title %}
+  {% set title = page.title %}
+{% elif section.title %}
+  {% set title = section.title %}
+{% endif %}
+
+<div class="share-bar-wrapper">
+  <div class="share-bar-inner">
+    <b>Share this</b>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text={{ title | urlencode }} {{ current_url | urlencode }}" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ current_url | urlencode }}" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ current_url | urlencode }}&amp;title={{ title | urlencode }}" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+
+    <a target="_blank" href="https://www.reddit.com/submit?url={{ current_url | urlencode }}" title="Share on Reddit">
+      <i class="fab fa-reddit"></i>
+    </a>
+  </div>
+</div>
+
+{% endmacro share %}
