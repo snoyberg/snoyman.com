@@ -1,23 +1,27 @@
-$doctype 5
-<html lang=en>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <meta charset=utf-8>
-        <title>#{title}
+        <meta charset="utf-8">
+        <title>{{ page.title }}</title>
         <link rel="stylesheet" href="/static/reveal/css/reveal.css">
         <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
         <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
         <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+    </head>
     <body>
         <div class="reveal">
             <div class="slides">
-                $forall rows <- cols
-                  <section>
-                    $forall row <- rows
-                      <section data-markdown>
-                        <script type="text/template">#{preEscapedToMarkup row}
+                <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-vertical="^\r?\n----\r?\n$">
+                  {% set content = load_data(path=page.extra.raw, format="plain") %}
 
-        <script src="/static/reveal/lib/js/head.min.js">
-        <script src="/static/reveal/js/reveal.js">
+{{ content }}
+
+                </section>
+            </div>
+        </div>
+
+        <script src="/static/reveal/lib/js/head.min.js"></script>
+        <script src="/static/reveal/js/reveal.js"></script>
 
         <script>
             function extend() {
@@ -59,3 +63,6 @@ $doctype 5
             var options = {"center":false,"controls":false};
             options = extend(defaultOptions, options, queryOptions);
             Reveal.initialize(options);
+        </script>
+    </body>
+</html>

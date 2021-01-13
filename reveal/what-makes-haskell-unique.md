@@ -1,7 +1,3 @@
----
-title: What Makes Haskell Unique
----
-
 ### What Makes Haskell Unique
 
 * Michael Snoyman

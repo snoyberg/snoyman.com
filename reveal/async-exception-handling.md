@@ -1,7 +1,3 @@
----
-title: Async exception handling in Haskell
----
-
 ## Async exception handling in Haskell
 
 * Michael Snoyman

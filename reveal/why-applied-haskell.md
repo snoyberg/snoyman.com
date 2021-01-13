@@ -1,7 +1,3 @@
----
-title: Why Applied Haskell
----
-
 ## Why Applied Haskell
 
 * Quick introduction to why you're here, and why I do this :)

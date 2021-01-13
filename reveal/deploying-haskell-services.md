@@ -1,7 +1,3 @@
----
-title: Deploying Haskell Services
----
-
 # Deploying Haskell Services
 
 * Michael Snoyman

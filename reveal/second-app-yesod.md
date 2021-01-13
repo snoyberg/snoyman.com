@@ -1,7 +1,3 @@
----
-title: Your Second Haskell Web App
----
-
 ## Your Second Haskell Web App
 
 ### A Yesod Workshop

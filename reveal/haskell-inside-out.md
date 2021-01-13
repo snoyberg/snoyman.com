@@ -1,7 +1,3 @@
----
-title: Haskell from the Inside Out
----
-
 ## Haskell from the Inside Out
 
 * Michael Snoyman

@@ -1,7 +1,3 @@
----
-title: Web Programming and Streaming Data in Haskell
----
-
 # Web Programming and Streaming Data in Haskell
 
 * Michael Snoyman

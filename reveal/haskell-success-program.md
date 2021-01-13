@@ -1,7 +1,3 @@
----
-title: Haskell Success Program
----
-
 ## Haskell Success Program
 
 * Michael Snoyman

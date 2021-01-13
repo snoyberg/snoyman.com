@@ -1,7 +1,3 @@
----
-title: Everything you didn't want to know about monad transformer state
----
-
 ### Monad Transformer State
 
 *Everything you didn't want to know*

@@ -1,7 +1,3 @@
----
-title: Functional Programming for the Long Haul
----
-
 ## Functional Programming for the Long Haul
 
 Michael Snoyman, VP of Engineering

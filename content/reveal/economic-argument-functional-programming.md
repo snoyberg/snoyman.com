@@ -1,3 +1,8 @@
++++
+title = "Economic Argument for Functional Programming"
+[extra]
+raw = "reveal/economic-argument-functional-programming.md"
++++
 ## Economic Argument for Functional Programming
 
 * Michael Snoyman

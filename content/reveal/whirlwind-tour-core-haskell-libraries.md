@@ -1,3 +1,9 @@
++++
+title = "Whirlwind Tour of Core Haskell Libraries"
+[extra]
+raw = "reveal/whirlwind-tour-core-haskell-libraries.md"
++++
+
 # Whirlwind Tour of Core Haskell Libraries
 
 * Michael Snoyman

@@ -1,7 +1,3 @@
----
-title: Your first Haskell web app with WAI and Warp
----
-
 ## Your first Haskell web app with WAI and Warp
 
 * Michael Snoyman
