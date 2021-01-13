@@ -1631,3 +1631,16 @@ table#versions th, table#versions td {
   border: 1px solid black;
   padding: 5px;
 }
+
+/* Shekel */
+#rateinfo {
+  border: 1px solid black;
+  border-radius: 7px;
+  padding: 10px;
+  text-align: center;
+}
+
+#rateinfo .rate {
+  display: block;
+  font-size: 200%;
+}
