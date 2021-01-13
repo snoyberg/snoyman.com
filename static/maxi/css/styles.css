@@ -1540,3 +1540,36 @@ li.nav-item.active > a {
     /* background-color: rgba(27, 30, 36, 0.3); */
   }
 } 
+
+/* Michael customized */
+.blog-image-title {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-column-gap: 1rem;
+  align-items: center;
+}
+
+.blog-image-title > a > img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+
+#blog-body blockquote {
+  margin-left: 0.5em;
+  border-left: 5px solid #999;
+  padding-left: 0.5em;
+}
+
+#blog-body table {
+  border-collapse: collapse;
+}
+
+#blog-body th, #blog-body td {
+  border: 1px solid black;
+  padding: 3px;
+}
+
+#blog-body #archive {
+  border-left: 1px solid black;
+}

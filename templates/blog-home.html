@@ -2,158 +2,27 @@
 
 {% block content %}
 
-<section>
-  <div class="container">
-      <div class="row">
-            {% for page in paginator.pages %}
+{{ macros::paginator() }}
 
-              {% if loop.index == 1 %}
-                <div class="col-sm-6">
-                  {% if page.extra.blogimage %}
-                  <a class="main-blog-image" href="{{ page.permalink | safe }}"><img src="{{ page.extra.blogimage }}"></a>
-                  {% else %}
-                  <a class="text-decoration-none" href="{{ page.permalink | safe }}"><img src="/images/blog/blog.jpg"></a>
-                  {% endif %}
-                </div>
-                <div class="col-sm-6 mt-5">
-                  <h2><a class="text-decoration-none" href="{{ page.permalink | safe }}">{{ page.title }}</a></h2>
-                  <span class="font-weight-light d-block">Published {{ page.date | date(format="%B %e, %Y") }}</span>
-                </div>
-              {% endif %}
-
-            {% endfor %}
-            <div class="col-sm-12">
-              <div class="row dark-coral py-3 px-3 mt-5 mb-4 mx-0">
-                <div class="col-sm-8 pt-2 blog-topics">
-                  Topics: 
-                  <a data-filter="insights" class="deep-blue-text" href="/categories/insights/">Insights</a> | 
-                  <a data-filter="devops" class="deep-blue-text" href="/categories/devops/">DevOps</a> | 
-                  <a data-filter="functional programming" class="deep-blue-text" href="/categories/functional-programming/">Functional Programming</a> | 
-                  <!--<a data-filter="BPO" class="deep-blue-text" href="/categories/bpo/">BPO</a> | -->
-                  <a data-filter="kube360" class="deep-blue-text" href="/categories/kube360/">Kube360®</a> 
-                </div>
-              </div>
-              <div class="d-flex justify-content-center mt-1 mb-3 font-weight-bolder h4 align-bottom blog-nav">
-                <span class="mr-5">
-                {% if paginator.current_index == 1 %}
-                  ❮❮
-                {% else %}
-                  <a href="{{ paginator.first }}">❮❮</a>
-                {% endif %}
-                </span>
-              
-                <span class="mr-5">
-                {% if paginator.previous %}
-                  <a href="{{ paginator.previous }}"> ❮ </a>
-                {% else %}
-                  ❮
-                {% endif %}
-                </span>
-              
-                <span class="text-uppercase font-weight-normal h6 mb-0 mt-1">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
-              
-                <span class="ml-5">
-                {% if paginator.next %}
-                  <a href="{{ paginator.next }}">❯</a>
-                {% else %}
-                  ❯
-                {% endif %}
-                </span>
-              
-                <span class="ml-5">
-                {% if paginator.current_index == paginator.number_pagers %}
-                  ❯❯
-                {% else %}
-                  <a href="{{ paginator.last }}">❯❯</a>
-                {% endif %}
-                </span>
-              </div>
-            </div>
-
-            
-
-
-            <div class="col-sm-12 blog-holder">
-              <div class="technical-main">
-
-            {% for page in paginator.pages %}   
-
-              {% if loop.index == 2 or loop.index == 5 or loop.index == 8 or loop.index == 11 or loop.index == 14 or loop.index == 17 or loop.index == 20 %}
-
-                <div class="card-deck">
-
-              {% endif %}
-              
-              {% if loop.index != 1 %}
-                  <div class="card mb-4">
-                    {% if page.extra.blogimage %}
-                    <a class="text-decoration-none deep-blue-text" href="{{ page.permalink | safe }}"></a>
-                      <img class="card-img-top" src="{{ page.extra.blogimage }}" alt="{{ page.title }}">
-                    </a>
-                    {% else %}
-                    <a class="text-decoration-none deep-blue-text" href="{{ page.permalink | safe }}">
-                      <img class="card-img-top" src="/images/blog/blog.jpg" alt="{{ page.title }}">
-                    </a>
-                    {% endif %}
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="text-decoration-none deep-blue-text" href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
-                      <span class="font-italic d-block">By {{ page.extra.author }}</span>
-                    </div>
-                    <div class="card-footer text-muted">
-                      <span class="font-weight-light d-block"><i class="fa fa-calendar" aria-hidden="true"></i> Published {{ page.date | date(format="%B %e, %Y") }}</span>
-                    </div>
-                  </div>
-              {% endif %}    
-
-              {% if loop.index == 4 or loop.index == 7 or loop.index == 10 or loop.index == 13 or loop.index == 16 or loop.index == 19 or loop.index == 22 %}
-                  
-                </div> <!-- end deck -->
-
-              {% endif %}
-            
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    
+{% for page in paginator.pages %}   
+  <div class="card mb-4">
+    {% if page.extra.ogimage %}
+      {% set image = page.extra.ogimage %}
+    {% else %}
+      {% set image = "/img/slogo.png" %}
+    {% endif %}
+    <div class="blog-image-title">
+      <a href="{{ page.permalink | safe }}">
+        <img src="{{ image | safe }}" alt="{{ page.title }}">
+      </a>
+      <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
+    </div>
+    <div class="card-footer text-muted">
+      <span class="font-weight-light d-block"><i class="fa fa-calendar" aria-hidden="true"></i> Published {{ page.date | date(format="%B %e, %Y") }}</span>
+    </div>
   </div>
+{% endfor %}
 
-  <div class="d-flex justify-content-center mt-1 mb-3 font-weight-bolder h4 align-bottom blog-nav">
-    <span class="mr-5">
-    {% if paginator.current_index == 1 %}
-      ❮❮
-    {% else %}
-      <a href="{{ paginator.first }}">❮❮</a>
-    {% endif %}
-    </span>
-  
-    <span class="mr-5">
-    {% if paginator.previous %}
-      <a href="{{ paginator.previous }}"> ❮ </a>
-    {% else %}
-      ❮
-    {% endif %}
-    </span>
-  
-    <span class="text-uppercase font-weight-normal h6 mb-0 mt-1">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
-  
-    <span class="ml-5">
-    {% if paginator.next %}
-      <a href="{{ paginator.next }}">❯</a>
-    {% else %}
-      ❯
-    {% endif %}
-    </span>
-  
-    <span class="ml-5">
-    {% if paginator.current_index == paginator.number_pagers %}
-      ❯❯
-    {% else %}
-      <a href="{{ paginator.last }}">❯❯</a>
-    {% endif %}
-    </span>
-  </div>
-
-</section>
+{{ macros::paginator() }}
 
 {% endblock content %}

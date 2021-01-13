@@ -82,3 +82,41 @@
 <script src="/maxi/js/global.js"></script>
 <!-- END JAVASCRIPTS -->
 {% endmacro bodyend %}
+
+{% macro paginator() %}
+<div class="d-flex justify-content-center mt-1 mb-3 font-weight-bolder h4 align-bottom blog-nav">
+                <span class="mr-5">
+                {% if paginator.current_index == 1 %}
+                  ❮❮
+                {% else %}
+                  <a href="{{ paginator.first }}">❮❮</a>
+                {% endif %}
+                </span>
+              
+                <span class="mr-5">
+                {% if paginator.previous %}
+                  <a href="{{ paginator.previous }}"> ❮ </a>
+                {% else %}
+                  ❮
+                {% endif %}
+                </span>
+              
+                <span class="text-uppercase font-weight-normal h6 mb-0 mt-1">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
+              
+                <span class="ml-5">
+                {% if paginator.next %}
+                  <a href="{{ paginator.next }}">❯</a>
+                {% else %}
+                  ❯
+                {% endif %}
+                </span>
+              
+                <span class="ml-5">
+                {% if paginator.current_index == paginator.number_pagers %}
+                  ❯❯
+                {% else %}
+                  <a href="{{ paginator.last }}">❯❯</a>
+                {% endif %}
+                </span>
+</div>
+{% endmacro paginator %}
