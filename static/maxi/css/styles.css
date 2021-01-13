@@ -1602,3 +1602,19 @@ li.nav-item.active > a {
 .share-bar-inner a:hover {
 	text-decoration: none !important;
 }
+
+/* Homepage */
+#abominable {
+  letter-spacing: 2px;
+  font-weight: bolder;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  #abominable {
+    font-size: 2rem;
+  }
+}
