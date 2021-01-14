@@ -24,6 +24,9 @@ jobs:
 
           docker run --rm -v $(pwd):/repo $IMAGE_ID_LATEST /usr/local/bin/snoycron /repo
 
+          # See what changed
+          git diff
+
       - uses: actions-go/push@v1
         with:
           commit-message: '[Auto] run snoycron'
