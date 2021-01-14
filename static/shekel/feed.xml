@@ -1,1 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>Dollar versus Shekel</title><link href="https://www.snoyman.com/shekel/feed" rel="self"/><link href="https://www.snoyman.com/shekel"/><updated>2021-01-13T14:19:24-00:00</updated><id>https://www.snoyman.com/shekel</id><entry><id>https://www.snoyman.com/shekel?2021-01-13</id><link href="https://www.snoyman.com/shekel?2021-01-13T14:19:24-00:00"/><updated>2021-01-13T14:19:24-00:00</updated><title>Dollar versus Shekel: January 13, 2021</title><content type="html">On January 13, 2021, $1 (United States Dollar) buys:&lt;div class=&#34;rate&#34;&gt;3.134 ₪&lt;/div&gt;(New Israeli Shekel).&lt;div class=&#34;delta&#34;&gt;The dollar became &lt;div class=weaker&gt;0.791% weaker&lt;/div&gt;&lt;/div&gt;</content><author><name>Michael Snoyman</name></author></entry></feed>
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Dollar versus Shekel</title>
+  <link href="https://www.snoyman.com/shekel/feed.xml" rel="self"/>
+  <link href="https://www.snoyman.com/shekel/"/>
+  <updated>2021-01-13T00:00:00+00:00</updated>
+  <id>https://www.snoyman.com/shekel</id>
+  <entry>
+    <id>https://www.snoyman.com/shekel?2021-01-13</id>
+    <link href="https://www.snoyman.com/shekel?2021-01-13T00:00:00+00:00"/>
+    <updated>2021-01-13T00:00:00+00:00</updated>
+    <title>Dollar versus Shekel: January 13, 2021</title>
+    <content type="html">
+      On January 13, 2021, $1 (United States Dollar) buys 3.134₪ (New Israeli Shekel). The dollar became 0.791% weaker.
+    </content>
+    <author>
+      <name>Michael Snoyman</name>
+    </author>
+  </entry>
+</feed>
