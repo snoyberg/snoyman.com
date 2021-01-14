@@ -15,7 +15,7 @@ jobs:
       - name: Log into Github registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-      - name: Build soycron image
+      - name: Build snoycron image
         run: |
           set -eux
 
