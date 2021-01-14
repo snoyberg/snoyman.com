@@ -1,0 +1,27 @@
+name: Run snoycron
+
+on:
+  push:
+    branches: [test-snoycron]
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into Github registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Run snoycron
+        run: |
+          set -eux
+
+          IMAGE_ID_LATEST=docker.pkg.github.com/${{ github.repository }}/snoycron:latest
+
+          docker run --rm -v $(pwd):/repo $IMAGE_ID_LATEST /usr/local/bin/snoycron /repo
+
+      - uses: actions-go/push@v1
+        with:
+          commit-message: '[Auto] run snoycron'
