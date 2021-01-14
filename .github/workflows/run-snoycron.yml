@@ -2,7 +2,9 @@ name: Run snoycron
 
 on:
   push:
-    branches: [test-snoycron]
+    branches: [master]
+  schedule:
+  - cron: "32 */4 * * *""
 
 jobs:
   push:
