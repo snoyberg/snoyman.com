@@ -6,4 +6,4 @@ RUN cargo install --path /src --root /out
 
 FROM fpco/pid1:18.04
 
-COPY --from=build /out/snoycron /usr/local/bin/snoycron
+COPY --from=build /out/bin/snoycron /usr/local/bin/snoycron
