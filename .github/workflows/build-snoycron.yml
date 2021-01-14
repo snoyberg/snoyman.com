@@ -20,7 +20,7 @@ jobs:
           set -eux
 
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/snoycron:$GITHUB_SHA
-          IMAGE_ID_LATEST=docker.pkg.github.com/${{ github.repository }}/snoycron:$GITHUB_SHA
+          IMAGE_ID_LATEST=docker.pkg.github.com/${{ github.repository }}/snoycron:latest
 
           docker build snoycron --tag $IMAGE_ID
           docker tag $IMAGE_ID $IMAGE_ID_LATEST
