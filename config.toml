@@ -2,8 +2,11 @@ base_url = "https://www.snoyman.com"
 default_language = "en"
 compile_sass = false
 generate_feed = true
+feed_filename = "rss.xml"
 highlight_code = true
 highlight_theme = "solarized-light"
+title = "Snoyberg - Michael Snoyman"
+description = "Michael Snoyman's homepage and blog. Eclectic collection of programming (mostly Rust and Haskell) and lifting (weights, children, and monads)."
 
 taxonomies = [
   {name = "tags", paginate_by = 20},

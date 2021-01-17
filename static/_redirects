@@ -1,3 +1,4 @@
 /feed /rss.xml
-/rss.xml /atom.xml
+/atom.xml /rss.xml
+/feed.xml /rss.xml
 /shekel/feed /shekel/feed.xml
