@@ -9,8 +9,8 @@ title = "Snoyberg - Michael Snoyman"
 description = "Michael Snoyman's homepage and blog. Eclectic collection of programming (mostly Rust and Haskell) and lifting (weights, children, and monads)."
 
 taxonomies = [
-  {name = "tags", paginate_by = 20},
-  {name = "series", paginate_by = 20},
+  {name = "tags", paginate_by = 20, feed = true},
+  {name = "series", paginate_by = 20, feed = true},
 ]
 
 [extra]

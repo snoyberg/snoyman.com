@@ -2,3 +2,13 @@
 /atom.xml /rss.xml
 /feed.xml /rss.xml
 /shekel/feed /shekel/feed.xml
+
+/feed/rust-crash-course /series/rust-crash-course/rss.xml
+/feed/kids-coding /series/kids-coding/rss.xml
+/feed/haskell-bad-parts /series/haskell-bad-parts/rss.xml
+/feed/health-guide /series/health-guide/rss.xml
+
+/apple-touch-icon-precomposed.png /apple-icon-precomposed.png	
+/apple-touch-icon.png /apple-icon.png	
+
+/planet-haskell https://planet.haskell.org/rss20.xml
