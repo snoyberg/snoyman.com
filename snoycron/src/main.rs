@@ -28,17 +28,14 @@ struct Currency {
 
 impl Currencies {
     fn find(&self, code: &str) -> Result<&Currency> {
-        for c in &self.currencies {
-            if c.code == code {
-                return Ok(&c);
-            }
-        }
-        Err(anyhow!("Currency code not found: {}", code))
+        self.currencies
+            .iter()
+            .find(|x| x.code == code)
+            .ok_or_else(|| anyhow!("Currency code not found: {}", code))
     }
 
     fn load() -> Result<Currencies> {
-        let mut res = get("https://www.boi.org.il/currency.xml")?;
-        Ok(serde_xml_rs::from_reader(&mut res)?)
+        Ok(serde_xml_rs::from_reader(get("https://www.boi.org.il/currency.xml")?)?)
     }
 }
 
@@ -68,7 +65,10 @@ delta = "{delta}"
 
     fn delta(&self) -> String {
         match self.change.chars().next() {
-            Some('-') => format!("{}% weaker", self.change.chars().skip(1).collect::<String>()),
+            Some('-') => format!(
+                "{}% weaker",
+                self.change.chars().skip(1).collect::<String>()
+            ),
             _ => format!("{}% stronger", self.change),
         }
     }
@@ -127,19 +127,17 @@ struct AllGhcInfo(Vec<(Version, GhcInfo)>);
 const GHC_INFO_URL: &str =
     "https://raw.githubusercontent.com/commercialhaskell/stackage-content/master/stack/global-hints.yaml";
 fn load_ghc_info() -> Result<AllGhcInfo> {
-    let mut res = get(GHC_INFO_URL)?;
-    let m: HashMap<String, GhcInfo> = serde_yaml::from_reader(&mut res)?;
-    let mut v: Vec<(Version, GhcInfo)> = Vec::new();
-    for (name, info) in m {
+    let res = get(GHC_INFO_URL)?;
+    let m: HashMap<String, GhcInfo> = serde_yaml::from_reader(res)?;
+    let v: Vec<(Version, GhcInfo)> = Vec::with_capacity(m.len());
+    m.into_iter().map(|(name, info)| {
         let prefix: String = name.chars().take(4).collect();
         ensure!(&prefix == "ghc-", "Invalid GHC version: {}", name);
         let version_str: String = name.chars().skip(4).collect();
         let version =
             Version::parse(&version_str).with_context(|| format!("Could not parse {}", name))?;
-        v.push((version, info));
-    }
-    v.sort_by(|x, y| y.0.cmp(&x.0));
-    Ok(AllGhcInfo(v))
+        Ok((version, info))
+    }).collect::<Result<_>>().map(AllGhcInfo)
 }
 
 impl Display for AllGhcInfo {
