@@ -6,9 +6,9 @@ date = 2021-01-21
 [extra]
 ogimage = "stack-governance.png"
 +++
-A few months back I [wrote about the Haskell Foundation](@/blog/haskell-foundation.md) and some of my plans with it. Earlier than that, I also spoke about [my thoughts on transparency](@/blog/transparency.md). Continuing on those two topics, I want to talk today about Stack's governance.
+A few months back I [wrote about the Haskell Foundation](@/blog/haskell-foundation.md) and some of my plans with it. Earlier than that, I also spoke about [my thoughts on transparency](@/blog/transparency.md). Continuing on those topics, I want to talk today about Stack's governance.
 
-While it takes many things to make a project successful, two important aspects are clarity around __goals__ and __governance__. Let me provide two concrete examples I'm involved in:
+While it takes many things to make a project successful, clarity around __goals__ and __governance__ is vital. Let me provide two concrete examples I'm involved in:
 
 * Yesod's goal is: provide a standard MVC web framework that leverages Haskell's type system to avoid large classes of bugs. Its governance is: there are a bunch of committers who can do things, and ultimately a (hopefully benevolent) dictator for life, me.
 * Stackage's goal is: test large sets of open source Haskell packages for compatibility, making it easy for library users to pull in compatible package sets, and easy for authors to maintain their packages. Its governance is: there's a group of curators who come to consensus on decisions.
@@ -55,7 +55,7 @@ The maintainer team will make decisions when necessary, specifically:
 Generally, maintainers are only removed due to non-participation or actions unhealthy to the project. The former is _not_ a punishment, simply a recognition that maintainership is for active participants only. The latter will hopefully never be necessary, but would include protection for cases of:
 
 * Disruptive behavior in public channels related to Stack
-* Negative decision making related to the codebase
+* Impairing the codebase through bad commits/merges
 
 Following the same principle of committers, maintainers are broadly encouraged to **make autonomous decisions**. Each individual maintainer is empowered to make a unilateral decision, again with the principle that a bad change can be rolled back. Maintainers should favor getting consensus first if:
 
