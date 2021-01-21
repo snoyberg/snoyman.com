@@ -35,7 +35,9 @@ impl Currencies {
     }
 
     fn load() -> Result<Currencies> {
-        Ok(serde_xml_rs::from_reader(get("https://www.boi.org.il/currency.xml")?)?)
+        Ok(serde_xml_rs::from_reader(get(
+            "https://www.boi.org.il/currency.xml",
+        )?)?)
     }
 }
 
@@ -129,15 +131,17 @@ const GHC_INFO_URL: &str =
 fn load_ghc_info() -> Result<AllGhcInfo> {
     let res = get(GHC_INFO_URL)?;
     let m: HashMap<String, GhcInfo> = serde_yaml::from_reader(res)?;
-    let v: Vec<(Version, GhcInfo)> = Vec::with_capacity(m.len());
-    m.into_iter().map(|(name, info)| {
-        let prefix: String = name.chars().take(4).collect();
-        ensure!(&prefix == "ghc-", "Invalid GHC version: {}", name);
-        let version_str: String = name.chars().skip(4).collect();
-        let version =
-            Version::parse(&version_str).with_context(|| format!("Could not parse {}", name))?;
-        Ok((version, info))
-    }).collect::<Result<_>>().map(AllGhcInfo)
+    m.into_iter()
+        .map(|(name, info)| {
+            let prefix: String = name.chars().take(4).collect();
+            ensure!(&prefix == "ghc-", "Invalid GHC version: {}", name);
+            let version_str: String = name.chars().skip(4).collect();
+            let version = Version::parse(&version_str)
+                .with_context(|| format!("Could not parse {}", name))?;
+            Ok((version, info))
+        })
+        .collect::<Result<_>>()
+        .map(AllGhcInfo)
 }
 
 impl Display for AllGhcInfo {
