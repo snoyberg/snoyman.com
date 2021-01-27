@@ -1,11 +1,12 @@
 +++
 title = "Moving to Fastmail: custom domain, family accounts, and more"
 description = "I recently, and finally, found an email and cloud accounts setup that I'm happy with for my own email management, privacy, and family setup."
-date = 2021-01-26
+date = 2021-01-27
+path = "/blog/2021/01/moving-to-fastmail"
 [extra]
 ogimage = "moving-to-fastmail.png"
 +++
-This blog post is much more about the journey, and what makes it so difficult to balance different needs in a good setup for cloud and email accounts. To forestall any complaints about "just give me the information," here's the ultimate setup I've landed on:
+This blog post is about what makes it so difficult to balance different needs in a good setup for cloud and email accounts, and my journey to a good solution. For those who want to see the ending right away, here's the ultimate setup I've landed on:
 
 * Email: Fastmail, with aliases forwarding my family's email to their respective Gmail accounts
 * Neither Google nor Microsoft having special handling for my domain name (`snoyman.com`)
@@ -93,7 +94,7 @@ Since the rest of my family is happily using Gmail and doesn't intend to switch,
 
 ## Moving to Cloudflare
 
-Now that I didn't have any email forwarding going on with Google Domains, the only feature I was using from them was the redirect rules. But I had enough experience to know that Cloudflare offers the same, plus much more functionality (such as [Cloudflare Workers](https://www.fpcomplete.com/blog/serverless-rust-wasm-cloudflare/), and the current-in-beta Cloudflare Pages). I transferred my domains from Google Domains to Cloudflare for name serving and added appropriate page rules for the redirects. Then I transferred registration over to Cloudflare as well.
+Now that I didn't have any email forwarding going on with Google Domains, the only feature I was using from them was the redirect rules. But I had enough experience to know that Cloudflare offers the same, plus much more functionality (such as [Cloudflare Workers](https://www.fpcomplete.com/blog/serverless-rust-wasm-cloudflare/), and the currently-in-beta Cloudflare Pages). I transferred my domains from Google Domains to Cloudflare for name serving and added appropriate page rules for the redirects. Then I transferred registration over to Cloudflare as well.
 
 I didn't do the second step for a cost savings, but I was pleasantly surprised to see the Cloudflare charged $8.50/year for most of my domain names, versus Google's $12/year. Since I have 9 domain names, this worked out to $31.50 in savings. Meaning the opportunity cost of switching over to Fastmail for email essentially dropped to $18.50/year, making the exchange even nicer.
 
