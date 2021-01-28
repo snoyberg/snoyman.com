@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: snoyman.com
+Token: 201776bd90f7b9269ff9c6b12edb1f065c84a0c5ed8e474bee38397692dcf84d
