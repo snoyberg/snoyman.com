@@ -171,3 +171,15 @@
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 {% endmacro favicons %}
+
+{% macro blog_email() %}
+<div class="blog-email">
+  <form class="blog-email" method='post' action='https://blogtrottr.com' target="_blank">
+    <span>Get new blog posts via email</span>
+    <input type='email' name='btr_email' placeholder='Email address'>
+    <input type='hidden' name='btr_url' value='https://www.snoyman.com/feed'>
+    <input type='hidden' name='schedule_type' value='0'>
+    <button class="btn btn-primary">Subscribe!</button>
+  </form>
+</div>
+{% endmacro blog_email %}

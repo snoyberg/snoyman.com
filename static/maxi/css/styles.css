@@ -1644,3 +1644,24 @@ table#versions th, table#versions td {
   display: block;
   font-size: 200%;
 }
+
+/* Blog */
+.blog-email {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.blog-email > form {
+	background-color: rgba(26, 169, 226, .25);
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px #ddd;
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.blog-email input {
+  margin: 0 1rem;
+}

@@ -20,11 +20,6 @@
 
 {{ macros::share() }}
 
-<!--
-<div class="container" id="blog-body">
-  <div class="row">
-    <div class="col-lg-9">
--->
       <p>
         <i>
           See a typo? Have a suggestion?
@@ -32,27 +27,19 @@
         </i>
       </p>
 
+      {{ macros::blog_email() }}
+
       {{ page.content | safe }}
 
 <div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+
+      {{ macros::blog_email() }}
 
       <div id="disqus_thread"></div>
       <script>
         (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
       </script>
       <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<!--
-    </div>
-
-    <div class="col-lg-3" id="archive">
-      <h3>Blog archive</h3>
-      <ul class="blog-archive">
-            $forall ((year, month, slug), post) <- posts
-                <li>
-                    <a href=@?{addPreview $ PostR year month slug}>#{postTitle post}
-                    \ #
-                    <i>#{prettyDay now (postTime post)}
--->
 
 <div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
 
