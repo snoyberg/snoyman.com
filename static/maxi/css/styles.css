@@ -1659,6 +1659,7 @@ table#versions th, table#versions td {
   padding: 1rem;
   border-radius: 1rem;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 
