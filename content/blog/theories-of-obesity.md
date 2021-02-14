@@ -29,7 +29,7 @@ So why do people become obese? Because CI > CO. If you eat more than you use, yo
 
 The first problem I want to point out about CICO is a pedantic one. This way of framing the theory makes it sound like calories weigh something. And now that I have more calories in my body, I weigh more. But (ignoring some physicist who's about to yell at me) energy doesn't actually weigh anything! A calorie doesn't have mass. When we talk about "gaining weight" from "calories," what we're _actually_ talking about is storing additional fat (or glycogen), which can later be burned to release energy.
 
-Alright, fair enough, that seems like a little bit of a distinction without a difference. But it does have an important outcome. You never have extra "energy" circulating around your body. You have specific kinds of matter. It may be surplus glucose or triglycerides in your blood. It may be saturated glycogen stored in your liver. It may be too many visceral fat cells. Or overloaded fat cells. Or subcutaneous fat. And all of these behave differently.
+Alright, fair enough, that seems like a little bit of a distinction without a difference. But it does have an important outcome. You never have extra "energy" circulating around your body. You have specific kinds of matter. It may be surplus glucose or triglycerides in your blood. It may be overly filled glycogen stores in your liver. It may be too many visceral fat cells. Or overloaded fat cells. Or subcutaneous fat. And all of these behave differently.
 
 OK, with that tangent addressed, let's get more substantive.
 
