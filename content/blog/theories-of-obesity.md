@@ -1,11 +1,14 @@
 +++
 title = "Theories of Obesity"
 description = "There's no shortage of opinions on how and why we become obese. This blog post is intended to give an overview of these different opinions, and help you navigate the common opinions."
-path = "/blog/2019/07/how-to-lose-weight"
+path = "/blog/2021/02/theories-of-obesity"
 date = 2021-02-16
 
 [taxonomies]
 series = ["health-guide"]
+
+[extra]
+ogimage = "theories-of-obesity.png"
 +++
 I've been giving this topic a lot of thought over the past few weeks. I decided to coalesce my thoughts into this post. I'll start off with a pretty significant caveat. Each theory I'm putting down below is almost certainly espoused by _somebody_. But there are too many different people with different theories to in any meaningful way say "vegans believe X," for instance. Instead, consider this a high level lay of the land for these theories, and realize that there are nuances that many people will make.
 
@@ -89,11 +92,73 @@ So to sum up: It's still about Calories In/Calories out. We need to reduce Calor
 
 ## Insulin
 
+There are lots of arguments about the carbohydrate-insulin theory of obesity. I'm not talking about that (yet). Instead, I'm talking about something much simpler. Take a person who burns 2,000 calories a day. Give them a diet of 2,000 calories a day. Confirm over a number of weeks that they do not gain any weight. (If necessary, adjust caloric intake.) Awesome.
+
+Now begin injecting them with insulin every time they eat. Do not allow them to eat more food or exercise less. They're going to gain weight. How is that possible? Isn't that a violation of CICO?
+
+No, not at all. A complex series of hormonal responses will occur inside the subject's body. Insulin will encourage energy storage. Less total available energy in the bloodstream will encourage other body systems to reduce metabolism. Or some other series of events that will ultimately lead to reduced energy expenditure. Calories out go down, therefore energy delta increases, therefore weight gain.
+
+There's likely some disagreement on the details I provided above. I did a quick search, and didn't find any specific studies demonstrating the isocaloric affect I just described. (If someone has a study on it, please send it to me, I'll update the post.) Maybe injecting insulin encourages people to eat more. But it's a well known phenomenon among diabetics that insulin injections lead to weight gain.
+
+Still don't believe me? OK, take a type 1 diabetic, who produces next to no insulin. Without insulin injections, they will hit [diabetic ketoacidosis](https://en.wikipedia.org/wiki/Diabetic_ketoacidosis) and burn through massive amounts of energy stores.
+
+Point being: weight gain and loss cannot be exclusively explained by food consumption and exercise. Hormonal factors do have an impact, at least in extreme circumstances.
+
+Many theories of obesity within the low-carb world revolve around the idea of regular insulin secretion in the body leading to insulin resistance, leading to increased insulin production, leading to increased obesity. They would explain the insulin as leading to increased caloric intake and decreased expenditure. The root cause of this may be [fructose](https://youtu.be/dBnniua6-oM), or carbs in general, or some other mechanism.
+
+According to these theories, the best way to combat obesity would be to reduce or remove foods that trigger insulin production. This will allow the body to become insulin sensitive again. And you'll no longer be battling against a hormone trying to make you fat. Approaches to this would include:
+
+* Intermittent or multiday fasting
+* Low carb diets, or more extreme: ketogenic or zero-carb diets
+
 ## Fat versus sugar burner
 
-* Increased metabolism
-* Less hunger
+This approach overlaps the previous one significantly, but comes with a different mechanism. The theory goes that our cells have two primary fuel sources: fat and glucose. Glucose is the default fuel source for various reasons. If it's available, it will "crowd out" the fat. And burning fat is slower, requiring more mitochondria. If you constantly have a stream of fat and glucose entering your cells, your cells will prefer burning the glucose, slowly burn the fat, not produce enough mitochondria, and end up storing extra fat.
+
+Instead, if you remove the glucose source, your cells will be forced to produce more mitochondria to meet the energy demands based on fat alone. This will turn you into fat burning mode, and your body will quite happily burn up stored body fat. You'll feel less cravings for between-meal snacks, because you're easily getting by on your energy reserves. And you may even increase your overall metabolism, leading to increased calories out.
+
+The same approaches from the previous section apply here.
+
+## Linoleic acid
+
+This theory is relatively newer, at least to my reading. And it's complicated enough in its mechanisms that, if you're interested, you should definitely [go read up on it at Fire in a Bottle](https://fireinabottle.net/the-ros-theory-of-obesity/). As a very high level, imprecise summary:
+
+* Linoleic acid, an omega-6 fatty acid, is an essential nutrient (we die without it)
+* However, we don't need much of it, and historically have received small amounts of it
+* Since the American Civil War, industrial seed oils (cottonseed, corn, soybean, etc) have been increasing in usage, with a massive uptick in the 1970s
+* These oils are unnaturally high (for our diet) in linoleic acid
+* In large concentrations in our bodies, linoleic acid causes metabolic disfunction
+
+According to this theory, the [Croissant Diet](https://fireinabottle.net/introducing-the-croissant-diet/). I will say up front that I have not been successful with my attempts at this, but that may have been my own error. The Croissant Diet provides the very alluring promise of getting to each starch, sugar, and refined saturated fats (e.g., butter), all while fixing metabolic disfunction and losing weight.
 
 ## Food quality
 
+The final one is really a catch-all basket. "Food quality" is a broad term. Lots of people have lots of definitions of what makes food "good" and "bad." For example:
+
+* Vegans say that animal food is bad and plant food is good
+* Carnivores say that plant food is bad and animal food is good
+* Paleo diet fans say that food invented in the past ~10,000 years is bad, older food is good
+
+And so on. Each of these theories espouse some claims of what makes the bad food bad, and why it leads to various diseases. Typically, to some extent, the claims will end up in one of the above buckets, at least as far as obesity is concerned. For example, in Primal lore, overconsuming starch that you haven't "earned" (through high intensity workouts) will lead to fat accumulation, likely through the action of insulin. Many vegan advocates will point out the high proportion of saturated fat in animal products to explain weight gain.
+
+This section may sound like I'm dismissive of these claims. I'm not. I think there's a lot to the idea of food quality. It's just that the term is so broad, and the mechanisms so varied, that it's hard to nail anything down.
+
 ## My thoughts
+
+Up until now, my point was to give you the lay of the land. Hopefully now, the next time you see a debate going on between "low carb plant based" versus "carnivore" versus "high saturated fat," you'll have some concept of what the underlying mechanisms are they're arguing about. Or maybe not; there may be some brand new mechanism people have come up with!
+
+For myself, I base my decisions on three things:
+
+* Personal experience: what's worked, what hasn't. This is definitely an `n=1` kind of experiment, but since I'm advocating for myself and just sharing that information, I feel comfortable with it.
+* Scientific studies, especially statistical analyses of changes over time in diet versus health outcomes. And take all of it with a huge grain of salt, much of the scientific literature is contradictory and, in my opinion, coming from predetermined conclusions.
+* An overall belief that "ancestral diets," whatever that may mean, are likely best. I believe we evolved towards certain kinds of eating, and second-guessing that may be difficult. I'm not quite at the point of believing that we can't improve our diet through science and technology at all. I just believe it's difficult to surpass millions of years of evolution, and we don't have the full story yet.
+
+I like root cause analyses. I would _love_ to say "this one thing caused obesity." I've tried acting that way previously, and my own diet outcomes make me think it's wrong.
+
+So I believe there's a mixture of all these things. I believe overeating _is_ a major cause of obesity. I've seen it in myself. Even when I stick to "healthy" (by some definition) foods, I have a natural tendency to overeat. Simply eliminating sugar and seed oils, and even carbs, isn't enough to help me lose weight. I've needed to use techniques to help me control my hunger as well.
+
+I also don't believe it's all about the calories. I think there's ample evidence that different kinds of food cause different behavior and outcomes in the body.
+
+In the past, I've had the most success at weight loss with massive calorie restricted plant based diets, extreme keto, calorie counting, multiday fasting, and carnivore. For weight maintenance, things have been much easier. Almost any diet that gets me off of sugar and seed oils, and more generally off of processed foods, lets me stay weight neutral.
+
+And that's really the final and most easily repeated advice: if you're going to do only one thing, **stop eating processed foods**. It's basically the one piece of advice everyone seems to agree on.
