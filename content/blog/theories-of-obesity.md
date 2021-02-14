@@ -16,7 +16,7 @@ In other words, this isn't even my opinion. What I'm putting below is almost a c
 
 OK, with that out of the way, let's state a clear question: why do people become obese? There are multiple variations of this question that play in too:
 
-* Why are people obese more often today than, says, in the 1970s, at least in the western world?
+* Why are people obese more often today than, say, in the 1970s, at least in the western world?
 * Why are more people suffering from metabolic disorders like diabetes, chronic conditions like heart disease and cancer, and so on, at seemingly higher rates than previously?
 
 ## Calories in, calories out
@@ -29,7 +29,7 @@ So why do people become obese? Because CI > CO. If you eat more than you use, yo
 
 The first problem I want to point out about CICO is a pedantic one. This way of framing the theory makes it sound like calories weigh something. And now that I have more calories in my body, I weigh more. But (ignoring some physicist who's about to yell at me) energy doesn't actually weigh anything! A calorie doesn't have mass. When we talk about "gaining weight" from "calories," what we're _actually_ talking about is storing additional fat (or glycogen), which can later be burned to release energy.
 
-Alright, fair enough, that seems like a little bit of a distinction without a difference. But it does have an important outcome. You never have extra "energy" circulating around your body. You have specific kinds of matter. It may be surplus glucose or triglycerides in your blood. It may be a saturated glycogen store in your liver. It may be too many visceral fat cells. Or overloaded fat cells. Or subcutaneous fat. And all of these behave differently.
+Alright, fair enough, that seems like a little bit of a distinction without a difference. But it does have an important outcome. You never have extra "energy" circulating around your body. You have specific kinds of matter. It may be surplus glucose or triglycerides in your blood. It may be saturated glycogen stored in your liver. It may be too many visceral fat cells. Or overloaded fat cells. Or subcutaneous fat. And all of these behave differently.
 
 OK, with that tangent addressed, let's get more substantive.
 
@@ -82,7 +82,7 @@ What if the choice of the food we eat impacts how much food we eat? If you were 
 
 4,000 calories of broccoli is another story. And I _like_ broccoli. It's just difficult to imagine consuming that much of it. Broccoli is energy sparse. It has high water content. It has fiber. And it just doesn't have the same appeal as a bowl of ice cream.
 
-So let's move beyond "a calorie is a calorie." No, not all calories are created equal! Different food sources encourage different eating behaviors. Some kind of food causes satiety. Some kind of food encourages ravenous hunger.
+So let's move beyond "a calorie is a calorie." No, not all calories are created equal! Different food sources encourage different eating behaviors. Some kinds of food cause satiety. Some kinds of food encourage ravenous hunger.
 
 Stephan Guyenet almost certainly falls into this category with [The Hungry Brain](https://www.amazon.com/Hungry-Brain-Outsmarting-Instincts-Overeat/dp/125008119X), which I've read, enjoyed, and still follow some advice from. That book analyzes hormonal signals that may trigger our brain to want to overeat. There's a lot to the theory, but to massively simplify it: our brain was built to seek carbs and fats as scarce energy resources. And in nature, you'll find them. But modern processed food slams these together into things like donuts that completely overpower our natural satiety mechanisms.
 
@@ -98,7 +98,7 @@ Now begin injecting them with insulin every time they eat. Do not allow them to 
 
 No, not at all. A complex series of hormonal responses will occur inside the subject's body. Insulin will encourage energy storage. Less total available energy in the bloodstream will encourage other body systems to reduce metabolism. Or some other series of events that will ultimately lead to reduced energy expenditure. Calories out go down, therefore energy delta increases, therefore weight gain.
 
-There's likely some disagreement on the details I provided above. I did a quick search, and didn't find any specific studies demonstrating the isocaloric affect I just described. (If someone has a study on it, please send it to me, I'll update the post.) Maybe injecting insulin encourages people to eat more. But it's a well known phenomenon among diabetics that insulin injections lead to weight gain.
+There's likely some disagreement on the details I provided above. I did a quick search, and didn't find any specific studies demonstrating the isocaloric effect I just described. (If someone has a study on it, please send it to me, I'll update the post.) Maybe injecting insulin encourages people to eat more. But it's a well known phenomenon among diabetics that insulin injections lead to weight gain.
 
 Still don't believe me? OK, take a type 1 diabetic, who produces next to no insulin. Without insulin injections, they will hit [diabetic ketoacidosis](https://en.wikipedia.org/wiki/Diabetic_ketoacidosis) and burn through massive amounts of energy stores.
 
