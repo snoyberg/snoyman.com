@@ -2,7 +2,7 @@
 title = "Theories of Obesity"
 description = "There's no shortage of opinions on how and why we become obese. This blog post is intended to give an overview of these different opinions, and help you navigate the common opinions."
 path = "/blog/2021/02/theories-of-obesity"
-date = 2021-02-16
+date = 2021-02-14
 
 [taxonomies]
 series = ["health-guide"]
