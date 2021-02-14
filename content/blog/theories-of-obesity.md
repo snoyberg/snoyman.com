@@ -12,7 +12,7 @@ ogimage = "theories-of-obesity.png"
 +++
 I've been giving this topic a lot of thought over the past few weeks. I decided to coalesce my thoughts into this post. I'll start off with a pretty significant caveat. Each theory I'm putting down below is almost certainly espoused by _somebody_. But there are too many different people with different theories to in any meaningful way say "vegans believe X," for instance. Instead, consider this a high level lay of the land for these theories, and realize that there are nuances that many people will make.
 
-In other words, this isn't even my opinion. What I'm putting below is almost a characiture of a bunch of different opinions. So take it with a grain of salt. I'll end off with my own, current-but-evolving opinion.
+In other words, this isn't even my opinion. What I'm putting below is almost a caricature of a bunch of different opinions. So take it with a grain of salt. I'll end off with my own, current-but-evolving opinion.
 
 OK, with that out of the way, let's state a clear question: why do people become obese? There are multiple variations of this question that play in too:
 
