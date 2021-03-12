@@ -129,7 +129,7 @@ This theory is relatively newer, at least to my reading. And it's complicated en
 * These oils are unnaturally high (for our diet) in linoleic acid
 * In large concentrations in our bodies, linoleic acid causes metabolic disfunction
 
-According to this theory, the [Croissant Diet](https://fireinabottle.net/introducing-the-croissant-diet/). I will say up front that I have not been successful with my attempts at this, but that may have been my own error. The Croissant Diet provides the very alluring promise of getting to each starch, sugar, and refined saturated fats (e.g., butter), all while fixing metabolic disfunction and losing weight.
+The [Croissant Diet](https://fireinabottle.net/introducing-the-croissant-diet/) follows this theory. I will say up front that I have not been successful with my attempts at this, but that may have been my own error. The Croissant Diet provides the very alluring promise of getting to each starch, sugar, and refined saturated fats (e.g., butter), all while fixing metabolic disfunction and losing weight.
 
 ## Food quality
 
