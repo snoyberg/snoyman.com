@@ -43,7 +43,7 @@ Given that the "split base" concept has been around for about as long as I've be
 
 Going back to that list of types above, I'm going to ask everyone to _ignore_ lazy lists and `Seq` as, currently, unrelated data types. They represent non-memory-packed data. Similarly, I want to ignore the lazy variants of `ByteString` and `Text` too. I think we should stop using them, but that's a discussion for another day. Instead, I want to focus in on `Vector` and its variants, `ByteString`, `Text`, and `Builder`. I also want to focus on the mutable variants and the `Unbox` and `Storable` typeclasses.
 
-First, it's long been recognized that `ByteString` is, essentially, synonymous with a storable `Vector` of `Word8`s. I say essentially, since there's a slight optimization in `Vector` to avoid holding onto an offset value. But the two are isomorphic. Representing `ByteString` as `Data.Vector.Storable.Vector Word8` is doable.
+First, it's long been recognized that `ByteString` is, essentially, synonymous with a storable `Vector` of `Word8`s. Before bytestring 0.11, the only real difference was that there's a slight optimization in `Vector` to avoid holding onto an offset value. But the two are isomorphic, and since 0.11 that optimization exists in both packages. Therefore, representing `ByteString` as `Data.Vector.Storable.Vector Word8` is doable.
 
 Similarly, `text` implements its own unpacked array implementation. That could be replaced with `vector`'s unboxed array.
 
@@ -53,13 +53,13 @@ So on our first step in this journey, my recommendation is simple: let's unify t
 
 Credit where credit is due: Vincent Hanquez figured this out a while ago with his `foundation` package.
 
-Unboxed and storable vectors differ in whether memory is pinned or not. Pinned memory is good, because it lets you share data with the FFI without the garbage collector moving it. But it has the downside that it can lead to heap fragmentation. And this is a real issue in real world codebases.
+Unboxed and storable vectors differ in whether memory is pinned or not. Pinned memory is good, because it lets you share data with the FFI without the garbage collector moving it. But it has the downside that it can lead to heap fragmentation. And this is a real issue in real world codebases. (Side note: unpinned memory _can_ be used with unsafe FFI calls, but not generally.)
 
 As a result of this, users need to choose which representation to use. Type authors need to implement both `Unbox` and `Storable` instances, which is non-trivial.
 
 I would love to see a few improvements here, which are where GHC comes into play:
 
-* Make it possible to have temporarily-pinned memory. I'd love to be able to allocate a byte buffer, mark it initially as unpinned, and then while making an FFI call temporarily pin the memory. This would allow us to have just one unboxed vector representation that subsumes both unboxed and storable vectors.
+* Make it possible to have temporarily-pinned memory. I'd love to be able to allocate a byte buffer, mark it initially as unpinned, and then while making an FFI call temporarily pin the memory. This would allow us to have just one unboxed vector representation that subsumes both unboxed and storable vectors. (Alexey Kuleshevich has provided some [additional problems](https://github.com/snoyberg/snoyman.com/pull/15#discussion_r594950679) for the curious.)
 * I'd love to see some built-in ability to derive an instance that can be used by this kind of byte buffer. This may sound too special cased, but let me push back on that idea: virtually every other language out there with unboxed memory representations will natively let you write your data into raw bytes.
 
 There would be some potential limitations with those instances. Maybe it only works with fully strict fields. Maybe it requires constant-size representation (ala Rust's `Sized` trait and Dynamically Sized Types). But my goal is that, for the common cases of data that can be represented easily as raw bytes:
