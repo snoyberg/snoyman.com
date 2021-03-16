@@ -1,6 +1,6 @@
 +++
-title = "Haskell base proposal"
-description = "A semi-concrete, semi-fleshed out proposal for changes to GHC and base"
+title = "Haskell base proposal: unifying vector-like types"
+description = "A semi-concrete, semi-fleshed out proposal for changes to GHC and base to unify vector, bytestring, and text"
 path = "/blog/2021/04/haskell-base-proposal"
 date = 2021-03-16
 +++
