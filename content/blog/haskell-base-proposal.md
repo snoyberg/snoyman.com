@@ -18,7 +18,7 @@ If you want to represent a sequence of data in Haskell today, you have too many 
 * A strict and lazy `Text` for `Char`s
 * A boxed vector (plus its mutable version)
 * An unboxed vector for types with `Unbox` instances
-* A storable vector types with `Storable` instances
+* A storable vector for types with `Storable` instances
 * `Builder`s for constructing data, both in `bytestring` and (unfortunately, more on that later) `text` flavors
 
 I know this, because it's part of my [Applied Haskell training](https://www.fpcomplete.com/haskell/tutorial/data-types/), and I always feel a bit embarrassed having to explain all of this. It's a lot of cognitive overhead for new users, the libraries somewhat fight over which thing to use, and there are some hidden traps and performance costs. For example:
