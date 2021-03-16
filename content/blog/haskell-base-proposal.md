@@ -97,3 +97,11 @@ I was originally going to write about `Builder`s, and how they are one of the be
 
 * [`Utf8Builder`](https://www.stackage.org/haddock/lts-17.6/rio-0.1.20.0/RIO.html#t:Utf8Builder)
 * [`Display`](https://www.stackage.org/haddock/lts-17.6/rio-0.1.20.0/RIO.html#t:Display)
+
+## Adoption
+
+This section was added at the suggestion of Ben Gamari. I hadn't realized that this post initially came off as a massive breaking change in the language and library ecosystem. So let me clarify. I believe that the changes above can be made immediately with zero breakage (though plenty of effort). The problem would be further fracturing the ecosystem ala the [classic XKCD](https://xkcd.com/927/). However, I think we have a great move here: compatibility shims.
+
+In this world I'm picturing, most of the existing data types, and especially the two most common ones (strict `ByteString` and `Text`) can be expressed as newtype wrappers over the new types. `Vector` can probably have the same kind of shim too, though the strictness requirements I'm envisioning may change the semantics of boxed `Vector`s; I'm not sure yet.
+
+In any event, that's my goal here: put these types deep into `base`, make them ubiquitous, and move most/all existing code over to use them.
