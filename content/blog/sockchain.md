@@ -40,7 +40,7 @@ But further than this is the emotional and psychological harm caused by these si
 
 ## Enter the sockchain
 
-<img src="/thumbs/sockchain.jpg">
+<img src="/thumbs/sockchain.jpg" style="max-width:90%">
 
 The sockchain is the natural, obvious, and modern solution to this problem. We leverage our novel Proof-of-Work/Proof-of-Stake hybrid technology to create a distributed application that uses Near Field Communication (NFC) to tag each pair of socks. Dryers throughout the world can easily and cheaply be outfitted with NFC detectors. Miners will be able to detect the presence of such socks in distributed drying systems, and provide a searchable, distributed ledger of sock-pair-locations (SPLs).
 
