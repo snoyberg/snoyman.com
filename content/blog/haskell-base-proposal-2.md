@@ -4,7 +4,7 @@ description = "My summary of discussions until now"
 path = "/blog/2021/03/haskell-base-proposal-2"
 date = 2021-03-31
 +++
-TODO: Add a link to a Discourse thread for a discussion of this.
+[**Discourse thread for discussion**](https://discourse.haskell.org/t/vector-type-proposal-discussion-blog/2272?u=snoyberg)
 
 Two weeks back, I [wrote a blog post](@/blog/haskell-base-proposal.md) with a proposal for unification of vector-like types in `bytestring`, `text`, and `vector`. This continued with a [discussion on Discourse](https://discourse.haskell.org/t/base-proposal-around-vector-like-types/2112), and has been part of some brainstorming sessions at the Haskell Foundation tech track to lock down some of the concrete details. ([Meeting minutes](https://discourse.haskell.org/t/tech-agenda-track-meeting-minutes-3-24/2257) have been posted to Discourse regularly.) I've discussed with a few other interested parties, and invited feedback from people who have been working on related projects. (And I even received some such feedback!)
 
@@ -59,4 +59,4 @@ Overall, I think this is a good procedure. If I could make one change, it would 
 
 On the bright side, the significant usage of Discourse for collaboration and reporting on meeting minutes has been a Good Thing. I think blog posts like this one and my previous one are a Good Thing for collecting thoughts coherently.
 
-That said, I realize I'm in the driver's seat on this proposal, and have a skewed view of how the outside world sees things. If people have concerns with how this was handled, or ideas for improvement, bring them up. I think figuring out how to foster serious discussion of complex technical issues in the Haskell ecosystem is vital to its continued success. FIXME: include a link to a separate Discourse thread here?
+That said, I realize I'm in the driver's seat on this proposal, and have a skewed view of how the outside world sees things. If people have concerns with how this was handled, or ideas for improvement, bring them up. I think figuring out how to foster serious discussion of complex technical issues in the Haskell ecosystem is vital to its continued success.
