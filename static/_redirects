@@ -12,3 +12,5 @@
 /apple-touch-icon.png /apple-icon.png	
 
 /planet-haskell https://planet.haskell.org/rss20.xml
+
+/blog/2021/04/haskell-base-proposal /blog/2021/03/haskell-base-proposal

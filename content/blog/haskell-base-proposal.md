@@ -1,7 +1,7 @@
 +++
 title = "Haskell base proposal: unifying vector-like types"
 description = "A semi-concrete, semi-fleshed out proposal for changes to GHC and base to unify vector, bytestring, and text"
-path = "/blog/2021/04/haskell-base-proposal"
+path = "/blog/2021/03/haskell-base-proposal"
 date = 2021-03-16
 +++
 __DISCUSSION__ I've opened up a [Discourse thread to discuss this post](https://discourse.haskell.org/t/base-proposal-around-vector-like-types/2112). I'll likely respond to comments here and on Twitter, but I'd like to move towards using the more official discussion channels when possible.
