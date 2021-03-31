@@ -41,7 +41,7 @@ And while brainstorming in calls has been good, I don't think it's great. I'd li
 
 ## Other packages
 
-I've reached out to some authors of other packages to get their input on this proposal. I've received some, and incorporated some of that here. For example, both Alexey Kuleshevich and Alexey Lelechenko proposed using `primitive` as the new home for the shared data types. Others have expressed that they'd rather first see a concrete proposal. We'll see if there is further collaboration possible in the future.
+I've reached out to some authors of other packages to get their input on this proposal. I've received some, and incorporated some of that here. For example, both Alexey Kuleshevich and Alexey Khudyakov proposed using `primitive` as the new home for the shared data types. Others have expressed that they'd rather first see a concrete proposal. We'll see if there is further collaboration possible in the future.
 
 ## Process level comments
 
