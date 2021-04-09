@@ -19,6 +19,8 @@ __OK, but why are you publishing them on your personal blog?__ As you'll also se
 
 __Isn't a blog post for each meeting excessive?__ Yes. As I mentioned in my [transparency blog post](@/blog/transparency.md), transparency includes a balance between too much and too little information. I intend to leverage announcement blog posts for things that deserve an announcement.
 
+__Where are the actual meeting minutes?__ They're [on Google Drive](https://docs.google.com/document/d/1yfrd757NqggdqZ11GEXyDnTJfZFxaXSdFYh5-eEpvFI/edit?usp=sharing). I have a bit more information on the Google Drive setup below.
+
 With those out of the way, let's get into the noteworthy information from this meeting.
 
 ## Opening up Slack
