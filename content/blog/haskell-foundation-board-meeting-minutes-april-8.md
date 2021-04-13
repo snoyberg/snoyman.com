@@ -2,12 +2,12 @@
 title = "Haskell Foundation Board - Meeting Minutes - April 8, 2021"
 description = "Meetings minutes/announcements/more for the Haskell Foundation board meeting. And an explanation of why exactly it's on my personal blog."
 path = "/blog/2021/04/haskell-foundation-board-meeting-minutes-april-8"
-date = 2021-04-12
+date = 2021-04-13
 
 [taxonomies]
 series = ["haskell-foundation"]
 +++
-**FIXME** Add a link to a Discourse discussion.
+<p class="text-center"><a class="btn btn-info" href="https://discourse.haskell.org/t/board-meeting-minutes-april-8-opening-up-slack-board-officers-new-website/2359">Discourse thread for discussion</a></p>
 
 This blog post is a summary of the meeting minutes for the Haskell Foundation board meeting that took place on April 8, 2021. This is the first time I'm writing these up, and potentially the only time I'm putting them on this blog. So this post is going to be a bit weird; we'll start with some questions.
 
@@ -32,7 +32,7 @@ A lot of the work in the board so far has been in the "ways of working" directio
     * On a personal note, I'm _very_ excited about this. I think a central place for ecosystem discussions is vital.
 * There's some hesitation/concern about moderation, off-topic discussions, and other points, which we'll need to work out over time.
 
-I'd encourage anyone interested in joining in the conversation and staying up to date with topics to [request an invite](FIXME). We're already starting separate topic-specific channels to iterate on various technical topics.
+I'd encourage anyone interested in joining in the conversation and staying up to date with topics to [request an invite](https://join.slack.com/t/haskell-foundation/shared_invite/zt-mjh76fw0-CEjg2NbyVE8rVQDvR~0F4A). We're already starting separate topic-specific channels to iterate on various technical topics.
 
 Note that Slack is _not_ a replacement for Discourse or other existing platforms. We'll still use Discourse for more official discussions and announcements. (This blog post is an example, the official discussion for it lives on Discourse.) Like many things, we'll likely be figuring out the details over time.
 
@@ -60,7 +60,7 @@ I'm hoping that, in the future, I'll be putting posts like this one on that site
 
 I'm going to try and reserve these kinds of announcement posts to topics that I think will have widespread interest. I may make mistakes in that judgement, I apologize in advance. My goal is that anyone who wants to stay up to speed on large decisions coming from the board will be able to without using up a lot of their bandwidth.
 
-That said, every board meeting (and, for that matter, most or all working group meetings) take and keep meeting notes. These are all available in the [Haskell Foundation Google Drive folder](FIXME).
+That said, every board meeting (and, for that matter, most or all working group meetings) take and keep meeting notes. We've been sharing these on Discourse, but in the future may simply publish them in the [`hf/minutes` repo](https://gitlab.haskell.org/hf/minutes).
 
 Until now, we've been creating a new Discourse thread and posting the meeting minutes for each meeting. I proposed reducing how often we do that, and instead leave the minutes in Google Drive for those interested. My hope is that a combination of "information is all available in Drive" with "important things get an announcement" will cover most people. But if people would like to see a new Discourse thread for each meeting, I'd like to hear about it. Please comment on this (and other topics) in the Discourse thread linked.
 
@@ -68,4 +68,4 @@ Until now, we've been creating a new Discourse thread and posting the meeting mi
 
 We've been in planning and discussion mode for the past few months on the board. The various working groups are beginning to get some clarity around how they want to function, and are ready for more people to get involved. There's technical work to do, documentation, outreach, and much more. If you're excited to be a part of the efforts of the Haskell Foundation to improve the overall state of Haskell, now's a great time to get in and influence the direction. I strongly encourage everyone to check out the Slack, ask questions, interact on Discourse, and overall dive in!
 
-**FIXME add another link to Discourse**
+<p class="text-center"><a class="btn btn-info" href="https://discourse.haskell.org/t/board-meeting-minutes-april-8-opening-up-slack-board-officers-new-website/2359">Discourse thread for discussion</a></p>
