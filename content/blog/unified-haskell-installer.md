@@ -39,7 +39,7 @@ So the problem statement: can't we standardize an install method that meets most
 
 ## The goal
 
-I'll start by laying out the ultimate goal for in my head. This idea's been bouncing around for a few months now, but only came up in May 4, 2021 tech track meeting for the Haskell Foundation. I don't think it's that ambitious of a goal. But in the next section, I'm also going to lay out some shorter term milestones.
+I'll start by laying out the ultimate goal that's in my head. This idea's been bouncing around for a few months now, but only came up in May 4, 2021 tech track meeting for the Haskell Foundation. I don't think it's that ambitious of a goal. But in the next section, I'm also going to lay out some shorter term milestones.
 
 What I'd like to see is a well maintained Haskell library for installing Haskell toolchains, generally acknowledged as the de facto standard way to install GHC and other tools. It should be Haskell, so that it's easy for Haskellers to maintain. It should support as many operating systems as possible. It should provide an easy-to-use Haskell API that other tooling can leverage.
 
@@ -69,9 +69,11 @@ And in parallel to that, the Stack codebase itself can begin its move over to th
 
 I'm trying to avoid sounding like a broken record, but a lot of the inspiration for my thoughts here come from [rustup](https://rustup.rs/). Honestly though, most of the ideas of how this installer should work predate Rust, and come from a combination of experience with MinGHC and seeing how tools like [virtualenv](https://pypi.org/project/virtualenv/) and [RVM](https://rvm.io/) work.
 
-## Discussion/collaborating
+## Get involved!
 
 I'm going to put this blog post on [Discourse](https://discourse.haskell.org/), as I've been doing with previous posts. But I'm going to strongly encourage anyone interested in this to join up on Slack too. We've created a new channel for this topic, `#tech-track-installer`. If you're interested in the topic, please join up!
+
+I'm not just asking for people to provide some feedback, though that's welcome. I'm looking for people to contribute, work on code, and more broadly, take ownership of this work. I think this is a relatively small, but massively vital, piece of Haskell infrastructure we're trying to solidify. Someone looking to get deeper into open source maintenance would be great. And you'll have plenty of people available to provide guidance when desired.
 
 ## Stack/cabal-install/GHC mapping
 
