@@ -62,7 +62,7 @@ You may have some legitimate objections to this philosophy:
       accept pull requests, and contributing an extra function can be
       less intimidating than writing a new library. (But please
       consider
-      [opening an issue first](/blog/2017/06/how-to-send-me-a-pull-request?preview=true).)
+      [opening an issue first](@/blog/how-to-send-me-a-pull-request.md).)
     * And if you're certain you're not up to the task: try to
       encourage others. You may not succeed. But try to make the case
       for why this project is useful, interesting, necessary, or
