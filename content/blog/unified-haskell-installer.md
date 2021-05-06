@@ -2,7 +2,7 @@
 title = "Haskell proposal: unified installer"
 description = "A new proposal from the Haskell Foundation tech track, on a unified installer for Haskell tooling"
 path = "/blog/2021/05/unified-haskell-installer"
-date = 2021-05-10
+date = 2021-05-06
 +++
 **`<quick-intro>`** In my [previous post](@/blog/haskell-foundation-board-meeting-minutes-april-8.md), I mentioned that we were opening up the Haskell Foundation Slack instance for more people. I'd like to emphasize that a second time, and mention that we are trying to use Slack as a tech track communication hub. We're actively looking for contributors to join up on some of these initiatives and bring them to reality. If the previous topics I've mentioned (like the Vector Types Proposal) or topics like improving Haskell educational material sound interesting, please [join the Slack](https://join.slack.com/t/haskell-foundation/shared_invite/zt-mjh76fw0-CEjg2NbyVE8rVQDvR~0F4A), introduce yourself in `#tech-track`, and tell us what you'd be interested in helping out with. You'll get to be part of some hopefully significant improvements to the Haskell ecosystem, and have access to a lot of other collaborators and mentors to make this happen. **`</quick-intro>`**
 
