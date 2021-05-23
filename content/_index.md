@@ -30,6 +30,12 @@ date = "June 2011"
 publisher = "IEEE Spectrum, The Functional Web"
 
 [[extra.talks]]
+date = "2021-05"
+title = "Go vs Rust | Round table discussion"
+venue = "GoLab/RustLab joint event"
+links = []
+
+[[extra.talks]]
 date = "2020-05"
 title = "Economic Argument for Functional Programming"
 venue = "LambdaConf 2020 Global Edition"
