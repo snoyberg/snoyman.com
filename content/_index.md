@@ -33,7 +33,9 @@ publisher = "IEEE Spectrum, The Functional Web"
 date = "2021-05"
 title = "Go vs Rust | Round table discussion"
 venue = "GoLab/RustLab joint event"
-links = []
+  [[extra.talks.links]]
+  url = "https://youtu.be/N-E-qtQhsHw"
+  text = "Video"
 
 [[extra.talks]]
 date = "2020-05"
