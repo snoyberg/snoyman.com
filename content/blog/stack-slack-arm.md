@@ -3,6 +3,8 @@ title = "Stack on Slack and ARM64"
 description = "Two updates on the Stack project: two new chat rooms on Slack, and building on ARM64"
 path = "/blog/2021/05/stack-slack-arm"
 date = 2021-05-31
+[extra]
+ogimage = "stack-slack-arm.png"
 +++
 This blog post is covering two completely unrelated announcements about [Stack](https://haskellstack.org/) that happened to land at the same time.
 
