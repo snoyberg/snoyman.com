@@ -17,11 +17,13 @@ struct Currency {
 
 impl Currency {
     fn load() -> Result<Self> {
-        let token = std::env::var("OPEN_EXCHANGE_RATE_TOKEN").context("Could not get OPEN_EXCHANGE_RATE_TOKEN")?;
-        let url = format!("https://openexchangerates.org/api/latest.json?app_id={}", token);
-        let mut res = get_client()
-            .get(url)
-            .send()?;
+        let token = std::env::var("OPEN_EXCHANGE_RATE_TOKEN")
+            .context("Could not get OPEN_EXCHANGE_RATE_TOKEN")?;
+        let url = format!(
+            "https://openexchangerates.org/api/latest.json?app_id={}",
+            token
+        );
+        let mut res = get_client().get(url).send()?;
         let oer: Oer = serde_json::from_reader(&mut res)?;
         oer.into_currency()
     }
@@ -116,7 +118,12 @@ struct GhcInfo {
 fn get_client() -> &'static Client {
     static CLIENT: OnceCell<Client> = OnceCell::new();
     CLIENT
-        .get_or_try_init(|| ClientBuilder::new().use_rustls_tls().user_agent("snoycron").build())
+        .get_or_try_init(|| {
+            ClientBuilder::new()
+                .use_rustls_tls()
+                .user_agent("snoycron")
+                .build()
+        })
         .unwrap()
 }
 
