@@ -1,55 +1,51 @@
 use anyhow::*;
 use chrono::prelude::*;
+use once_cell::sync::OnceCell;
 use reqwest::blocking::{Client, ClientBuilder};
-use reqwest::header::ACCEPT;
 use semver::Version;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::env::args;
 use std::fmt::{Display, Formatter};
 use std::io::Write;
-use once_cell::sync::OnceCell;
 
-#[derive(Deserialize, Debug)]
-struct Currencies {
-    #[serde(rename = "LAST_UPDATE")]
-    last_update: NaiveDate,
-    #[serde(rename = "CURRENCY")]
-    currencies: Vec<Currency>,
-}
-
-#[derive(Deserialize, Debug)]
+#[derive(Debug)]
 struct Currency {
-    #[serde(rename = "CURRENCYCODE")]
-    code: String,
-    #[serde(rename = "RATE")]
     rate: String,
-    #[serde(rename = "CHANGE")]
-    change: String,
+    timestamp: DateTime<Utc>,
 }
 
-impl Currencies {
-    fn find(&self, code: &str) -> Result<&Currency> {
-        for c in &self.currencies {
-            if c.code == code {
-                return Ok(&c);
-            }
-        }
-        Err(anyhow!("Currency code not found: {}", code))
-    }
-
-    fn load() -> Result<Currencies> {
+impl Currency {
+    fn load() -> Result<Self> {
+        let token = std::env::var("OPEN_EXCHANGE_RATE_TOKEN").context("Could not get OPEN_EXCHANGE_RATE_TOKEN")?;
+        let url = format!("https://openexchangerates.org/api/latest.json?app_id={}", token);
         let mut res = get_client()
-            .get("https://www.boi.org.il/currency.xml")
-            .header(reqwest::header::USER_AGENT, "snoycron")
-            .header(ACCEPT, "text/html")
+            .get(url)
             .send()?;
-        Ok(serde_xml_rs::from_reader(&mut res)?)
+        let oer: Oer = serde_json::from_reader(&mut res)?;
+        oer.into_currency()
+    }
+}
+
+#[derive(Deserialize, Debug)]
+struct Oer {
+    timestamp: i64,
+    rates: HashMap<String, f64>,
+}
+
+impl Oer {
+    fn into_currency(self) -> Result<Currency> {
+        let ils = self.rates.get("ILS").context("Israeli shekel not listed")?;
+        let rate = format!("{:.3}", ils);
+        Ok(Currency {
+            rate,
+            timestamp: Utc.timestamp(self.timestamp, 0),
+        })
     }
 }
 
 impl Currency {
-    fn write_shekel_md(&self, prefix: &str, last_update: NaiveDate) -> Result<()> {
+    fn write_shekel_md(&self, prefix: &str) -> Result<()> {
         let mut file = std::path::PathBuf::new();
         file.push(prefix);
         file.push("content");
@@ -63,24 +59,14 @@ template = "shekel.html"
 [extra]
 date = "{date}"
 rate = "{rate}"
-delta = "{delta}"
 +++"#,
-            date = last_update.format("%B %e, %Y"),
+            date = self.timestamp.format("%B %e, %Y"),
             rate = self.rate,
-            delta = self.delta(),
         )?;
         Ok(())
     }
 
-    fn delta(&self) -> String {
-        match self.change.chars().next() {
-            Some('-') => format!("{}% weaker", self.change.chars().skip(1).collect::<String>()),
-            _ => format!("{}% stronger", self.change),
-        }
-    }
-
-    fn write_shekel_feed(&self, prefix: &str, last_update: NaiveDate) -> Result<()> {
-        let last_update_time: DateTime<Utc> = DateTime::from_utc(last_update.and_hms(0, 0, 0), Utc);
+    fn write_shekel_feed(&self, prefix: &str) -> Result<()> {
         let mut file = std::path::PathBuf::new();
         file.push(prefix);
         file.push("static");
@@ -102,18 +88,17 @@ delta = "{delta}"
     <updated>{updated}</updated>
     <title>Dollar versus Shekel: {pretty}</title>
     <content type="html">
-      On {pretty}, $1 (United States Dollar) buys {rate}₪ (New Israeli Shekel). The dollar became {delta}.
+      On {pretty}, $1 (United States Dollar) buys {rate}₪ (New Israeli Shekel).
     </content>
     <author>
       <name>Michael Snoyman</name>
     </author>
   </entry>
 </feed>"#,
-            updated = last_update_time.to_rfc3339(),
-            short = last_update.format("%Y-%m-%d"),
-            pretty = last_update.format("%B %e, %Y"),
+            updated = self.timestamp.to_rfc3339(),
+            short = self.timestamp.format("%Y-%m-%d"),
+            pretty = self.timestamp.format("%B %e, %Y"),
             rate = self.rate,
-            delta = self.delta(),
         )?;
         Ok(())
     }
@@ -130,8 +115,9 @@ struct GhcInfo {
 
 fn get_client() -> &'static Client {
     static CLIENT: OnceCell<Client> = OnceCell::new();
-    CLIENT.get_or_try_init(|| ClientBuilder::new()
-    .use_rustls_tls().build()).unwrap()
+    CLIENT
+        .get_or_try_init(|| ClientBuilder::new().use_rustls_tls().user_agent("snoycron").build())
+        .unwrap()
 }
 
 struct AllGhcInfo(Vec<(Version, GhcInfo)>);
@@ -180,10 +166,9 @@ fn main() -> Result<()> {
         Some(x) => x,
     };
 
-    let currencies: Currencies = Currencies::load()?;
-    let usd = currencies.find("USD")?;
-    usd.write_shekel_md(&prefix, currencies.last_update)?;
-    usd.write_shekel_feed(&prefix, currencies.last_update)?;
+    let usd = Currency::load()?;
+    usd.write_shekel_md(&prefix)?;
+    usd.write_shekel_feed(&prefix)?;
 
     let ghc_info = load_ghc_info()?;
     let mut base_md = std::path::PathBuf::new();
