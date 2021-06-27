@@ -1,12 +1,14 @@
 use anyhow::*;
 use chrono::prelude::*;
-use reqwest::blocking::get;
+use reqwest::blocking::{Client, ClientBuilder};
+use reqwest::header::ACCEPT;
 use semver::Version;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::env::args;
 use std::fmt::{Display, Formatter};
 use std::io::Write;
+use once_cell::sync::OnceCell;
 
 #[derive(Deserialize, Debug)]
 struct Currencies {
@@ -37,7 +39,11 @@ impl Currencies {
     }
 
     fn load() -> Result<Currencies> {
-        let mut res = get("https://www.boi.org.il/currency.xml")?;
+        let mut res = get_client()
+            .get("https://www.boi.org.il/currency.xml")
+            .header(reqwest::header::USER_AGENT, "snoycron")
+            .header(ACCEPT, "text/html")
+            .send()?;
         Ok(serde_xml_rs::from_reader(&mut res)?)
     }
 }
@@ -122,12 +128,18 @@ struct GhcInfo {
     win32: String,
 }
 
+fn get_client() -> &'static Client {
+    static CLIENT: OnceCell<Client> = OnceCell::new();
+    CLIENT.get_or_try_init(|| ClientBuilder::new()
+    .use_rustls_tls().build()).unwrap()
+}
+
 struct AllGhcInfo(Vec<(Version, GhcInfo)>);
 
 const GHC_INFO_URL: &str =
     "https://raw.githubusercontent.com/commercialhaskell/stackage-content/master/stack/global-hints.yaml";
 fn load_ghc_info() -> Result<AllGhcInfo> {
-    let mut res = get(GHC_INFO_URL)?;
+    let mut res = get_client().get(GHC_INFO_URL).send()?;
     let m: HashMap<String, GhcInfo> = serde_yaml::from_reader(&mut res)?;
     let mut v: Vec<(Version, GhcInfo)> = Vec::new();
     for (name, info) in m {
