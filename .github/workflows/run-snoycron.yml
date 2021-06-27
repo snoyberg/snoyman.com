@@ -21,6 +21,7 @@ jobs:
           set -eux
 
           IMAGE_ID_LATEST=docker.pkg.github.com/${{ github.repository }}/snoycron:latest
+          OPEN_EXCHANGE_RATE_TOKEN="${{ secrets.OPEN_EXCHANGE_RATE_TOKEN }}"
 
           docker run --rm -e OPEN_EXCHANGE_RATE_TOKEN=$OPEN_EXCHANGE_RATE_TOKEN -v $(pwd):/repo $IMAGE_ID_LATEST /usr/local/bin/snoycron /repo
 
