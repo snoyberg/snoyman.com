@@ -147,7 +147,7 @@ impl Display for AllGhcInfo {
         writeln!(fmt, "template = \"index.html\"")?;
         writeln!(fmt, "+++")?;
         writeln!(fmt, "This table correlates GHC versions with the versions of the base and Cabal libraries it ships with.")?;
-        writeln!(fmt, "")?;
+        writeln!(fmt)?;
         writeln!(fmt, "<table id=\"versions\"><thead><tr><th>GHC</th><th>base</th><th>Cabal</th><th>Win32</th></tr></thead><tbody>")?;
         for (ghc, info) in &self.0 {
             writeln!(
@@ -161,7 +161,7 @@ impl Display for AllGhcInfo {
 }
 
 fn main() -> Result<()> {
-    let prefix = match args().skip(1).next() {
+    let prefix = match args().nth(1) {
         None => return Err(anyhow!("Please provide root directory")),
         Some(x) => x,
     };
