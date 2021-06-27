@@ -23,19 +23,23 @@ impl Currency {
             "https://openexchangerates.org/api/latest.json?app_id={}",
             token
         );
-        let mut res = get_client().get(url).send()?;
-        let oer: Oer = serde_json::from_reader(&mut res)?;
-        oer.into_currency()
+        let oxr: Oxr = get_client()
+            .get(url)
+            .send()
+            .context("Request to openexchangerates")?
+            .json()
+            .context("Parsing JSON from openexchangerates")?;
+        oxr.into_currency()
     }
 }
 
 #[derive(Deserialize, Debug)]
-struct Oer {
+struct Oxr {
     timestamp: i64,
     rates: HashMap<String, f64>,
 }
 
-impl Oer {
+impl Oxr {
     fn into_currency(self) -> Result<Currency> {
         let ils = self.rates.get("ILS").context("Israeli shekel not listed")?;
         let rate = format!("{:.3}", ils);

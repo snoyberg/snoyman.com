@@ -484,6 +484,7 @@ dependencies = [
  "pin-project-lite",
  "rustls",
  "serde",
+ "serde_json",
  "serde_urlencoded",
  "tokio",
  "tokio-rustls",
@@ -625,7 +626,6 @@ dependencies = [
  "reqwest",
  "semver",
  "serde",
- "serde_json",
  "serde_yaml",
 ]
 
