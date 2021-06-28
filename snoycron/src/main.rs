@@ -21,27 +21,32 @@ impl Currency {
         let token = std::env::var("OPEN_EXCHANGE_RATE_TOKEN")
             .context("Could not get OPEN_EXCHANGE_RATE_TOKEN")?;
         let yesterday = Utc::today().naive_utc().pred();
+        let prevdate = yesterday.pred();
 
-        let prev = Oxr::load(&token, &yesterday.pred())?;
+        let prev = Oxr::load(&token, &prevdate)?;
         let curr = Oxr::load(&token, &yesterday)?;
 
         let timestamp = Utc.timestamp(curr.timestamp, 0);
         let prev = prev.get_ils()?;
         let curr = curr.get_ils()?;
-        let delta = (curr - prev) / prev - 1.0;
+        let delta = (curr - prev) / prev * 100.0;
+        let prevdate = prevdate.format("%B %e");
 
         let delta = if delta == 0.0 {
-            "The dollar remained unchanged.".to_owned()
-        } else if delta > 0.0 {
-            format!("The dollar became {:.3}% stronger.", delta)
+            format!("There was no change since {}", prevdate)
         } else {
-            format!("The dollar became {:.3}% weaker.", -delta)
+            format!("On {prevdate}, the dollar was {prevrate:.3}. The dollar became {delta:.3}% {direction}.",
+                prevdate = prevdate,
+                prevrate = prev,
+                delta = delta.abs(),
+                direction = if delta > 0.0 { "stronger" } else { "weaker"}
+            )
         };
 
         Ok(Currency {
             rate: format!("{:.3}", curr),
             delta,
-            timestamp: timestamp,
+            timestamp,
         })
     }
 }
@@ -68,7 +73,10 @@ impl Oxr {
     }
 
     fn get_ils(&self) -> Result<f64> {
-        self.rates.get("ILS").context("Israeli shekel not listed").map(|x| *x)
+        self.rates
+            .get("ILS")
+            .context("Israeli shekel not listed")
+            .map(|x| *x)
     }
 }
 
@@ -118,7 +126,7 @@ delta = "{delta}"
     <updated>{updated}</updated>
     <title>Dollar versus Shekel: {pretty}</title>
     <content type="html">
-      On {pretty}, $1 (United States Dollar) buys {rate}₪ (New Israeli Shekel). {delta}
+      On {pretty}, $1 (United States Dollar) buys &lt;b>{rate}₪&lt;/b>. {delta}
     </content>
     <author>
       <name>Michael Snoyman</name>
