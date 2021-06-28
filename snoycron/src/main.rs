@@ -13,23 +13,36 @@ use std::io::Write;
 struct Currency {
     rate: String,
     timestamp: DateTime<Utc>,
+    delta: String,
 }
 
 impl Currency {
     fn load() -> Result<Self> {
         let token = std::env::var("OPEN_EXCHANGE_RATE_TOKEN")
             .context("Could not get OPEN_EXCHANGE_RATE_TOKEN")?;
-        let url = format!(
-            "https://openexchangerates.org/api/latest.json?app_id={}",
-            token
-        );
-        let oxr: Oxr = get_client()
-            .get(url)
-            .send()
-            .context("Request to openexchangerates")?
-            .json()
-            .context("Parsing JSON from openexchangerates")?;
-        oxr.into_currency()
+        let yesterday = Utc::today().naive_utc().pred();
+
+        let prev = Oxr::load(&token, &yesterday.pred())?;
+        let curr = Oxr::load(&token, &yesterday)?;
+
+        let timestamp = Utc.timestamp(curr.timestamp, 0);
+        let prev = prev.get_ils()?;
+        let curr = curr.get_ils()?;
+        let delta = (curr - prev) / prev - 1.0;
+
+        let delta = if delta == 0.0 {
+            "The dollar remained unchanged.".to_owned()
+        } else if delta > 0.0 {
+            format!("The dollar became {:.3}% stronger.", delta)
+        } else {
+            format!("The dollar became {:.3}% weaker.", -delta)
+        };
+
+        Ok(Currency {
+            rate: format!("{:.3}", curr),
+            delta,
+            timestamp: timestamp,
+        })
     }
 }
 
@@ -40,13 +53,22 @@ struct Oxr {
 }
 
 impl Oxr {
-    fn into_currency(self) -> Result<Currency> {
-        let ils = self.rates.get("ILS").context("Israeli shekel not listed")?;
-        let rate = format!("{:.3}", ils);
-        Ok(Currency {
-            rate,
-            timestamp: Utc.timestamp(self.timestamp, 0),
-        })
+    fn load(token: &str, date: &NaiveDate) -> Result<Self> {
+        let url = format!(
+            "https://openexchangerates.org/api/historical/{date}.json?app_id={token}",
+            date = date,
+            token = token,
+        );
+        get_client()
+            .get(url)
+            .send()
+            .context("Request to openexchangerates")?
+            .json()
+            .context("Parsing JSON from openexchangerates")
+    }
+
+    fn get_ils(&self) -> Result<f64> {
+        self.rates.get("ILS").context("Israeli shekel not listed").map(|x| *x)
     }
 }
 
@@ -65,9 +87,11 @@ template = "shekel.html"
 [extra]
 date = "{date}"
 rate = "{rate}"
+delta = "{delta}"
 +++"#,
             date = self.timestamp.format("%B %e, %Y"),
             rate = self.rate,
+            delta = self.delta,
         )?;
         Ok(())
     }
@@ -94,7 +118,7 @@ rate = "{rate}"
     <updated>{updated}</updated>
     <title>Dollar versus Shekel: {pretty}</title>
     <content type="html">
-      On {pretty}, $1 (United States Dollar) buys {rate}₪ (New Israeli Shekel).
+      On {pretty}, $1 (United States Dollar) buys {rate}₪ (New Israeli Shekel). {delta}
     </content>
     <author>
       <name>Michael Snoyman</name>
@@ -105,6 +129,7 @@ rate = "{rate}"
             short = self.timestamp.format("%Y-%m-%d"),
             pretty = self.timestamp.format("%B %e, %Y"),
             rate = self.rate,
+            delta = self.delta,
         )?;
         Ok(())
     }
