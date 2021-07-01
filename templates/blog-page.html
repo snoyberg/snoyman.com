@@ -31,7 +31,9 @@
 
       {{ macros::blog_email() }}
 
-      {{ page.content | safe }}
+      <div id="blog-body">
+        {{ page.content | safe }}
+      </div>
 
 <div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
 
