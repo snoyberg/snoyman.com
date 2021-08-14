@@ -24,7 +24,7 @@ Important notes:
 
 * If you have MFA enabled, you'll likely need to run `bw login` at least once before running this executable to provide the MFA token.
 * If you log in with multiple different Bitwarden accounts, running this tool will switch which one you're logged in with.
-* The `bw unlock` and `bw export` commands (at time of writing) unfortunately does not allow specifying the password via environment variables. Therefore, the password will be passed as a command line argument, which is less secure. It's possible that other processes on your system may be able to see that password. Caveat emptor!
+* The `bw unlock` and `bw export` commands (at time of writing) unfortunately do not allow specifying the password via environment variables. Therefore, the password will be passed as a command line argument, which is less secure. It's possible that other processes on your system may be able to see that password. Caveat emptor!
 * The file is encrypted using a [`sodiumoxide`](https://lib.rs/crates/sodiumoxide) `secretbox`, using your master password for key generation.
 * This tool will produce a new salt and nonce and each invocation, meaning even if your vault and password remain unchanged, you will get different encrypted output on each invocation.
 
