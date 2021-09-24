@@ -1,4 +1,4 @@
-### What Makes Haskell Unique
+### What Makes Haskell Unique (2020 update)
 
 * Michael Snoyman
 * VP of Engineering, FP Complete
