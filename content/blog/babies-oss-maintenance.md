@@ -35,7 +35,7 @@ I've never actually codified my current stance on OSS project maintenance, so it
 5. There are a few time saving mechanisms I've taken on over the years as well. These include:
 
     * I won't spend time on Hackage revisions. I'm not starting a fight here, I'm stating a fact. When people ask me to make revisions on Hackage to fix the dependency solver, my response will almost always be: I'm happy to give you Hackage maintainer rights to do so yourself, but I won't do it.
-    * GHC has overly aggressive releases which cause a lot of breakage. I won't guarantee any more than three GHC version compatibility anymore. Even maintaining the CI matrix for more than that is a major burden. I realize dropping support for 1.5 year old compilers is aggressive, and I'd prefer not to do that. But it's a simple cost/benefit trade-off here.
+    * GHC has overly aggressive releases which cause a lot of breakage. I won't guarantee compatibility with more than three GHC major versions going forward (e.g. GHC 8.6, 8.8, and 8.10) Even maintaining the CI matrix for more than that is a major burden. I realize dropping support for 1.5 year old compilers is aggressive, and I'd prefer not to do that. But it's a simple cost/benefit trade-off here.
     * I maintain a lot of my projects in "mega-repos", or more appropriately named these days monorepos. I use the tools [mega-sdist](https://www.stackage.org/package/mega-sdist) to help maintain releases of these packages.
     * When it comes to dependency bounds in my `.cabal`/`package.yaml` files, I will include lower bounds on my packages in two cases:
         * I know for a fact that I don't support an old version of a package.
