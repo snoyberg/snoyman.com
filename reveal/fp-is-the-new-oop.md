@@ -277,7 +277,7 @@ main = do
 ## The next generation
 
 * New developers will learn languages with FP concepts built in
-* JavaScript's `forAll`, immutable-by-default, pattern matching... all "normal" programming
+* JavaScript's `forEach`, immutable-by-default, pattern matching... all "normal" programming
 * FP-focused languages will no longer stand out from the pack for these features
 * Instead, like imperative and OOP before it, FP languages will stand out for what other languages _haven't_ adopted
 
