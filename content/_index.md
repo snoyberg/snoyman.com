@@ -30,6 +30,14 @@ date = "June 2011"
 publisher = "IEEE Spectrum, The Functional Web"
 
 [[extra.talks]]
+date = "2022-03"
+title = "FP is the new OOP"
+venue = "Functional Conf 2022"
+  [[extra.talks.links]]
+  url = "/reveal/fp-is-the-new-oop"
+  text = "Slides"
+
+[[extra.talks]]
 date = "2021-05"
 title = "Go vs Rust | Round table discussion"
 venue = "GoLab/RustLab joint event"
