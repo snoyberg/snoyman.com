@@ -36,6 +36,9 @@ venue = "Functional Conf 2022"
   [[extra.talks.links]]
   url = "/reveal/fp-is-the-new-oop"
   text = "Slides"
+  [[extra.talks.links]]
+  url = "https://youtu.be/to8ISIQjETk"
+  text = "Video"
 
 [[extra.talks]]
 date = "2021-05"
