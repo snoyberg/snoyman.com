@@ -23,7 +23,7 @@ I know there are a lot of details below, but I strongly encourage people to read
     * Use [Signal](https://www.signal.org/), [Wire](https://wire.com/en/), or [Matrix](https://matrix.org/)
     * Be careful about what you say in a group chat
     * Assume anything you say will last forever
-    * If you want semi-secure email, use [ProtonMail](https://protonmail.com/), but don't rely on it
+    * If you want semi-secure email, use [ProtonMail](https://proton.me/mail), but don't rely on it
 * Social media
     * Your best bet for censorship freedom: host the content yourself, but that's hard, and you have to find a place to host it
     * When you use _any_ platform, you're at their mercy regarding censorship
@@ -75,7 +75,7 @@ Sure, the rest of the message is secure, but does it matter?
 
 Email is a necessary evil. Many services require it as some kind of identity provider. You'll have to use it. But don't consider anything you put in email safe.
 
-With major providers like Gmail and Outlook, you can safely assume that the companies are spying on everything you're saying. I use both, and assume nothing that goes on there is truly private. If you want to harden your email usage a bit, [ProtonMail](https://protonmail.com/) is a good choice.
+With major providers like Gmail and Outlook, you can safely assume that the companies are spying on everything you're saying. I use both, and assume nothing that goes on there is truly private. If you want to harden your email usage a bit, [ProtonMail](https://proton.me/mail) is a good choice.
 
 ## Messaging apps
 
