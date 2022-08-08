@@ -1,13 +1,13 @@
-use anyhow::*;
+use anyhow::{anyhow, ensure, Context, Result};
 use chrono::prelude::*;
 use once_cell::sync::OnceCell;
 use reqwest::blocking::{Client, ClientBuilder};
-use semver::Version;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::env::args;
 use std::fmt::{Display, Formatter};
 use std::io::Write;
+use std::str::FromStr;
 
 #[derive(Debug)]
 struct Currency {
@@ -176,8 +176,8 @@ fn load_ghc_info() -> Result<AllGhcInfo> {
         let prefix: String = name.chars().take(4).collect();
         ensure!(&prefix == "ghc-", "Invalid GHC version: {}", name);
         let version_str: String = name.chars().skip(4).collect();
-        let version =
-            Version::parse(&version_str).with_context(|| format!("Could not parse {}", name))?;
+        let version = Version::from_str(&version_str)
+            .with_context(|| format!("Could not parse {}-{}", name, version_str))?;
         v.push((version, info));
     }
     v.sort_by(|x, y| y.0.cmp(&x.0));
@@ -223,4 +223,32 @@ fn main() -> Result<()> {
     write!(base, "{}", ghc_info)?;
 
     Ok(())
+}
+
+/// A Version number that supports Haskell's world of unlimited components.
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+struct Version(Vec<u32>);
+
+impl Display for Version {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        for (idx, component) in self.0.iter().enumerate() {
+            if idx > 0 {
+                write!(f, ".")?;
+            }
+            write!(f, "{}", component)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl FromStr for Version {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        s.split('.')
+            .map(|x| x.parse().context("Invalid version component"))
+            .collect::<Result<_>>()
+            .map(Version)
+    }
 }

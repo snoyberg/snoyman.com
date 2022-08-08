@@ -493,12 +493,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "semver"
-version = "1.0.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93f6841e709003d68bb2deee8c343572bf446003ec20a583e76f7b15cebf3711"
-
-[[package]]
 name = "serde"
 version = "1.0.142"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -568,7 +562,6 @@ dependencies = [
  "chrono",
  "once_cell",
  "reqwest",
- "semver",
  "serde",
  "serde_yaml",
 ]
