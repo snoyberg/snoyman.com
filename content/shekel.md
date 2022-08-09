@@ -2,7 +2,7 @@
 title = "Dollar versus Shekel"
 template = "shekel.html"
 [extra]
-date = "August  7, 2022"
-rate = "3.346"
-delta = "On August  6, the dollar was 3.347. The dollar became 0.025% weaker."
+date = "August  8, 2022"
+rate = "3.308"
+delta = "On August  7, the dollar was 3.346. The dollar became 1.126% weaker."
 +++
