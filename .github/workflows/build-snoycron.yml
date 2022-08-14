@@ -2,12 +2,14 @@ name: Build snoycron image
 
 on:
   push:
-    branches: [snoycron]
+    branches: [master]
+    paths:
+    - '.github/**'
+    - 'snoycron/**'
 
 jobs:
   push:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2

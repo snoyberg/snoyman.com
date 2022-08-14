@@ -21,6 +21,13 @@ impl Currency {
         let token = std::env::var("OPEN_EXCHANGE_RATE_TOKEN")
             .context("Could not get OPEN_EXCHANGE_RATE_TOKEN")?;
         let yesterday = Utc::today().naive_utc().pred();
+
+        // Prices don't update on Saturday, so if yesterday is Saturday, go back to Friday
+        let yesterday = if yesterday.weekday() == Weekday::Sat {
+            yesterday.pred()
+        } else {
+            yesterday
+        };
         let prevdate = yesterday.pred();
 
         let prev = Oxr::load(&token, &prevdate)?;
