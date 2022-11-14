@@ -16,7 +16,7 @@ If you're looking for a summary "try this if you're having trouble," here are my
 
 The rest of this blog post will try to explain what the problem is. We're going to get into the technicals, but I'm hoping the content will make sense to anyone with basic experience on the internet, not just networking engineers.
 
-Finally, it's worth calling out two coworkers for their involvement in this story. First is Niklas Hambüchen, who years ago warned me of the perils of ISP-provided routers. I should have listened to him then. The second is Neil, who not only helped me debug this along the way, but also accidentally gave me the clue I needed to isolate the problem.
+Finally, it's worth calling out two coworkers for their involvement in this story. First is Niklas Hambüchen, who years ago warned me of the perils of ISP-provided routers. I should have listened to him then. The second is Neil Mayhew, who not only helped me debug this along the way, but also accidentally gave me the clue I needed to isolate the problem.
 
 ## Analyzing the problem
 
@@ -36,7 +36,7 @@ Every computer on a network has an Internet Protocol (IP) address. These are num
 
 But like I said, there aren't any "connections." Instead, internet traffic is made up of a bunch of "packets." You can think of these as envelopes. They have an IP address on the outside, and a small amount of data inside. When you "connect" to another computer, you're actually sending a bunch of these packets over the network. The computers in the middle route your traffic by looking at the outside of the envelope (called the _header_). And your packets make it to their destination.
 
-One other thing to keep in mind. Each computers can talk to lots of other computers at the same time. Each computer may provide different ways to talk to it (known as _protocols_, such as the web, or email, or video calling). To allow a single computer to do all these things at the same time, we have one more important number: the port number. This is a number between 1 and 65,536, and tells the computer which "connection" traffic is trying to use. When you send a packet, your header includes the destination IP address and destination port number. It also includes the source IP address and source port number. This allows the other computer to respond to you.
+One other thing to keep in mind. Each computer can talk to lots of other computers at the same time. Each computer may provide different ways to talk to it (known as _protocols_, such as the web, or email, or video calling). To allow a single computer to do all these things at the same time, we have one more important number: the port number. This is a number between 1 and 65,536, and tells the computer which "connection" traffic is trying to use. When you send a packet, your header includes the destination IP address and destination port number. It also includes the source IP address and source port number. This allows the other computer to respond to you.
 
 ## Packet loss, UDP, and TCP
 
