@@ -1,7 +1,7 @@
 +++
 title = "Why my video calls sucked (and how I fixed it)"
 description = "My ISP gave me a crappy router and I had 3 years of terrible video calls and gaming. Deep dive explanation of what happened and how to fix it for yourself."
-date = 2022-11-13
+date = 2022-11-14
 +++
 A few years ago, I [wrote a blog post](https://www.snoyman.com/blog/2019/06/my-new-home-network-setup/) about how I set up the networking in our house following some major construction. I was really excited about how much better the internet would be. No more WiFi dead zones, and a wired connection to my computer to provide extra speed and stability to my office. Overall, the results were great. Speed test anywhere in my house showed I was getting the full 500mbps promised by my cable company. However, not everything was working as expected:
 
