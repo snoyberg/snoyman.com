@@ -163,7 +163,7 @@ found three interesting takeaways here:
 __My recommendation to all__: never use `Prelude.readFile`,
 `Data.Text.IO.readFile`, `Data.Text.Lazy.IO.readFile`, or
 `Data.ByteString.Lazy.readFile`. Stick with `Data.ByteString.readFile`
-for known-small data, use a streaming package (e.g, [conduit](https://haskell-lang.org/library/conduit)) if your choice for large
+for known-small data, use a streaming package (e.g, [conduit](https://haskell-lang.org/library/conduit)) of your choice for large
 data, and handle the character encoding yourself. And apply this to
 `writeFile` and other file-related functions as well.
 
