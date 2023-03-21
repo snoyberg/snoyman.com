@@ -30,6 +30,17 @@ date = "June 2011"
 publisher = "IEEE Spectrum, The Functional Web"
 
 [[extra.talks]]
+date = "2023-03"
+title = "Intro to Rust"
+venue = "Func Prog Sweden 2023"
+  [[extra.talks.links]]
+  url = "/reveal/intro-to-rust"
+  text = "Slides"
+  [[extra.talks.links]]
+  url = "https://www.youtube.com/watch?v=Es8YfrCHjXg"
+  text = "Video"
+
+[[extra.talks]]
 date = "2022-03"
 title = "FP is the new OOP"
 venue = "Functional Conf 2022"
