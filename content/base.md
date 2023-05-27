@@ -13,6 +13,7 @@ This table correlates GHC versions with the versions of the base and Cabal libra
 <tr><td>ghc-9.4.2</td><td>base-4.17.0.0</td><td>Cabal-3.8.1.0</td><td>Win32-2.12.0.0</td></tr>
 <tr><td>ghc-9.4.1</td><td>base-4.17.0.0</td><td>Cabal-3.8.1.0</td><td>Win32-2.12.0.0</td></tr>
 <tr><td>ghc-9.4.0.20220721</td><td>base-4.17.0.0</td><td>Cabal-3.8.0.20220526</td><td>Win32-2.12.0.0</td></tr>
+<tr><td>ghc-9.2.8</td><td>base-4.16.4.0</td><td>Cabal-3.6.3.0</td><td>Win32-2.12.0.1</td></tr>
 <tr><td>ghc-9.2.7</td><td>base-4.16.4.0</td><td>Cabal-3.6.3.0</td><td>Win32-2.12.0.1</td></tr>
 <tr><td>ghc-9.2.6</td><td>base-4.16.4.0</td><td>Cabal-3.6.3.0</td><td>Win32-2.12.0.1</td></tr>
 <tr><td>ghc-9.2.5</td><td>base-4.16.4.0</td><td>Cabal-3.6.3.0</td><td>Win32-2.12.0.1</td></tr>
