@@ -2,7 +2,7 @@
 title = "Type Safety Doesn't Matter"
 date = 2023-08-28
 +++
-I'm a huge believer in using strongly typed languages and leveraging type level protections in my codebases. Inspired by events at work, I have a new, modified stance on this:
+I'm a huge believer in using strongly typed languages and leveraging type level protections in my codebases. But I'd like to clarify my new, somewhat modified stance on this:
 
 **Type safety does not matter.**
 
@@ -10,7 +10,7 @@ What I mean is that, on its own, type safety is not important. It's only useful 
 
 This may sound pedantic and click-baity, but in my opinion it's a vitally important distinction with real world ramifications. For example, when discussing architecture of code or reviewing a pull request, I will often times push back on changes that add more complexity in the type system. The reason is because, even if a change adds "type safety," this extra complexity is only warranted if it achieves our primary goal, namely reducing runtime errors.
 
-Such an assessment is largely speculative, subjective, and risk-based. By that last point, I'm tapping into my actuarial background. The idea is that, when considering a code change, the question will always be: do I think there's a good probability that this change will meaningfully reduce bug count in the long term more so than other activities I could be spending this time on? And if you watched my talk [the economic argument for functional programming](https://www.youtube.com/watch?v=n7QETok5hYI) (or [read the slides](https://www.snoyman.com/reveal/economic-argument-functional-programming)), you may be familiar with this way of thinking as the _opportunity cost_ of spending more time on type safety.
+Such an assessment is largely speculative, subjective, and risk-based. By that last point, I'm tapping into my actuarial background. The idea is that, when considering a code change, the question will always be: do I think there's a high likelihood that this change will meaningfully reduce bug count in the long term more so than other activities I could be spending this time on? And if you watched my talk [the economic argument for functional programming](https://www.youtube.com/watch?v=n7QETok5hYI) (or [read the slides](https://www.snoyman.com/reveal/economic-argument-functional-programming)), you may be familiar with this way of thinking as the _opportunity cost_ of spending more time on type safety.
 
 This is why languages that provide for strong typing with type inference end up working out so well. There's relatively little cost for basic type safety mechanisms with significant gain. It's the 80/20 rule. I continue to believe that the vast majority of the value I've received from strongly typed languages like Rust, Haskell, and even TypeScript come from the "simplest" features like enums/ADTs and pattern matching.
 
@@ -38,7 +38,7 @@ For those not familiar: `useEffect` allows me to run some kind of an action, in 
 
 There are plenty of improvements to be made in this code, but there's one blatant bug: my `useEffect` dependency list does not include `gameLevel`. This would be a bug at runtime: once the user's score is loaded for a level, we would never reload it despite moving on to other levels. This would be the kind of bug that is easy to miss during manual testing, and could end up in production pretty easily.
 
-Automated testing, unit tests, QA acceptance guidelines... basically everything around quality assurance will help ameliorate bugs like this. But static analysis does even better. This kind of code will immediately trigger lints saying "hey, I see you used `gameLevel` in your function, but you didn't list it in your dependencies." This is a prime example of moving a bug from runtime to compile time, preventing an entire class of bugs from occurring, and it didn't need any type safety to do it. Sure, it doesn't eliminate every potential bug, but it does knock down a whole bunch of them.
+Automated testing, unit tests, QA acceptance guidelines... basically everything around quality assurance will help ameliorate bugs like this. But static analysis arguably does even better here. The above code will immediately trigger lints saying "hey, I see you used `gameLevel` in your function, but you didn't list it in your dependencies." This is a prime example of moving a bug from runtime to compile time (or at least development time), preventing an entire class of bugs from occurring, and it didn't need any type safety to do it. Sure, it doesn't eliminate every potential bug, but it does knock down a whole bunch of them.
 
 As you might imagine, this blog post was inspired by a specific set of problems I was running into at work. I thought about getting into those details here, and if there's interest I can write a follow-up blog post, but honestly the specific case isn't terribly interesting. My point here is the general principles:
 

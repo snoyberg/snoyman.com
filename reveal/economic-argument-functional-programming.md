@@ -8,7 +8,6 @@
 <div style="text-align:center;margin-top:1em">
 <div>
 <img src="/static/fpcomplete-logo.png" style="border:0;margin:0;margin-right:1em;background:inherit;box-shadow:none">
-<img src="https://lambdaconf.us/assets/default/LC-Simple-Logo-LG.png" style="border:0;margin:0;height:94px;background:inherit;box-shadow:none">
 </div>
 </div>
 
