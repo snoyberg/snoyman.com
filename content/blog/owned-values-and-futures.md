@@ -128,7 +128,7 @@ for url in urls {
 }
 ```
 
-On the one hand, this feels dirty. We're violating best practices and taking an owned `String` where one isn't needed. However, this may be considered a small price to pay for the code simply working. If we have other cases within the program where `download_and_print` will be used where taking the value by reference still obeys lifetime rules, however, we may want to look at a better solution.
+On the one hand, this feels dirty. We're violating best practices and taking an owned `String` where one isn't needed. However, this may be considered a small price to pay for the code simply working. However, if the `download_and_print`` function will be used in other parts of the code base where passing a reference will work fine, forcing an owned `String`` will cause an unnecessary allocation for those use cases, and we may want to look for a better solution.
 
 ## Adjust the callsite with async move
 
