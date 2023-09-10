@@ -171,8 +171,8 @@ Fortunately, both of these are relatively easy to implement thanks to the simpli
 
 ```rust
 use anyhow::Result;
+use async_channel::Receiver;
 use clap::Parser;
-use crossbeam_channel::Receiver;
 
 #[derive(clap::Parser)]
 struct Opt {
@@ -186,11 +186,11 @@ async fn main() -> Result<()> {
     let Opt { urls, workers } = Opt::parse();
     let mut set = tokio::task::JoinSet::new();
     let client = reqwest::Client::new();
-    let (send, recv) = crossbeam_channel::bounded(workers * 2);
+    let (send, recv) = async_channel::bounded(workers * 2);
 
     set.spawn(async move {
         for url in urls {
-            send.send(url)?;
+            send.send(url).await?;
         }
         Ok(())
     });
@@ -216,7 +216,7 @@ async fn main() -> Result<()> {
 }
 
 async fn worker(client: reqwest::Client, recv: Receiver<String>) -> Result<()> {
-    while let Ok(url) = recv.recv() {
+    while let Ok(url) = recv.recv().await {
         download_and_print(&client, &url).await?;
     }
     Ok(())
