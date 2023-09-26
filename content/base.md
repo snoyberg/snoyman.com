@@ -5,6 +5,7 @@ template = "index.html"
 This table correlates GHC versions with the versions of the base and Cabal libraries it ships with.
 
 <table id="versions"><thead><tr><th>GHC</th><th>base</th><th>Cabal</th><th>Win32</th></tr></thead><tbody>
+<tr><td>ghc-9.6.3</td><td>base-4.18.1.0</td><td>Cabal-3.10.1.0</td><td>Win32-2.13.3.0</td></tr>
 <tr><td>ghc-9.6.2</td><td>base-4.18.0.0</td><td>Cabal-3.10.1.0</td><td>Win32-2.13.3.0</td></tr>
 <tr><td>ghc-9.6.1</td><td>base-4.18.0.0</td><td>Cabal-3.10.1.0</td><td>Win32-2.13.3.0</td></tr>
 <tr><td>ghc-9.4.7</td><td>base-4.17.2.0</td><td>Cabal-3.8.1.0</td><td>Win32-2.12.0.1</td></tr>
