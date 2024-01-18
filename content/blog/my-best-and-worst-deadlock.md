@@ -2,7 +2,7 @@
 title = "My Best and Worst Deadlock in Rust"
 description = "I wrote a deadlock a few months back in some Rust code, and we finally solved it recently. It was both my best and worst deadlock ever."
 path = "/blog/2024/01/best-worst-deadlock-rust"
-date = 2024-01-15
+date = 2024-01-18
 +++
 We're going to build up a deadlock together. If you're unfamiliar with Rust and/or its multithreaded concepts, you'll probably learn a lot from this. If you _are_ familiar with Rust's multithreading capabilities, my guess is you'll be as surprised by this deadlock as I was. And if you spot the deadlock immediately, you get a figurative hat-tip from me.
 
@@ -147,7 +147,7 @@ You see, the way an `RwLock`'s `read` method works is that it returns a `RwLockR
 
 And this is basically how many interior mutability primitives in Rust work, whether it's an `RwLock`, `Mutex`, or `RefCell`.
 
-The problem with our implementation of `get_name` is that it tries to take a lock and then borrow a value through the lock. However, when we exit the `get_name` method is that it's still holding a reference to the `RwLockReadGuard` which we're trying to drop. So how do we implement this method? There are a few possibilities:
+The problem with our implementation of `get_name` is that it tries to take a lock and then borrow a value through the lock. However, when we exit the `get_name` method it's still holding a reference to the `RwLockReadGuard` which we're trying to drop. So how do we implement this method? There are a few possibilities:
 
 * Return the `RwLockReadGuard<PersonInner>`. This is no longer a `get_name` method, but now a general purpose "get a read lock" method. It's also unsatisfying because it requires exposing the innards of our inner data structure.
 * Clone the inner `String`, which is unnecessary allocation.
