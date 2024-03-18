@@ -265,8 +265,7 @@ really like Todoist as an app, but appreciate even more the thought they
 put into how the app would tie into a real organizational system. This
 guide is a good example:
 
--   [[Todoist Getting Things Done
-    guide]{.underline}](https://todoist.com/productivity-methods/getting-things-done)
+- [Todoist Getting Things Done guide](https://todoist.com/productivity-methods/getting-things-done)
 
 Beyond that, I'd recommend looking up getting things done and inbox zero
 as search terms. And as I find other articles (or people put them in the
