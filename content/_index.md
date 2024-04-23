@@ -30,6 +30,14 @@ date = "June 2011"
 publisher = "IEEE Spectrum, The Functional Web"
 
 [[extra.talks]]
+date = "2024-04"
+title = "Roundtable | Unlocking Blockchain's Potential with Rust"
+venue = "Signify Technology"
+  [[extra.talks.links]]
+  url = "https://www.youtube.com/watch?v=BQgggf3wues"
+  text = "Video"
+
+[[extra.talks]]
 date = "2023-03"
 title = "Intro to Rust"
 venue = "Func Prog Sweden 2023"
