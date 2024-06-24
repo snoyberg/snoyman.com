@@ -101,7 +101,7 @@ Fixing this is fortunately fairly straightforward. Instead of `SayHi` taking a `
  }
 ```
 
-With these two changes, our application works as expected! When we embed `name` inside the `view!` macro in the `SayHi` component, we're embedding a signal, not a value. Leptos automatically subscribes to any changes in that signal, and will uptime just the relevant DOM node when the signal is updated. In the callsite, we no longer pass in `name()`, but rather `name`. This is the heart of reactivity in Leptos: when we want values to be updated, we pass around signals, not values. Previously, we were getting the current value of the signal when doing initial render and never updating it. Now we pass in the mutable signal itself.
+With these two changes, our application works as expected! When we embed `name` inside the `view!` macro in the `SayHi` component, we're embedding a signal, not a value. Leptos automatically subscribes to any changes in that signal, and will update just the relevant DOM node when the signal is updated. In the callsite, we no longer pass in `name()`, but rather `name`. This is the heart of reactivity in Leptos: when we want values to be updated, we pass around signals, not values. Previously, we were getting the current value of the signal when doing initial render and never updating it. Now we pass in the mutable signal itself.
 
 We can simplify this a bit more by leveraging punning:
 
