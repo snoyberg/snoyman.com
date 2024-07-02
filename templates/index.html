@@ -6,17 +6,23 @@
 {% elif section %}
     {% set content = section %}
 {% endif %}
+
+{% if content %}
+  {% set title = content.title %}
+{% else %}
+  {% set title = "Page not found" %}
+{% endif %}
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>{{ content.title }}</title>
+    <title>{{ title }}</title>
 
     <meta name="twitter:site" content="@snoyberg">
     <meta name="twitter:creator" content="@snoyberg">
     <meta name="og:site_name" content="Michael Snoyman's homepage">
-    <meta name="og:title" content="{{ content.title }}">
+    <meta name="og:title" content="{{ title }}">
     <meta name="og:type" content="website">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -52,7 +58,7 @@
           <div class="row justify-content-md-center align-items-center text-white py-lg-5">
             <div class="col-md-7">
               <div class="text-center">
-                <h1 class="display-sm-4 display-lg-3">{{ content.title }}</h1>
+                <h1 class="display-sm-4 display-lg-3">{{ title }}</h1>
                 {% block subtitle %}
                 {% endblock subtitle %}
               </div>
