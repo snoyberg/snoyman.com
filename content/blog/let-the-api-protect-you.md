@@ -1,6 +1,6 @@
 +++
 title = "Let the API protect you"
-description = "A small journey, in Rust, of demonstrating the power of data driven API and strong types."
+description = "A small journey, in Rust, demonstrating the power of data driven APIs and strong types."
 path = "/blog/2024/08/let-the-api-protect-you"
 date = 2024-08-26
 +++
