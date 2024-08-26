@@ -2,7 +2,7 @@
 title = "Let the API protect you"
 description = "Announcing a small utility for encrypted backups of Bitwarden vaults"
 path = "/blog/2024/08/let-the-api-protect-you"
-date = 2024-08-27
+date = 2024-08-26
 +++
 Let's write a simple program to manage purchases at a small convenience store. The store only sells two items: eggs and apples. We know the price of each item, and we need to set aside 5% of every purchase for taxes. We should _really_ use a decimal type instead of floats for handling currency, but we'll simplify things a bit here for convenience.
 
@@ -350,7 +350,7 @@ impl Accounts {
 
 ## Conclusion
 
-OK, so we moved some code around, centralized some logic, and everything nicer. We have some type safety in place too. You may be looking at this as small gains for introducing a lot of type complexity. But here are my closing thoughts:
+OK, so we moved some code around, centralized some logic, and now everything is nicer. We have some type safety in place too. You may be looking at this as small gains for introducing a lot of type complexity. But here are my closing thoughts:
 
 1. Sure, this silly example may not warrant the type machinery for protection. But it's very easy to scale up from such a simple example to real-world use cases where the type safety prevents far more complex and insidious bugs.
 2. I'd argue that there's not really any complexity here. We introduced two new data types and a new method on each of them, but also removed two helper functions and five constants. I'd take that trade in complexity any day.
