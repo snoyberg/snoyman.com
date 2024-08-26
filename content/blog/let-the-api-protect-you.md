@@ -109,8 +109,8 @@ fn main() {
 Easy peasy... and broken! Once again, I've made a simple mistake, and the type system and my APIs have done nothing to protect me. I've set the tax rate in Utah at 0%... but for the purchase of apples, not eggs! Once again, it's an easy fix:
 
 ```rust
-accounts.buy_eggs(12, 0.0);
-accounts.buy_apples(2, TAX_RATE_UTAH); // essential goods have no taxes in Utah
+accounts.buy_eggs(12, 0.0); // essential goods have no taxes in Utah
+accounts.buy_apples(2, TAX_RATE_UTAH);
 ```
 
 But these recurring bugs are frustrating, and frankly the code structure is completely unsatisfactory. I've needed to put some of the logic for tax collection into our `main` function, while other parts live in `log_purchase`. And the types do nothing to protect us. Is there anything we can do about this?
