@@ -33,7 +33,7 @@ That first bit, “generally accepted as payment,” got a lot of attention in t
 
 My disagreement on this part of the debate is that, in my opinion fairly obviously, *neither* asset is generally used as “money” today, at least by this definition of “used to buy goods in stores.” Instead, both assets are more generally used as investments, speculation, store of value, or any other long-term holding term you’d want to use. So by the focus of the debate, both assets fail at being money.
 
-But that’s the wrong question\! It’s not about whether or not these assets **are** money. Instead, I would want to ask to separate questions:
+But that’s the wrong question\! It’s not about whether or not these assets **are** money. Instead, I would want to ask two separate questions:
 
 * In an ideal world, which asset works *better* as money?  
 * Which asset has the best path forward to becoming money?
