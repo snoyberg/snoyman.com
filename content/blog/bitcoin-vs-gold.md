@@ -7,6 +7,8 @@ date = 2024-10-08
 
 I just watched an interview between Peter Schiff and Jack Mallers about gold versus Bitcoin. I’d recommend it to anyone interested in either asset, or more generally to those interested in the theories of economics and money in general:
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MSlEQA1BoOE?si=KR9n_kqKMGnuLJdt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 [Peter Schiff & Jack Mallers Debate Bitcoin Vs. Gold, Collapse Of Dollar](https://youtu.be/MSlEQA1BoOE?si=Wy3JYaZYBQ0Vb_Ol)
 
 Peter represented the pro-gold side of this debate, with Jack taking the pro-Bitcoin side.
@@ -25,7 +27,7 @@ The question is: what asset is better for fixing this problem, gold or Bitcoin?
 
 Overall, I thought both sides represented their arguments well, and I’ll reference some of them below. There was only one piece of the debate that I think completely missed the point, but it’s crucial enough that I’ll start my analysis there. Peter and Jack discussed, at length, whether gold or Bitcoin counted as money. This of course begs the question: what’s your definition of money? Using the [Wikipedia definition](https://en.wikipedia.org/wiki/Money):
 
-\> Money is any item or verifiable record that is generally accepted as payment for goods and services and repayment of debts, such as taxes, in a particular country or socio-economic context. The primary functions which distinguish money are: medium of exchange, a unit of account, a store of value and sometimes, a standard of deferred payment.
+> Money is any item or verifiable record that is generally accepted as payment for goods and services and repayment of debts, such as taxes, in a particular country or socio-economic context. The primary functions which distinguish money are: medium of exchange, a unit of account, a store of value and sometimes, a standard of deferred payment.
 
 That first bit, “generally accepted as payment,” got a lot of attention in the debate. There were discussions for a while about whether you could walk into a store and buy things with either gold or Bitcoin, and moreso, if goods were *priced* in gold or Bitcoin. Both sides tried to make arguments around this claiming their side was money.
 
