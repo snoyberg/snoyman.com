@@ -46,7 +46,7 @@ And I think the debate provided a lot of food for thought to analyze these two q
 
 Peter pointed out that gold has intrinsic value. Gold is desired for jewelry, manufacturing, technology, and other purposes, in addition to being sought as a store of value. Jack was fairly dismissive of this, since money doesn’t need to have any intrinsic value. It only needs to be widely accepted. (Case in point: when I receive a stimulus check from the US government as a wire transfer into my bank account, there is 0 “intrinsic value” to that digital update of my bank account, but I can use it as money regardless.)
 
-While I agree with Jack that intrinsic value is *not* a necessary property of money, I have to give the win to Peter on this. While intrinsic value isn’t necessary, it’s certainly a perk, and makes it less likely that the good will stop being accepted for payment of some kind in the future. And we can see this with how the price of gold behaved after the end of the gold standard: it started to rise significantly.
+While I agree with Jack that intrinsic value is *not* a necessary property of money, I have to give the win to Peter on this. While intrinsic value isn’t necessary, it’s certainly a perk, and makes it less likely that the asset will stop being accepted for payment of some kind in the future. And we can see this with how the price of gold behaved after the end of the gold standard: it started to rise significantly.
 
 ## Intrinsic value of Bitcoin
 
