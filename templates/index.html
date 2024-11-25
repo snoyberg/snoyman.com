@@ -9,6 +9,10 @@
 
 {% if content %}
   {% set title = content.title %}
+{% elif terms %}
+  {% set title = "Blog Post Series" %}
+{% elif term %}
+  {% set title = "Blog Post Series: " ~ term.name %}
 {% else %}
   {% set title = "Page not found" %}
 {% endif %}

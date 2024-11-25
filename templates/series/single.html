@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{{ macros::paginator() }}
+
+<ul>
+
+{% for page in paginator.pages %}
+
+<li>
+  <a href="{{ page.permalink | safe}}">
+    {{ page.title }}
+  </a>
+</li>
+
+{% endfor %}
+
+</ul>
+
+{{ macros::paginator() }}
+
+{% endblock content %}

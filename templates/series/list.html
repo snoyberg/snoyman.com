@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<ul>
+
+{% for term in terms %}   
+
+<li>
+  <a href="{{ term.permalink | safe }}">{{ term.name }}</a>
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% endblock content %}
