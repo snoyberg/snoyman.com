@@ -4,6 +4,8 @@ description = "My best arguments in favor of Trump's proposed tariffs, from the 
 path = "/blog/2024/11/steelmanning-tariffs"
 date = 2024-11-25
 +++
+__UPDATE__ A few days after posting this article, I saw a [video on X](https://x.com/RallyWithGalli/status/1861354664773722140) that gives (IMO) a better argument in favor of tariffs than I came up with here. If you're interested in the topic, I'd recommend giving it a watch, it's only about 11 minutes.
+
 I’m a believer in the idea of free markets. The principle is simple: with less regulation and freedom of individuals to engage in trade and their own price discovery, we’ll end up with optimal price points and maximizing production, making everyone’s life better.
 
 Tariffs fly in the face of this by introducing unnecessary and artificial barriers to trade. A classic example is sugar. The US has an import tariff on sugar, which makes it artificially more expensive to use sugar in products. Corn syrup, on the other hand, is produced from domestically grown corn and faces no such penalty. It is therefore artificially cheaper than sugar, and ends up being used in products. The results:
