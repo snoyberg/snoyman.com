@@ -3,5 +3,17 @@
     "michael": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365",
     "snoyberg": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365",
     "_": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365"
+  },
+  "relays": {
+    "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365": [
+      "wss://algo.utxo.one/",
+      "wss://nos.lol/",
+      "wss://nostr.land",
+      "wss://nostr.wine",
+      "wss://purplerelay.com/",
+      "wss://relay.damus.io/",
+      "wss://relay.snort.social/",
+      "wss://nostrelay.yeghro.site"
+    ]
   }
 }
