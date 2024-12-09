@@ -13,7 +13,12 @@
       "wss://purplerelay.com/",
       "wss://relay.damus.io/",
       "wss://relay.snort.social/",
-      "wss://nostrelay.yeghro.site"
+      "wss://nostrelay.yeghro.site",
+      "wss://theforest.nostr1.com/",
+      "wss://relay.nostr.band",
+      "wss://hist.nostr.land",
+      "wss://greensoul.space",
+      "wss://wot.nostr.party",
     ]
   }
 }
