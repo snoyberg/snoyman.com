@@ -1,0 +1,1 @@
+{"callback":"https://blink.sv:443/lnurlp/snoyberg/callback","minSendable":1000,"maxSendable":100000000000,"metadata":"[[\"text/plain\",\"Payment to snoyberg\"],[\"text/identifier\",\"snoyberg@blink.sv\"]]","commentAllowed":2000,"tag":"payRequest","allowsNostr":true,"nostrPubkey":"e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365"}
