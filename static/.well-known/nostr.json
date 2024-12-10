@@ -2,10 +2,26 @@
   "names": {
     "michael": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365",
     "snoyberg": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365",
-    "_": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365"
+    "_": "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365",
+    "miriam": "22cc6c8e117ea4cc463db5aa20f273e8b6fa1e063c3a3745ef3b8337299f105b"
   },
   "relays": {
     "e3ba5e1a06e11c860036b5c5e688012be2a84760abc066ac34a099535e433365": [
+      "wss://algo.utxo.one/",
+      "wss://nos.lol/",
+      "wss://nostr.land",
+      "wss://nostr.wine",
+      "wss://purplerelay.com/",
+      "wss://relay.damus.io/",
+      "wss://relay.snort.social/",
+      "wss://nostrelay.yeghro.site",
+      "wss://theforest.nostr1.com/",
+      "wss://relay.nostr.band",
+      "wss://hist.nostr.land",
+      "wss://greensoul.space",
+      "wss://wot.nostr.party"
+    ],
+    "22cc6c8e117ea4cc463db5aa20f273e8b6fa1e063c3a3745ef3b8337299f105b": [
       "wss://algo.utxo.one/",
       "wss://nos.lol/",
       "wss://nostr.land",
