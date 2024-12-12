@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% for page in section.pages %}   
+  <div class="card mb-4">
+    {% if page.extra.ogimage %}
+      {% set image = "/thumbs/" ~ page.extra.ogimage %}
+    {% else %}
+      {% set image = "/img/slogo.png" %}
+    {% endif %}
+    <div class="blog-image-title">
+      <a href="{{ page.permalink | safe }}">
+        <img src="{{ image | safe }}" alt="{{ page.title }}">
+      </a>
+      <div>
+        <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
+        {% if page.description %}
+          <p class="description">{{ page.description }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock content %}
