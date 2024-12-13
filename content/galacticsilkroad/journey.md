@@ -1,5 +1,5 @@
 +++
-title = "Journey"
+title = "Journey: A Galactic Silk Road Story"
 +++
 
 ## Bio-age 23 years, 8 months
