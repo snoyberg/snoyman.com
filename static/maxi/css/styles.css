@@ -1583,6 +1583,13 @@ li.nav-item.active > a {
   border-left: 1px solid black;
 }
 
+#blog-body img {
+  max-width: 90%;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 /* Share bar */
 .share-bar-wrapper {
 	font-size: 120%;
