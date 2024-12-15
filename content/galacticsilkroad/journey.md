@@ -6,7 +6,7 @@ title = "Journey: A Galactic Silk Road Story"
 
 "I remember when I left on my journey. It feels like a thousand years
 ago now." The line, as usual, was met with polite chuckles. Taryn had
-been hearing such comments from his parents his whole life. *Why does he
+been hearing such comments from his parents his whole life. *Ugh. So cliche. Why does he
 have to embarrass me, now of all times?* Taryn thought.
 
 "Journey isn't just about adventure. It's about growth. About knowledge.
@@ -25,7 +25,7 @@ The next morning was the big day. Taryn had been looking forward to it
 since he was 16. For seven long years, he'd dreamed of finally escaping
 the boredom and doldrums of Vectra and finding true adventure. But now
 that the moment was at hand, the gravity of the situation was finally
-settling in. He could feel the butterflies in his stomach, and slight
+settling in. He could feel the butterflies in his stomach, the slight
 shake in his hands, and the fine layer of sweat that suddenly coated his
 forehead.
 
@@ -48,7 +48,7 @@ tearing up twice in as many days.
 "Oh, come here!" his mother, Soren, said. She rushed over and grabbed
 Taryn in a bear hug that only a mother could pull off. "Be safe, be
 smart, be strong." Taryn put his arms around his mother, put his head on
-her shoulder, and cried. He wept like a baby, like he hadn't in years.
+her shoulder, and cried. He wept like a baby, like he hadn't done in years.
 Kaelin came over and wrapped his arms around the two of them.
 
 They stood like that for five minutes, just outside Taryn's new home,
@@ -86,7 +86,7 @@ have a timeless quality. They would mention some day-to-day events, but
 they knew these would be unimportant to him. By the time he read them,
 whatever silly dramas existed back on Vectra would be long resolved.
 
-But to be honest, he'd stopped reading the letters a few weeks back,
+To be honest though, he'd stopped reading the letters a few weeks back,
 just skimming them. He had more important things to do.
 
 "Another round for my friends!" he called out. Cheers from around the
@@ -111,7 +111,7 @@ someone fresh on his Journey. You may want to hold onto your nakas, you
 never know when you'll need them."
 
 "Thanks, but I think I'll be OK," said Taryn, downing his drink. With
-that, he stood up from the bar, walked over to the table with the higher
+that, he stood up from the bar, walked over to the table with the highest
 female-to-male ratio in the bar, and asked if anyone wanted a refill. He
 wasn't planning on sleeping alone tonight.
 
@@ -129,7 +129,7 @@ premium, but I'll be lucky to get 20,000 nakas each."
 
 "Then give me 20,000 for them!"
 
-The storekeeper laughed again, but this time it looked like Taryn had
+The storekeeper laughed again, but this time it sounded like Taryn had
 used up his patience. "You find the customers. You can sell to them
 directly for whatever price they'll give you. But our business is done.
 Have a good day son."
@@ -208,9 +208,9 @@ he had 6 more messages waiting for him. He left them unread.
 
 ## Bio-age 24 years, 3 months
 
-The lighting in the room was weird. It wasn't dark, but somehow it
+The lighting in the room was weird. It wasn't dark, yet
 didn't feel bright. It somehow felt smoky, though there weren't any
-fires. The electronic whizzing and beeping sounds from the machines gave
+fires. The electronic whizzing and beeping from the machines gave
 the room an air of frivolity, which was very much at odds with how he
 was feeling.
 
@@ -268,7 +268,7 @@ that emotion? Was that pity?
 
 Her cards on the table blinked and the numbers appeared. A pair of aces.
 
-He'd won! "It was a pleasure doing," he began, until the gold coins
+He'd won! "It was a pleasure doing--" he began, until the gold coins
 moved to her side of the table. "What?!?" he yelled in surprise.
 Everyone looked at him with astonishment. "The program is broken, I won!
 I had the kings!"
@@ -316,7 +316,7 @@ and he'd been trying to sell this shit for over a year now.
 
 *What's the name of this station?* he thought blearily. He'd been to a
 few bars already today. How far was this station from the nearest star?
-The antimatter costs were high, as was the alcohol. He'd just stop for
+The antimatter was expensive here, as was the alcohol. He'd just stop for
 another few drinks and then call it a day.
 
 ## Bio-age 26 years, 3 months
@@ -339,8 +339,7 @@ tasted the lotans from his home village. But his new cargo? Completely
 worthless here.
 
 He was friendly with the bartender of the local bar. This useless
-station only had one bar, and not only was the alcohol expensive, but
-also had a horrible selection. Someone could really make a killing if
+station only had one bar, where the alcohol was both pricey and had a lousy selection. Someone could really make a killing if
 they fixed that. No one seemed interested. Too busy with mining. How
 could people care more about rocks than booze?
 
@@ -367,7 +366,7 @@ sleep.
 The rations were gone. The antimatter was barely enough to power at-rest
 systems. The docking lease was going to expire in two days.
 
-He did math he never had to do before. He had to figure out how much
+He did math he'd never had to do before. He had to figure out how much
 money he'd need to get somewhere else. Anywhere else. But even that
 wasn't helpful. How would going to a new station help? He had worthless
 cargo, no skills, no money. He was failing his Journey.
@@ -396,7 +395,7 @@ their retirement thanks to the fortunes they made on their own Journeys.
 What was a billion nakas to them? They'd happily give it to him! The
 problem though was one of time. It would take two years for his message
 to make it to them, and another two years for the nakas to make it back.
-If he could engage relativistic travel, he could make that work. But he
+If he could engage relativistic travel, he could make that work, but he
 didn't have the money to make that happen. And if he booked random
 voyages with others--if he could even convince them to let him travel
 with them--he wouldn't know which network to ask his parents to send his
@@ -419,11 +418,11 @@ The bartender looked Taryn directly in the eye. Others may have found
 this topic uncomfortable, but a man who spent his living surrounded by
 drunks learned to be direct. "That may as well be a gift. Your cargo is
 useless, or you would have sold it by now. I could never collect the
-collateral for the loan if you can't repay, you'll be long gone. The
+collateral for the loan if you can't repay; you'll be long gone. The
 best I could hope for is that you'll repay that loan with interest, but
 it'll be decades in local time before that payment shows up."
 
-"Please, I'm begging you. This is my only option."
+Taryn's voice was low. "Please, I'm begging you. This is my only option."
 
 The bartender smiled a sad smile. "Look, I've seen you coming here for a
 few weeks now. I've seen you wasting your money. I can judge a man
@@ -434,7 +433,7 @@ willing to offer you something for something."
 Taryn's ears perked up. "Oh, that's great! Why don't you come down to my
 ship and check the cargo..."
 
-Before he could finish his sentence, the bartender laughed. How did
+He trailed off as the bartender began to laugh. How did
 Taryn still not know the guy's name? "No, no, no, I don't need anything
 like that. I need someone to clean up the place. The bots do a decent
 job overall, but they need to be managed, and there are still some
@@ -452,7 +451,7 @@ arranging, and if you do a good job, you can even tend the bar."
 
 "But that's your job!" said Taryn. "How will you make a living?"
 
-The bartender laughed. "Thank you for looking out for me. But I'll be
+The bartender laughed again. "Thank you for looking out for me. But I'll be
 fine. I own the place. And if you take over my daily operations, I can
 spend more time on my distillery."
 
@@ -475,10 +474,10 @@ idea of pouring drinks for a pittance of nakas. He was supposed to be on
 his Journey, making his fortune, creating his own destiny. How could he
 do that at an out of the way station?
 
-He wanted to scoff and walk out of the bar. But he didn't have many
+He wanted to scoff and walk out of the bar, but he didn't have many
 options. "Can I think about it and get back to you?"
 
-The bartender gave him a knowing look and said, "Take all the time you
+The bartender gave him a knowing look, nodded, and said, "Take all the time you
 need."
 
 It was official: no one would give Taryn a ride anywhere for free. No
@@ -487,18 +486,18 @@ And he hadn't checked, but he didn't think anyone else would offer him a
 job either.
 
 Taryn sat in the captain's chair. It was one of the mottos held
-throughout the galaxy: within a man's home, he is king. This ship had
+throughout the galaxy: Within a man's home, he is king. This ship had
 been home for three years now. And Taryn felt like the king of nothing.
 
-He sat there, paralyzed, seeing his life crumbling around him. He sat
-there for hours, thinking of everything and nothing. He may have sat
-there until the port authority came by to evict him from his dock. But a
+He sat there, paralyzed, seeing his life crumbled around him. He sat
+there for hours, thinking of everything and nothing. He might have sat
+there until the port authority came by to evict him from his dock, but a
 familiar sound broke his trance. A simple ding. A notification. He had a
 message.
 
 It was another message from his parents. He couldn't remember the last
 time he'd read one of their messages. He was about to dismiss the
-notification and go back to his brooding. But either he had a
+notification and go back to his brooding, but either he had a
 last-minute change of heart, his finger slipped, or the computer decided
 to do what it thought was best. The message popped up on the main
 display.
@@ -508,10 +507,10 @@ message we've been sending for the past year. If you've already read it:
 you know you can ignore it. If you haven't: this has been a part of the
 tradition of the Journey for generations.*
 
-*You're probably struggling right now. It's OK, we all have. It's not
+*You're probably struggling right now. It's OK; we all have. It's not
 easy taking your first steps out into the real world. You thought you
 were ready. No one ever is. You haven't contacted us at all for the past
-28 years. That's OK, it's part of the Journey.*
+28 years. That's OK too; it's part of the Journey.*
 
 *We both struggled. We both failed at first. It's OK. Don't give up.
 You'll find your way, and you'll be a better man for it.*
@@ -526,11 +525,10 @@ valuable thing we could ever give you.*
 *It would be wonderful to hear from you when you're ready. But take your
 time.*
 
-Taryn reread the message a few times. He opened his message history. He
-started from the beginning. He saw a few initial messages from his
-parents, for the first few years of Vectra-local time, discussing
-minutiae of life. But this new message popped up after five years. And
-every message since then was an exact repeat.
+Taryn reread the message a few times. He opened his message history, scrolled back, and started from the beginning. The initial messages from his
+parents, for the first few years of Vectra-local time, discussed
+minutiae of life. But after five years, this new message popped up. And
+every message since then was an exact copy.
 
 There were tears on his face. He was exhausted, but he was no longer
 demoralized. He got up. He turned on the shower, shaved, dressed in his
@@ -542,7 +540,7 @@ bar.
 The bartender started. That apparently hadn't been the tone he'd been
 expecting. "Does that mean you'll accept?"
 
-"I only have two questions. First: how much will you pay me?"
+"I only have three questions. First: how much will you pay me?"
 
 The bartender smiled. "I'll pay you 1.3 AMEs. That'll cover your
 expenses, if you stop wasting money on getting drunk each night, plus
@@ -553,13 +551,19 @@ really matter. "Thank you, that would be wonderful. And my second
 question: can I get an advance on my first paycheck? My port dues are up
 tomorrow, and I'm completely broke."
 
-At this, the bartender laughed. "I'll do you one better. I'll throw in
+At this, the bartender chuckled. "I'll do you one better. I'll throw in
 your dock fees as part of the pay. The station administrator is a
-regular customer, he'll give me a discount."
+regular customer, he'll give me a discount. What's your last question?"
+
+"What's your name?"
+
+A smile spread over the bartender's face. "Jaxon," he said.
+
+Taryn stuck out his hand with the awkward formality of someone unused to such efforts and said earnestly, "Nice to meet you, Jaxon. I'm Taryn."
 
 ## Bio-age 27 years
 
-*Dear Mom and Dad. I turned 27 today! I know you won't get this for
+*Dear Mom and Dad, I turned 27 today! I know you won't get this for
 another two years, but thought you'd want to know. And yes, I'm close to
 Vectra. I've been on Titan Station for the past few months.*
 
@@ -577,7 +581,7 @@ hit send. *At least that's over with.*
 Taryn had a daily routine now. His shift covered the afternoon and
 evening, leaving his mornings free. It turned out that there were lots
 of quality educational resources available on the station. He gladly
-paid a few thousand nakas per course. The first thing he'd found was a
+paid a few thousand nakas per course. The first thing he'd looked for was a
 course on space trading. He'd never really thought about *why* someone
 would be willing to give him money for his goods, much less why they'd
 pay him more than he bought it for in the first place.
@@ -601,7 +605,7 @@ his cargo. He'd identified a station that looked promising. There was a
 station four light-months away that was having a Festival. Travelers
 would be flying in from up to ten lightyears away, and they all wanted
 to take home a souvenir. He was finalizing negotiations with a caravan
-heading off there to sell his artwork for a commission. It was risky,
+heading off there to sell his artwork for a commission. It was risky;
 there was a chance they'd simply take the money and fly off, avoiding
 the negative reputation points long enough for them to wash off the net,
 but the artwork wasn't doing him any good here.
@@ -623,7 +627,7 @@ added up to a nice buffer for a rainy day. And I took a chance and
 offered my remaining spice and clothing cargo at a discount. I just got
 word back, and they're buying everything. I'm finally inventory free!*
 
-*I've been learning a bit more about the distilling process. But I
+*I've been learning a bit more about the distilling process, but I
 realized it's not really something I'm that excited about. As much as I
 love working at the bar, I think it's time that I moved away from an
 alcohol-focused business. I took an apprenticeship with some of the
@@ -648,7 +652,7 @@ It felt weird to be using his parents for a trade deal like this, but it
 was in line with the ethos they'd taught him. He wasn't trying to take
 advantage of them, he was trying to make a mutually beneficial
 arrangement. Everyone wins. His parents take a commission, Jaxon gets to
-make better alcohol he can sell for more, and the customers on both Echo
+make better alcohol he can sell at a higher price, and the customers on both Echo
 Relay and Titan Station would enjoy it more. That's when Taryn realized
 what he'd missed in his message.
 
@@ -720,20 +724,20 @@ area. Waiting for your orders to detonate."
 
 Ten seconds later, a nearby asteroid split in half. There was no sound,
 of course. There's no medium to carry sound waves in space. He knew that
-now but had been the butt of jokes for about two weeks for covering his
-ears during their first detonation. No one was laughing now. As much as
+now, but had been the butt of jokes for about two weeks for covering his
+ears during his first detonation. No one was laughing now. As much as
 they teased him, they knew that if his new estimation method worked,
-they'd all essentially get a 25% pay bump. But more than that, they were
+they'd all essentially get a 25% pay bump. More than that though, they were
 rooting for him.
 
-"Debris field stabilized Captain. Can I authorize the survey team to
+"Debris field stabilized, Captain. Can I authorize the survey team to
 enter the area?"
 
 "Yes, go ahead."
 
 A series of communications ensued, but Taryn couldn't spare any
 attention for that. His eyes were fixed on the viewer. His hands were
-clenched. He was sweating. He couldn't hear anything around him. All he
+clenched. He was sweating. The sounds around him faded to silence in his focus. All he
 wanted to know was *did it work?*
 
 After five agonizing minutes, he heard the radio receiver kick in. "Tell
@@ -742,8 +746,8 @@ is within 0.05% of his estimates. Best concentration we've found in over
 a decade."
 
 The entire bridge burst into cheers. Everyone but Taryn. He stood there,
-speechless. The captain said something about a bonus, it was some large
-number of nakas, he didn't even hear how many.
+speechless. The captain said something about a bonus. It was some large
+number of nakas, but he didn't even hear how many.
 
 All he could think was, *I did it. I made the galaxy a better place.*
 
@@ -752,7 +756,7 @@ All he could think was, *I did it. I made the galaxy a better place.*
 That round of drinks had to wait almost eight months, but it was well
 worth it. Taryn walked into Jaxon's bar with the rest of his crew. There
 was a new bartender on duty, someone he hadn't met before. But Taryn had
-messaged Jaxon in advance. He was there personally to greet him.
+messaged Jaxon in advance, and he was there personally to greet him.
 
 "So, you did it, eh?"
 
@@ -767,7 +771,7 @@ Taryn hadn't been expecting that. He looked over the bar. He saw some
 new imported whiskeys on the shelf, as well as the standard Lotan Vodka
 that most people came in for. The tables were arranged a bit
 differently, the artwork slightly updated. Was it the music system? It
-seemed a bit clearer than last time he'd come in, maybe Jaxon had
+seemed a bit clearer than last time he'd come in; maybe Jaxon had
 finally patched up that faulty third speaker.
 
 "OK, I give up. What is it?"
@@ -777,7 +781,7 @@ spoke into its microphone, "Yeah, he just got here, come on in whenever
 you're ready. Uh-huh. Got it." After clicking off and putting the device
 away, he continued, "They'll be here in a few minutes. Why don't I get
 you gentlemen started off with a round. I'm sure one of your shipmates
-already promised to pick up your tab tonight but let me get the first
+already promised to pick up your tab tonight, but let me get the first
 one."
 
 "Thank you, Jaxon. Truly, thank you for everything. I wouldn't have made
@@ -794,7 +798,7 @@ in.
 
 "Hi Taryn." He knew that voice. He turned around, and there stood his
 parents. They must have experienced forty bio-years since he last saw
-them. But they looked barely aged. The wonders of modern medicine. "It's
+them, but they looked barely aged. The wonders of modern medicine. "It's
 good to see you."
 
 Taryn jumped up. "Mom, Dad, I... I... I didn't expect to see you!"
@@ -814,13 +818,13 @@ treat his parents to dinner at the local restaurant. "Another time,"
 Kaelin said. "Let's go back to our ship instead."
 
 Sure enough, they'd brought the entire main house with them. After all,
-why not? Antimatter was cheap, may as well travel in comfort. Not to
+why not? Antimatter was cheap, one may as well travel in comfort. Not to
 mention bringing along Taryn's old bedroom. Like no time had passed at
-all, they all stood around in the kitchen together, taking terms
-chopping, peeling, cooking, boiling. They never stopped talking.
+all, they all stood around in the kitchen together, taking turns
+chopping, peeling, stirring, seasoning. They never stopped talking.
 
 They wanted to know everything about his new discovery. It was clear
-partway through that they had no idea what he was talking about. Both of
+partway through his explanation that they had no idea what he was talking about. Both of
 them had focused more on trade during their Journeys. They hadn't gone
 deep into the science or engineering fields. Apparently, they'd been
 doing a bit of reading since they got his first message detailing his
@@ -828,12 +832,12 @@ plans. However, due to the time dilation from travel, they'd only had
 about three months to try and catch up. Nonetheless, they listened
 eagerly to everything he had to say.
 
-They talked about home, about friends he'd left behind. He could have
-checked up on his friends any time on their Notes, he was close enough
+At some point the conversation shifted and they talked about home, and about friends he'd left behind. He could have
+checked up on his friends any time on their Notes; he was close enough
 now that most messages got relayed to his network. But he'd been too
 busy. And it meant more hearing it from his parents.
 
-When they finally sat down to eat, he turned to the question most
+When they eventually sat down to eat, he turned to the question most
 pressing on his mind. "I need your advice on what I should do next."
 
 "No, you don't son," Kaelin said firmly. "You've proven that over the
@@ -922,7 +926,7 @@ device without sending you your commission?"
 
 "You mean besides the reputational damage from contract violation?"
 
-The secretary blushed a bit. "Yes, sir, besides that."
+The secretary blushed a bit. "Yes, Taryn, besides that."
 
 "Easy." Taryn thought back to that conversation with his parents
 fourteen years ago. "We're going to keep improving the tech, and they
@@ -940,20 +944,19 @@ it hadn't seemed right. No one could claim he'd failed at his Journey
 anymore, but going back home still felt like some strange admission of
 defeat.
 
-But those were just the immature thoughts he would have had at the start
+But those were just vestiges of the immature thoughts he'd had at the start
 of his Journey. Now that he was ready to complete it and settle down,
 his motivations were much more simple. He'd found a beautiful plot of
 land on Novara. It was close to some major scientific institutes, which
 would be good fodder for his research labs.
 
-But most of all, his wife, Elara, loved Novara. Turns out, even though
+Most of all, his wife, Elara, loved Novara. Turns out, even though
 it was an industrial hub, the planet itself was gorgeous.
 
 He glanced over at his wife, still holding their new baby daughter. She
 was barely two months old. The labor had started a bit early, and they'd
 needed to initiate a time-dilation jump so they could make it to a
-well-stocked medical facility quickly enough. Thankfully, everyone was
-OK. And his team had finished the arrangements to bring the rest of the
+well-stocked medical facility quickly enough. Thankfully, it all went smoothly, and both Elara and little Nyra were doing great. To top it all off, his team had finished the arrangements to bring the rest of the
 research facility planetside while he was gone. They'd likely be
 arriving in the next few days.
 
@@ -975,7 +978,7 @@ situation with a quiet chuckle. "You could say that I guess, but I don't
 think so. It's not about how far you travel. Or even how much money you
 make along the way. It's about the Journey itself."
 
-As much as an eleven-year-old can ponder a deep topic, Nyra did so. All
+As much as an eleven-year-old can ponder a deep idea, Nyra did so. All
 the way until they saw a spot in the sky. "Is that them?" she asked
 excitedly.
 
@@ -991,7 +994,7 @@ them first. They'd sent plenty of videos back and forth, so she felt
 like she almost knew them already.
 
 Taryn didn't know how long his parents planned on staying. For all he
-knew, they'd leave that night, or in a year, or never. They may go back
+knew, they'd leave that night, or in a year, or never. They might go back
 to Vectra, or explore space, or even go back to their original home
 worlds for a visit. They still had so many years left.
 
@@ -1004,8 +1007,8 @@ find. That hall happened to be in an orbiting station, so that's where
 they did the ceremony. It was a bit of an expense, but if you didn't
 spend money on a moment like this, when would you?
 
-Everyone gathered knew who he was. And if they hadn't, he was sitting at
-the head table, so they at least knew he was important. So, when he
+Everyone gathered knew who he was. If they didn't, his seat at
+the head table made it clear he was important. So, when he
 stood up, the entire room went quiet.
 
 "I remember when I left on my journey. It feels like a thousand years
