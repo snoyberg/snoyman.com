@@ -21,6 +21,8 @@ With that, all the assembled guests, all of Taryn's friends and family,
 virtually everyone who meant anything to him, raised their glasses in
 unison and toasted his successful Journey.
 
+* * *
+
 The next morning was the big day. Taryn had been looking forward to it
 since he was 16. For seven long years, he'd dreamed of finally escaping
 the boredom and doldrums of Vectra and finding true adventure. But now
@@ -114,6 +116,8 @@ never know when you'll need them."
 that, he stood up from the bar, walked over to the table with the highest
 female-to-male ratio in the bar, and asked if anyone wanted a refill. He
 wasn't planning on sleeping alone tonight.
+
+* * *
 
 "The best price I can do is 15,000 nakas per kilogram," said the
 storekeeper.
@@ -407,6 +411,8 @@ could he? He was a failure. All he would do was embarrass and worry
 them. No, his only option was to find someone on this shitty station to
 help him.
 
+* * *
+
 "I'm sorry, son, but I'm not in the gift giving business."
 
 "It's not a gift, I'm asking for a loan," Taryn repeated. "I have a ship
@@ -479,6 +485,8 @@ options. "Can I think about it and get back to you?"
 
 The bartender gave him a knowing look, nodded, and said, "Take all the time you
 need."
+
+* * *
 
 It was official: no one would give Taryn a ride anywhere for free. No
 one was traveling to Vectra. No one was engaging in charity or loans.
@@ -812,6 +820,8 @@ purported wisdom. Now it was a different story. He'd failed. And then
 he'd succeeded. He was a man standing on his own merits. He walked over
 to them and grabbed them both in a tight embrace. "It's so good to see
 you."
+
+* * *
 
 His crew had shooed him off pretty quickly after that. Taryn offered to
 treat his parents to dinner at the local restaurant. "Another time,"
