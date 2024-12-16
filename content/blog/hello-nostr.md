@@ -2,7 +2,7 @@
 title = "Hello Nostr"
 description = "An introduction to the Nostr social media protocol, written by a fresh user who's been on the platform for less than a week."
 path = "/blog/2024/12/hello-nostr"
-date = "2024-12-12"
+date = "2024-12-16"
 +++
 This blog post is in the style of my [previous blog post on Matrix](@/blog/guide-to-matrix-riot.md). I'm reviewing and sharing onboarding experience with a new technology. I'm sharing in the hopes that it will help others become aware of this new technology, understand what it can do, and if people are intrigued, have a more pleasant onboarding experience. Just keep in mind: I'm in no way an expert on this. PRs welcome to improve the content here!
 
@@ -132,6 +132,8 @@ You can look at [my nostr.json file](https://www.snoyman.com/.well-known/nostr.j
 You're now set up on your web experience. For mobile, download any mobile app and set it up similarly to what I described for web. The major difference will be that you'll likely be entering your `nsec` directly into the mobile app.
 
 I've used both [Damus](https://damus.io/) and [YakiHonne](https://yakihonne.com/yakihonne-mobile-app). I had better luck with YakiHonne for getting zaps working reliably, but that may simply be because I'd tried Damus before I'd gotten set up with coinos before. I'll probably try out Damus some more soon.
+
+Note on Damus: I had trouble initially with sending Zaps on Damus, but apparently that's because of [Apple rules](https://njump.me/nevent1qgsr9cvzwc652r4m83d86ykplrnm9dg5gwdvzzn8ameanlvut35wy3gqyp6m8dphmzjfpynmvzsr88mkkulmq2npm92eewr0h5p92jzujn0lvz79rnt). You can enable Zaps by visiting this site on your device: <https://zap.army/>. Thanks [William Cassarin](https://njump.me/jb55.com) for the guidance and the great app.
 
 ## Introductions
 
