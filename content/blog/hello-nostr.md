@@ -2,7 +2,7 @@
 title = "Hello Nostr"
 description = "An introduction to the Nostr social media protocol, written by a fresh user who's been on the platform for less than a week."
 path = "/blog/2024/12/hello-nostr"
-date = "2024-12-16"
+date = "2024-12-17"
 +++
 This blog post is in the style of my [previous blog post on Matrix](@/blog/guide-to-matrix-riot.md). I'm reviewing and sharing onboarding experience with a new technology. I'm sharing in the hopes that it will help others become aware of this new technology, understand what it can do, and if people are intrigued, have a more pleasant onboarding experience. Just keep in mind: I'm in no way an expert on this. PRs welcome to improve the content here!
 
