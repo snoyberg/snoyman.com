@@ -38,17 +38,17 @@ As a decentralized protocol, Nostr relies on public key cryptography for identit
 
 Clients are how a user will interact with the protocol. You'll provide your identity to the client in one of a few ways:
 
-* Directly entering your `nsec`. This is generally frowned upon since it opens you up for exploit, though most mobile apps do work by direct `nsec` entry.
+* Directly entering your `nsec`. This is generally frowned upon since it opens you up for exploit, though most mobile apps work by direct `nsec` entry.
 * Getting a view-only experience in clients that support it by entering your `npub`.
 * Using a signing tool to perform the signing on behalf of the client without giving away your private keys to everyone. (This matches most web3 interactions that rely on a wallet browser extension.)
 
-Events are a general-purpose concept, and are the heart of Nostr interaction. Events can represent a note (similar to a Tweet), articles, likes, reposts, profile updates, and more. Anything you do on the protocol involves creating and signing and event. This is also the heart of Nostr's extensibility: new events can be created to support new kinds of interactions.
+Events are a general-purpose concept, and are the heart of Nostr interaction. Events can represent a note (similar to a Tweet), articles, likes, reposts, profile updates, and more. Anything you do on the protocol involves creating and signing an event. This is also the heart of Nostr's extensibility: new events can be created to support new kinds of interactions.
 
 Finally there are relays. Relays are the servers of the Nostr world, and are where you broadcast your events to. Clients will typically configure multiple relays, broadcast your events to those relays, and query relays for relevant events for you (such as notes from people you follow, likes on your posts, and more).
 
 ## Getting started
 
-This is where the suboptimal experience really exists for Nostr. It took me a few days to come up with a setup that worked reliably. I'm going to share what worked best for me, but keep in mind that there are many other options, I'm a novice, other guides may give different recommendations, and you may not like my selection of tools. My best recommendation: don't end up in shell shock like I did. Set up _any_ kind of a Nostr profile, introduce yourself with the `#introductions` hashtag, and ask for help. I've found the community unbelievably welcoming.
+This is where the suboptimal experience really exists for Nostr. It took me a few days to come up with a setup that worked reliably. I'm going to share what worked best for me, but keep in mind that there are many other options. I'm a novice; other guides may give different recommendations and you may not like my selection of tools. My best recommendation: don't end up in shell shock like I did. Set up _any_ kind of a Nostr profile, introduce yourself with the `#introductions` hashtag, and ask for help. I've found the community unbelievably welcoming.
 
 Alright, so here are the different pieces you're going to need for a full experience:
 
@@ -68,7 +68,7 @@ First, you're going to set up a Lightning wallet. There are a lot of options her
 
 I tried a bunch of web clients and had problems with almost all of them. I later realized most of my problems seemed to be caused by incorrectly set relays, which we'll discuss below. In any event, I ultimately chose [YakiHonne](https://yakihonne.com/). It also has mobile iOS and Android clients, so you can have a consistent experience. (I also used the Damus iOS client, which is also wonderful.)
 
-Go to the homepage, click on the Login button in the bottom-left, and then choose "Create an account." You can add a profile picture, banner image, choose a display name, and add a short description. In the signup wizard, you'll see an option to let YakiHonne set up a wallet (meaning a Lightning wallet) for you. I chose not to rely on this and use coinos instead to keep more flexibility in swapping clients in the future, but if you want to simplify, you can just use the built-in wallet.
+Go to the homepage, click on the Login button in the bottom-left, and then choose "Create an account." You can add a profile picture, banner image, choose a display name, and add a short description. In the signup wizard, you'll see an option to let YakiHonne set up a wallet (meaning a Lightning wallet) for you. I chose not to rely on this and used coinos instead to keep more flexibility for swapping clients in the future. If you want to simplify, however, you can just use the built-in wallet.
 
 Before going any further, *make sure you back up your `nsec` secret key!!!* Click on your username in the bottom-left, then settings, and then "Your keys." I recommend saving both your `nsec` and `npub` values in your password manager.
 
@@ -111,7 +111,7 @@ However, to keep things a bit more simple and single-task focused, I'll recommen
 
 You may also notice that there's any entry area for "preferred relays." We'll discuss relays next. Feel free to come back to this step and add those relays. (And, after you've done that, you can also use a [nostr.json generator](https://snowcait.github.io/nostr-json-generator) to help you self-host your NIP-05 address if you're so inclined.)
 
-Final note: once you've done the initial setup, it's not clear how to get back to the nos2x settings page. Right-click the extension, click manage extension, and then choose "extension options." At least those were the steps in [Brave](https://brave.com/), it may be slightly different in other browsers.
+Final note: once you've done the initial setup, it's not clear how to get back to the nos2x settings page. Right-click the extension, click manage extension, and then choose "extension options." At least those were the steps in [Brave](https://brave.com/); it may be slightly different in other browsers.
 
 ### Relays
 
@@ -149,6 +149,6 @@ I'm definitely planning to continue using Nostr. The community has a different f
 
 Nostr is a free speech haven. It's quite literally impossible to fully silence someone. People can theoretically be banned from specific relays, but a banned user could always just use other relays are continue to create new keys. There's no KYC process to stop them. I've only found one truly vile account so far, and it was easy enough to just ignore. This fits very well with my own personal ethos. I'd rather people have a public forum to express _any_ opinion, especially the opinions I most strongly disagree with, including calls to violence. I believe the world is better for allowing these opinions to be shared, debated, and (hopefully) exposed as vapid.
 
-The process of zapping is surprisingly engaging. The amount of money people send around isn't much. The most common zap amount is 21 satoshis, which at the current price of Bitcoin is just about 2 US cents. Unless you become massively popular, you're not going to retire on zaps. But it's far more meaningful to receive a zap than a like, it means someone parted with something of actual value because you made their day just a little bit better. And likewise, zapping someone else has the same feeling. It's also possible to tip providers of clients and other tools, which is a fundamental shift from the advertiser-driven web of today.
+The process of zapping is surprisingly engaging. The amount of money people send around isn't much. The most common zap amount is 21 satoshis, which at the current price of Bitcoin is just about 2 US cents. Unless you become massively popular, you're not going to retire on zaps. But it's far more meaningful to receive a zap than a like; it means someone parted with something of actual value because you made their day just a little bit better. And likewise, zapping someone else has the same feeling. It's also possible to tip providers of clients and other tools, which is a fundamental shift from the advertiser-driven web of today.
 
 I'd love to hear from others about their own experiences! Please reach out with your own findings. Hopefully we'll all be able to push social media into a more open, healthy, and fun direction.
