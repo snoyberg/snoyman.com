@@ -17,7 +17,9 @@
       "wss://relay.nostr.band",
       "wss://hist.nostr.land",
       "wss://greensoul.space",
-      "wss://wot.nostr.party"
+      "wss://wot.nostr.party",
+      "wss://nostr.mutinywallet.com",
+      "wss://sendit.nosflare.com"
     ],
     "22cc6c8e117ea4cc463db5aa20f273e8b6fa1e063c3a3745ef3b8337299f105b": [
       "wss://algo.utxo.one/",
@@ -32,7 +34,9 @@
       "wss://relay.nostr.band",
       "wss://hist.nostr.land",
       "wss://greensoul.space",
-      "wss://wot.nostr.party"
+      "wss://wot.nostr.party",
+      "wss://nostr.mutinywallet.com",
+      "wss://sendit.nosflare.com"
     ]
   }
 }
