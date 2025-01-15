@@ -117,7 +117,7 @@ The output may look slightly different due to timing differences, but you get th
 
 ## What's in a name?
 
-It's pretty annoying having now idea _who_ has access. Alice has a name! We should use it. Let's implement a helper method for getting the person's name:
+It's pretty annoying having no idea _who_ has access. Alice has a name! We should use it. Let's implement a helper method for getting the person's name:
 
 ```rust
 fn get_name(&self) -> &String {
