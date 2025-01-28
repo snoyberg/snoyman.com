@@ -30,6 +30,17 @@ date = "June 2011"
 publisher = "IEEE Spectrum, The Functional Web"
 
 [[extra.talks]]
+date = "2025-01"
+title = "When to be Weird"
+venue = "Functional Conf 2025"
+  [[extra.talks.links]]
+  url = "/talks/2025-functional-conf-when-to-be-weird.pdf"
+  text = "Slides"
+  [[extra.talks.links]]
+  url = "https://www.youtube.com/watch?v=wsOf3GGOEVM"
+  text = "Video"
+
+[[extra.talks]]
 date = "2024-04"
 title = "Roundtable | Unlocking Blockchain's Potential with Rust"
 venue = "Signify Technology"
