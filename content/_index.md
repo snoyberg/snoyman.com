@@ -30,6 +30,17 @@ date = "June 2011"
 publisher = "IEEE Spectrum, The Functional Web"
 
 [[extra.talks]]
+date = "2025-03"
+title = "Strongly Typed Financial Conference"
+venue = "Rustikon 2025, Poland"
+  [[extra.talks.links]]
+  url = "https://1drv.ms/p/c/91d70572dc58aa91/EZGqWNxyBdcggJEZzwAAAAABx5V0w77re56f_9pmZMNIGA"
+  text = "Slides (PPT)"
+  [[extra.talks.links]]
+  url = "/talks/2025-03-rustikon-strongly-typed-financial-software.pdf"
+  text = "Slides (PDF)"
+
+[[extra.talks]]
 date = "2025-01"
 title = "When to be Weird"
 venue = "Functional Conf 2025"
