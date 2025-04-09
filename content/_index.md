@@ -34,6 +34,9 @@ date = "2025-03"
 title = "Strongly Typed Financial Conference"
 venue = "Rustikon 2025, Poland"
   [[extra.talks.links]]
+  url = "https://www.youtube.com/watch?v=WcpoVSeJcA8"
+  text = "Video"
+  [[extra.talks.links]]
   url = "https://1drv.ms/p/c/91d70572dc58aa91/EZGqWNxyBdcggJEZzwAAAAABx5V0w77re56f_9pmZMNIGA"
   text = "Slides (PPT)"
   [[extra.talks.links]]
