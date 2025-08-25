@@ -245,6 +245,7 @@ How do we deal with these?
     * Hardware: running in multiple AZs
     * Engineers: writing tests
     * Project: analyzing risks
+* Helpful question: what's the worst that could happen?
 
 ---
 
