@@ -37,7 +37,8 @@
 * In aggregate, we can treat some risks essentially as guarantees
     * If I run 100,000 servers, one of them will have a hardware failure this year
 * Unlikely things _will_ happen
-    * Let's talk about coins
+    * Coin flip: How likely are 10 heads in a row?
+    * How likely is a streak of 10 heads in 1 million tosses?
 * I wasted my money on home owner's insurance because nothing bad happened to my house
     * Do you feel the same way about life insurance?
 
