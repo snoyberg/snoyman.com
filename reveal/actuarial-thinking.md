@@ -5,6 +5,8 @@
 * Semi-sequel to [Economic Argument for Functional Programming](https://www.snoyman.com/reveal/economic-argument-functional-programming/)
 * Avoiding complex math, focusing on intuition
 
+<img src="/img/actuarial-thinking/endisnigh.png" height="300">
+
 ---
 
 ## What is an actuary?
