@@ -5,24 +5,24 @@
 {{ section.content | safe }}
 
 {% for page in section.pages %}   
-  <div class="card mb-4">
+  <article class="card blog-card">
     {% if page.extra.ogimage %}
       {% set image = "/thumbs/" ~ page.extra.ogimage %}
     {% else %}
       {% set image = "/img/slogo.png" %}
     {% endif %}
-    <div class="blog-image-title">
+    <div class="blog-card__media">
       <a href="{{ page.permalink | safe }}">
-        <img src="{{ image | safe }}" alt="{{ page.title }}">
+        <img src="{{ image | safe }}" alt="{{ page.title }}" loading="lazy">
       </a>
-      <div>
-        <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
-        {% if page.description %}
-          <p class="description">{{ page.description }}</p>
-        {% endif %}
-      </div>
     </div>
-  </div>
+    <div class="blog-card__body">
+      <h2><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h2>
+      {% if page.description %}
+        <p class="description">{{ page.description }}</p>
+      {% endif %}
+    </div>
+  </article>
 {% endfor %}
 
 {% endblock content %}
