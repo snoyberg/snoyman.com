@@ -2,9 +2,9 @@
 <html lang="en" class="no-js">
 
 {% if page %}
-    {% set content = page %}
+  {% set content = page %}
 {% elif section %}
-    {% set content = section %}
+  {% set content = section %}
 {% endif %}
 
 {% if content %}
@@ -16,18 +16,26 @@
 {% else %}
   {% set title = "Page not found" %}
 {% endif %}
+
+{% if content and content.description %}
+  {% set description = content.description %}
+{% else %}
+  {% set description = config.description %}
+{% endif %}
+
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ title }}</title>
 
+    <meta name="description" content="{{ description }}">
     <meta name="twitter:site" content="@snoyberg">
     <meta name="twitter:creator" content="@snoyberg">
-    <meta name="og:site_name" content="Michael Snoyman's homepage">
-    <meta name="og:title" content="{{ title }}">
-    <meta name="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:site_name" content="Michael Snoyman's homepage">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{{ description }}">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1434510-21"></script>
@@ -39,54 +47,40 @@
       gtag('config', 'UA-1434510-21');
     </script>
 
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
-    <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
-    <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/site.css">
 
-    {% block pagehead %}
-    {% endblock %}
+    {% block pagehead %}{% endblock %}
 
     <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
     <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Michael Snoyman's blog">
 
-    <style>.wt-section { padding-top: 2rem }</style>
-
     {{ macros::favicons() }}
+  </head>
   <body>
-    <header class="inner-page">
-      {{ macros::topnav() }}
+    <a class="skip-link" href="#content">Skip to content</a>
+    {{ macros::topnav() }}
 
-      <section class="wt-section bg-gray text-center inner-page-header" style="padding-top:100px">
-        <div class="container">
-          <div class="row justify-content-md-center align-items-center text-white py-lg-5">
-            <div class="col-md-7">
-              <div class="text-center">
-                <h1 class="display-sm-4 display-lg-3">{{ title }}</h1>
-                {% block subtitle %}
-                {% endblock subtitle %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    {% block hero %}
+    <header class="page-hero">
+      <div class="container">
+        <h1>{{ title }}</h1>
+        {% block subtitle %}{% endblock %}
+      </div>
     </header>
+    {% endblock hero %}
 
-    <main role="main">
-      <section class="wt-section">
-        <div class="container">
-          <div class="row justify-content-between">
-            <div class="col-lg-12">
-              {% block content %}
-                {{ content.content | safe }}
-              {% endblock content %}
-            </div>
-          </div>
-        </div>
-      </section>
+    <main id="content" class="page-content">
+      <div class="container">
+        {% block content %}
+          {% if content %}
+            {{ content.content | safe }}
+          {% endif %}
+        {% endblock content %}
+      </div>
     </main>
 
     {{ macros::bodyend() }}
-
   </body>
 </html>
