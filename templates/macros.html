@@ -1,147 +1,77 @@
 {% macro topnav() %}
-
-<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img src="/img/snoylogo.png" height="50px">
+<nav class="site-nav" aria-label="Primary">
+  <div class="container site-nav__inner">
+    <a class="site-nav__brand" href="/" aria-label="Michael Snoyman home">
+      <img src="/img/snoylogo.png" alt="Snoyman logo" width="48" height="48">
+      <span>Michael Snoyman</span>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
-      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="/blog">Blog</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
-        </li>
-      </ul>
-    </div>
+    <ul class="site-nav__links">
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="https://www.yesodweb.com/">Yesod</a></li>
+      <li><a href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a></li>
+      <li><a href="https://www.beginrust.com/">Rust Book</a></li>
+      <li><a href="https://www.youtube.com/c/snoyberg">YouTube</a></li>
+      <li><a href="https://twitter.com/snoyberg">Twitter</a></li>
+      <li><a href="https://github.com/snoyberg">GitHub</a></li>
+    </ul>
   </div>
 </nav>
-
 {% endmacro topnav %}
 
 {% macro bodyend() %}
-<footer class="bg-dark py-5">
-  <ul class="list-inline text-center text-md-right mb-0">
-    <li class="list-inline-item mx-2">
-      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://github.com/snoyberg">Github</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://tech.fpcomplete.com/">FP Complete</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
-    </li>
-  </ul>
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__tagline">Thanks for visiting my little corner of the internet.</p>
+    <ul class="site-footer__links">
+      <li><a href="https://twitter.com/snoyberg">Twitter</a></li>
+      <li><a href="https://github.com/snoyberg">GitHub</a></li>
+      <li><a href="https://tech.fpcomplete.com/">FP Complete</a></li>
+      <li><a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a></li>
+    </ul>
+  </div>
 </footer>
-
-<!-- JS Script Files -->
-<!-- Global Vendor -->
-<script src="/maxi/vendors/jquery.min.js"></script>
-<script src="/maxi/vendors/jquery.migrate.min.js"></script>
-<script src="/maxi/vendors/popper.min.js"></script>
-<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
-
-<!-- Components Vendor  --> 
-<script src="/maxi/contact/jqBootstrapValidation.js"></script>
-<!--Plugin Initialize-->
-<script src="/maxi/js/global.js"></script>
-<!-- Open external links in a different tab -->
-<script src="/static/external-links.js"></script>
-<!-- END JAVASCRIPTS -->
+<script src="/js/site.js"></script>
 {% endmacro bodyend %}
 
 {% macro paginator() %}
-<div class="d-flex justify-content-center mt-1 mb-3 font-weight-bolder h4 align-bottom blog-nav">
-                <span class="mr-5">
-                {% if paginator.current_index == 1 %}
-                  ❮❮
-                {% else %}
-                  <a href="{{ paginator.first }}">❮❮</a>
-                {% endif %}
-                </span>
-              
-                <span class="mr-5">
-                {% if paginator.previous %}
-                  <a href="{{ paginator.previous }}"> ❮ </a>
-                {% else %}
-                  ❮
-                {% endif %}
-                </span>
-              
-                <span class="text-uppercase font-weight-normal h6 mb-0 mt-1">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
-              
-                <span class="ml-5">
-                {% if paginator.next %}
-                  <a href="{{ paginator.next }}">❯</a>
-                {% else %}
-                  ❯
-                {% endif %}
-                </span>
-              
-                <span class="ml-5">
-                {% if paginator.current_index == paginator.number_pagers %}
-                  ❯❯
-                {% else %}
-                  <a href="{{ paginator.last }}">❯❯</a>
-                {% endif %}
-                </span>
-</div>
+{% if paginator is defined %}
+<nav class="paginator" aria-label="Pagination">
+  <a class="paginator__link" href="{{ paginator.first }}" aria-label="First page">
+    « First
+  </a>
+  {% if paginator.previous %}
+    <a class="paginator__link" href="{{ paginator.previous }}" aria-label="Previous page">‹ Prev</a>
+  {% else %}
+    <span class="paginator__link is-disabled">‹ Prev</span>
+  {% endif %}
+  <span class="paginator__status">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
+  {% if paginator.next %}
+    <a class="paginator__link" href="{{ paginator.next }}" aria-label="Next page">Next ›</a>
+  {% else %}
+    <span class="paginator__link is-disabled">Next ›</span>
+  {% endif %}
+  <a class="paginator__link" href="{{ paginator.last }}" aria-label="Last page">
+    Last »
+  </a>
+</nav>
+{% endif %}
 {% endmacro paginator %}
 
 {% macro share() %}
-
-{% if page.title %}
+{% if page is defined and page.title %}
   {% set title = page.title %}
-{% elif section.title %}
+{% elif section is defined and section.title %}
   {% set title = section.title %}
+{% else %}
+  {% set title = config.title %}
 {% endif %}
-
-<div class="share-bar-wrapper">
-  <div class="share-bar-inner">
-    <b>Share this</b>
-    <a target="_blank" href="https://twitter.com/intent/tweet?text={{ title | urlencode }} {{ current_url | urlencode }}" title="Share on Twitter">
-      <i class="fab fa-twitter"></i>
-    </a>
-
-    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ current_url | urlencode }}" title="Share on Facebook">
-      <i class="fab fa-facebook"></i>
-    </a>
-
-    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ current_url | urlencode }}&amp;title={{ title | urlencode }}" title="Share on LinkedIn">
-      <i class="fab fa-linkedin"></i>
-    </a>
-
-    <a target="_blank" href="https://www.reddit.com/submit?url={{ current_url | urlencode }}" title="Share on Reddit">
-      <i class="fab fa-reddit"></i>
-    </a>
-  </div>
+<div class="share-bar" aria-label="Share this page">
+  <span class="share-bar__label">Share:</span>
+  <a class="share-bar__link" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text={{ title | urlencode }} {{ current_url | urlencode }}">Twitter</a>
+  <a class="share-bar__link" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ current_url | urlencode }}">Facebook</a>
+  <a class="share-bar__link" target="_blank" rel="noopener" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ current_url | urlencode }}&amp;title={{ title | urlencode }}">LinkedIn</a>
+  <a class="share-bar__link" target="_blank" rel="noopener" href="https://www.reddit.com/submit?url={{ current_url | urlencode }}">Reddit</a>
 </div>
-
 {% endmacro share %}
 
 {% macro favicons() %}
@@ -166,12 +96,14 @@
 
 {% macro blog_email() %}
 <div class="blog-email">
-  <form class="blog-email" method='post' action='https://blogtrottr.com' target="_blank">
-    <span>Get new blog posts via email</span>
-    <input type='email' name='btr_email' placeholder='Email address'>
-    <input type='hidden' name='btr_url' value='https://www.snoyman.com/feed'>
-    <input type='hidden' name='schedule_type' value='0'>
-    <button class="btn btn-primary">Subscribe!</button>
+  <form method="post" action="https://blogtrottr.com" target="_blank">
+    <p class="blog-email__label">Get new blog posts via email</p>
+    <div class="blog-email__controls">
+      <input type="email" name="btr_email" placeholder="Email address" required>
+      <button class="btn btn-primary" type="submit">Subscribe</button>
+    </div>
+    <input type="hidden" name="btr_url" value="https://www.snoyman.com/feed">
+    <input type="hidden" name="schedule_type" value="0">
   </form>
 </div>
 {% endmacro blog_email %}
