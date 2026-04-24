@@ -2,7 +2,7 @@
 
 {% block pagehead %}
 {% if page.description %}
-<meta name="og:description" value="{{ page.description }}">
+<meta property="og:description" content="{{ page.description }}">
 {% endif %}
 
 {% if page.extra.ogimage %}
@@ -15,36 +15,44 @@
 {% endblock pagehead %}
 
 {% block subtitle %}
-<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published {{ page.date | date(format="%B %e, %Y") }}</p>
+<p class="page-meta">Published {{ page.date | date(format="%B %e, %Y") }}</p>
 {% endblock subtitle %}
 
 {% block content %}
 
 {{ macros::share() }}
 
-      <p>
-        <i>
-          See a typo? Have a suggestion?
-          <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/{{ page.relative_path }}">Edit this page on Github</a>
-        </i>
-      </p>
+<p class="page-feedback">
+  See a typo? Have a suggestion?
+  <a target="_blank" rel="nofollow" href="https://github.com/snoyberg/snoyman.com/edit/master/content/{{ page.relative_path }}">Edit this page on GitHub</a>
+</p>
 
-      {{ macros::blog_email() }}
+{{ macros::blog_email() }}
 
-      <div id="blog-body">
-        {{ page.content | safe }}
-      </div>
+<article id="blog-body" class="prose">
+  {{ page.content | safe }}
+</article>
 
-<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+<p class="text-center">
+  <a href="/blog/" class="btn btn-primary">Read more blog posts</a>
+</p>
 
-      {{ macros::blog_email() }}
+{{ macros::blog_email() }}
 
-      <div id="disqus_thread"></div>
-      <script>
-        (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<div id="disqus_thread"></div>
+<script>
+  (function() {
+    var d = document,
+      s = d.createElement('script');
+    s.src = '//snoyberg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-<div class="text-center"><a href="/blog/" class="btn btn-primary">Read more blog posts</a></div>
+<p class="text-center">
+  <a href="/blog/" class="btn btn-primary">Read more blog posts</a>
+</p>
 
 {% endblock content %}
