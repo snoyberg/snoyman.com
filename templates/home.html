@@ -74,7 +74,7 @@
                   <a href="{{ recent.path }}">{{ recent.title }}</a> <i>{{ recent.date | date(format="%B %e, %Y") }}</i>
                 </p>
 
-                <h2>Publications</h2>
+                <h2 id="publications">Publications</h2>
                 <ul>
                   {% for pub in section.extra.publications %}
                     <li>
