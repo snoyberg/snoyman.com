@@ -1,13 +1,13 @@
 {% import "macros.html" as macros %}<!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
-    <title>Michael Snoyman - Strong Typing Advocate</title>
+    <title>Michael Snoyman - CTO / Engineering Executive</title>
 
     <meta charset=utf-8>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="keywords" content="Haskell, Rust, weightlifting, powerlifting, nutrition">
-    <meta name="description" content="Michael Snoyman's homepage, focusing on strongly typed programming and weightlifting. I'm a big fan of Haskell and Rust.">
+    <meta name="keywords" content="CTO, engineering executive, high-assurance systems, Rust, Haskell, fintech, blockchain, regulated systems">
+    <meta name="description" content="Michael Snoyman is a CTO and hands-on engineering executive building high-assurance production systems across fintech, blockchain, healthcare, and regulated domains.">
     <meta name="author" content="Michael Snoyman">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -40,13 +40,19 @@
         <div class="container">
           <div class="row align-items-center">
             <div class="col-md-6">
+              <p class="availability">Available for CTO / engineering leadership roles</p>
               <h1 id="michael-snoyman">
                 Michael Snoyman
               </h1>
-              <p class="mb-4 h6">Programmer, economist, author, speaker, weight lifter, Bitcoin enthusiast.</p>
+              <p class="mb-4 h5">CTO and hands-on engineering executive for high-assurance production systems.</p>
+              <p class="hero-summary">I lead teams building reliable software where architecture, delivery risk, product direction, and business goals all matter: fintech, blockchain, healthcare, enterprise software, and regulated domains.</p>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="/resume.pdf">Download resume</a>
+                <a class="btn btn-outline-primary" href="mailto:michael@snoyman.com">Contact me</a>
+              </div>
             </div>
             <div class="col-md-6">
-              <img src="/img/michael-home.jpg" alt="banner" class="w-75">
+              <img src="/img/michael-home.jpg" alt="Michael Snoyman" class="w-75">
             </div>
           </div>
         </div>
@@ -60,11 +66,31 @@
             <div class="col-md-8">
                 <h2>About Me</h2>
                 <div class="aboutme">
-                  <p>Michael Snoyman is a software developer and blockchain specialist, leading a team of developers at <a href="https://www.fpcomplete.com">FP Complete</a>. With a deep passion for Rust and functional programming, Michael has built a career at the intersection of strongly typed programming, actuarial science, and economics. His expertise spans blockchain development, statistics, and software architecture, making him a trusted consultant and respected voice in the tech industry.</p>
+                  <p>Michael Snoyman is a CTO and hands-on technical leader with 20+ years building reliable, maintainable, high-assurance production systems. He recently led architecture, delivery, client strategy, and engineering teams at FP Complete / FP Block, working across fintech, blockchain, healthcare, enterprise software, and regulated domains.</p>
 
-                  <p>In addition to managing large-scale projects and contributing to open source initiatives, Michael has authored multiple books on programming and regularly shares insights at conferences around the world. He also blogs regularly on topics ranging from software development and blockchain to weight lifting, nutrition, and fantasy books. Michael takes pride in making complex concepts accessible, fostering collaboration, and building lasting professional relationships.</p>
+                  <p>He operates where technical reality, product direction, business goals, and stakeholder alignment meet. His strongest work is turning ambitious product ideas into deliverable systems: shaping architecture, leading teams, managing risk, and translating technical strategy into business terms.</p>
 
-                  <p>When he's not at the forefront of the blockchain space, Michael enjoys life in Maalot, Israel, with <a href="https://twitter.com/lambdamom">his wife Miriam</a> and their six children.</p>
+                  <p>Michael is the founding author or original architect of major Haskell ecosystem projects including Stack, Stackage, Yesod, Warp, and WAI, and has authored multiple books and training programs on practical typed functional programming and Rust. He lives in Maalot, Israel, with <a href="https://twitter.com/lambdamom">his wife Miriam</a> and their six children.</p>
+                </div>
+
+                <h2 id="leadership">Leadership Focus</h2>
+                <div class="focus-grid">
+                  <div>
+                    <h3>Engineering leadership</h3>
+                    <p>Hiring, mentoring, training, and leading 100+ engineers and technical contributors through real delivery pressure.</p>
+                  </div>
+                  <div>
+                    <h3>Architecture and risk</h3>
+                    <p>Owning systems that need to remain reliable, secure, maintainable, and able to evolve after launch.</p>
+                  </div>
+                  <div>
+                    <h3>Business translation</h3>
+                    <p>Aligning engineering, product, executives, investors, customers, and incumbent teams through ambiguity.</p>
+                  </div>
+                  <div>
+                    <h3>Financial systems</h3>
+                    <p>Applying actuarial training to fintech, trading, tokenization, DeFi, prediction markets, insurance, and other risk-sensitive domains.</p>
+                  </div>
                 </div>
 
                 {% set blogs = get_section(path="blog/_index.md") %}
@@ -103,9 +129,23 @@
 
             <div class="col-md-4">
               <aside>
-                <div id="twitter">
-                  <a class="twitter-timeline" href="https://twitter.com/snoyberg">Tweets by snoyberg</a>
-                  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                <div class="profile-card">
+                  <h2>Current Search</h2>
+                  <p>I am looking for executive or senior technical leadership roles where deep engineering judgment matters: CTO, VP Engineering, Head of Engineering, principal architect, or senior consulting leadership.</p>
+                  <a class="btn btn-primary btn-block" href="/resume.pdf">Resume PDF</a>
+                  <a class="btn btn-outline-primary btn-block" href="mailto:michael@snoyman.com">michael@snoyman.com</a>
+                </div>
+
+                <div class="profile-card">
+                  <h2>Relevant Domains</h2>
+                  <ul>
+                    <li>Fintech and trading systems</li>
+                    <li>Blockchain and tokenization</li>
+                    <li>Prediction markets</li>
+                    <li>Healthcare and pharma computation</li>
+                    <li>Enterprise software</li>
+                    <li>Rust, Haskell, TypeScript, SQL</li>
+                  </ul>
                 </div>
               </aside>
             </div>
@@ -115,4 +155,4 @@
     </main>
     {{ macros::bodyend() }}
   </body>
-</head>
+</html>

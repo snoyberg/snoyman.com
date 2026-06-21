@@ -1,3 +1,66 @@
+.availability {
+    color: #a34800;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+}
+
+.hero-summary {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 36rem;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.focus-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 2rem;
+}
+
+.focus-grid > div,
+.profile-card {
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.focus-grid h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.focus-grid p,
+.profile-card p,
+.profile-card li {
+    color: #444;
+    line-height: 1.55;
+}
+
+.profile-card {
+    margin-bottom: 1.25rem;
+}
+
+.profile-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.profile-card ul {
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+}
+
 .talk {
     padding: 0.5em;
     border: 1px solid #666;
@@ -22,4 +85,20 @@
 .talk > .links {
     font-size: 70%;
     display: block;
+}
+
+@media (max-width: 767px) {
+    .hero-actions {
+        display: block;
+    }
+
+    .hero-actions .btn {
+        display: block;
+        margin-bottom: 0.75rem;
+        width: 100%;
+    }
+
+    .focus-grid {
+        grid-template-columns: 1fr;
+    }
 }
