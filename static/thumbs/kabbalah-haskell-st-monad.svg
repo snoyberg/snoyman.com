@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Venn diagram of Kabalah-learning Jews and Haskell enthusiasts</title>
+  <desc id="desc">Two overlapping circles. The left circle says Kabalah-learning Jews, the right circle says Haskell enthusiasts, and the overlap says approximately four people.</desc>
+  <rect width="1280" height="720" fill="#f7f3ea"/>
+  <rect x="40" y="40" width="1200" height="640" rx="42" fill="#ffffff" stroke="#222222" stroke-width="6"/>
+  <circle cx="500" cy="370" r="245" fill="#4f9fd8" fill-opacity="0.58" stroke="#24638f" stroke-width="8"/>
+  <circle cx="780" cy="370" r="245" fill="#d69a3a" fill-opacity="0.62" stroke="#8c5a13" stroke-width="8"/>
+  <text x="392" y="316" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700" fill="#102333" text-anchor="middle">
+    <tspan x="392" dy="0">Kabalah-</tspan>
+    <tspan x="392" dy="54">learning</tspan>
+    <tspan x="392" dy="54">Jews</tspan>
+  </text>
+  <text x="888" y="344" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700" fill="#2d1d05" text-anchor="middle">
+    <tspan x="888" dy="0">Haskell</tspan>
+    <tspan x="888" dy="54">enthusiasts</tspan>
+  </text>
+  <text x="640" y="344" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" fill="#251400" text-anchor="middle">
+    <tspan x="640" dy="0">approximately</tspan>
+    <tspan x="640" dy="42">four people</tspan>
+  </text>
+</svg>
