@@ -39,7 +39,7 @@ Much of human history has lived under receiving to receive economic systems. The
 
 By free markets, I'm going to focus on idealized versions. By that, I mean a system where:
 
-* No one is ever forced to do anything
+* No one is forced to participate in a trade
 * All trade is fully voluntary
 * Participants have full access to information to avoid being deceived
 * Courts enforce laws and contracts fairly and equally
@@ -83,7 +83,7 @@ My Kabbalistic response is: you can't. You can't uproot the desire to receive li
 
 In my opinion, socialism has the right _goal_, but achieves the exact opposite of its intent. Using the Kabbalistic framing:
 
-* Capitalism/free markets sits squarely in the giving to receive world, and can never naturally improve beyond that.
+* Capitalism/free markets sit squarely in the giving to receive world, and can never naturally improve beyond that.
 * Advocates of socialism want to push us into a world of giving to give (the right _goal_).
 * But in practice, by doing so through force, they aren't encouraging people to selflessly give. They're using force to take from some people and redistribute to others, while calling the resulting transfer an act of giving. In other words, socialism is a reversion back to the realm of receiving to receive.
 
