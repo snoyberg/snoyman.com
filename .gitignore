@@ -1,5 +1,6 @@
 *.swp
 *~
 /public/
+/.tools/
 /migrate/target/
 /snoycron/target/
