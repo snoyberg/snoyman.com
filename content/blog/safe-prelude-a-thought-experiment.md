@@ -15,7 +15,7 @@ out of my head, and am sharing it in case anyone finds the idea
 intriguing or useful.
 
 The project is available
-[on Github at snoyberg/safe-prelude](https://github.com/snoyberg/safe-prelude#readme),
+[on GitHub at snoyberg/safe-prelude](https://github.com/snoyberg/safe-prelude#readme).
 The rest of
 this post is just a copy of the `README.md` file for the project.
 
