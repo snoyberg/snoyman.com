@@ -37,6 +37,17 @@ h1, h2, h3, h4, h5, h6 {
 
 button, input, select, textarea { font-family: var(--font-sans); }
 
+.shekel-subscribe {
+  border: 1px solid #ccc;
+  padding: 3px;
+  text-align: center;
+}
+.shekel-subscribe input[type="email"] {
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 400px;
+}
+
 h2 { margin-top: 2.5rem; }
 h3 { margin-top: 1.8rem; }
 
