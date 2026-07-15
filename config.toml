@@ -1,10 +1,8 @@
 base_url = "https://www.snoyman.com"
 default_language = "en"
 compile_sass = false
-generate_feed = true
-feed_filename = "rss.xml"
-highlight_code = true
-highlight_theme = "solarized-light"
+generate_feeds = true
+feed_filenames = ["rss.xml"]
 title = "Snoyberg - Michael Snoyman"
 description = "Michael Snoyman's homepage and blog. Eclectic collection of programming (mostly Rust and Haskell) and lifting (weights, children, and monads)."
 
@@ -12,6 +10,9 @@ taxonomies = [
   {name = "tags", paginate_by = 20, feed = true},
   {name = "series", paginate_by = 20, feed = true},
 ]
+
+[markdown.highlighting]
+theme = "solarized-light"
 
 [extra]
 # Put all your custom variables here

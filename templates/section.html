@@ -5,7 +5,7 @@
 {{ section.content | safe }}
 
 {% for page in section.pages %}   
-  <div class="card mb-4">
+  <article class="card blog-card mb-4">
     {% if page.extra.ogimage %}
       {% set image = "/thumbs/" ~ page.extra.ogimage %}
     {% else %}
@@ -16,13 +16,13 @@
         <img src="{{ image | safe }}" alt="{{ page.title }}">
       </a>
       <div>
-        <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
+        <h2><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h2>
         {% if page.description %}
           <p class="description">{{ page.description }}</p>
         {% endif %}
       </div>
     </div>
-  </div>
+  </article>
 {% endfor %}
 
 {% endblock content %}

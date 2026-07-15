@@ -1,38 +1,32 @@
 {% macro topnav() %}
 
-<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg">
-  <div class="container-fluid">
+<nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg" aria-label="Primary navigation">
+  <div class="container">
     <a class="navbar-brand" href="/">
-      <img src="/img/snoylogo.png" height="50px">
+      <img src="/img/snoylogo.png" width="150" height="50" alt="Michael Snoyman home">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars"></i>
     </button>
-    <div class="collapse navbar-collapse onCollapse" id="navbarTogglerDemo">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo">
       <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
+        <li class="nav-item mb-2 mb-lg-0">
           <a class="nav-link" href="/blog">Blog</a>
         </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
+        <li class="nav-item mb-2 mb-lg-0">
           <a class="nav-link" href="/resume.pdf">Resume</a>
         </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://www.yesodweb.com/">Yesod</a>
+        <li class="nav-item mb-2 mb-lg-0">
+          <a class="nav-link" href="https://www.linkedin.com/in/snoyberg/">LinkedIn</a>
         </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="http://shop.oreilly.com/product/0636920035664.do">Yesod Book</a>
+        <li class="nav-item mb-2 mb-lg-0">
+          <a class="nav-link" href="https://x.com/snoyberg">X</a>
         </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://www.beginrust.com/">Rust Book</a>
+        <li class="nav-item mb-2 mb-lg-0">
+          <a class="nav-link" href="https://github.com/snoyberg">GitHub</a>
         </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://www.youtube.com/c/snoyberg">YouTube</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://twitter.com/snoyberg">Twitter</a>
-        </li>
-        <li class="nav-item mr-4 mb-2 mb-lg-0">
-          <a class="nav-link" href="https://github.com/snoyberg">Github</a>
+        <li class="nav-item mb-2 mb-lg-0">
+          <a class="nav-link nav-contact" href="mailto:michael@snoyman.com">Contact</a>
         </li>
       </ul>
     </div>
@@ -42,24 +36,27 @@
 {% endmacro topnav %}
 
 {% macro bodyend() %}
-<footer class="bg-dark py-5">
-  <ul class="list-inline text-center text-md-right mb-0">
-    <li class="list-inline-item mx-2">
-      <a href="https://twitter.com/snoyberg">Follow @snoyberg</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://twitter.com/intent/tweet?screen_name=snoyberg">Tweet to @snoyberg</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://github.com/snoyberg">Github</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://tech.fpcomplete.com/">FP Complete</a>
-    </li>
-    <li class="list-inline-item mx-2">
-      <a href="https://www.haskellers.com/user/snoyberg">I'm a Haskeller</a>
-    </li>
-  </ul>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">Michael Snoyman</p>
+      <ul class="list-inline mb-0 footer-social">
+        <li class="list-inline-item"><a href="https://www.linkedin.com/in/snoyberg/">LinkedIn</a></li>
+        <li class="list-inline-item"><a href="https://x.com/snoyberg">X</a></li>
+        <li class="list-inline-item"><a href="https://github.com/snoyberg">GitHub</a></li>
+        <li class="list-inline-item"><a href="https://www.youtube.com/c/snoyberg">YouTube</a></li>
+        <li class="list-inline-item"><a href="/rss.xml">RSS</a></li>
+      </ul>
+    </div>
+    <div class="footer-work">
+      <p class="footer-heading">Selected work</p>
+      <ul class="list-inline mb-0">
+        <li class="list-inline-item"><a href="https://www.yesodweb.com/">Yesod</a></li>
+        <li class="list-inline-item"><a href="https://www.oreilly.com/library/view/developing-web-applications/9781449336868/">Yesod book</a></li>
+        <li class="list-inline-item"><a href="https://www.beginrust.com/">Rust book</a></li>
+      </ul>
+    </div>
+  </div>
 </footer>
 
 <!-- JS Script Files -->
@@ -79,7 +76,7 @@
 {% endmacro bodyend %}
 
 {% macro paginator() %}
-<div class="d-flex justify-content-center mt-1 mb-3 font-weight-bolder h4 align-bottom blog-nav">
+<nav class="d-flex justify-content-center mt-1 mb-4 align-items-center blog-nav" aria-label="Blog pagination">
                 <span class="mr-5">
                 {% if paginator.current_index == 1 %}
                   ❮❮
@@ -113,7 +110,7 @@
                   <a href="{{ paginator.last }}">❯❯</a>
                 {% endif %}
                 </span>
-</div>
+</nav>
 {% endmacro paginator %}
 
 {% macro share() %}
@@ -127,19 +124,19 @@
 <div class="share-bar-wrapper">
   <div class="share-bar-inner">
     <b>Share this</b>
-    <a target="_blank" href="https://twitter.com/intent/tweet?text={{ title | urlencode }} {{ current_url | urlencode }}" title="Share on Twitter">
-      <i class="fab fa-twitter"></i>
+    <a target="_blank" rel="noopener noreferrer" href="https://x.com/intent/post?text={{ title | urlencode }} {{ current_url | urlencode }}" title="Share on X" aria-label="Share on X">
+      <span class="x-mark" aria-hidden="true">X</span>
     </a>
 
-    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ current_url | urlencode }}" title="Share on Facebook">
+    <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u={{ current_url | urlencode }}" title="Share on Facebook">
       <i class="fab fa-facebook"></i>
     </a>
 
-    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ current_url | urlencode }}&amp;title={{ title | urlencode }}" title="Share on LinkedIn">
+    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ current_url | urlencode }}&amp;title={{ title | urlencode }}" title="Share on LinkedIn">
       <i class="fab fa-linkedin"></i>
     </a>
 
-    <a target="_blank" href="https://www.reddit.com/submit?url={{ current_url | urlencode }}" title="Share on Reddit">
+    <a target="_blank" rel="noopener noreferrer" href="https://www.reddit.com/submit?url={{ current_url | urlencode }}" title="Share on Reddit">
       <i class="fab fa-reddit"></i>
     </a>
   </div>

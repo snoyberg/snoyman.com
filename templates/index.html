@@ -25,9 +25,11 @@
 
     <meta name="twitter:site" content="@snoyberg">
     <meta name="twitter:creator" content="@snoyberg">
-    <meta name="og:site_name" content="Michael Snoyman's homepage">
-    <meta name="og:title" content="{{ title }}">
-    <meta name="og:type" content="website">
+    <meta property="og:site_name" content="Michael Snoyman's homepage">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
+    <meta name="description" content="{% if content and content.description %}{{ content.description }}{% else %}{{ config.description }}{% endif %}">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1434510-21"></script>
@@ -42,6 +44,7 @@
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/site.css">
 
     {% block pagehead %}
     {% endblock %}
@@ -50,10 +53,10 @@
     <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Michael Snoyman's blog">
 
-    <style>.wt-section { padding-top: 2rem }</style>
-
     {{ macros::favicons() }}
+  </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="inner-page">
       {{ macros::topnav() }}
 
@@ -72,11 +75,11 @@
       </section>
     </header>
 
-    <main role="main">
+    <main id="main-content">
       <section class="wt-section">
         <div class="container">
           <div class="row justify-content-between">
-            <div class="col-lg-12">
+            <div class="col-lg-10 mx-auto content-column">
               {% block content %}
                 {{ content.content | safe }}
               {% endblock content %}

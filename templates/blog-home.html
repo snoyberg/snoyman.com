@@ -5,7 +5,7 @@
 {{ macros::paginator() }}
 
 {% for page in paginator.pages %}   
-  <div class="card mb-4">
+  <article class="card blog-card mb-4">
     {% if page.extra.ogimage %}
       {% set image = "/thumbs/" ~ page.extra.ogimage %}
     {% else %}
@@ -16,16 +16,16 @@
         <img src="{{ image | safe }}" alt="{{ page.title }}">
       </a>
       <div>
-        <h5><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h5>
+        <h2><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h2>
         {% if page.description %}
           <p class="description">{{ page.description }}</p>
         {% endif %}
       </div>
     </div>
     <div class="card-footer text-muted">
-      <span class="font-weight-light d-block"><i class="fa fa-calendar" aria-hidden="true"></i> Published {{ page.date | date(format="%B %e, %Y") }}</span>
+      <time datetime="{{ page.date }}">Published {{ page.date | date(format="%B %e, %Y") }}</time>
     </div>
-  </div>
+  </article>
 {% endfor %}
 
 {{ macros::paginator() }}

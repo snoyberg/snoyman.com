@@ -9,6 +9,14 @@
     <meta name="keywords" content="CTO, engineering executive, high-assurance systems, Rust, Haskell, fintech, blockchain, regulated systems">
     <meta name="description" content="Michael Snoyman is a CTO and hands-on engineering executive building high-assurance production systems across fintech, blockchain, healthcare, and regulated domains.">
     <meta name="author" content="Michael Snoyman">
+    <meta property="og:site_name" content="Michael Snoyman's homepage">
+    <meta property="og:title" content="Michael Snoyman - CTO / Engineering Executive">
+    <meta property="og:description" content="Michael Snoyman is a CTO and hands-on engineering executive building high-assurance production systems across fintech, blockchain, healthcare, and regulated domains.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config.base_url }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@snoyberg">
+    <meta name="twitter:creator" content="@snoyberg">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1434510-21"></script>
@@ -24,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
     <link rel="stylesheet" type="text/css" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
-
+    <link rel="stylesheet" href="/static/site.css">
     <link rel="stylesheet" href="/static/home.css">
 
     <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
@@ -32,14 +40,15 @@
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Michael Snoyman's blog">
 
     {{ macros::favicons() }}
-
+  </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header>
       {{ macros::topnav() }}
       <section class="wt-section hero-large position-relative overflow-hidden mt-md-2 pb-0 mb-0">
         <div class="container">
           <div class="row align-items-center">
-            <div class="col-md-6">
+            <div class="col-lg-7 col-md-7 hero-copy">
               <p class="availability">Available for CTO / engineering leadership roles</p>
               <h1 id="michael-snoyman">
                 Michael Snoyman
@@ -51,15 +60,15 @@
                 <a class="btn btn-outline-primary" href="mailto:michael@snoyman.com">Contact me</a>
               </div>
             </div>
-            <div class="col-md-6">
-              <img src="/img/michael-home.jpg" alt="Michael Snoyman" class="w-75">
+            <div class="col-lg-5 col-md-5 hero-portrait-wrap">
+              <img src="/img/michael-home.jpg" alt="Michael Snoyman" class="hero-portrait" width="520" height="520">
             </div>
           </div>
         </div>
       </section>
     </header>
 
-    <main role="main">
+    <main id="main-content">
       <section class="wt-section">
         <div class="container">
           <div class="row">
@@ -70,7 +79,7 @@
 
                   <p>He operates where technical reality, product direction, business goals, and stakeholder alignment meet. His strongest work is turning ambitious product ideas into deliverable systems: shaping architecture, leading teams, managing risk, and translating technical strategy into business terms.</p>
 
-                  <p>Michael is the founding author or original architect of major Haskell ecosystem projects including Stack, Stackage, Yesod, Warp, and WAI, and has authored multiple books and training programs on practical typed functional programming and Rust. He lives in Maalot, Israel, with <a href="https://twitter.com/lambdamom">his wife Miriam</a> and their six children.</p>
+                  <p>Michael is the founding author or original architect of major Haskell ecosystem projects including Stack, Stackage, Yesod, Warp, and WAI, and has authored multiple books and training programs on practical typed functional programming and Rust. He lives in Maalot, Israel, with <a href="https://x.com/lambdamom">his wife Miriam</a> and their six children.</p>
                 </div>
 
                 <h2 id="leadership">Leadership Focus</h2>
@@ -119,7 +128,7 @@
                     <span class="title">{{ t.title }}</span>
                     <span class="links">
                       {% for l in t.links %}
-                        <a href="{{ l.url }}" target="_blank">{{ l.text }}</a>
+                        <a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.text }}</a>
                       {% endfor %}
                     </span>
                   </div>

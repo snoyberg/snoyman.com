@@ -1,5 +1,5 @@
 .availability {
-    color: #a34800;
+    color: var(--accent);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0;
@@ -8,8 +8,8 @@
 }
 
 .hero-summary {
-    color: #333;
-    font-size: 1rem;
+    color: var(--muted);
+    font-size: 1.08rem;
     line-height: 1.65;
     max-width: 36rem;
 }
@@ -30,9 +30,11 @@
 
 .focus-grid > div,
 .profile-card {
-    border: 1px solid #d8d8d8;
-    border-radius: 6px;
-    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: .7rem;
+    box-shadow: 0 5px 18px rgba(24,43,56,.04);
+    padding: 1.25rem;
 }
 
 .focus-grid h3 {
@@ -43,7 +45,7 @@
 .focus-grid p,
 .profile-card p,
 .profile-card li {
-    color: #444;
+    color: var(--muted);
     line-height: 1.55;
 }
 
@@ -62,15 +64,23 @@
 }
 
 .talk {
-    padding: 0.5em;
-    border: 1px solid #666;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--line);
     margin-bottom: 1em;
-    border-radius: 5px;
+    border-radius: .6rem;
 }
 
 .talk > .venue {
-    color: orange;
+    color: var(--accent);
+    font-weight: 700;
 }
+
+.hero-large { background: linear-gradient(150deg, #f4f8f8 0%, #fff 65%); padding-top: 9rem !important; }
+.hero-copy h1 { font-size: clamp(2.8rem, 6vw, 5rem); }
+.hero-portrait-wrap { text-align: center; }
+.hero-portrait { border: 8px solid white; border-radius: 50%; box-shadow: var(--shadow); height: auto; max-width: 390px; width: 88%; }
+.aboutme { color: #3e4b54; font-size: 1.06rem; }
+aside { position: sticky; top: 100px; }
 
 .talk > .date {
     font-size: 70%;
@@ -88,6 +98,10 @@
 }
 
 @media (max-width: 767px) {
+    .hero-large { padding-top: 7.5rem !important; }
+    .hero-portrait-wrap { margin-top: 2rem; }
+    .hero-portrait { max-width: 260px; }
+    aside { position: static; }
     .hero-actions {
         display: block;
     }
