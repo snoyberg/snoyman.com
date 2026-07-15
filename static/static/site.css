@@ -115,7 +115,7 @@ h3 { margin-top: 1.8rem; }
 .blog-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
 .blog-image-title { align-items: center; gap: 1.5rem; padding: 1.5rem; }
 .blog-image-title > a { flex: 0 0 190px; }
-.blog-image-title > a > img { border-radius: .5rem; height: 120px; object-fit: cover; width: 190px; }
+.blog-image-title > a > img { border-radius: .5rem; height: 120px; max-height: 120px; max-width: 190px; object-fit: cover; width: 190px; }
 .blog-image-title h2 { font-size: 1.45rem; margin: 0 0 .5rem; }
 .blog-image-title h2 a { color: var(--ink); }
 .blog-image-title .description { color: var(--muted); line-height: 1.55; margin: 0; }
