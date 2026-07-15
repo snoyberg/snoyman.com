@@ -3,6 +3,9 @@ title = "Personal update, upcoming blogging"
 description = "Why have I been so quiet for the past few years?"
 path = "/blog/2024/10/personal-update-upcoming-blogging"
 date = 2024-10-07
+
+[extra]
+ogimage = "personal-update-upcoming-blogging.png"
 +++
 My blog posts have slowed down quite a bit over the past few years. I’m probably going to be ramping back up on posting, and covering some new topics. So I thought a quick update on what’s been happening with me would be in order.
 

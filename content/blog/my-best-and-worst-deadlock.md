@@ -3,6 +3,9 @@ title = "My Best and Worst Deadlock in Rust"
 description = "I wrote a deadlock a few months back in some Rust code, and we finally solved it recently. It was both my best and worst deadlock ever."
 path = "/blog/2024/01/best-worst-deadlock-rust"
 date = 2024-01-18
+
+[extra]
+ogimage = "my-best-and-worst-deadlock.png"
 +++
 We're going to build up a deadlock together. If you're unfamiliar with Rust and/or its multithreaded concepts, you'll probably learn a lot from this. If you _are_ familiar with Rust's multithreading capabilities, my guess is you'll be as surprised by this deadlock as I was. And if you spot the deadlock immediately, you get a figurative hat-tip from me.
 

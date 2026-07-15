@@ -4,6 +4,9 @@ description = "Partial functions are often considered harmful, and we recommend 
 path = "/blog/2023/04/opposite-of-partial-functions"
 date = 2023-04-01
 
+[extra]
+ogimage = "opposite-of-partial-functions.png"
+
 #[extra]
 #ogimage = "double-cherry.jpeg"
 +++

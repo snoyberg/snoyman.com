@@ -2,6 +2,9 @@
 title = "Seeking new Stackage Curator"
 description = "Putting out a call for a new Stackage Curator. Interested in joining the team? Come read more!"
 date = 2022-11-21
+
+[extra]
+ogimage = "seeking-new-stackage-curator.png"
 +++
 The Stackage Curator team is responsible for ongoing maintenance tasks for Stackage: creating builds, adding manual bounds, merging pull requests, and more. The responsibilities and general workflow are described in detail in [the curators document](https://github.com/commercialhaskell/stackage/blob/master/CURATORS.md), but in short:
 

@@ -2,6 +2,9 @@
 title = "Manual Leptos"
 description = "Leptos is a Rust frontend web framework focusing on fine-grained reactivity. In this post, we take a look at a more manual approach to using Leptos."
 date = 2024-06-25
+
+[extra]
+ogimage = "manual-leptos.png"
 +++
 I've spent most of my career on the server side. In the past few years, the projects I've been running have included significant TypeScript+React codebases, which has given me a crash course in the framework. About six months ago, I decided to look into Rust frontend frameworks, and played around with Leptos. I ended up writing a simple utility program with Leptos. Overall, the process was pretty nice, and the performance of the app was noteworthy. (Meaning: other team members commented on how responsive the app was.) However, I never felt like I fully grokked Leptos. In particular, I felt like I was always glancing over my shoulder to make sure I'd properly made things reactive (more details on this below).
 

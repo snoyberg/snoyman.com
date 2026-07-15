@@ -3,6 +3,9 @@ title = "Steelmanning Tariffs"
 description = "My best arguments in favor of Trump's proposed tariffs, from the standpoint of someone opposed to tariffs."
 path = "/blog/2024/11/steelmanning-tariffs"
 date = 2024-11-25
+
+[extra]
+ogimage = "steelmanning-tariffs.png"
 +++
 __UPDATE__ A few days after posting this article, I saw a [video on X](https://x.com/RallyWithGalli/status/1861354664773722140) that gives (IMO) a better argument in favor of tariffs than I came up with here. If you're interested in the topic, I'd recommend giving it a watch, it's only about 11 minutes.
 

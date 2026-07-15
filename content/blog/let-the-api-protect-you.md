@@ -3,6 +3,9 @@ title = "Let the API protect you"
 description = "A small journey, in Rust, demonstrating the power of data driven APIs and strong types."
 path = "/blog/2024/08/let-the-api-protect-you"
 date = 2024-08-26
+
+[extra]
+ogimage = "let-the-api-protect-you.png"
 +++
 Let's write a simple program to manage purchases at a small convenience store. The store only sells two items: eggs and apples. We know the price of each item, and we need to set aside 5% of every purchase for taxes. We should _really_ use a decimal type instead of floats for handling currency, but we'll simplify things a bit here for convenience.
 

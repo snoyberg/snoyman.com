@@ -2,6 +2,9 @@
 title = "How I Stay Organized"
 description = "A review of my personal organizational system and tools I use to enhance it"
 date = 2024-03-18
+
+[extra]
+ogimage = "how-i-stay-organized.png"
 +++
 When I describe the Yesod web framework, one of the terms I use is the
 boundary issue. Internally, I view Yesod as an organized, structured,

@@ -3,6 +3,9 @@ title = "My Path to Bitcoin"
 description = "My personal story of changing my opinion on Bitcoin."
 path = "/blog/2024/11/my-path-to-bitcoin"
 date = 2024-11-18
+
+[extra]
+ogimage = "my-path-to-bitcoin.png"
 +++
 Since [deciding to write more blog posts again](@/blog/personal-update-upcoming-blogging.md), I’ve drafted and thrown away a few different versions of this blog post. Originally, I was going to try to explain how Bitcoin works, or motivate to others why they should care about it. But the reality is that there is already much better material out there than I can produce. So instead, I’ve decided to make this much more personal: my own journey, why I ultimately changed my opinion and decided to embrace Bitcoin, and then answer some questions and comments I’ve received from others.
 

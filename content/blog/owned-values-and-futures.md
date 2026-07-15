@@ -1,6 +1,9 @@
 +++
 title = "Owned values and Futures in Rust"
 date = 2023-09-10
+
+[extra]
+ogimage = "owned-values-and-futures.png"
 +++
 Let's write a simple `tokio`-powered program that will download the contents of an HTTP response body using `reqwest` and print it to stdout. We'll take the URL to download on the command line using `clap`. This might look something like the following:
 

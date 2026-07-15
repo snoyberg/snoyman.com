@@ -1,6 +1,9 @@
 +++
 title = "Type Safety Doesn't Matter"
 date = 2023-08-28
+
+[extra]
+ogimage = "type-safety-doesnt-matter.png"
 +++
 I'm a huge believer in using strongly typed languages and leveraging type level protections in my codebases. But I'd like to clarify my new, somewhat modified stance on this:
 

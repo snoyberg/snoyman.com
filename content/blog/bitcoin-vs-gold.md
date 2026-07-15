@@ -3,6 +3,9 @@ title = "Bitcoin vs Gold"
 description = "My review of a debate between Peter Schiff and Jack Mallers on gold and Bitcoin"
 path = "/blog/2024/10/bitcoin-vs-gold"
 date = 2024-10-08
+
+[extra]
+ogimage = "bitcoin-vs-gold-editorial.png"
 +++
 
 I just watched an interview between Peter Schiff and Jack Mallers about gold versus Bitcoin. I’d recommend it to anyone interested in either asset, or more generally to those interested in the theories of economics and money in general:

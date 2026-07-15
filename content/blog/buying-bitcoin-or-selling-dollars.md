@@ -3,6 +3,9 @@ title = "Buying Bitcoin or selling dollars?"
 description = "It may sound like a purely semantic discussion, but when I trade dollars for Bitcoin, am I buying Bitcoin? Or am I selling dollars? Let's explore."
 path = "/blog/2024/10/buying-bitcoin-or-selling-dollars"
 date = 2024-10-13
+
+[extra]
+ogimage = "buying-bitcoin-or-selling-dollars.png"
 +++
 The act of trading means that both sides give up one good for something they value more. When I go to the supermarket, I’m giving the supermarket dollars (or euros, or shekels) in exchange for food. I value the food more than the money. The supermarket values the money more than the food. Everyone walks away happy with a successful trade.
 
