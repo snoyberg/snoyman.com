@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-footer text-muted">
-      <time datetime="{{ page.date }}">Published {{ page.date | date(format="%B %e, %Y") }}</time>
+      <time datetime="{{ page.date | date(format="%F") }}">Published {{ page.date | date(format="%B %e, %Y") }}</time>
     </div>
   </article>
 {% endfor %}
