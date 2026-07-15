@@ -4,7 +4,7 @@ This contains the code and content for the [snoyman.com](https://www.snoyman.com
 
 ## Local development
 
-The site is built with [Zola 0.22.1](https://github.com/getzola/zola/releases/tag/v0.22.1), matching the version pinned for Netlify.
+The site is built with [Zola 0.22.1](https://github.com/getzola/zola/releases/tag/v0.22.1).
 
 ```console
 zola serve
