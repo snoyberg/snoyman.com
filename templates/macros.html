@@ -2,8 +2,8 @@
 
 <nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg" aria-label="Primary navigation">
   <div class="container">
-    <a class="navbar-brand" href="/">
-      <img src="/img/snoylogo-v2.png" width="213" height="44" alt="Michael Snoyman home">
+    <a class="navbar-brand" href="{{ get_url(path="@/_index.md") }}">
+      <img src="{{ get_url(path="img/snoylogo-v2.png") }}" width="213" height="44" alt="Michael Snoyman home">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars"></i>
@@ -11,10 +11,10 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo">
       <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
         <li class="nav-item mb-2 mb-lg-0">
-          <a class="nav-link" href="/blog">Blog</a>
+          <a class="nav-link" href="{{ get_url(path="@/blog/_index.md") }}">Blog</a>
         </li>
         <li class="nav-item mb-2 mb-lg-0">
-          <a class="nav-link" href="/work/">Work with me</a>
+          <a class="nav-link" href="{{ get_url(path="@/work.md") }}">Work with me</a>
         </li>
         <li class="nav-item mb-2 mb-lg-0">
           <a class="nav-link" href="https://www.linkedin.com/in/snoyberg/">LinkedIn</a>
@@ -45,7 +45,7 @@
         <li class="list-inline-item"><a href="https://x.com/snoyberg">X</a></li>
         <li class="list-inline-item"><a href="https://github.com/snoyberg">GitHub</a></li>
         <li class="list-inline-item"><a href="https://www.youtube.com/c/snoyberg">YouTube</a></li>
-        <li class="list-inline-item"><a href="/rss.xml">RSS</a></li>
+        <li class="list-inline-item"><a href="{{ get_url(path="rss.xml") }}">RSS</a></li>
       </ul>
     </div>
     <div class="footer-work">
@@ -61,7 +61,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <!-- Open external links in a different tab -->
-<script src="/static/external-links.js"></script>
+<script src="{{ get_url(path="static/external-links.js") }}"></script>
 <!-- END JAVASCRIPTS -->
 {% endmacro bodyend %}
 
@@ -135,20 +135,20 @@
 {% endmacro share %}
 
 {% macro favicons() %}
-<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" sizes="57x57" href="{{ get_url(path="apple-icon-57x57.png") }}">
+<link rel="apple-touch-icon" sizes="60x60" href="{{ get_url(path="apple-icon-60x60.png") }}">
+<link rel="apple-touch-icon" sizes="72x72" href="{{ get_url(path="apple-icon-72x72.png") }}">
+<link rel="apple-touch-icon" sizes="76x76" href="{{ get_url(path="apple-icon-76x76.png") }}">
+<link rel="apple-touch-icon" sizes="114x114" href="{{ get_url(path="apple-icon-114x114.png") }}">
+<link rel="apple-touch-icon" sizes="120x120" href="{{ get_url(path="apple-icon-120x120.png") }}">
+<link rel="apple-touch-icon" sizes="144x144" href="{{ get_url(path="apple-icon-144x144.png") }}">
+<link rel="apple-touch-icon" sizes="152x152" href="{{ get_url(path="apple-icon-152x152.png") }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ get_url(path="apple-icon-180x180.png") }}">
+<link rel="icon" type="image/png" sizes="192x192" href="{{ get_url(path="android-icon-192x192.png") }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ get_url(path="favicon-32x32.png") }}">
+<link rel="icon" type="image/png" sizes="96x96" href="{{ get_url(path="favicon-96x96.png") }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ get_url(path="favicon-16x16.png") }}">
+<link rel="manifest" href="{{ get_url(path="manifest.json") }}">
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">

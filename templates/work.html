@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block pagehead %}
-<link rel="stylesheet" href="/static/home.css">
+<link rel="stylesheet" href="{{ get_url(path="static/home.css") }}">
 {% endblock pagehead %}
 
 {% block subtitle %}
@@ -14,7 +14,7 @@
 <div class="work-intro">
   {{ page.content | safe }}
   <div class="hero-actions">
-    <a class="btn btn-primary" href="/resume.pdf">Download résumé</a>
+    <a class="btn btn-primary" href="{{ get_url(path="resume.pdf") }}">Download résumé</a>
     <a class="btn btn-outline-primary" href="mailto:michael@snoyman.com">Contact me</a>
   </div>
 </div>

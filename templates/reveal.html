@@ -3,10 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>{{ page.title }}</title>
-        <link rel="stylesheet" href="/static/reveal/css/reveal.css">
-        <link rel="stylesheet" href="/static/reveal/css/theme/black.css" id="theme">
-        <link rel="stylesheet" href="/static/reveal/css/highlight/zenburn.css">
-        <link rel="stylesheet" href="/static/reveal/css/print/paper.css" type="text/css" media="print">
+        <link rel="stylesheet" href="{{ get_url(path="static/reveal/css/reveal.css") }}">
+        <link rel="stylesheet" href="{{ get_url(path="static/reveal/css/theme/black.css") }}" id="theme">
+        <link rel="stylesheet" href="{{ get_url(path="static/reveal/css/highlight/zenburn.css") }}">
+        <link rel="stylesheet" href="{{ get_url(path="static/reveal/css/print/paper.css") }}" type="text/css" media="print">
     </head>
     <body>
         <div class="reveal">
@@ -20,8 +20,8 @@
             </div>
         </div>
 
-        <script src="/static/reveal/lib/js/head.min.js"></script>
-        <script src="/static/reveal/js/reveal.js"></script>
+        <script src="{{ get_url(path="static/reveal/lib/js/head.min.js") }}"></script>
+        <script src="{{ get_url(path="static/reveal/js/reveal.js") }}"></script>
 
         <script>
             function extend() {

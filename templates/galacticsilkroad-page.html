@@ -6,9 +6,9 @@
 {% endif %}
 
 {% if page.extra.ogimage %}
-<meta property="og:image" content="{{ config.base_url }}/thumbs/{{ page.extra.ogimage }}">
+<meta property="og:image" content="{{ get_url(path="thumbs/" ~ page.extra.ogimage) }}">
 {% else %}
-<meta property="og:image" content="{{ config.base_url }}/img/galacticsilkroad.jpeg">
+<meta property="og:image" content="{{ get_url(path="img/galacticsilkroad.jpeg") }}">
 {% endif %}
 <meta name="twitter:card" content="summary_large_image">
 

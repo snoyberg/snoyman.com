@@ -3,6 +3,6 @@
 {% block content %}
 <div class="text-center py-5">
   <p class="lead">The page you were looking for could not be found.</p>
-  <a class="btn btn-primary" href="/">Return home</a>
+  <a class="btn btn-primary" href="{{ get_url(path="@/_index.md") }}">Return home</a>
 </div>
 {% endblock content %}

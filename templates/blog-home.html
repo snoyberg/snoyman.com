@@ -7,9 +7,9 @@
 {% for page in paginator.pages %}   
   <article class="card blog-card mb-4">
     {% if page.extra.ogimage %}
-      {% set image = "/thumbs/" ~ page.extra.ogimage %}
+      {% set image = get_url(path="thumbs/" ~ page.extra.ogimage) %}
     {% else %}
-      {% set image = "/thumbs/default-v2.jpg" %}
+      {% set image = get_url(path="thumbs/default-v2.jpg") %}
     {% endif %}
     <div class="blog-image-title">
       <a href="{{ page.permalink | safe }}">
