@@ -13,7 +13,7 @@ If you really do want to learn the best arguments in favor of Bitcoin (as oppose
 
 OK, without further ado, my path to Bitcoin!
 
-# Before Bitcoin
+## Before Bitcoin
 
 My worldview is highly impactful on this discussion, so I need to get the cliffnotes of my outlook clarified. I come from a financially conservative background. I grew up believing that dollars were king, fixed income savings were good, and the stock market was little more than a casino. I ran most of my financial investments like that for most of my life, either investing in property (i.e., the house I own, not extra investment properties) or keeping cash, US treasuries, and Certificates of Deposit (CDs). When I went truly crazy, I would occasionally invest in the S&P 500 index, the least gambly of gambling. (I’ve [commented on that previously](@/blog/buying-bitcoin-or-selling-dollars.md).)
 
@@ -27,7 +27,7 @@ It was macroeconomics that I couldn’t understand. Why did all the rules of mic
 
 I was just a math student larping as an economist, not a true economist, so I incorrectly assumed that this was all just beyond my feeble understanding. And I happily lived my life for about 15 years as an actuary/programmer who enjoyed some economics and lived a fiscally conservative lifestyle.
 
-# First hints of Bitcoin
+## First hints of Bitcoin
 
 I heard about Bitcoin relatively early in its existence. My wife and I even discussed buying some when it was still under a dollar. To our chagrin, we didn’t. This fit in nicely with my “avoid casinos” approach. Bitcoin was simply a get-rich-quick scam, a Ponzi scheme, fake internet money, you name it. To be completely fair, I didn’t fully come to those conclusions at the time, but it was more-or-less what I thought.
 
@@ -37,7 +37,7 @@ I spent close to 7 years having virtually nothing to do with blockchain and cryp
 
 I won’t call out any specific projects. But suffice it to say that I walked away completely believing that all of “crypto” was a scam. And to quote a phrase from Jewish literature, אוי לרשע אוי לשכנו (woe to the evil one, woe to his neighbor). I must have opened up a Binance account at some point in this, and probably bought some crypto to get a feel for how it all worked. But I had no interest in being part of the space. Blockchain seemed like a cool technology on its own early in its hype cycle. But cryptocurrency itself wasn’t for me.
 
-# COVID-19, money printer goes brrrr
+## COVID-19, money printer goes brrrr
 
 When COVID-19 began kicking off, many of us saw the huge amount of money printing, paired with forced lack of productivity due to various COVID restrictions. The combination meant that, simultaneously, true productivity in the economy slowed down (meaning: less goods) and more money was chasing those goods. A *lot* more money. Money printer goes brrr.
 
@@ -59,7 +59,7 @@ I want to be clear that this was *not* a purchase of me saying “I’m a total 
 
 I invested in crypto like I would invest in stocks: I chose a basket of the top performers at the time, diversified my money into them, and hoped for the best.
 
-## Terra collapse
+### Terra collapse
 
 This is a side note almost not worth including, but some people may be comforted by this part of the story.
 
@@ -73,7 +73,7 @@ The point of the inclusion of this here: I basically went through the worst poss
 
 The important part for everyone: don’t fall into the sunk cost fallacy\! If you’ve taken losses on an investment, try to stay calm, look at it rationally, and make the best decision you possibly can with current knowledge and no emotional input.
 
-# The Bitcoin maxi path
+## The Bitcoin maxi path
 
 I’m almost embarrassed by this next sentence. Despite working in the crypto space off-and-on for about 8 years now, and despite spending 3 years full-time working on crypto and Decentralized Finance products, I only recently understood the connection between the beginning of this story (the Great Financial Crisis of 2008\) and Bitcoin.
 
@@ -89,13 +89,13 @@ Putting that all together: a monetary system which allows for no inflation and g
 
 I no longer look at my investment in Bitcoin as a risk. I’ve switched worldviews completely. Every other asset I hold is the risk. I can be hurt significantly by this of course. If Bitcoin has another bear market and I need to buy groceries, I’ll be taking a huge loss on the Bitcoin I need to liquidate. (I discuss how I address this in my [buying Bitcoin or selling dollars post](@/blog/buying-bitcoin-or-selling-dollars.md).)
 
-# Aren’t I scared?
+## Aren’t I scared?
 
 Yes. I think we’re living in some of the scariest financial times of our lives. But my viewpoint now is that *everything* is risky, there’s no escaping it. There isn’t a safe-haven in dollars and potentially big gains in other assets. Everything is on a precipice right now. And my honest belief is that, for the long haul, Bitcoin is the least risky of all potentially stores of value.
 
 Am I right? We’ll know in 20 years.
 
-# My recommendation to others
+## My recommendation to others
 
 This is my personal journey. This story shouldn’t convince anyone to do anything with their money. I haven’t presented any true arguments in favor of Bitcoin here, just some comments and references to larger ideas.
 
@@ -103,7 +103,7 @@ If you take anything away from this, I hope it’s this: there’s some guy out 
 
 I hope that motivates those of you who are opposed to Bitcoin to do a bit more research. Challenge the ideas you read. Challenge the ideas you already hold. Ask questions. Get in debates. Treat this seriously. Because whichever way you decide, for or against Bitcoin, will likely have a major impact on the rest of your life.
 
-# Random Q\&A
+## Random Q\&A
 
 I received some questions previously on my [Bitcoin vs gold](@/blog/bitcoin-vs-gold.md) blog post, and haven’t had a chance to answer them in another post. Instead of a dedicated post for that, this seems like a good time to address that.
 

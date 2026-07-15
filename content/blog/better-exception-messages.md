@@ -7,9 +7,6 @@ date = 2017-02-16
 
 [extra]
 +++
-Better exception messages
-=========================
-
 Let's write a really silly, highly inefficient (my favorite kind!) program that
 connects to multiple HTTP servers and sends a very simple request. Using the
 network package, this is really straightforward:

@@ -16,9 +16,7 @@ intriguing or useful.
 
 The project is available
 [on Github at snoyberg/safe-prelude](https://github.com/snoyberg/safe-prelude#readme),
-and I've
-[uploaded the Haddocks for easier reading](/static/safe-prelude/SafePrelude.html)
-(though, be warned, they aren't well organized at all). The rest of
+The rest of
 this post is just a copy of the `README.md` file for the project.
 
 * * *

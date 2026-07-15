@@ -1,18 +1,17 @@
 {% extends "index.html" %}
 
-{% block pagehead %}
-{% if page.description %}
-<meta property="og:description" content="{{ page.description }}">
-{% endif %}
+{% block ogtype %}<meta property="og:type" content="article">{% endblock ogtype %}
 
+{% block socialmeta %}
+<meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ config.description }}{% endif %}">
 {% if page.extra.ogimage %}
 <meta property="og:image" content="{{ get_url(path="thumbs/" ~ page.extra.ogimage) }}">
 {% else %}
 <meta property="og:image" content="{{ get_url(path="thumbs/default-v2.jpg") }}">
 {% endif %}
+<meta property="og:image:alt" content="{{ page.title }}">
 <meta name="twitter:card" content="summary_large_image">
-
-{% endblock pagehead %}
+{% endblock socialmeta %}
 
 {% block subtitle %}
 <p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Published {{ page.date | date(format="%B %e, %Y") }}</p>
@@ -35,16 +34,12 @@
         {{ page.content | safe }}
       </div>
 
-<div class="text-center"><a href="{{ get_url(path="@/blog/_index.md") }}" class="btn btn-primary">Read more blog posts</a></div>
-
-      {{ macros::blog_email() }}
-
       <div id="disqus_thread"></div>
       <script>
         (function() {var d = document, s = d.createElement('script'); s.src = '//snoyberg.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s);})();
       </script>
       <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-<div class="text-center"><a href="{{ get_url(path="@/blog/_index.md") }}" class="btn btn-primary">Read more blog posts</a></div>
+<div class="text-center mt-5"><a href="{{ get_url(path="@/blog/_index.md") }}" class="btn btn-primary">Read more blog posts</a></div>
 
 {% endblock content %}

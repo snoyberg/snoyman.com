@@ -55,7 +55,7 @@ There are plenty of details you can quibble with above. It’s in a company’s 
 
 Using our model from above, we can lament how lazy, greedy, and unethical the employees are for doing what they’re incentivized to do instead of what’s right. But that’s simply ignoring the reality of human nature.
 
-# Moral hazard
+## Moral hazard
 
 Moral hazard is a situation where one party is incentivized to take on more risk because another party will bear the consequences. Suppose I tell my son when he turns 21 (or whatever legal gambling age is) that I’ll cover all his losses for a day at the casino, but he gets to keep all the winnings.
 
@@ -79,7 +79,7 @@ It’s easy to demonstrate that by extending the casino example a bit. I said it
 
 And since we’re talking about the government already…
 
-## Government moral hazards
+### Government moral hazards
 
 As I was preparing to write this blog post, the California wildfires hit. The discussions around those wildfires gave a *huge* number of examples of moral hazards. I decided to cherry-pick a few for this post.
 
@@ -97,7 +97,7 @@ And here’s the absolute best part of this: I can’t even truly blame either C
 
 There’s a lot more to government and moral hazard, but I think these two cases demonstrate the crux pretty solidly. But let’s leave moral hazard behind for a bit and get to general incentivization discussions.
 
-# Non-monetary competition
+## Non-monetary competition
 
 At least 50% of the economics knowledge I have comes from the very first econ course I took in college. That professor was amazing, and had some very colorful stories. I can’t vouch for the veracity of the two I’m about to share, but they definitely drive the point home.
 
@@ -117,7 +117,7 @@ So who did she choose? A young, unmarried, wealthy, white woman. It made perfect
 
 You can deride her for being racist, I won’t disagree with you. But it’s simply the reality. Under the non-rent-control scenario, her profit motive for money outweighed her racism motive. But under rent control, the monetary competition was removed, and she was free to play into her racist tendencies without facing any negative consequences.
 
-## Bureaucracy
+### Bureaucracy
 
 These were the two examples I remember for that course. But non-monetary compensation pops up in many more places. One highly pertinent example is bureaucracies. Imagine you have a government office, or a large corporation’s acquisition department, or the team that apportions grants at a university. In all these cases, you have a group of people making decisions about handing out money that has no monetary impact on them. If they give to the best qualified recipients, they receive no raises. If they spend the money recklessly on frivolous projects, they face no consequences.
 
@@ -125,7 +125,7 @@ Under such an incentivization scheme, there’s little to encourage the bureaucr
 
 Compare that ever so briefly with the purchases made by a small mom-and-pop store like my parents owned. Could my dad take a bribe to buy from a vendor who’s ripping him off? Absolutely he could\! But he’d lose more on the deal than he’d make on the bribe, since he’s directly incentivized by the deal itself. It would make much more sense for him to go with the better vendor, save $5,000 on the deal, and then treat himself to a lavish $400 meal to celebrate.
 
-# Government incentivized behavior
+## Government incentivized behavior
 
 This post is getting longer in the tooth than I’d intended, so I’ll finish off with this section and make it a bit briefer. Beyond all the methods mentioned above, government has another mechanism for modifying behavior: through directly changing incentives via legislation, regulation, and monetary policy. Let’s see some examples:
 
@@ -136,7 +136,7 @@ This post is getting longer in the tooth than I’d intended, so I’ll finish o
 * Tax incentives cause people to engage in behavior they wouldn’t otherwise (daycare+working mother, for example).  
 * Inflation means that the value of your money goes down over time, which encourages people to spend more today, when their money has a larger impact. (Milton Friedman described this as [high living](https://www.youtube.com/watch?v=ZwNDd2_beTU).)
 
-# Conclusion
+## Conclusion
 
 The idea here is simple, and fully encapsulated in the title: incentives determine outcomes. If you want to know how to get a certain outcome from others, incentivize them to want that to happen. If you want to understand why people act in seemingly irrational ways, check their incentives. If you’re confused why leaders (and especially politicians) seem to engage in destructive behavior, check their incentives.
 

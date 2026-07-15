@@ -14,7 +14,7 @@ You may notice, all of these acts are really identical to trading, it’s just a
 
 Which brings me to the point of this post: buying Bitcoin.
 
-# Buying Bitcoin
+## Buying Bitcoin
 
 I come from a fairly traditional, if very conservative, financial background. I was raised in a house that believes putting money in the stock market is essentially reckless gambling, and then my university education included a lot of economics and finance courses, which gave me a broader view. I’m still fairly conservative in my investments, and was very crypto-wary for a while. I care more about long-term security, not short term gains. Investing in Bitcoin seemed foolish.
 
@@ -24,13 +24,13 @@ As those 5 years have trudged along, I’ve become more confident in Bitcoin, an
 
 All of this led to the question that kicked off this blog post:
 
-# Am I buying Bitcoin, or selling dollars?
+## Am I buying Bitcoin, or selling dollars?
 
 Remember that buying and selling are both the same thing as trading. There’s no difference between the act of buying Bitcoin with dollars, or selling dollars for Bitcoin. It’s just a difference in what you view as the real money. Most people in the world would consider the dollar to be the real money in the equation.
 
 I have some background in Talmudic study, and one of the common phrases we use in studying Talmud is [מאי נפקא מינה](https://en.wikipedia.org/wiki/Nafka_minnah), pronounced “my nafka meena,” or “what is the practical difference between these two?” There’s no point having a pure debate about terminology. Is there any practical difference in how I relate to the world whether I’m buying Bitcoin or selling dollars? And after some thinking, I realized what it is.
 
-# Entering a trade
+## Entering a trade
 
 Forget Bitcoin entirely. I wake up one morning, and go to my brokerage account. I’ve got $50,000 in cash sitting there, waiting to be invested. Let’s say that represents half of my net worth. I start looking at the charts, doing some research, and I strongly believe that a company’s stock is undervalued and is about to go up significantly. What do I do?
 
@@ -44,7 +44,7 @@ Let’s say I *did* buy the stock, it *did* go up 20%, and now I’m nervous it�
 
 By selling early, I risk losing out on further potential gains. Economically, that’s equivalent to losing money when you view things as opportunity costs. But the risks of losing value, to someone fiscally conservative and risk averse like me, outweigh the potential gains.
 
-# The price of Bitcoin, the price of the dollar
+## The price of Bitcoin, the price of the dollar
 
 Alright, back to Bitcoin. My practical difference absolutely applies here. Let’s say (for simplicity of numbers) that the current price of Bitcoin is $50,000. I’m sitting on 1 BTC and $50,000 cash. I have three options:
 
@@ -69,7 +69,7 @@ Anyway, let’s come back to the case in point. We have two different world view
 
 You may notice that cases 1a and 2b are equivalent: the price of Bitcoin going up is the same as the price of the dollar going down. The same with cases 1b and 2a. And more obviously, cases 1c and 2c are the same: in both cases, I don’t know where I think the prices will go.
 
-# Risk-averse defaults
+## Risk-averse defaults
 
 This is where risk aversion should come into play. Put simply: what is the least risky asset to hold? In our stock case, it was clearly the dollar. And if you asked me 5 years ago, I absolutely would have said holding onto dollars is far less risky than holding onto Bitcoin.
 
@@ -79,7 +79,7 @@ I understand and completely respect the viewpoint that Bitcoin is imaginary inte
 
 In other words, as I stared at this argument, I came to a clear conclusion: my worldview is that the risk-averse asset to hold these days is Bitcoin, not dollars. But this bothered me even more.
 
-# Tzvei dinim
+## Tzvei dinim
 
 OK, I’m a full-on Bitcoin Maxi. I should liquidate all my existing investments and convert them to Bitcoin. Every time I get a paycheck, I should convert the full value into Bitcoin. I’ll never touch a dollar again. Right?
 
@@ -98,7 +98,7 @@ This significantly assuaged my feelings of cognitive dissonance. And it allows m
 * Invest money speculatively based on strong beliefs about where asset prices are heading  
 * And beyond that, keep the rest of the money in Bitcoin, not dollars. Over time, the dollar *will* decrease in value, and Bitcoin *will* increase in value. I’d rather have my default exposure be to the asset that’s going up, not down.
 
-# Conclusion
+## Conclusion
 
 Thanks for going on this journey with me. The point here isn’t to evangelize anything in particular. As I said, I understand and respect the hesitancy to buy into a new asset class. I’ve been working in the blockchain field for close to a decade now, and I've only recently come around to this way of thinking. And it’s entirely possible that I’m completely wrong, Bitcoin will turn out to be a complete scam asset and go to 0, and I’ll bemoan my stupid view of the world I’m sharing in this post. If so, please don’t point and laugh when you see me.
 
@@ -106,7 +106,7 @@ My point in this post is primarily to solidify my own viewpoint for myself. And 
 
 And if I did end up publishing this and you’re reading it now, here’s my secondary point: helping others gain a new perspective. I think it’s always valuable to challenge your assumptions. If you’ve been looking at “cryptobros” as crazy investors hoping to make 10,000% returns on a GIF, I’m hoping this post gives you a different perspective of viewing Bitcoin as a better store of value than traditional assets. Feel free to disagree with me\! But I hope you at least give the ideas some time to percolate.
 
-# Appendix 1: risk aversion
+## Appendix 1: risk aversion
 
 I’m sure plenty of people will read this and think I’m lying to myself. I claim to be risk averse, but I’m gambling on a new and relatively untested asset class. Putting money into the stock market is a far more well-established mechanism for providing inflation protection, and investing in indices like the S\&P 500 provides good hedging of risks. So why would I buy into Bitcoin instead?
 
@@ -120,7 +120,7 @@ By contrast, the underlying mechanism for the stock market going up over time is
 
 My views on the stock market are somewhat extreme and colored by the extremely risk-averse viewpoint I received growing up. Others will likely disagree completely that the stock market is pure speculation. And they’d also probably laugh at the idea that Bitcoin has *more* inherent value than the way stocks are traded. It’s still my stance.
 
-# Appendix 2: cryptobros
+## Appendix 2: cryptobros
 
 I mentioned cryptobros above, and made a reference to NFTs. Before getting deeper into the space, I had–like many others–believed “Bitcoin” and “crypto” were more or less synonymous. True believers in Bitcoin, and I’m slowly coming to admit that I’m one of them, disagree completely. Bitcoin is a new monetary system based on fixed supply, no centralized control, censorship resistance, and pseudo-anonymity. Crypto in many of its forms is little more than get-rich-quick schemes.
 
@@ -128,7 +128,7 @@ I don’t believe that’s true across the board for all crypto assets. I *do* b
 
 So just keep in mind, crypto does not necessarily mean the same thing as Bitcoin.
 
-# Appendix 3: drei dinim
+## Appendix 3: drei dinim
 
 I mentioned “tzvei dinim” above, meaning “two laws.” I want to introduce a drei dinim, meaning three laws. (And if I mistransliterated Yiddish, my apologies, I don’t actually speak the language at all.) I described short-term vs long-term above. In reality, I think there are really three different ideas at play:
 
@@ -140,7 +140,7 @@ My view is that, due to the inflationary nature of fiat currency, groups (2) and
 
 I want a world where there’s an asset that retains its value over time, regardless of inflation and money printing. Bitcoin is designed to do just that. But if you *really* think a stock is going to go up 75% in a week, category (3) still gives plenty of room to do speculative investment, without violating the rest of the cognitive framework I’ve described.
 
-# Appendix 4: why specifically Bitcoin?
+## Appendix 4: why specifically Bitcoin?
 
 The arguments I’ve given above just argue for a currency that has a fixed maximum supply. You could argue decentralization is a necessary feature too, since it’s what guarantees the supply won’t be changed. So why is Bitcoin in particular the thing we go with? To go to the absurd, why doesn’t each person on the planet make their own coin (e.g. my Snoycoin) and use that as currency?
 

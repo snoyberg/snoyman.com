@@ -7,7 +7,7 @@ date = 2017-07-05
 
 [extra]
 +++
-#### *With great power comes great responsibility*
+*With great power comes great responsibility*
 
 I was
 [recently reminded](https://twitter.com/snoyberg/status/880637139574304769)

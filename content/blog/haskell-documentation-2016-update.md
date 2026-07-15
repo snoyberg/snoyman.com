@@ -12,7 +12,7 @@ a bit in the past. Following up on
 [tooling issues](https://www.fpcomplete.com/blog/2015/05/thousand-user-haskell-survey),
 all available evidence tells me that improving the situation for
 documentation in Haskell is the next
-[obstacle we need to knock down](/blog/2016/11/spreading-the-gospel-of-haskell#attacking-haskell39s-flaws).
+[obstacle we need to knock down](/blog/2016/11/spreading-the-gospel-of-haskell#attacking-haskell-s-flaws).
 
 This blog post will cover:
 

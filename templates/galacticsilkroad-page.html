@@ -1,18 +1,17 @@
 {% extends "index.html" %}
 
-{% block pagehead %}
-{% if page.description %}
-<meta property="og:description" content="{{ page.description }}">
-{% endif %}
+{% block ogtype %}<meta property="og:type" content="article">{% endblock ogtype %}
 
+{% block socialmeta %}
+<meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ config.description }}{% endif %}">
 {% if page.extra.ogimage %}
 <meta property="og:image" content="{{ get_url(path="thumbs/" ~ page.extra.ogimage) }}">
 {% else %}
 <meta property="og:image" content="{{ get_url(path="img/galacticsilkroad.jpeg") }}">
 {% endif %}
+<meta property="og:image:alt" content="{{ page.title }}">
 <meta name="twitter:card" content="summary_large_image">
-
-{% endblock pagehead %}
+{% endblock socialmeta %}
 
 {% block content %}
 

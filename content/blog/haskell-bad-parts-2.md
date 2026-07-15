@@ -23,7 +23,7 @@ Partial functions are the antithesis of this concept. They allow you to say "yea
 
 Alright, so plenty of languages screw this up. Haskell tells those languages "hold my beer."
 
-<img src="/static/images/holdmybeer.jpg" style="max-width:90%">
+<img src="/static/images/holdmybeer.jpg" alt="Hold my beer" style="max-width:90%">
 
 Haskell screws up partial functions way, way worse than other languages:
 

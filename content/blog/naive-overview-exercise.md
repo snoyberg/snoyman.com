@@ -296,10 +296,10 @@ with these terms:
 
 * A barbell is a long metal bar (about 2 meters or 6 feet) that you
   usually hold with both
-  hands.<br><img src="/static/exercise/barbell.jpg" width="300">
-* A dumbbell is a shorter metal bar usually held in one hand<br><img src="/static/exercise/dumbbell.png" width="300">
-* A kettlebell is a weight with a handle on the top<br><img src="/static/exercise/kettlebell.png" width="300">
-* A machine is some kind of, well, machine<br><img src="/static/exercise/machine.jpg" width="300">
+  hands.<br><img src="/static/exercise/barbell.jpg" alt="Barbell" width="300">
+* A dumbbell is a shorter metal bar usually held in one hand<br><img src="/static/exercise/dumbbell.png" alt="Dumbbell" width="300">
+* A kettlebell is a weight with a handle on the top<br><img src="/static/exercise/kettlebell.png" alt="Kettlebell" width="300">
+* A machine is some kind of, well, machine<br><img src="/static/exercise/machine.jpg" alt="Exercise machine" width="300">
 
 Free weights have an advantage over machines in that they are
 _unstable_. This means you need to use more muscle groups to keep

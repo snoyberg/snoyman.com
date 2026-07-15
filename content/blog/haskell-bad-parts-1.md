@@ -11,7 +11,7 @@ series = ["haskell-bad-parts"]
 +++
 There's a popular book called _JavaScript: The Good Parts_. And there's a common meme around the relative size of that book versus _JavaScript: The Definitive Guide_.
 
-<img src="https://i.imgur.com/wIf3EJh.jpg" style="max-width:80%"> 
+<img src="https://i.imgur.com/wIf3EJh.jpg" alt="A list of Haskell's bad parts" style="max-width:80%">
 
 Haskell is, in my opinion, a far more well designed and coherent language than JavaScript. However, it's also an old language with some historical baggage. In many ways, it's a bleeding edge research language that sometimes includes...half-baked features. Due to an inconsistent set of rules around backwards compatibility, it will sometimes break code every six months, and sometimes keep strange decisions around for decades.
 

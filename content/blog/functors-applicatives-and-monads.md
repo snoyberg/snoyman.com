@@ -470,14 +470,14 @@ main = do
             _ -> Prelude.putStrLn "Try again"
     ```
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="accordion-473" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
     <div class="panel-heading" role="tab">
-    <h4 class="panel-title">
+    <h3 class="panel-title">
     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseOne" aria-expanded="true" aria-controls="collapseOne">
     Show Solution
     </a>
-    </h4>
+    </h3>
     </div>
     <div id="exerciseOne" class="panel-collapse collapse" role="tabpanel">
     <div class="panel-body">
@@ -503,14 +503,14 @@ main = do
         | otherwise = putStrLn "Incorrect, please try again"
     ```
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="accordion-506" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
     <div class="panel-heading" role="tab">
-    <h4 class="panel-title">
+    <h3 class="panel-title">
     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseTwo" aria-expanded="true" aria-controls="collapseTwo">
     Show Solution
     </a>
-    </h4>
+    </h3>
     </div>
     <div id="exerciseTwo" class="panel-collapse collapse" role="tabpanel">
     <div class="panel-body">
@@ -554,14 +554,14 @@ main = do
         displayAge maybeAge
     ```
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="accordion-557" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
     <div class="panel-heading" role="tab">
-    <h4 class="panel-title">
+    <h3 class="panel-title">
     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseThree" aria-expanded="true" aria-controls="collapseThree">
     Show Solution
     </a>
-    </h4>
+    </h3>
     </div>
     <div id="exerciseThree" class="panel-collapse collapse" role="tabpanel">
     <div class="panel-body">
@@ -596,14 +596,14 @@ main = do
         | otherwise = putStrLn "Please try again"
     ```
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="accordion-599" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
     <div class="panel-heading" role="tab">
-    <h4 class="panel-title">
+    <h3 class="panel-title">
     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseFour" aria-expanded="true" aria-controls="collapseFour">
     Show Solution
     </a>
-    </h4>
+    </h3>
     </div>
     <div id="exerciseFour" class="panel-collapse collapse" role="tabpanel">
     <div class="panel-body">
@@ -638,14 +638,14 @@ main = do
         | otherwise = putStrLn "Please try again"
     ```
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="accordion-641" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
     <div class="panel-heading" role="tab">
-    <h4 class="panel-title">
+    <h3 class="panel-title">
     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseFive" aria-expanded="true" aria-controls="collapseFive">
     Show Solution
     </a>
-    </h4>
+    </h3>
     </div>
     <div id="exerciseFive" class="panel-collapse collapse" role="tabpanel">
     <div class="panel-body">

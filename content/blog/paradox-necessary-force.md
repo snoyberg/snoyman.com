@@ -17,7 +17,7 @@ The producer approach is better for society in every conceivable way. The looter
 
 Looter philosophy is rooted in the concept of the zero sum game, the mistaken belief that I can only have more if someone else has less. By contrast, the producer philosophy correctly identifies the fact that we can *all* end up better by producing more goods in more efficient ways. We live in our modern world of relatively widespread luxury because producers have made technological leaps—for their own self-serving motives—that have improved everyone’s ability to produce more goods going forward. Think of the steam engine, electricity, computing power, and more.
 
-# A producer-only world
+## A producer-only world
 
 It would be wonderful to live in a world in which there are no looters. We all produce, we all trade, everyone receives more value than they give, and there is no wasted energy or destruction from the use of force.
 
@@ -27,7 +27,7 @@ I believe many economists—especially Austrian economists—are cheering for th
 
 There’s only one problem with this vision, and it’s also based in economics: game theory.
 
-# Game theory and looters
+## Game theory and looters
 
 Imagine I’m a farmer. I’m a great farmer, I have a large plot of land, I run my operations efficiently, and I produce huge amounts of food. I sell that food into the marketplace, and with that money I’m able to afford great resources from other people, who willingly trade them to me because they value the money more than their own resources. For example, how many T-shirts does the clothing manufacturer need? Instead of his 1,000th T-shirt, he’d rather sell it for $5 and buy some food.
 
@@ -39,7 +39,7 @@ In other words, he could be a producer and get 5% in exchange for hard work, or 
 
 So how do we stop a producer world from devolving back into a looter world?
 
-# Deterrence
+## Deterrence
 
 There’s only one mechanism I’m aware of for this, and it’s deterrence. As the farmer, I made a mistake. I *should* get weapons training. I *should* keep weapons on my farm. I *should* be ready to defend myself and my property. Because if I don’t, game theory ultimately predicts that all trade will collapse, and society as we know it will crumble.
 
@@ -53,7 +53,7 @@ And in California, this is even worse. Those who try to be their own deterrence,
 
 I’m guessing this phrasing has now split my reading audience into three groups. Group A agrees wholly with what I’m saying. Group B believes what I’ve just written is pure evil and garbage. Group C initially disagreed with my statements, but has an open mind and is willing to consider a different paradigm. The next section is targeted at groups A and C. Group B: good luck with the broken world you’re advocating.
 
-# Global scale
+## Global scale
 
 This concept of deterrence applies at a global scale too. I would love to live in a world where all nations exchange value for value and never use force against others. In fact, I believe the ultimate vision for this kind of a world ends with anarcho-capitalism (though I don’t know enough about the topic to be certain). There ends up being no need for any force against anyone else. It’s a beautiful vision for a unified world, where there are no borders, there is no destruction, there is only unity through trade. I love it.
 
@@ -61,7 +61,7 @@ But game theory destroys this too. If the entire world disarmed, it would take j
 
 And this is the paradox. In order to live in our wonderful world of production, prosperity, health, and happiness, we always need to have our finger near enough to the trigger to respond to looters with force. I know of no other approach that allows production to happen. (And I am very interested in other theoretical solutions to this problem, if anyone wants to share reading material.)
 
-# Peace through strength
+## Peace through strength
 
 This line of thinking leads to the concept of [peace through strength](https://en.wikipedia.org/wiki/Peace_through_strength). When those tempted to use violence see the overwhelming strength of their potential victims, they will be disincentivized to engage in violent behavior. It’s the story of the guy who wants to rob my farm. Or the roaming army in the ancient world that bypassed the well fortified walled city and attacked its unprotected neighbor.
 
@@ -69,7 +69,7 @@ There are critics of this philosophy. As put by Andrew Bacevich, "'Peace through
 
 In other words, my thesis here is that the threat of violence must be present to keep society civilized. But the cost of *using* that violence must be high enough that neither side is incentivized to initiate it.
 
-# Israel
+## Israel
 
 I’d been thinking of writing a blog post on this topic for a few months now, but finally decided to today. Israel just agreed to a hostage deal with Hamas. In exchange for the release of 33 hostages taken in the October 7 massacre, Israel will hand over 1,000 terrorists in Israeli prisons.
 
@@ -85,7 +85,7 @@ I honestly believe this is all far beyond irrelevant. The only question people s
 
 In other words, if you care about the innocent people on either side, you should be opposed to this kind of capitulation. Whatever you think about the morality of each side, more people will suffer with this approach.
 
-# Skin in the game
+## Skin in the game
 
 It’s easy to say things like that when your life isn’t on the line. I also don’t think that matters much. Either the philosophical, political, and economic analysis is correct, or it isn’t. Nonetheless, I *do* have skin in the game here. I still live in a warzone. I am less than 15 kilometers from the Lebanese border. We’ve had Hezbollah tunnels reaching into our surrounding cities. My family had to lock ourselves inside when Hezbollah paratroopers had attempted to land in our city.
 
@@ -97,7 +97,7 @@ My wife (Miriam) and I have discussed this situation at length, many times, over
 
 I don’t know why this hostage deal went through now. I don’t know what pressures have been brought to bear on the leaders in Israel. I don’t know if they are good people trying to protect their citizens, nefarious power hungry cretins looking to abuse both the Israeli and Palestinian populace to stay in control, weak-willed toadies who do what they’re told by others, or simply stupid. But my own stance is clear.
 
-# But what about the Palestinians?
+## But what about the Palestinians?
 
 I said it above, and I’ll say it again: I truly do feel horrible for the trauma that the Palestinian people are going through. Not for the active terrorists mind you, I feel no qualms about those raising arms against us being destroyed. But everyone else, even those who wish me and my fellow Israelis harm. (And, if polling is to be believed, that’s the majority of Palestinians.) I would much rather that they *not* be suffering now, and that eventually through earned trust on both sides, everyone’s lots are improved.
 

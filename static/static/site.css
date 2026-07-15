@@ -135,6 +135,11 @@ h3 { margin-top: 1.8rem; }
   max-width: var(--prose-measure);
 }
 #blog-body img { border-radius: .45rem; height: auto; margin: 1.25rem auto; }
+#blog-body iframe, #blog-body video, #blog-body embed {
+  display: block;
+  max-width: 100%;
+}
+#blog-body iframe { margin-left: auto; margin-right: auto; }
 #blog-body blockquote { background: var(--surface-soft); border-left: 4px solid var(--brand); color: #3e4b54; margin: 1.6rem auto; padding: 1rem 1.3rem; }
 #blog-body pre { border: 1px solid var(--line); border-radius: .55rem; font-size: .86rem; line-height: 1.55; padding: 1.15rem; }
 #blog-body pre, #blog-body code, #blog-body kbd, #blog-body samp { font-family: var(--font-mono); }

@@ -116,7 +116,7 @@ for!
 Just so you know: there's no content following these examples, besides
 the Disqus comments below. If you're not interested in the gotchas,
 feel free to quit reading now and [stay
-tuned](/feed/rust-crash-course) for more posts.
+tuned](/series/rust-crash-course/rss.xml) for more posts.
 
 ### Mutable values, mutable variables
 

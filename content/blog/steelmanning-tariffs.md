@@ -23,7 +23,7 @@ Based on all this, it seems pretty straightforward that economists would oppose 
 
 To set the stage, we’re going to start by discussing two ideas, and then bringing them together: negative externalities and granularity of competition.
 
-# Negative externalities
+## Negative externalities
 
 In economics, a negative externality is when some activity has a negative impact on others. This essentially transfers some of the costs of an activity to others, while keeping all the benefits for the actor. A great example is pollution. A factory can either spend a million dollars a year cleaning up its waste, or it could dump its pollution into the lake. The business gets no benefit from an unpolluted lake, but normal people will lose the ability to use the lake. The business has *externalized* a cost onto society.
 
@@ -35,7 +35,7 @@ Instead of assigning the property rights to the lake to a private entity, the go
 
 You may not like this solution, because you believe that the free market can’t properly price in the true value of a non-polluted lake, or because you don’t believe people will act rationally, or any other reason. That’s not terribly relevant for this discussion. The point is the definition of a negative externality, and the fact that the government can extract money from economic actors while increasing public good.
 
-# Granularity of competition
+## Granularity of competition
 
 All of economics is a story of competition over scarce goods. Generally, we talk about the competition of individuals or private entities. In other words: people and businesses competing with each other. Note that the competition isn’t between buyers and sellers, as is often believed. Instead, buyers are competing with other buyers, pushing prices up, while sellers are competing with other sellers, pushing prices down.
 
@@ -43,13 +43,13 @@ One of the underlying assumptions of capitalism is that there’s a fair playing
 
 As mentioned above, tariffs hurt people by creating an uneven playing field between individuals. But viewed at the national level, tariffs are a method of competition between different governments. In other words, leveraging tariffs may end up hurting competition at the granular level, but might end up serving the interests of a government policy which is at odds with “make all goods cheaper through more competition.”
 
-## Protecting workers
+### Protecting workers
 
 In this sense, tariffs are not at all unique. Differences in regulations between countries, laws about fair labor practices, environment impact, local tax structures, and manipulation of currency exchange rates are all part of the competition between different nations. As a simple example, suppose country A has strict labor laws, demanding safe working conditions and demanding health coverage for all workers, while country B does not. Country B will be able to outcompete country A for new businesses, because it’s relatively cheaper to produce in country B.
 
 Tariffs in such a scenario can be a method for country A to make production in country B less attractive. If country A imposes a 20% tariff on country B imports due to human rights violations, it is in essence making production in country A more competitive again. Without this kind of change, countries seeking to attract investment and new businesses may be incentivized to pass laws that hurt their citizens just to bring down production costs.
 
-## National security
+### National security
 
 Another topic is national security. Let’s take countries C and D, who are not on the best of terms. Both countries are stocking up on weapons in case war breaks out. Both countries locally source weapons production, ordering lots of tanks from domestic producers.
 
@@ -65,7 +65,7 @@ But suppose there’s completely free international trade, with no embargos and 
 * When war breaks out, country C can simply block all steel exports  
 * Country D will face a supply chain crisis. Its domestic steel production is low, it hasn’t invested in better tools and technology for steel production, and it will have to quickly and inefficiently produce enough steel to keep up with the war effort.
 
-# Tying it together
+## Tying it together
 
 The best argument I can pull together from these points is that tariffs can be used to place the United States in a stronger position for future competition with geopolitical competitors. Instead of allowing poor labor practices in other countries to drag down the standard of living for Americans, tariffs will artificially inflate the price of incoming goods. Instead of rewarding other countries that pollute, tariffs will extract a penalty from those countries, properly allocating the costs of the negative externalities to those polluting nations. And finally, by incentivizing an increase in domestic production across the board, the US is set up for more autonomy in the case of escalation (through either embargos or full-on warfare), protecting its interests.
 
@@ -75,7 +75,7 @@ Personally, I don’t think the arguments add up. I’m mostly on the side of th
 
 Which leaves me with only one final argument in favor of the tariffs: they could be a great bluff. I think many people in the world believe that Trump would be willing to pull the trigger and enact such a policy. That gives him a really great negotiating position for whatever trade deals and other foreign policy objectives he has.
 
-# My prediction
+## My prediction
 
 I’m a software developer who watches politics and studies economics. My prediction on topics like this isn’t particularly informed, and is likely to be completely wrong. But I may as well put my thoughts in writing so everyone can remind me how wrong I was in the future\!
 

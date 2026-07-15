@@ -16,7 +16,7 @@ nights were spent walking Lavi around the block singing. I'm actually
 pretty lucky none of the neighbors called the cops, my singing
 definitely counts as disturbing the peace.
 
-<img src="/static/lavi.jpeg" style="max-width: 100%">
+<img src="/static/lavi.jpeg" alt="Lavi Snoyman" style="max-width: 100%">
 
 Pro tip to any new parents even a little bit superstitious: never say
 “We've been through all of this before, this baby can't surprise us.”

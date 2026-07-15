@@ -9,7 +9,6 @@ series = ["kids-coding"]
 
 [extra]
 +++
-# Kids Coding, Part 1
 
 I've been wanting to give my eldest child (Eliezer, now 10) a chance
 to learn to code for about a year now, with little success. My second
