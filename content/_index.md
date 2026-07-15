@@ -1,5 +1,5 @@
 +++
-title = "Michael Snoyman's homepage"
+title = "Michael Snoyman's Homepage"
 template = "home.html"
 
 [[extra.publications]]

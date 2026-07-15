@@ -3,8 +3,8 @@ default_language = "en"
 compile_sass = false
 generate_feeds = true
 feed_filenames = ["rss.xml"]
-title = "Snoyberg - Michael Snoyman"
-description = "Michael Snoyman's homepage and blog. Eclectic collection of programming (mostly Rust and Haskell) and lifting (weights, children, and monads)."
+title = "Michael Snoyman's Homepage"
+description = "Michael Snoyman's personal homepage and blog, featuring writing about programming, open source, health, finance, religion, and whatever else catches his interest."
 
 taxonomies = [
   {name = "tags", paginate_by = 20, feed = true},
