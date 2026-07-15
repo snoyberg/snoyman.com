@@ -159,6 +159,7 @@ h3 { margin-top: 1.8rem; }
 
 .edit-note { color: var(--muted); font-size: .88rem; }
 .share-bar-wrapper, .blog-email { border-color: var(--line); border-radius: .6rem; }
+.share-bar-inner a { text-decoration: none; }
 .x-mark { font-family: Arial, sans-serif; font-size: 1.05em; font-weight: 700; line-height: 1; }
 .blog-email { background: var(--surface-soft); }
 .blog-email input[type=email] { border: 1px solid #becbd1; border-radius: .35rem; min-height: 42px; padding: .45rem .7rem; }
