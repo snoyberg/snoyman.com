@@ -3,13 +3,13 @@
 <nav class="js-navbar-scroll navbar fixed-top navbar-expand-lg" aria-label="Primary navigation">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <img src="/img/snoylogo.png" width="150" height="50" alt="Michael Snoyman home">
+      <img src="/img/snoylogo-v2.png" width="213" height="44" alt="Michael Snoyman home">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo" aria-controls="navbarTogglerDemo" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars"></i>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo">
-      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+      <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
         <li class="nav-item mb-2 mb-lg-0">
           <a class="nav-link" href="/blog">Blog</a>
         </li>
@@ -59,17 +59,7 @@
   </div>
 </footer>
 
-<!-- JS Script Files -->
-<!-- Global Vendor -->
-<script src="/maxi/vendors/jquery.min.js"></script>
-<script src="/maxi/vendors/jquery.migrate.min.js"></script>
-<script src="/maxi/vendors/popper.min.js"></script>
-<script src="/maxi/vendors/bootstrap/js/bootstrap.min.js"></script>
-
-<!-- Components Vendor  --> 
-<script src="/maxi/contact/jqBootstrapValidation.js"></script>
-<!--Plugin Initialize-->
-<script src="/maxi/js/global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <!-- Open external links in a different tab -->
 <script src="/static/external-links.js"></script>
 <!-- END JAVASCRIPTS -->
@@ -77,7 +67,7 @@
 
 {% macro paginator() %}
 <nav class="d-flex justify-content-center mt-1 mb-4 align-items-center blog-nav" aria-label="Blog pagination">
-                <span class="mr-5">
+                <span class="me-5">
                 {% if paginator.current_index == 1 %}
                   ❮❮
                 {% else %}
@@ -85,7 +75,7 @@
                 {% endif %}
                 </span>
               
-                <span class="mr-5">
+                <span class="me-5">
                 {% if paginator.previous %}
                   <a href="{{ paginator.previous }}"> ❮ </a>
                 {% else %}
@@ -93,9 +83,9 @@
                 {% endif %}
                 </span>
               
-                <span class="text-uppercase font-weight-normal h6 mb-0 mt-1">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
+                <span class="text-uppercase fw-normal h6 mb-0 mt-1">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
               
-                <span class="ml-5">
+                <span class="ms-5">
                 {% if paginator.next %}
                   <a href="{{ paginator.next }}">❯</a>
                 {% else %}
@@ -103,7 +93,7 @@
                 {% endif %}
                 </span>
               
-                <span class="ml-5">
+                <span class="ms-5">
                 {% if paginator.current_index == paginator.number_pagers %}
                   ❯❯
                 {% else %}

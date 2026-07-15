@@ -19,7 +19,6 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <title>{{ title }}</title>
 
@@ -31,17 +30,7 @@
     <meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
     <meta name="description" content="{% if content and content.description %}{{ content.description }}{% else %}{{ config.description }}{% endif %}">
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1434510-21"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-1434510-21');
-    </script>
-
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="/maxi/vendors/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="/maxi/css/styles.css">
     <link rel="stylesheet" type="text/css" href="/static/site.css">
@@ -49,8 +38,6 @@
     {% block pagehead %}
     {% endblock %}
 
-    <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider">
-    <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/d26546d2-46db-4099-83ca-e1eccfa0dd8d">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Michael Snoyman's blog">
 
     {{ macros::favicons() }}
