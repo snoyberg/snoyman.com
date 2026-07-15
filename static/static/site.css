@@ -146,6 +146,17 @@ h3 { margin-top: 1.8rem; }
 #blog-body code { border-radius: .25rem; }
 #blog-body table { display: block; max-width: 100%; overflow-x: auto; }
 
+.torah-guide { max-width: 52rem; margin: 0 auto; }
+.torah-guide dl { display: grid; gap: .6rem 1.25rem; grid-template-columns: minmax(8rem, auto) 1fr; }
+.torah-guide dt { color: var(--brand-dark); font-weight: 700; }
+.torah-guide dd { margin: 0 0 .8rem; }
+.torah-notes { background: var(--surface-soft); border-left: 4px solid var(--brand); border-radius: .4rem; padding: 1.2rem 1.4rem 1.2rem 2.5rem; }
+.torah-notes li, .torah-procedure > li { margin-bottom: .8rem; }
+.torah-procedure > li { padding-left: .35rem; }
+.torah-guide .bracha, .torah-guide .statement { border-radius: .4rem; font-weight: 650; margin: .75rem 0; padding: .85rem 1rem; }
+.torah-guide .bracha { background: #edf7f2; border-right: 4px solid #2d7a58; color: #1f6246; font-family: var(--font-serif); font-size: 1.2rem; text-align: right; }
+.torah-guide .statement { background: #fff4ed; border-left: 4px solid var(--accent); color: #873f1f; }
+
 .edit-note { color: var(--muted); font-size: .88rem; }
 .share-bar-wrapper, .blog-email { border-color: var(--line); border-radius: .6rem; }
 .x-mark { font-family: Arial, sans-serif; font-size: 1.05em; font-weight: 700; line-height: 1; }
@@ -178,6 +189,8 @@ h3 { margin-top: 1.8rem; }
   .blog-image-title > a { flex-basis: auto; }
   .footer-inner { align-items: flex-start; flex-direction: column; gap: 1.4rem; }
   .site-footer .list-inline-item { margin: 0 1rem .4rem 0 !important; }
+  .torah-guide dl { display: block; }
+  .torah-guide dt { margin-top: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

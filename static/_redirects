@@ -4,6 +4,7 @@
 /shekel/feed /shekel/feed.xml
 
 /feed/rust-crash-course /series/rust-crash-course/rss.xml
+/torah/teruma.html /torah/teruma/ 301
 /feed/kids-coding /series/kids-coding/rss.xml
 /feed/haskell-bad-parts /series/haskell-bad-parts/rss.xml
 /feed/health-guide /series/health-guide/rss.xml

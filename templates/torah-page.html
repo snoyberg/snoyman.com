@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block ogtype %}<meta property="og:type" content="article">{% endblock ogtype %}
+
+{% block socialmeta %}
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:image" content="{{ get_url(path="thumbs/default-v2.jpg") }}">
+<meta property="og:image:alt" content="{{ page.title }}">
+<meta name="twitter:card" content="summary_large_image">
+{% endblock socialmeta %}
+
+{% block content %}
+<article class="torah-guide">
+  {{ page.content | safe }}
+</article>
+{% endblock content %}
