@@ -558,7 +558,7 @@ main = do
     <div class="panel panel-default">
     <div class="panel-heading" role="tab">
     <h3 class="panel-title">
-    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#exerciseThree" aria-expanded="true" aria-controls="collapseThree">
+    <a role="button" data-toggle="collapse" data-parent="#accordion-557" href="#exerciseThree" aria-expanded="true" aria-controls="collapseThree">
     Show Solution
     </a>
     </h3>
