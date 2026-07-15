@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+
+{% block pagehead %}
+<link rel="stylesheet" href="/static/home.css">
+{% endblock pagehead %}
+
+{% block subtitle %}
+<p class="h6 text-uppercase wt-letter-spacing-sm mb-0">Professional background and availability</p>
+{% endblock subtitle %}
+
+{% block content %}
+{% set home = get_section(path="_index.md") %}
+
+<div class="work-intro">
+  {{ page.content | safe }}
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="/resume.pdf">Download résumé</a>
+    <a class="btn btn-outline-primary" href="mailto:michael@snoyman.com">Contact me</a>
+  </div>
+</div>
+
+<h2>Current availability</h2>
+<p>I am looking for executive or senior technical leadership roles where deep engineering judgment matters: CTO, VP Engineering, Head of Engineering, principal architect, or senior consulting leadership.</p>
+
+<h2>Leadership focus</h2>
+<div class="focus-grid">
+  <div><h3>Engineering leadership</h3><p>Hiring, mentoring, training, and leading 100+ engineers and technical contributors through real delivery pressure.</p></div>
+  <div><h3>Architecture and risk</h3><p>Owning systems that need to remain reliable, secure, maintainable, and able to evolve after launch.</p></div>
+  <div><h3>Business translation</h3><p>Aligning engineering, product, executives, investors, customers, and incumbent teams through ambiguity.</p></div>
+  <div><h3>Financial systems</h3><p>Applying actuarial training to fintech, trading, tokenization, DeFi, prediction markets, insurance, and other risk-sensitive domains.</p></div>
+</div>
+
+<h2>Relevant domains</h2>
+<ul class="domain-list">
+  <li>Fintech and trading systems</li>
+  <li>Blockchain and tokenization</li>
+  <li>Prediction markets</li>
+  <li>Healthcare and pharma computation</li>
+  <li>Enterprise software</li>
+  <li>Rust, Haskell, TypeScript, and SQL</li>
+</ul>
+
+<h2 id="publications">Publications</h2>
+<ul>
+  {% for pub in home.extra.publications %}
+    <li><a href="{{ pub.url }}">{{ pub.text }}</a>. {{ pub.date }}{% if pub.publisher %}, {{ pub.publisher }}{% endif %}</li>
+  {% endfor %}
+</ul>
+
+<h2 id="talks">Selected talks</h2>
+{% for t in home.extra.talks %}
+  <div class="talk">
+    <span class="venue">{{ t.venue }}</span>
+    <span class="date">{{ t.date }}</span>
+    <span class="title">{{ t.title }}</span>
+    <span class="links">
+      {% for l in t.links %}<a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.text }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+    </span>
+  </div>
+{% endfor %}
+{% endblock content %}

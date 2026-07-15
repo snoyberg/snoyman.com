@@ -37,15 +37,14 @@
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-7 col-md-7 hero-copy">
-              <p class="availability">Available for CTO / engineering leadership roles</p>
               <h1 id="michael-snoyman">
                 Michael Snoyman
               </h1>
-              <p class="mb-4 h5">CTO and hands-on engineering executive for high-assurance production systems.</p>
-              <p class="hero-summary">I lead teams building reliable software where architecture, delivery risk, product direction, and business goals all matter: fintech, blockchain, healthcare, enterprise software, and regulated domains.</p>
+              <p class="mb-4 h5">An eclectic mix of programming, lifting, finance, religion, and whatever else catches my attention.</p>
+              <p class="hero-summary">This is where I write, share projects, work through ideas, and occasionally disappear down a rabbit hole.</p>
               <div class="hero-actions">
-                <a class="btn btn-primary" href="/resume.pdf">Download resume</a>
-                <a class="btn btn-outline-primary" href="mailto:michael@snoyman.com">Contact me</a>
+                <a class="btn btn-primary" href="/blog/">Read the blog</a>
+                <a class="btn btn-outline-primary" href="/work/">Work with me</a>
               </div>
             </div>
             <div class="col-lg-5 col-md-5 hero-portrait-wrap">
@@ -59,93 +58,74 @@
     <main id="main-content">
       <section class="wt-section">
         <div class="container">
-          <div class="row">
-            <div class="col-md-8">
-                <h2>About Me</h2>
+          <div class="row gy-4">
+            <div class="col-lg-8">
+                <h2>About me</h2>
                 <div class="aboutme">
-                  <p>Michael Snoyman is a CTO and hands-on technical leader with 20+ years building reliable, maintainable, high-assurance production systems. He recently led architecture, delivery, client strategy, and engineering teams at FP Complete / FP Block, working across fintech, blockchain, healthcare, enterprise software, and regulated domains.</p>
-
-                  <p>He operates where technical reality, product direction, business goals, and stakeholder alignment meet. His strongest work is turning ambitious product ideas into deliverable systems: shaping architecture, leading teams, managing risk, and translating technical strategy into business terms.</p>
-
-                  <p>Michael is the founding author or original architect of major Haskell ecosystem projects including Stack, Stackage, Yesod, Warp, and WAI, and has authored multiple books and training programs on practical typed functional programming and Rust. He lives in Maalot, Israel, with <a href="https://x.com/lambdamom">his wife Miriam</a> and their six children.</p>
-                </div>
-
-                <h2 id="leadership">Leadership Focus</h2>
-                <div class="focus-grid">
-                  <div>
-                    <h3>Engineering leadership</h3>
-                    <p>Hiring, mentoring, training, and leading 100+ engineers and technical contributors through real delivery pressure.</p>
-                  </div>
-                  <div>
-                    <h3>Architecture and risk</h3>
-                    <p>Owning systems that need to remain reliable, secure, maintainable, and able to evolve after launch.</p>
-                  </div>
-                  <div>
-                    <h3>Business translation</h3>
-                    <p>Aligning engineering, product, executives, investors, customers, and incumbent teams through ambiguity.</p>
-                  </div>
-                  <div>
-                    <h3>Financial systems</h3>
-                    <p>Applying actuarial training to fintech, trading, tokenization, DeFi, prediction markets, insurance, and other risk-sensitive domains.</p>
-                  </div>
+                  <p>I'm a software developer, author, open source maintainer, amateur weightlifter, and inveterate learner. I've spent much of my career around Haskell and Rust, but the subjects here range much further afield.</p>
+                  <p>I live in Maalot, Israel, with <a href="https://x.com/lambdamom">my wife Miriam</a> and our six children.</p>
                 </div>
 
                 {% set blogs = get_section(path="blog/_index.md") %}
-                {% set recent = blogs.pages.0 %}
-                <p class="alert alert-info">
-                  <b>Most recent blog post:</b>
-                  <a href="{{ recent.path }}">{{ recent.title }}</a> <i>{{ recent.date | date(format="%B %e, %Y") }}</i>
-                </p>
-
-                <h2 id="publications">Publications</h2>
-                <ul>
-                  {% for pub in section.extra.publications %}
-                    <li>
-                      <a href="{{ pub.url }}">{{ pub.text }}</a>.
-                      {{ pub.date }}{% if pub.publisher %}, {{ pub.publisher }}{% endif %}
-                    </li>
+                <h2>Recent writing</h2>
+                <div class="recent-posts">
+                  {% for post in blogs.pages | slice(end=5) %}
+                    <article class="recent-post">
+                      <div>
+                        <h3><a href="{{ post.permalink | safe }}">{{ post.title }}</a></h3>
+                        {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+                      </div>
+                      <time datetime="{{ post.date | date(format="%F") }}">{{ post.date | date(format="%b %e, %Y") }}</time>
+                    </article>
                   {% endfor %}
-                </ul>
-
-                <h2 id="talks">Talks</h2>
-
-                {% for t in section.extra.talks %}
-                  <div class="talk">
-                    <span class="venue">{{ t.venue }}</span>
-                    <span class="date">{{ t.date }}</span>
-                    <span class="title">{{ t.title }}</span>
-                    <span class="links">
-                      {% for l in t.links %}
-                        <a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.text }}</a>
-                      {% endfor %}
-                    </span>
-                  </div>
-                {% endfor %}
-
+                </div>
+                <p><a href="/blog/">Browse all blog posts →</a></p>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-lg-4">
               <aside>
-                <div class="profile-card">
-                  <h2>Current Search</h2>
-                  <p>I am looking for executive or senior technical leadership roles where deep engineering judgment matters: CTO, VP Engineering, Head of Engineering, principal architect, or senior consulting leadership.</p>
-                  <a class="btn btn-primary w-100" href="/resume.pdf">Resume PDF</a>
-                  <a class="btn btn-outline-primary w-100 mt-2" href="mailto:michael@snoyman.com">michael@snoyman.com</a>
+                <div class="profile-card work-card">
+                  <h2>Work with me</h2>
+                  <p>Looking for my professional background, current availability, or ways we might work together?</p>
+                  <a class="btn btn-primary w-100" href="/work/">Professional information</a>
                 </div>
 
                 <div class="profile-card">
-                  <h2>Relevant Domains</h2>
-                  <ul>
-                    <li>Fintech and trading systems</li>
-                    <li>Blockchain and tokenization</li>
-                    <li>Prediction markets</li>
-                    <li>Healthcare and pharma computation</li>
-                    <li>Enterprise software</li>
-                    <li>Rust, Haskell, TypeScript, SQL</li>
+                  <h2>Elsewhere</h2>
+                  <ul class="elsewhere-list">
+                    <li><a href="https://github.com/snoyberg">GitHub</a></li>
+                    <li><a href="https://www.youtube.com/c/snoyberg">YouTube</a></li>
+                    <li><a href="https://www.linkedin.com/in/snoyberg/">LinkedIn</a></li>
+                    <li><a href="https://x.com/snoyberg">X</a></li>
+                    <li><a href="/rss.xml">RSS feed</a></li>
                   </ul>
                 </div>
               </aside>
             </div>
+          </div>
+
+          <div class="home-archive">
+            <h2 id="publications">Publications</h2>
+            <ul>
+              {% for pub in section.extra.publications %}
+                <li>
+                  <a href="{{ pub.url }}">{{ pub.text }}</a>.
+                  {{ pub.date }}{% if pub.publisher %}, {{ pub.publisher }}{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+
+            <h2 id="talks">Talks</h2>
+            {% for t in section.extra.talks %}
+              <div class="talk">
+                <span class="venue">{{ t.venue }}</span>
+                <span class="date">{{ t.date }}</span>
+                <span class="title">{{ t.title }}</span>
+                <span class="links">
+                  {% for l in t.links %}<a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.text }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+                </span>
+              </div>
+            {% endfor %}
           </div>
         </div>
       </section>
