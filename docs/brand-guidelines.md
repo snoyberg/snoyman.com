@@ -6,7 +6,7 @@ Current core sites:
 
 - `snoyman.com`
 - `veloxwarp.com`
-- TryCrypto
+- `TryCrypto`
 
 Future sites should start here unless they have a deliberate reason to diverge.
 
@@ -239,9 +239,7 @@ Repositories with user-facing web UI should contain an `AGENTS.md` instruction t
 - tells the agent to surface a conflict rather than silently overriding a product requirement or deliberate sub-brand decision;
 - requires proposed **family-wide** design-system changes to be made in (or accompanied by) a PR against `snoyberg/snoyman.com`, rather than silently creating a local fork of the policy.
 
-Canonical source:
-
-`https://github.com/snoyberg/snoyman.com/blob/master/docs/brand-guidelines.md`
+Canonical source: [Snoyman web family brand guidelines](https://github.com/snoyberg/snoyman.com/blob/master/docs/brand-guidelines.md).
 
 ## Change policy
 
