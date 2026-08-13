@@ -1,0 +1,28 @@
+:root {
+  --ink: #1f2933;
+  --muted: #627d98;
+  --surface-soft: #f7fafc;
+  --line: #d9e2ec;
+  --shadow: 0 16px 40px rgba(16, 42, 67, 0.09);
+}
+
+.inner-page-header {
+  background: linear-gradient(135deg, #102a43 0%, #087f8c 100%) !important;
+}
+
+.hero-large {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(47, 158, 158, 0.10), transparent 26rem),
+    linear-gradient(150deg, var(--surface-soft) 0%, var(--surface) 68%);
+}
+
+.navbar {
+  border-bottom-color: rgba(217, 226, 236, 0.9);
+  box-shadow: 0 3px 18px rgba(16, 42, 67, 0.05);
+}
+
+.focus-grid > div,
+.profile-card,
+.blog-card {
+  box-shadow: 0 5px 18px rgba(16, 42, 67, 0.045);
+}
