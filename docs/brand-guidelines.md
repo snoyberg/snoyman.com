@@ -6,7 +6,7 @@ Current core sites:
 
 - `snoyman.com`
 - `veloxwarp.com`
-- TryCrypto
+- `TryCrypto`
 
 Future sites should start here unless they have a deliberate reason to diverge.
 
