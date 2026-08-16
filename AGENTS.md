@@ -2,6 +2,12 @@
 
 These instructions apply to the entire repository.
 
+## General agent collaboration
+
+For general agent-collaboration and engineering guidance, see [P2P Agents](https://github.com/snoyberg/p2p-agents/blob/master/AGENTS.md). Treat that repository as general reference material; this file is authoritative for snoyman.com-specific instructions and takes precedence where it intentionally differs.
+
+Do not mechanically recurse between guidance repositories. For visual work, the local canonical brand guide below is authoritative; the P2P Agents repository points back here intentionally for the shared Snoyman / Velox Warp visual system.
+
 ## Family brand system
 
 `docs/brand-guidelines.md` is the canonical source of truth for the shared visual language used across snoyman.com, Velox Warp, TryCrypto, and related sites.
