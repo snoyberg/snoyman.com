@@ -6,7 +6,7 @@ These instructions apply to the entire repository.
 
 For general agent-collaboration and engineering guidance, see [P2P Agents](https://github.com/snoyberg/p2p-agents/blob/master/AGENTS.md). Treat that repository as general reference material; this file is authoritative for snoyman.com-specific instructions and takes precedence where it intentionally differs.
 
-Do not mechanically recurse between guidance repositories. For visual work, the local canonical brand guide below is authoritative; the p2p repository points back here intentionally for the shared Snoyman / Velox Warp visual system.
+Do not mechanically recurse between guidance repositories. For visual work, the local canonical brand guide below is authoritative; the P2P Agents repository points back here intentionally for the shared Snoyman / Velox Warp visual system.
 
 ## Family brand system
 
