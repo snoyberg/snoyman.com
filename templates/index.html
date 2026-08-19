@@ -32,6 +32,7 @@
     {% set description = config.description %}
     {% if content and content.description %}{% set description = content.description %}{% endif %}
     <meta name="description" content="{{ description }}">
+    <meta name="follow.it-verification-code" content="mVkCdMV1fmHQbZT48q1d">
     {% block socialmeta %}
     <meta property="og:description" content="{{ description }}">
     <meta property="og:image" content="{{ get_url(path="thumbs/default-v2.jpg") }}">
