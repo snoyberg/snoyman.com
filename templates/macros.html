@@ -157,9 +157,11 @@
 
 {% macro blog_email() %}
 <div class="blog-email">
-  <form class="blog-email" method='post' action='https://api.follow.it/subscription-form/VFN0NUIwK3Q3RlpRVXZidk11NjUrdC9GcWhhNzEwbWViVnVNb0RWOTBjOE5RWjc3REExSGZDczI3cFZITW83clFVR1ZzeDV4dFdJMzg3K1UwUTlUZzBhVGRUYStxRE01RSs1ek1uUTZTTWpyRmUvaVYyS2tOajV6WDZYVHpHVVJ8SXF0d055MGtWK3dBUFVReWR1YkZMdlVMdTQrTmV2UlY2cWZXZHJ0L1ozWT0=/8' target="_blank">
+  <form class="blog-email" method='post' action='https://blogtrottr.com' target="_blank">
     <span>Get new blog posts via email</span>
-    <input type='email' name='email' placeholder='Email address'>
+    <input type='email' name='btr_email' placeholder='Email address'>
+    <input type='hidden' name='btr_url' value='https://www.snoyman.com/feed'>
+    <input type='hidden' name='schedule_type' value='0'>
     <button class="btn btn-primary">Subscribe!</button>
   </form>
 </div>
