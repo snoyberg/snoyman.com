@@ -9,6 +9,11 @@ url = "https://trycrypto.snoyman.com"
 description = "An interactive introduction to practical cryptography. It teaches hashes, encryption, public/private keys, and signatures through hands-on exercises that run entirely in the browser."
 
 [[sites]]
+name = "P:E Diet Recipe Calculator"
+url = "https://pedietcalc.snoyman.com/"
+description = "A browser-based recipe calculator for combining food-label macros, scaling ingredients by serving count, and seeing the overall protein-to-energy ratio. Recipes can be shared by URL or printed as a compact breakdown."
+
+[[sites]]
 name = "Sorta Secret"
 url = "https://sortasecret.com/"
 description = "A small tool for sharing encrypted data when you need something more deliberate than pasting a secret into chat or email."
