@@ -1,12 +1,22 @@
-# This is the source of truth for /projects. Keep it curated, but not terse:
-# include public work that is actively maintained and useful to someone visiting
-# Michael's site. Private and pre-launch work waits until it is ready for public
-# discovery.
+# Source of truth for /projects. This page is a curated portfolio, not merely a
+# list of repositories with recent commits. Include current public work plus
+# selected older projects that are an important part of Michael's technical
+# history. Private/pre-launch work waits until public discovery makes sense.
 
 [[sites]]
 name = "TryCrypto"
 url = "https://trycrypto.snoyman.com"
 description = "An interactive introduction to practical cryptography. It teaches hashes, encryption, public/private keys, and signatures through hands-on exercises that run entirely in the browser."
+
+[[sites]]
+name = "Sorta Secret"
+url = "https://sortasecret.com/"
+description = "A small tool for sharing encrypted data when you need something more deliberate than pasting a secret into chat or email."
+
+[[sites]]
+name = "Luach"
+url = "https://luach.snoyman.com/"
+description = "A Jewish calendar and zmanim site: a practical personal utility that has stayed useful enough to keep around and maintain."
 
 [[sites]]
 name = "Velox Warp"
@@ -18,27 +28,57 @@ name = "Dollar versus Shekel"
 url = "https://www.snoyman.com/shekel"
 description = "A deliberately small USD/ILS tracker that updates daily and offers RSS and email subscriptions. It is also a useful example of the kind of tiny, durable automation I enjoy maintaining."
 
-[[github]]
+[[protocols]]
 name = "P2P Agents"
 url = "https://github.com/snoyberg/p2p-agents"
 description = "My evolving recommendations for working effectively with AI coding agents: review practices, collaboration patterns, persistent instructions, and the broader idea of making engineering judgment reusable."
 
-[[github]]
+[[devops]]
+name = "Amber"
+url = "https://github.com/veloxwarp/amber"
+description = "A public-key-encryption tool for keeping encrypted CI and application secrets in version control while preserving useful diffs and history."
+
+[[devops]]
 name = "pid1-rs"
 url = "https://github.com/veloxwarp/pid1-rs"
 description = "A Rust library and standalone binary for correct PID 1 behavior in containers, including signal forwarding and zombie-process reaping."
 
-[[github]]
+[[devops]]
 name = "health-check"
 url = "https://github.com/veloxwarp/health-check"
 description = "A container entrypoint that watches an application for common failure modes, handles PID 1 responsibilities, and can send crash information to Slack."
 
-[[github]]
+[[devops]]
 name = "job-watcher"
 url = "https://github.com/veloxwarp/job-watcher"
 description = "A Rust library for periodic background jobs with execution history, health monitoring, retry behavior, alert hooks, and an optional web status page."
 
-[[github]]
-name = "Amber"
-url = "https://github.com/veloxwarp/amber"
-description = "A public-key-encryption tool for keeping encrypted CI and application secrets in version control while preserving useful diffs and history."
+[[rust]]
+name = "routetype-rs"
+url = "https://github.com/snoyberg/routetype-rs"
+description = "An experimental exploration of strongly typed routing in Rust, carrying ideas from Yesod into the Rust web ecosystem."
+
+[[haskell]]
+name = "Yesod"
+url = "https://www.yesodweb.com/"
+description = "The type-safe Haskell web framework I started and spent many years developing. Yesod shaped much of my thinking about using types to move web-application errors from runtime to compile time."
+
+[[haskell]]
+name = "Conduit"
+url = "https://github.com/snoyberg/conduit"
+description = "A streaming-data library for Haskell built around composable producers, transformers, and consumers with explicit resource handling."
+
+[[haskell]]
+name = "Persistent"
+url = "https://github.com/yesodweb/persistent"
+description = "A type-safe persistence layer for Haskell supporting SQL and other backends, originally developed as part of the Yesod ecosystem."
+
+[[haskell]]
+name = "WAI & Warp"
+url = "https://github.com/yesodweb/wai"
+description = "WAI is the standard Haskell web application interface; Warp is the high-performance HTTP server built around it. They became infrastructure underneath Yesod and many other Haskell web applications."
+
+[[haskell]]
+name = "Stack"
+url = "https://github.com/commercialhaskell/stack"
+description = "The Haskell build tool I helped create around reproducible project environments and curated package sets, closely connected with the Stackage ecosystem."
