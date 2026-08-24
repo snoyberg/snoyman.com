@@ -58,6 +58,11 @@ name = "job-watcher"
 url = "https://github.com/veloxwarp/job-watcher"
 description = "A Rust library for periodic background jobs with execution history, health monitoring, retry behavior, alert hooks, and an optional web status page."
 
+[[devops]]
+name = "bwbackup"
+url = "https://github.com/snoyberg/bwbackup"
+description = "A small Rust command-line tool that exports a Bitwarden vault and encrypts it before the backup ever touches disk."
+
 [[haskell]]
 name = "Yesod"
 url = "https://www.yesodweb.com/"
