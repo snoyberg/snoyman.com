@@ -16,7 +16,7 @@ description = "A small tool for sharing encrypted data when you need something m
 [[sites]]
 name = "Luach"
 url = "https://luach.snoyman.com/"
-description = "A Jewish calendar and zmanim site: a practical personal utility that has stayed useful enough to keep around and maintain."
+description = "A Jewish calendar and reminder service for Gregorian and Hebrew anniversaries, Rosh Chodesh, and holidays, with private RSS and iCalendar feeds."
 
 [[sites]]
 name = "Velox Warp"
