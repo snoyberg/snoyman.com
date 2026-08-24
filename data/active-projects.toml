@@ -1,23 +1,44 @@
-# Keep this intentionally short: projects belong here when they are actively
-# maintained, public, and useful to a visitor. Private or pre-launch work should
-# wait until it is ready to be discovered from the homepage.
+# This is the source of truth for /projects. Keep it curated, but not terse:
+# include public work that is actively maintained and useful to someone visiting
+# Michael's site. Private and pre-launch work waits until it is ready for public
+# discovery.
 
-[[projects]]
+[[sites]]
 name = "TryCrypto"
 url = "https://trycrypto.snoyman.com"
-description = "An interactive introduction to practical cryptography, with hands-on exercises that run in the browser."
+description = "An interactive introduction to practical cryptography. It teaches hashes, encryption, public/private keys, and signatures through hands-on exercises that run entirely in the browser."
 
-[[projects]]
+[[sites]]
 name = "Velox Warp"
 url = "https://veloxwarp.com"
-description = "My software engineering and consulting company, focused on technically demanding product work."
+description = "My software engineering and consulting company. It is the umbrella for much of my current product, architecture, Rust, and high-assurance engineering work."
 
-[[projects]]
-name = "P2P Agents"
-url = "https://github.com/snoyberg/p2p-agents"
-description = "My evolving recommendations for working effectively with AI agents on software projects."
-
-[[projects]]
+[[sites]]
 name = "Dollar versus Shekel"
 url = "https://www.snoyman.com/shekel"
-description = "A small daily-updated USD/ILS tracker with RSS and email subscription options."
+description = "A deliberately small USD/ILS tracker that updates daily and offers RSS and email subscriptions. It is also a useful example of the kind of tiny, durable automation I enjoy maintaining."
+
+[[github]]
+name = "P2P Agents"
+url = "https://github.com/snoyberg/p2p-agents"
+description = "My evolving recommendations for working effectively with AI coding agents: review practices, collaboration patterns, persistent instructions, and the broader idea of making engineering judgment reusable."
+
+[[github]]
+name = "pid1-rs"
+url = "https://github.com/veloxwarp/pid1-rs"
+description = "A Rust library and standalone binary for correct PID 1 behavior in containers, including signal forwarding and zombie-process reaping."
+
+[[github]]
+name = "health-check"
+url = "https://github.com/veloxwarp/health-check"
+description = "A container entrypoint that watches an application for common failure modes, handles PID 1 responsibilities, and can send crash information to Slack."
+
+[[github]]
+name = "job-watcher"
+url = "https://github.com/veloxwarp/job-watcher"
+description = "A Rust library for periodic background jobs with execution history, health monitoring, retry behavior, alert hooks, and an optional web status page."
+
+[[github]]
+name = "Amber"
+url = "https://github.com/veloxwarp/amber"
+description = "A public-key-encryption tool for keeping encrypted CI and application secrets in version control while preserving useful diffs and history."
