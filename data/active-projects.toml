@@ -1,0 +1,23 @@
+# Keep this intentionally short: projects belong here when they are actively
+# maintained, public, and useful to a visitor. Private or pre-launch work should
+# wait until it is ready to be discovered from the homepage.
+
+[[projects]]
+name = "TryCrypto"
+url = "https://trycrypto.snoyman.com"
+description = "An interactive introduction to practical cryptography, with hands-on exercises that run in the browser."
+
+[[projects]]
+name = "Velox Warp"
+url = "https://veloxwarp.com"
+description = "My software engineering and consulting company, focused on technically demanding product work."
+
+[[projects]]
+name = "P2P Agents"
+url = "https://github.com/snoyberg/p2p-agents"
+description = "My evolving recommendations for working effectively with AI agents on software projects."
+
+[[projects]]
+name = "Dollar versus Shekel"
+url = "https://www.snoyman.com/shekel"
+description = "A small daily-updated USD/ILS tracker with RSS and email subscription options."
