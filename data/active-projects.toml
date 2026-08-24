@@ -53,11 +53,6 @@ name = "job-watcher"
 url = "https://github.com/veloxwarp/job-watcher"
 description = "A Rust library for periodic background jobs with execution history, health monitoring, retry behavior, alert hooks, and an optional web status page."
 
-[[rust]]
-name = "routetype-rs"
-url = "https://github.com/snoyberg/routetype-rs"
-description = "An experimental exploration of strongly typed routing in Rust, carrying ideas from Yesod into the Rust web ecosystem."
-
 [[haskell]]
 name = "Yesod"
 url = "https://www.yesodweb.com/"
