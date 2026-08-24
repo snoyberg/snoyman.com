@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+
+{% block subtitle %}
+Things I'm actively building, maintaining, or responsible for.
+{% endblock subtitle %}
+
+{% block content %}
+{% set active_projects = load_data(path="data/active-projects.toml") %}
+
+<p class="lead">This is a living list rather than a complete catalog of everything I've ever worked on. I keep it focused on public work that is still active enough that I would point someone at it today.</p>
+
+<h2>Sites &amp; products</h2>
+<p>These are the public-facing sites and products I currently maintain.</p>
+<div class="project-list">
+  {% for project in active_projects.sites %}
+    <article class="project-entry">
+      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+      <p>{{ project.description }}</p>
+    </article>
+  {% endfor %}
+</div>
+
+<h2>Open-source projects</h2>
+<p>These are repositories I actively maintain or have taken responsibility for and that may be useful independently of the sites above.</p>
+<div class="project-list">
+  {% for project in active_projects.github %}
+    <article class="project-entry">
+      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+      <p>{{ project.description }}</p>
+    </article>
+  {% endfor %}
+</div>
+
+<h2>In development</h2>
+<p>I also have projects in active development that are not listed here yet because they are still private, experimental, or not ready for public discovery. When one crosses that line, it should show up here.</p>
+
+<p>For older work, libraries, and the much larger historical trail, <a href="https://github.com/snoyberg">my GitHub profile</a> is still the best place to browse.</p>
+{% endblock content %}
