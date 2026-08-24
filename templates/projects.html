@@ -11,7 +11,7 @@ Sites, open source, and projects that have shaped my work.
 {% block content %}
 {% set projects = load_data(path="data/active-projects.toml") %}
 
-<p class="lead">This is a curated portfolio rather than a chronological list of everything I've ever touched. It includes what I'm actively maintaining today as well as older projects that remain an important part of my technical work and public identity.</p>
+<p class="lead">A selection of sites and open-source projects I've built, maintained, or played a major role in.</p>
 
 <h2>Sites &amp; products</h2>
 <p>Public-facing things I still maintain or am directly responsible for.</p>
@@ -45,7 +45,7 @@ Sites, open source, and projects that have shaped my work.
 </div>
 
 <h2>Haskell</h2>
-<p>Some of these are now maintained by broader communities, but leaving them out would give a very misleading picture of my work.</p>
+<p>Many of these are now maintained by broader communities, but they remain central to my work in Haskell.</p>
 <div class="project-list">
   {% for project in projects.haskell %}
     <article class="project-entry">
@@ -55,8 +55,5 @@ Sites, open source, and projects that have shaped my work.
   {% endfor %}
 </div>
 
-<h2>In development</h2>
-<p>I also have private and pre-launch work that is intentionally absent from this page. Once a project is ready for public discovery, it can graduate into the appropriate section above.</p>
-
-<p>For the much larger historical trail, <a href="https://github.com/snoyberg">my GitHub profile</a> is still the best place to browse.</p>
+<p>For more of my open-source work, see <a href="https://github.com/snoyberg">my GitHub profile</a>.</p>
 {% endblock content %}
