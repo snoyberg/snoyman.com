@@ -69,6 +69,18 @@
                   <p>I live in Maalot, Israel, with <a href="https://x.com/lambdamom">my wife Miriam</a> and our six children.</p>
                 </div>
 
+                {% set active_projects = load_data(path="data/active-projects.toml") %}
+                <h2>Active projects</h2>
+                <p>A current, intentionally short list of things I'm actively building or maintaining.</p>
+                <div class="focus-grid">
+                  {% for project in active_projects.projects %}
+                    <div>
+                      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+                      <p>{{ project.description }}</p>
+                    </div>
+                  {% endfor %}
+                </div>
+
                 {% set blogs = get_section(path="blog/_index.md") %}
                 <h2>Recent writing</h2>
                 <div class="recent-posts">
