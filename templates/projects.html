@@ -4,6 +4,10 @@
 Sites, open source, and projects that have shaped my work.
 {% endblock subtitle %}
 
+{% block pagehead %}
+<link rel="stylesheet" type="text/css" href="{{ get_url(path="static/projects.css") }}">
+{% endblock pagehead %}
+
 {% block content %}
 {% set projects = load_data(path="data/active-projects.toml") %}
 
@@ -33,16 +37,6 @@ Sites, open source, and projects that have shaped my work.
 <h2>DevOps &amp; operations</h2>
 <div class="project-list">
   {% for project in projects.devops %}
-    <article class="project-entry">
-      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
-      <p>{{ project.description }}</p>
-    </article>
-  {% endfor %}
-</div>
-
-<h2>Rust</h2>
-<div class="project-list">
-  {% for project in projects.rust %}
     <article class="project-entry">
       <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
       <p>{{ project.description }}</p>
