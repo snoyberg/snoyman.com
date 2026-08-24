@@ -1,0 +1,59 @@
+{% extends "index.html" %}
+
+{% block subtitle %}
+Sites, open source, and projects that have shaped my work.
+{% endblock subtitle %}
+
+{% block pagehead %}
+<link rel="stylesheet" type="text/css" href="{{ get_url(path="static/projects.css") }}">
+{% endblock pagehead %}
+
+{% block content %}
+{% set projects = load_data(path="data/active-projects.toml") %}
+
+<p class="lead">A selection of sites and open-source projects I've built, maintained, or played a major role in.</p>
+
+<h2>Sites &amp; products</h2>
+<p>Public-facing things I still maintain or am directly responsible for.</p>
+<div class="project-list">
+  {% for project in projects.sites %}
+    <article class="project-entry">
+      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+      <p>{{ project.description }}</p>
+    </article>
+  {% endfor %}
+</div>
+
+<h2>Protocols &amp; collaboration</h2>
+<div class="project-list">
+  {% for project in projects.protocols %}
+    <article class="project-entry">
+      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+      <p>{{ project.description }}</p>
+    </article>
+  {% endfor %}
+</div>
+
+<h2>DevOps &amp; operations</h2>
+<div class="project-list">
+  {% for project in projects.devops %}
+    <article class="project-entry">
+      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+      <p>{{ project.description }}</p>
+    </article>
+  {% endfor %}
+</div>
+
+<h2>Haskell</h2>
+<p>Many of these are now maintained by broader communities, but they remain central to my work in Haskell.</p>
+<div class="project-list">
+  {% for project in projects.haskell %}
+    <article class="project-entry">
+      <h3><a href="{{ project.url }}">{{ project.name }}</a></h3>
+      <p>{{ project.description }}</p>
+    </article>
+  {% endfor %}
+</div>
+
+<p>For more of my open-source work, see <a href="https://github.com/snoyberg">my GitHub profile</a>.</p>
+{% endblock content %}
