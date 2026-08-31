@@ -2,7 +2,7 @@
 title = "job-watcher: Monitoring background jobs in Rust"
 description = "Announcing job-watcher, a small Rust library we’ve been using in production for years to run and monitor background jobs."
 path = "/blog/2026/08/announcing-job-watcher"
-date = 2026-08-30
+date = 2026-08-31
 
 [extra]
 ogimage = "announcing-job-watcher.png"
