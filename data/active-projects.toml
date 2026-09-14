@@ -33,11 +33,6 @@ name = "Dollar versus Shekel"
 url = "https://www.snoyman.com/shekel"
 description = "A deliberately small USD/ILS tracker that updates daily and offers RSS and email subscriptions. It is also a useful example of the kind of tiny, durable automation I enjoy maintaining."
 
-[[protocols]]
-name = "P2P Agents"
-url = "https://github.com/snoyberg/p2p-agents"
-description = "My evolving recommendations for working effectively with AI coding agents: review practices, collaboration patterns, persistent instructions, and the broader idea of making engineering judgment reusable."
-
 [[devops]]
 name = "Amber"
 url = "https://github.com/veloxwarp/amber"
