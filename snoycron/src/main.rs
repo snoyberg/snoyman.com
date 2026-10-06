@@ -177,7 +177,11 @@ const GHC_INFO_URL: &str =
     "https://raw.githubusercontent.com/commercialhaskell/stackage-content/master/stack/global-hints.yaml";
 fn load_ghc_info() -> Result<AllGhcInfo> {
     let mut res = get_client().get(GHC_INFO_URL).send()?;
-    let m: HashMap<String, GhcInfo> = serde_yaml::from_reader(&mut res)?;
+    parse_ghc_info(&mut res)
+}
+
+fn parse_ghc_info(reader: impl std::io::Read) -> Result<AllGhcInfo> {
+    let m: HashMap<String, GhcInfo> = serde_yaml::from_reader(reader)?;
     let mut v: Vec<(Version, GhcInfo)> = Vec::new();
     for (name, info) in m {
         let prefix: String = name.chars().take(4).collect();
@@ -257,5 +261,104 @@ impl FromStr for Version {
             .map(|x| x.parse().context("Invalid version component"))
             .collect::<Result<_>>()
             .map(Version)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Read;
+    use std::net::TcpListener;
+    use std::time::{Duration, SystemTime, UNIX_EPOCH};
+
+    #[test]
+    fn blocking_client_deserializes_exchange_rates() -> Result<()> {
+        let listener = TcpListener::bind("127.0.0.1:0")?;
+        let address = listener.local_addr()?;
+        let server = std::thread::spawn(move || -> std::io::Result<()> {
+            let (mut stream, _) = listener.accept()?;
+            stream.set_read_timeout(Some(Duration::from_secs(5)))?;
+            let mut request = [0; 1024];
+            stream.read(&mut request)?;
+            let body = r#"{"timestamp":1660000000,"rates":{"ILS":3.25}}"#;
+            write!(stream, "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}", body.len(), body)?;
+            Ok(())
+        });
+        let response = ClientBuilder::new()
+            .use_rustls_tls()
+            .no_proxy()
+            .timeout(Duration::from_secs(5))
+            .build()?
+            .get(format!("http://{address}/historical.json"))
+            .send()?
+            .json::<Oxr>()?;
+        server.join().unwrap()?;
+        assert_eq!(response.timestamp, 1660000000);
+        assert_eq!(response.get_ils()?, 3.25);
+        Ok(())
+    }
+
+    #[test]
+    fn exchange_rates_require_shekel() {
+        let rates = Oxr {
+            timestamp: 0,
+            rates: HashMap::new(),
+        };
+        assert!(rates.get_ils().is_err());
+    }
+
+    #[test]
+    fn ghc_yaml_is_sorted_and_rendered() -> Result<()> {
+        let yaml = b"ghc-9.2.8:\n  base: '4.16.4.0'\n  Cabal: '3.6.3.0'\n  Win32: '2.12.0.1'\nghc-9.10.1:\n  base: '4.20.0.0'\n  Cabal: '3.12.0.0'\n  Win32: '2.14.0.0'\n";
+        let info = parse_ghc_info(yaml.as_slice())?;
+        let rendered = info.to_string();
+        assert!(rendered.find("ghc-9.10.1").unwrap() < rendered.find("ghc-9.2.8").unwrap());
+        assert!(rendered.contains("<td>base-4.20.0.0</td><td>Cabal-3.12.0.0</td>"));
+        assert!(rendered.ends_with("</tbody></table>\n"));
+        Ok(())
+    }
+
+    #[test]
+    fn rejects_invalid_ghc_versions() {
+        assert!(Version::from_str("9.not-a-version").is_err());
+        assert!(
+            parse_ghc_info(b"invalid: {base: '1', Cabal: '2', Win32: '3'}".as_slice()).is_err()
+        );
+    }
+
+    #[test]
+    fn currency_outputs_preserve_dates_and_rates() -> Result<()> {
+        let root = std::env::temp_dir().join(format!(
+            "snoycron-test-{}-{}",
+            std::process::id(),
+            SystemTime::now().duration_since(UNIX_EPOCH)?.as_nanos()
+        ));
+        std::fs::create_dir_all(root.join("content"))?;
+        std::fs::create_dir_all(root.join("static/shekel"))?;
+        let currency = Currency {
+            rate: "3.250".into(),
+            timestamp: DateTime::parse_from_rfc3339("2026-10-06T00:00:00Z")?.with_timezone(&Utc),
+            delta: "There was no change since October 5".into(),
+        };
+        let prefix = root.to_str().unwrap();
+        currency.write_shekel_md(prefix)?;
+        currency.write_shekel_feed(prefix)?;
+        let page = std::fs::read_to_string(root.join("content/shekel.md"))?;
+        let feed = std::fs::read_to_string(root.join("static/shekel/feed.xml"))?;
+        std::fs::remove_dir_all(&root)?;
+        assert!(page.contains("rate = \"3.250\""));
+        assert!(page.contains("date = \"October  6, 2026\""));
+        assert!(feed.contains("<updated>2026-10-06T00:00:00+00:00</updated>"));
+        assert!(feed.contains("&lt;b>3.250₪&lt;/b>"));
+        Ok(())
+    }
+
+    #[test]
+    #[ignore = "requires access to the public Stackage HTTPS endpoint"]
+    fn loads_live_ghc_hints_over_rustls() -> Result<()> {
+        let info = load_ghc_info()?;
+        assert!(!info.0.is_empty());
+        assert!(info.to_string().contains("ghc-"));
+        Ok(())
     }
 }
