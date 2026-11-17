@@ -9,6 +9,11 @@ url = "https://trycrypto.snoyman.com"
 description = "An interactive introduction to practical cryptography. It teaches hashes, encryption, public/private keys, and signatures through hands-on exercises that run entirely in the browser."
 
 [[sites]]
+name = "Keyline"
+url = "https://keyline.snoyman.com"
+description = "A keyboard-trajectory word puzzle. Choose a starting point and angle, then spell words by wrapping around the keyboard or bouncing off its edges and mirrors. Play in your browser on desktop or mobile."
+
+[[sites]]
 name = "P:E Diet Recipe Calculator"
 url = "https://pedietcalc.snoyman.com/"
 description = "A browser-based recipe calculator for combining food-label macros, scaling ingredients by serving count, and seeing the overall protein-to-energy ratio. Recipes can be shared by URL or printed as a compact breakdown."
